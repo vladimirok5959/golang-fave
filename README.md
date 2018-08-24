@@ -9,5 +9,5 @@ Usage of ./fave:
     	server port (default 8080)
 ```
 
-## Build
+## Development
 `make` - debug, `make run` - run on all ips and port 8080, `make build` - build release for Linux, Mac OS X and Windows.
