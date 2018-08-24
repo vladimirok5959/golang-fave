@@ -10,3 +10,15 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Binary files
+/fave
+/bin/*
+
+# Virtual hosts logs
+/hosts/*/logs/*
+!/hosts/*/logs/.*
+
+# Virtual hosts temp dir
+/hosts/*/tmp/*
+!/hosts/*/tmp/.*
