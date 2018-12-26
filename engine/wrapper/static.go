@@ -1,53 +1,14 @@
 package wrapper
 
 import (
-	"io"
 	"net/http"
 	"os"
-	"strconv"
-	"strings"
 
 	Images "golang-fave/engine/wrapper/resources/images"
 	Others "golang-fave/engine/wrapper/resources/others"
 	Styles "golang-fave/engine/wrapper/resources/styles"
 	Templates "golang-fave/engine/wrapper/resources/templates"
 )
-
-func (e *Wrapper) isFileExists(file string) bool {
-	if fi, err := os.Stat(file); !os.IsNotExist(err) {
-		if err == nil {
-			fmode := fi.Mode()
-			if !fmode.IsDir() {
-				return true
-			}
-		}
-	}
-	return false
-}
-
-func (e *Wrapper) getFileContentType(file string, of *os.File) string {
-	fContentType := ""
-	if strings.HasSuffix(file, ".htm") {
-		fContentType = "text/html"
-	} else if strings.HasSuffix(file, ".html") {
-		fContentType = "text/html"
-	} else if strings.HasSuffix(file, ".txt") {
-		fContentType = "text/plain"
-	} else if strings.HasSuffix(file, ".php") {
-		fContentType = "text/plain"
-	} else if strings.HasSuffix(file, ".css") {
-		fContentType = "text/css"
-	} else if strings.HasSuffix(file, ".png") {
-		fContentType = "image/png"
-	} else if strings.HasSuffix(file, ".jpg") {
-		fContentType = "image/jpeg"
-	} else if strings.HasSuffix(file, ".jpeg") {
-		fContentType = "image/jpeg"
-	} else {
-		fContentType = "application/octet-stream"
-	}
-	return fContentType
-}
 
 func (e *Wrapper) staticResource() bool {
 	if e.R.URL.Path == "/assets/sys/styles.css" {
@@ -77,25 +38,32 @@ func (e *Wrapper) staticResource() bool {
 func (e *Wrapper) staticFile() bool {
 	file := e.R.URL.Path
 	if file == "/" {
-		if e.isFileExists(e.DirVhostHome + "/htdocs" + "/index.htm") {
-			file = "/index.htm"
-		} else if e.isFileExists(e.DirVhostHome + "/htdocs" + "/index.html") {
-			file = "/index.html"
-		}
-	}
-	if file != "/" {
-		if e.isFileExists(e.DirVhostHome + "/htdocs" + file) {
-			of, err := os.Open(e.DirVhostHome + "/htdocs" + file)
-			defer of.Close()
+		f, err := os.Open(e.DirVhostHome + "/htdocs" + "/index.htm")
+		if err == nil {
+			defer f.Close()
+			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.htm")
+			return true
+		} else {
+			f, err = os.Open(e.DirVhostHome + "/htdocs" + "/index.html")
 			if err == nil {
-				fstat, _ := of.Stat()
-				fsize := strconv.FormatInt(fstat.Size(), 10)
-				(*e.W).Header().Add("Content-Type", e.getFileContentType(file, of))
-				(*e.W).Header().Add("Content-Length", fsize)
-				of.Seek(0, 0)
-				io.Copy(*e.W, of)
+				defer f.Close()
+				http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.html")
 				return true
 			}
+		}
+	} else {
+		f, err := os.Open(e.DirVhostHome + "/htdocs" + file)
+		if err == nil {
+			defer f.Close()
+			st, err := os.Stat(e.DirVhostHome + "/htdocs" + file)
+			if err != nil {
+				return false
+			}
+			if st.Mode().IsDir() {
+				return false
+			}
+			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+file)
+			return true
 		}
 	}
 	return false
