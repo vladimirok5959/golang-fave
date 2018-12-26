@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -84,27 +83,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Create and start engine
 	wrapper.New(&w, r, host, port, FParamWwwDir, FVhostHomeDir, C_Debug).
 		Run(func(e *wrapper.Wrapper) bool {
-			if e.R.URL.Path == "/" {
-				if !e.Session.IsSetInt("CounterTest") {
-					e.Session.SetInt("CounterTest", 1)
-				}
-
-				cc, err := e.Session.GetInt("CounterTest")
-				if err != nil {
-					cc = 1
-				}
-
-				(*e.W).Header().Set("Content-Type", "text/html")
-				io.WriteString(*e.W, "Home<br />")
-				io.WriteString(*e.W, "<a href=\"/static.html\">Static Page</a><br />")
-				io.WriteString(*e.W, "<a href=\"/robots.txt\">robots.txt</a><br />")
-				io.WriteString(*e.W, "<a href=\"/static404\">Page 404</a><br />")
-				io.WriteString(*e.W, "Counter: "+strconv.Itoa(cc))
-
-				e.Session.SetInt("CounterTest", cc+1)
-
-				return true
-			}
 			return false
 		})
 }
