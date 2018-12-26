@@ -13,7 +13,7 @@ import (
 	"golang-fave/engine/wrapper"
 )
 
-const C_Debug = false
+const C_Debug = !false
 
 var FParamHost string
 var FParamPort int
@@ -42,9 +42,9 @@ func main() {
 }
 
 func vhExists(vhosthome string) bool {
-	if fi, err := os.Stat(vhosthome); !os.IsNotExist(err) {
+	if st, err := os.Stat(vhosthome); !os.IsNotExist(err) {
 		if err == nil {
-			fmode := fi.Mode()
+			fmode := st.Mode()
 			if fmode.IsDir() {
 				return true
 			}
