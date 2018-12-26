@@ -22,3 +22,6 @@
 # Virtual hosts temp dir
 /hosts/*/tmp/*
 !/hosts/*/tmp/.*
+
+# Test virtual host dir
+/hosts/example.com
