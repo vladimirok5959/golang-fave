@@ -1,13 +1,16 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"strconv"
 	"strings"
+	"time"
 
 	"golang-fave/engine/wrapper"
 )
@@ -35,9 +38,40 @@ func main() {
 	if FParamWwwDir[len(FParamWwwDir)-1] != '/' {
 		FParamWwwDir = FParamWwwDir + "/"
 	}
-	http.HandleFunc("/", handler)
-	fmt.Println("Starting server at " + FParamHost + ":" + strconv.Itoa(FParamPort))
-	log.Fatal(http.ListenAndServe(FParamHost+":"+strconv.Itoa(FParamPort), nil))
+
+	// Handle
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handler)
+
+	srv := &http.Server{
+		Addr:    fmt.Sprintf("%s:%d", FParamHost, FParamPort),
+		Handler: mux,
+	}
+
+	stop := make(chan os.Signal)
+	signal.Notify(stop, os.Interrupt)
+
+	go func() {
+		log.Printf("Starting server at %s:%d", FParamHost, FParamPort)
+		if err := srv.ListenAndServe(); err != nil {
+			if err != http.ErrServerClosed {
+				log.Fatal(err)
+			}
+		}
+	}()
+
+	// Wait for signal
+	<-stop
+
+	log.Printf("Shutting down server...\n")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal(err)
+	} else {
+		log.Printf("Server is off!")
+	}
 }
 
 func vhExists(vhosthome string) bool {
