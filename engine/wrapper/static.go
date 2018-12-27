@@ -2,6 +2,7 @@ package wrapper
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -88,16 +89,12 @@ func (e *Wrapper) printPageDefault() {
 }
 
 func (e *Wrapper) printPage404() {
-	// TODO: Fix this
-	// http: multiple response.WriteHeader calls
-	// (*e.W).WriteHeader(http.StatusNotFound)
-
 	// Custom 404 error page
-	f, err := os.Open(e.DirVhostHome + "/htdocs" + "/404.html")
+	f, err := ioutil.ReadFile(e.DirVhostHome + "/htdocs" + "/404.html")
 	if err == nil {
-		defer f.Close()
-		// TODO: set status code 404 here
-		http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/404.html")
+		(*e.W).WriteHeader(http.StatusNotFound)
+		(*e.W).Header().Set("Content-Type", "text/html")
+		(*e.W).Write(f)
 		return
 	}
 
