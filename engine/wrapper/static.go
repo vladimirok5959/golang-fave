@@ -55,18 +55,11 @@ func (e *Wrapper) staticResource() bool {
 func (e *Wrapper) staticFile() bool {
 	file := e.R.URL.Path
 	if file == "/" {
-		f, err := os.Open(e.DirVhostHome + "/htdocs" + "/index.htm")
+		f, err := os.Open(e.DirVhostHome + "/htdocs" + "/index.html")
 		if err == nil {
 			defer f.Close()
-			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.htm")
+			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.html")
 			return true
-		} else {
-			f, err = os.Open(e.DirVhostHome + "/htdocs" + "/index.html")
-			if err == nil {
-				defer f.Close()
-				http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.html")
-				return true
-			}
 		}
 	} else {
 		f, err := os.Open(e.DirVhostHome + "/htdocs" + file)
