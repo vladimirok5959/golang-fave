@@ -9,6 +9,7 @@ import (
 type TmplMenuItem struct {
 	Name string
 	Link string
+	Active bool
 }
 
 type TmplData struct {
@@ -29,6 +30,7 @@ func handleFrontEnd(e *wrapper.Wrapper) bool {
 	tmpl, err := template.ParseFiles(
 		e.DirVhostHome+"/template"+"/index.html",
 		e.DirVhostHome+"/template"+"/header.html",
+		e.DirVhostHome+"/template"+"/sidebar.html",
 		e.DirVhostHome+"/template"+"/footer.html",
 	)
 	if err != nil {
@@ -48,8 +50,10 @@ func handleFrontEnd(e *wrapper.Wrapper) bool {
 		MetaDescription: "Meta Description",
 
 		MenuItems: []TmplMenuItem{
-			{Name: "Menu Item 1", Link: "/#1"},
-			{Name: "Menu Item 2", Link: "/#2"},
+			{Name: "Home", Link: "/", Active: true},
+			{Name: "Item 1", Link: "/#1", Active: false},
+			{Name: "Item 2", Link: "/#2", Active: false},
+			{Name: "Item 3", Link: "/#3", Active: false},
 		},
 		SomeHtml: template.HTML("<div class=\"some-class\">DIV</div>"),
 	})
