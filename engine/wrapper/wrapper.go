@@ -1,6 +1,7 @@
 package wrapper
 
 import (
+	"html/template"
 	"log"
 	"net"
 	"net/http"
@@ -9,6 +10,21 @@ import (
 
 	"golang-fave/engine/sessions"
 )
+
+type handleRun func(e *Wrapper) bool
+
+type tmplDataSystem struct {
+	PathIcoFav       string
+	PathCssBootstrap string
+	PathJsJquery     string
+	PathJsPopper     string
+	PathJsBootstrap  string
+}
+
+type tmplDataAll struct {
+	System tmplDataSystem
+	Data   interface{}
+}
 
 type Wrapper struct {
 	W            *http.ResponseWriter
@@ -24,7 +40,15 @@ type Wrapper struct {
 	Debug        bool
 }
 
-type handleRun func(e *Wrapper) bool
+func (e *Wrapper) tmplGetSystemData() tmplDataSystem {
+	return tmplDataSystem{
+		PathIcoFav:       e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/fave.ico",
+		PathCssBootstrap: e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.css",
+		PathJsJquery:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/jquery.js",
+		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js",
+		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js",
+	}
+}
 
 func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, wwwdir string, vhosthome string, debug bool) *Wrapper {
 	return &Wrapper{
@@ -142,4 +166,22 @@ func (e *Wrapper) LogError(value string) {
 	e.LoggerErr.Println("[ERR] [" + e.R.Method + "] [" + value + "] [" + e.RemoteIp +
 		"] [" + e.R.URL.Scheme + "://" + e.R.Host + e.R.URL.RequestURI() +
 		"] [" + e.R.Header.Get("User-Agent") + "]")
+}
+
+func (e *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
+	tmpl, err := template.ParseFiles(
+		e.DirVhostHome+"/template"+"/"+tname+".html",
+		e.DirVhostHome+"/template"+"/header.html",
+		e.DirVhostHome+"/template"+"/sidebar.html",
+		e.DirVhostHome+"/template"+"/footer.html",
+	)
+	if err != nil {
+		e.printTmplPageError(err)
+		return true
+	}
+	tmpl.Execute(*e.W, tmplDataAll{
+		System: e.tmplGetSystemData(),
+		Data:   data,
+	})
+	return true
 }

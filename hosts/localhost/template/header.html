@@ -7,25 +7,25 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="{{$.PathSysCssBootstrap}}">
+		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
 
-		<title>{{$.MetaTitle}}</title>
+		<title>{{$.Data.MetaTitle}}</title>
 
-		<meta name="keywords" content="{{$.MetaKeywords}}" />
-		<meta name="description" content="{{$.MetaDescription}}" />
+		<meta name="keywords" content="{{$.Data.MetaKeywords}}" />
+		<meta name="description" content="{{$.Data.MetaDescription}}" />
 
-		<link rel="shortcut icon" href="{{$.PathSysIcoFav}}" type="image/x-icon" />
+		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 	</head>
 	<body class="pt-5">
 		<header>
 			<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-				<a class="navbar-brand" href="/">{{$.MetaTitle}}</a>
+				<a class="navbar-brand" href="/">{{$.Data.MetaTitle}}</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarCollapse">
 					<ul class="navbar-nav mr-auto">
-						{{range $.MenuItems}}
+						{{range $.Data.MenuItems}}
 							<li class="nav-item{{if .Active}} active{{end}}">
 								<a class="nav-link" href="{{.Link}}">{{.Name}}</a>
 							</li>
