@@ -38,7 +38,7 @@ func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, www
 	}
 }
 
-func (e *Wrapper) Run(hr handleRun) {
+func (e *Wrapper) Run(hRun handleRun) {
 	// Populate some values
 	e.RemoteIp = e.R.RemoteAddr
 
@@ -109,8 +109,8 @@ func (e *Wrapper) Run(hr handleRun) {
 
 	// Logic
 	ret := false
-	if hr != nil {
-		if hr(e) {
+	if hRun != nil {
+		if hRun(e) {
 			ret = true
 		}
 	}
