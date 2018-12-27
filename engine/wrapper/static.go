@@ -94,5 +94,15 @@ func (e *Wrapper) printPageDefault() {
 func (e *Wrapper) printPage404() {
 	(*e.W).WriteHeader(http.StatusNotFound)
 	(*e.W).Header().Set("Content-Type", "text/html")
+
+	// Custom 404 error page
+	f, err := os.Open(e.DirVhostHome + "/htdocs" + "/404.html")
+	if err == nil {
+		defer f.Close()
+		http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/404.html")
+		return
+	}
+
+	// Default error page
 	(*e.W).Write(Templates.PageError404)
 }
