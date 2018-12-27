@@ -54,14 +54,7 @@ func (e *Wrapper) staticResource() bool {
 
 func (e *Wrapper) staticFile() bool {
 	file := e.R.URL.Path
-	if file == "/" {
-		f, err := os.Open(e.DirVhostHome + "/htdocs" + "/index.html")
-		if err == nil {
-			defer f.Close()
-			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.html")
-			return true
-		}
-	} else {
+	if file != "/" {
 		f, err := os.Open(e.DirVhostHome + "/htdocs" + file)
 		if err == nil {
 			defer f.Close()
@@ -81,6 +74,16 @@ func (e *Wrapper) staticFile() bool {
 
 func (e *Wrapper) printPageDefault() {
 	(*e.W).Header().Set("Content-Type", "text/html")
+
+	// Custom page
+	f, err := os.Open(e.DirVhostHome + "/htdocs" + "/index.html")
+	if err == nil {
+		defer f.Close()
+		http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.html")
+		return
+	}
+
+	// Default page
 	(*e.W).Write(Templates.PageDefault)
 }
 
