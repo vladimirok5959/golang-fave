@@ -6,6 +6,7 @@ import (
 
 	Images "golang-fave/engine/wrapper/resources/images"
 	Others "golang-fave/engine/wrapper/resources/others"
+	Scripts "golang-fave/engine/wrapper/resources/scripts"
 	Styles "golang-fave/engine/wrapper/resources/styles"
 	Templates "golang-fave/engine/wrapper/resources/templates"
 )
@@ -18,6 +19,10 @@ func (e *Wrapper) staticResource() bool {
 	} else if e.R.URL.Path == "/assets/sys/bootstrap.css" {
 		(*e.W).Header().Set("Content-Type", "text/css")
 		(*e.W).Write(Styles.File_assets_sys_bootstrap_css)
+		return true
+	} else if e.R.URL.Path == "/assets/sys/jquery.js" {
+		(*e.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
+		(*e.W).Write(Scripts.File_assets_sys_jquery_js)
 		return true
 	} else if e.R.URL.Path == "/assets/sys/logo.svg" {
 		(*e.W).Header().Set("Content-Type", "image/svg+xml")
