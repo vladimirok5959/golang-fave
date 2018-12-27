@@ -88,10 +88,12 @@ func (e *Wrapper) Run(hr handleRun) {
 	}
 
 	// Friendly search engine url
-	if e.redirectSeoFix() {
-		e.Log("301")
-		return
-	}
+	/*
+		if e.redirectSeoFix() {
+			e.Log("301")
+			return
+		}
+	*/
 
 	// Create and load session
 	e.Session = sessions.New(e.W, e.R, e.VHost, e.DirVhostHome, e.RemoteIp)
