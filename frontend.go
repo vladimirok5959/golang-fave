@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "log"
 	"html/template"
 
 	"golang-fave/engine/wrapper"
@@ -33,8 +32,8 @@ func handleFrontEnd(e *wrapper.Wrapper) bool {
 		e.DirVhostHome+"/template"+"/footer.html",
 	)
 	if err != nil {
-		// log.Printf(err.Error())
-		return false
+		e.PrintTmplPageError(err)
+		return true
 	}
 
 	tmpl.Execute(*e.W, TmplData{

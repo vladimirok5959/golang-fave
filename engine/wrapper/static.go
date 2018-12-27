@@ -1,6 +1,7 @@
 package wrapper
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -104,4 +105,10 @@ func (e *Wrapper) printPage404() {
 	(*e.W).WriteHeader(http.StatusNotFound)
 	(*e.W).Header().Set("Content-Type", "text/html")
 	(*e.W).Write(Templates.PageError404)
+}
+
+func (e *Wrapper) PrintTmplPageError(err error) {
+	(*e.W).WriteHeader(http.StatusInternalServerError)
+	(*e.W).Header().Set("Content-Type", "text/html")
+	(*e.W).Write([]byte(fmt.Sprintf(string(Templates.PageTmplError), err.Error())))
 }

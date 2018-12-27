@@ -1,22 +1,22 @@
 {{template "header.html" .}}
-		<div class="container">
-			<h1>Hello, world!</h1>
-			<h2>{{$.MetaTitle}}</h2>
-			<div>
-				Index template<br />
-				{{$.PathSysIcoFav}}
-			</div>
-			<div>
-				<ul>
-					{{range $.MenuItems}}
-						<li>
-							<a href="{{.Link}}">{{.Name}} - {{$.MetaTitle}}</a>
-						</li>
-					{{end}}
-				</ul>
-			</div>
-			<div class="html-test">
-				{{$.SomeHtml}}
-			</div>
-		</div>
+<div class="container">
+	<h1>Hello, world!</h1>
+	<h2>{{$.MetaTitle}}</h2>
+	<div>
+		Index template<br />
+		{{$.PathSysIcoFav}}
+	</div>
+	<div>
+		<ul>
+			{{range $.MenuItems}}
+				<li>
+					<a href="{{.Link}}">{{.Name}} - {{$.MetaTitle}}</a>
+				</li>
+			{{end}}
+		</ul>
+	</div>
+	<div class="html-test">
+		{{$.SomeHtml}}
+	</div>
+</div>
 {{template "footer.html" .}}
