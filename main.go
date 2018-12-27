@@ -117,6 +117,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Create and start engine
 	wrapper.New(&w, r, host, port, FParamWwwDir, FVhostHomeDir, C_Debug).
 		Run(func(e *wrapper.Wrapper) bool {
-			return false
+			if e.R.URL.Path == "/cp" || strings.HasPrefix(e.R.URL.Path, "/cp/") {
+				return handleBackEnd(e)
+			} else {
+				return handleFrontEnd(e)
+			}
 		})
+}
+
+func handleFrontEnd(e *wrapper.Wrapper) bool {
+	return false
+}
+
+func handleBackEnd(e *wrapper.Wrapper) bool {
+	return false
 }

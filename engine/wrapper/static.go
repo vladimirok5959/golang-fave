@@ -73,8 +73,6 @@ func (e *Wrapper) staticFile() bool {
 }
 
 func (e *Wrapper) printPageDefault() {
-	(*e.W).Header().Set("Content-Type", "text/html")
-
 	// Custom page
 	f, err := os.Open(e.DirVhostHome + "/htdocs" + "/index.html")
 	if err == nil {
@@ -84,21 +82,26 @@ func (e *Wrapper) printPageDefault() {
 	}
 
 	// Default page
+	(*e.W).Header().Set("Content-Type", "text/html")
 	(*e.W).Write(Templates.PageDefault)
 }
 
 func (e *Wrapper) printPage404() {
-	(*e.W).WriteHeader(http.StatusNotFound)
-	(*e.W).Header().Set("Content-Type", "text/html")
+	// TODO: Fix this
+	// http: multiple response.WriteHeader calls
+	// (*e.W).WriteHeader(http.StatusNotFound)
 
 	// Custom 404 error page
 	f, err := os.Open(e.DirVhostHome + "/htdocs" + "/404.html")
 	if err == nil {
 		defer f.Close()
+		// TODO: set status code 404 here
 		http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/404.html")
 		return
 	}
 
 	// Default error page
+	(*e.W).WriteHeader(http.StatusNotFound)
+	(*e.W).Header().Set("Content-Type", "text/html")
 	(*e.W).Write(Templates.PageError404)
 }
