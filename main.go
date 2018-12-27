@@ -124,11 +124,3 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			}
 		})
 }
-
-func handleFrontEnd(e *wrapper.Wrapper) bool {
-	return false
-}
-
-func handleBackEnd(e *wrapper.Wrapper) bool {
-	return false
-}
