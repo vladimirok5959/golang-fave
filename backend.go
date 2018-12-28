@@ -7,5 +7,6 @@ import (
 )
 
 func handleBackEnd(e *wrapper.Wrapper) bool {
-	return e.TmplBackEnd(Templates.CpLogin, nil)
+	//return e.TmplBackEnd(Templates.CpLogin, nil)
+	return e.TmplBackEnd(Templates.CpMySQL, nil)
 }

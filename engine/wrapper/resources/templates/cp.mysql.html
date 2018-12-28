@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="theme-color" content="#205081" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Configure MySQL</title>
+		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
+		<link rel="stylesheet" href="{{$.System.PathCssCpStyles}}">
+		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
+		<style type="text/css">html{height:100%;}</style>
+	</head>
+	<body class="cp-mysql text-center">
+		<form class="form-signin" action="/cp/" method="post">
+			<h1 class="h3 mb-3 font-weight-normal">Configure MySQL</h1>
+			<label for="host" class="sr-only">Host</label>
+			<input type="text" id="host" name="host" class="form-control mb-3" placeholder="Host" value="localhost" required>
+			<label for="name" class="sr-only">Name</label>
+			<input type="text" id="name" name="name" class="form-control mb-3" placeholder="Name" required autofocus>
+			<label for="user" class="sr-only">User</label>
+			<input type="text" id="user" name="user" class="form-control mb-3" placeholder="User" required>
+			<label for="password" class="sr-only">Password</label>
+			<input type="password" id="password" name="password" class="form-control mb-3" placeholder="Password">
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Configure</button>
+		</form>
+		<script src="{{$.System.PathJsJquery}}"></script>
+		<script src="{{$.System.PathJsPopper}}"></script>
+		<script src="{{$.System.PathJsBootstrap}}"></script>
+	</body>
+</html>
