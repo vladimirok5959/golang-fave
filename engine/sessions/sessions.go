@@ -19,11 +19,11 @@ type Vars struct {
 }
 
 type Session struct {
-	w         *http.ResponseWriter
-	r         *http.Request
-	vhost     string
-	vhosthome string
-	remoteip  string
+	W         *http.ResponseWriter
+	R         *http.Request
+	VHost     string
+	VHostHome string
+	RemoteIp  string
 	vars      *Vars
 	Ident     string
 	changed   bool
@@ -34,12 +34,12 @@ func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string
 }
 
 func (s *Session) Load() {
-	var session, err = s.r.Cookie("fsession")
+	var session, err = s.R.Cookie("fsession")
 	if err == nil && len(session.Value) == 40 {
 		// Load session
 		s.Ident = session.Value
 		StartNewSession := true
-		fsessfile := s.vhosthome + "/tmp/" + s.Ident
+		fsessfile := s.VHostHome + "/tmp/" + s.Ident
 		file, ferr := os.Open(fsessfile)
 		if ferr == nil {
 			defer file.Close()
@@ -62,7 +62,7 @@ func (s *Session) Load() {
 		// Generate unique hash
 		rand.Seed(time.Now().Unix())
 		rnd := rand.Intn(9999999-99) + 99
-		userstr := s.vhost + s.remoteip + s.r.Header.Get("User-Agent") +
+		userstr := s.VHost + s.RemoteIp + s.R.Header.Get("User-Agent") +
 			strconv.FormatInt((int64(time.Now().Unix())), 10) +
 			strconv.FormatInt(int64(rnd), 10)
 		userhashstr := fmt.Sprintf("%x", sha1.Sum([]byte(userstr)))
@@ -79,7 +79,7 @@ func (s *Session) Load() {
 		// Set session cookie
 		expiration := time.Now().Add(365 * 24 * time.Hour)
 		cookie := http.Cookie{Name: "fsession", Value: userhashstr, Expires: expiration}
-		http.SetCookie(*s.w, &cookie)
+		http.SetCookie(*s.W, &cookie)
 	}
 }
 
@@ -87,7 +87,7 @@ func (s *Session) Save() bool {
 	if !s.changed {
 		return false
 	}
-	fsessfile := s.vhosthome + "/tmp/" + s.Ident
+	fsessfile := s.VHostHome + "/tmp/" + s.Ident
 	r, err := json.Marshal(s.vars)
 	if err == nil {
 		file, ferr := os.Create(fsessfile)

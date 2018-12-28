@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"golang-fave/engine/actions"
 	"golang-fave/engine/sessions"
 )
 
@@ -42,6 +43,7 @@ type Wrapper struct {
 	RemoteIp     string
 	LoggerAcc    *log.Logger
 	LoggerErr    *log.Logger
+	Action       *actions.Action
 	Session      *sessions.Session
 	Debug        bool
 }
@@ -140,19 +142,21 @@ func (e *Wrapper) Run(hRun handleRun) {
 		e.Session.SetBool("IsLogged", false)
 	}
 
-	// Logic
-	ret := false
-	if hRun != nil {
-		if hRun(e) {
-			ret = true
-		}
+	// Create action
+	e.Action = actions.New(e.W, e.R, e.VHost, e.DirVhostHome, e.RemoteIp)
+
+	// Call action
+	if e.Action.Call() {
+		e.Session.Save()
+		return
 	}
 
-	// Save session
-	e.Session.Save()
-
-	if ret {
-		return
+	// Logic
+	if hRun != nil {
+		if hRun(e) {
+			e.Session.Save()
+			return
+		}
 	}
 
 	// Show default page
