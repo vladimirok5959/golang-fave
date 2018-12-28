@@ -78,6 +78,20 @@ func (e *Wrapper) staticFile() bool {
 			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+file)
 			return true
 		}
+	} else {
+		f, err := os.Open(e.DirVhostHome + "/htdocs/index.html")
+		if err == nil {
+			defer f.Close()
+			st, err := os.Stat(e.DirVhostHome + "/htdocs/index.html")
+			if err != nil {
+				return false
+			}
+			if st.Mode().IsDir() {
+				return false
+			}
+			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs/index.html")
+			return true
+		}
 	}
 	return false
 }
