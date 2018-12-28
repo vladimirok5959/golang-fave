@@ -18,6 +18,10 @@ func (e *Wrapper) staticResource() bool {
 		(*e.W).Header().Set("Content-Type", "text/css")
 		(*e.W).Write(Styles.File_assets_sys_styles_css)
 		return true
+	} else if e.R.URL.Path == "/assets/cp/styles.css" {
+		(*e.W).Header().Set("Content-Type", "text/css")
+		(*e.W).Write(Styles.File_assets_cp_styles_css)
+		return true
 	} else if e.R.URL.Path == "/assets/sys/bootstrap.css" {
 		(*e.W).Header().Set("Content-Type", "text/css")
 		(*e.W).Write(Styles.File_assets_sys_bootstrap_css)
