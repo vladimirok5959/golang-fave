@@ -5,9 +5,9 @@
 		<meta name="theme-color" content="#205081" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>Please login</title>
-		<link rel="stylesheet" href="/assets/sys/bootstrap.css">
-		<link rel="stylesheet" href="/assets/cp/styles.css">
-		<link rel="shortcut icon" href="/assets/sys/fave.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
+		<link rel="stylesheet" href="{{$.System.PathCssCpStyles}}">
+		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 		<style type="text/css">html{height:100%;}</style>
 	</head>
 	<body class="cp-login text-center">
@@ -22,8 +22,8 @@
 			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
 		</form>
-		<script src="/assets/sys/jquery.js"></script>
-		<script src="/assets/sys/popper.js"></script>
-		<script src="/assets/sys/bootstrap.js"></script>
+		<script src="{{$.System.PathJsJquery}}"></script>
+		<script src="{{$.System.PathJsPopper}}"></script>
+		<script src="{{$.System.PathJsBootstrap}}"></script>
 	</body>
 </html>
