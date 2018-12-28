@@ -11,7 +11,7 @@ import (
 	"golang-fave/engine/sessions"
 )
 
-const C_AssetsVersion = "1"
+const C_AssetsVersion = "2"
 
 type handleRun func(e *Wrapper) bool
 
