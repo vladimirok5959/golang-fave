@@ -18,16 +18,19 @@ type TmplData struct {
 }
 
 func handleFrontEnd(e *wrapper.Wrapper) bool {
-	return e.TmplFrontEnd("index", TmplData{
-		MetaTitle:       "Meta Title",
-		MetaKeywords:    "Meta Keywords",
-		MetaDescription: "Meta Description",
+	if e.R.URL.Path == "/" {
+		return e.TmplFrontEnd("index", TmplData{
+			MetaTitle:       "Meta Title",
+			MetaKeywords:    "Meta Keywords",
+			MetaDescription: "Meta Description",
 
-		MenuItems: []MenuItem{
-			{Name: "Home", Link: "/", Active: true},
-			{Name: "Item 1", Link: "/#1", Active: false},
-			{Name: "Item 2", Link: "/#2", Active: false},
-			{Name: "Item 3", Link: "/#3", Active: false},
-		},
-	})
+			MenuItems: []MenuItem{
+				{Name: "Home", Link: "/", Active: true},
+				{Name: "Item 1", Link: "/#1", Active: false},
+				{Name: "Item 2", Link: "/#2", Active: false},
+				{Name: "Item 3", Link: "/#3", Active: false},
+			},
+		})
+	}
+	return false
 }
