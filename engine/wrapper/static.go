@@ -1,7 +1,6 @@
 package wrapper
 
 import (
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -13,6 +12,10 @@ import (
 	Styles "golang-fave/engine/wrapper/resources/styles"
 	Templates "golang-fave/engine/wrapper/resources/templates"
 )
+
+type tmplDataErrorMsg struct {
+	ErrorMessage string
+}
 
 func (e *Wrapper) staticResource() bool {
 	if e.R.URL.Path == "/assets/sys/styles.css" {
@@ -123,8 +126,21 @@ func (e *Wrapper) printPage404() {
 	})
 }
 
-func (e *Wrapper) printTmplPageError(err error) {
+func (e *Wrapper) printTmplPageError(perr error) {
+	tmpl, err := template.New("template").Parse(string(Templates.PageTmplError))
+	if err != nil {
+		(*e.W).WriteHeader(http.StatusInternalServerError)
+		(*e.W).Header().Set("Content-Type", "text/html")
+		(*e.W).Write([]byte("<h1>Critical engine error!</h1>"))
+		(*e.W).Write([]byte("<h2>" + perr.Error() + "</h2>"))
+		return
+	}
 	(*e.W).WriteHeader(http.StatusInternalServerError)
 	(*e.W).Header().Set("Content-Type", "text/html")
-	(*e.W).Write([]byte(fmt.Sprintf(string(Templates.PageTmplError), err.Error())))
+	tmpl.Execute(*e.W, tmplDataAll{
+		System: e.tmplGetSystemData(),
+		Data: tmplDataErrorMsg{
+			ErrorMessage: perr.Error(),
+		},
+	})
 }
