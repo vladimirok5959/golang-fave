@@ -15,6 +15,7 @@ type handleRun func(e *Wrapper) bool
 
 type tmplDataSystem struct {
 	PathIcoFav       string
+	PathSvgLogo      string
 	PathCssStyles    string
 	PathCssCpStyles  string
 	PathCssBootstrap string
@@ -45,6 +46,7 @@ type Wrapper struct {
 func (e *Wrapper) tmplGetSystemData() tmplDataSystem {
 	return tmplDataSystem{
 		PathIcoFav:       e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/fave.ico",
+		PathSvgLogo:      e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/logo.svg",
 		PathCssStyles:    e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/styles.css",
 		PathCssCpStyles:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/styles.css",
 		PathCssBootstrap: e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.css",

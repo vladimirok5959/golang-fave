@@ -89,8 +89,15 @@ func (e *Wrapper) printPageDefault() {
 	}
 
 	// Default page
+	tmpl, err := template.New("template").Parse(string(Templates.PageDefault))
+	if err != nil {
+		e.printTmplPageError(err)
+		return
+	}
 	(*e.W).Header().Set("Content-Type", "text/html")
-	(*e.W).Write(Templates.PageDefault)
+	tmpl.Execute(*e.W, tmplDataAll{
+		System: e.tmplGetSystemData(),
+	})
 }
 
 func (e *Wrapper) printPage404() {
