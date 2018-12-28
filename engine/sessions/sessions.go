@@ -26,10 +26,11 @@ type Session struct {
 	remoteip  string
 	vars      *Vars
 	Ident     string
+	changed   bool
 }
 
 func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string, remoteip string) *Session {
-	return &Session{w, r, vhost, vhosthome, remoteip, &Vars{}, ""}
+	return &Session{w, r, vhost, vhosthome, remoteip, &Vars{}, "", false}
 }
 
 func (s *Session) Load() {
@@ -54,6 +55,7 @@ func (s *Session) Load() {
 			sessdata.FString = map[string]string{}
 			sessdata.FBool = map[string]bool{}
 			s.vars = &sessdata
+			s.changed = true
 		}
 	} else {
 		// Create new session
@@ -72,6 +74,7 @@ func (s *Session) Load() {
 		sessdata.FString = map[string]string{}
 		sessdata.FBool = map[string]bool{}
 		s.vars = &sessdata
+		s.changed = true
 
 		// Set session cookie
 		expiration := time.Now().Add(365 * 24 * time.Hour)
@@ -81,7 +84,9 @@ func (s *Session) Load() {
 }
 
 func (s *Session) Save() bool {
-	// TODO: Save session to file only if any var was modified
+	if !s.changed {
+		return false
+	}
 	fsessfile := s.vhosthome + "/tmp/" + s.Ident
 	r, err := json.Marshal(s.vars)
 	if err == nil {
@@ -89,7 +94,10 @@ func (s *Session) Save() bool {
 		if ferr == nil {
 			defer file.Close()
 			_, ferr = file.WriteString(string(r))
-			return true
+			if ferr == nil {
+				s.changed = false
+				return true
+			}
 		}
 	}
 	return false
@@ -121,14 +129,17 @@ func (s *Session) IsSetBool(name string) bool {
 
 func (s *Session) SetInt(name string, value int) {
 	s.vars.FInt[name] = value
+	s.changed = true
 }
 
 func (s *Session) SetString(name string, value string) {
 	s.vars.FString[name] = value
+	s.changed = true
 }
 
 func (s *Session) SetBool(name string, value bool) {
 	s.vars.FBool[name] = value
+	s.changed = true
 }
 
 func (s *Session) GetInt(name string) (int, error) {
@@ -158,17 +169,20 @@ func (s *Session) GetBool(name string) (bool, error) {
 func (s *Session) DelInt(name string) {
 	if s.IsSetInt(name) {
 		delete(s.vars.FInt, name)
+		s.changed = true
 	}
 }
 
 func (s *Session) DelString(name string) {
 	if s.IsSetString(name) {
 		delete(s.vars.FString, name)
+		s.changed = true
 	}
 }
 
 func (s *Session) DelBool(name string) {
 	if s.IsSetBool(name) {
 		delete(s.vars.FBool, name)
+		s.changed = true
 	}
 }
