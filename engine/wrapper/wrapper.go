@@ -147,6 +147,7 @@ func (e *Wrapper) Run(hRun handleRun) {
 
 	// Call action
 	if e.Action.Call() {
+		e.Log("200")
 		e.Session.Save()
 		return
 	}
@@ -154,6 +155,7 @@ func (e *Wrapper) Run(hRun handleRun) {
 	// Logic
 	if hRun != nil {
 		if hRun(e) {
+			e.Log("200")
 			e.Session.Save()
 			return
 		}
