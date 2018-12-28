@@ -9,23 +9,32 @@ $(document).ready(function() {
 				e.preventDefault();
 				return;
 			}
+
 			$(form).addClass('loading');
+			var button = $(this).find('button[type=submit]');
+			$(button).addClass('progress-bar-striped').addClass('progress-bar-animated');
 
 			$.ajax({
 				type: "POST",
 				url: form.attr('action'),
 				data: form.serialize()
 			}).done(function(data) {
-				console.log('done');
-				console.log(data);
+				try {
+					eval(data);
+				} catch(e) {
+					if(e instanceof SyntaxError) {
+						console.log('JavaScript eval error:', e.message);
+						console.log(data);
+					}
+				}
 			}).fail(function() {
-				console.log('fail');
+				console.log('Form send fail, page will be reloaded');
+				window.location.reload(false);
 			}).always(function() {
 				$(form).removeClass('loading');
-				console.log('always');
+				$(button).removeClass('progress-bar-striped').removeClass('progress-bar-animated');
 			});
 
-			console.log('1');
 			e.preventDefault();
 		});
 	});
