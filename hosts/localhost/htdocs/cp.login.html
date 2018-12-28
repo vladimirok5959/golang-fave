@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="theme-color" content="#205081" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Please login</title>
+		<link rel="stylesheet" href="/assets/sys/bootstrap.css">
+		<link rel="shortcut icon" href="/assets/sys/fave.ico" type="image/x-icon" />
+		<style type="text/css">
+			html {
+				height: 100%;
+			}
+			body.cp-login {
+				height: 100%;
+				display: -ms-flexbox;
+				display: -webkit-box;
+				display: flex;
+				-ms-flex-align: center;
+				-ms-flex-pack: center;
+				-webkit-box-align: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				justify-content: center;
+				padding-top: 40px;
+				padding-bottom: 40px;
+				background-color: #f5f5f5;
+			}
+			.cp-login .form-signin {
+				width: 100%;
+				max-width: 330px;
+				padding: 15px;
+				margin: 0 auto;
+			}
+			.cp-login .form-signin label {
+				cursor: pointer;
+			}
+			.cp-login .form-signin .checkbox {
+				font-weight: 400;
+			}
+			.cp-login .form-signin .form-control {
+				position: relative;
+				box-sizing: border-box;
+				height: auto;
+				padding: 10px;
+				font-size: 16px;
+			}
+			.cp-login .form-signin .form-control:focus {
+				z-index: 2;
+			}
+			.cp-login .form-signin input[type="email"] {
+				margin-bottom: -1px;
+				border-bottom-right-radius: 0;
+				border-bottom-left-radius: 0;
+			}
+			.cp-login .form-signin input[type="password"] {
+				margin-bottom: 10px;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
+		</style>
+	</head>
+	<body class="cp-login text-center">
+		<form class="form-signin">
+			<h1 class="h3 mb-3 font-weight-normal">Please login</h1>
+			<label for="login" class="sr-only">Email address</label>
+			<input type="email" id="login" class="form-control" placeholder="Login" required autofocus>
+			<label for="password" class="sr-only">Password</label>
+			<input type="password" id="password" class="form-control" placeholder="Password" required>
+			<div class="checkbox mb-3">
+				<label><input type="checkbox" value="remember-me"> Remember me</label>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+		</form>
+		<script src="/assets/sys/jquery.js"></script>
+		<script src="/assets/sys/popper.js"></script>
+		<script src="/assets/sys/bootstrap.js"></script>
+	</body>
+</html>
