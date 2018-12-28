@@ -42,6 +42,10 @@ func (e *Wrapper) staticResource() bool {
 		(*e.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
 		(*e.W).Write(Scripts.File_assets_sys_bootstrap_js)
 		return true
+	} else if e.R.URL.Path == "/assets/cp/scripts.js" {
+		(*e.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
+		(*e.W).Write(Scripts.File_assets_cp_scripts_js)
+		return true
 	} else if e.R.URL.Path == "/assets/sys/logo.svg" {
 		(*e.W).Header().Set("Content-Type", "image/svg+xml")
 		(*e.W).Write(Others.File_assets_sys_logo_svg)
