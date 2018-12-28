@@ -24,6 +24,7 @@ type tmplDataSystem struct {
 	PathJsJquery     string
 	PathJsPopper     string
 	PathJsBootstrap  string
+	PathJsCpScripts  string
 }
 
 type tmplDataAll struct {
@@ -46,16 +47,17 @@ type Wrapper struct {
 }
 
 func (e *Wrapper) tmplGetSystemData() tmplDataSystem {
-	verion := "?v=" + C_AssetsVersion
+	version := "?v=" + C_AssetsVersion
 	return tmplDataSystem{
-		PathIcoFav:       e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/fave.ico" + verion,
-		PathSvgLogo:      e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/logo.svg" + verion,
-		PathCssStyles:    e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/styles.css" + verion,
-		PathCssCpStyles:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/styles.css" + verion,
-		PathCssBootstrap: e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.css" + verion,
-		PathJsJquery:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/jquery.js" + verion,
-		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js" + verion,
-		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js" + verion,
+		PathIcoFav:       e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/fave.ico" + version,
+		PathSvgLogo:      e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/logo.svg" + version,
+		PathCssStyles:    e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/styles.css" + version,
+		PathCssCpStyles:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/styles.css" + version,
+		PathCssBootstrap: e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.css" + version,
+		PathJsJquery:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/jquery.js" + version,
+		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js" + version,
+		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js" + version,
+		PathJsCpScripts:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/scripts.js" + version,
 	}
 }
 
