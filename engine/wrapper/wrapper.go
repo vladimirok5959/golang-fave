@@ -183,3 +183,16 @@ func (e *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
 	})
 	return true
 }
+
+func (e *Wrapper) TmplBackEnd(tcont []byte, data interface{}) bool {
+	tmpl, err := template.New("template").Parse(string(tcont))
+	if err != nil {
+		e.printTmplPageError(err)
+		return true
+	}
+	tmpl.Execute(*e.W, tmplDataAll{
+		System: e.tmplGetSystemData(),
+		Data:   data,
+	})
+	return true
+}
