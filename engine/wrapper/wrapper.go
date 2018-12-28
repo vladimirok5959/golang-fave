@@ -11,6 +11,8 @@ import (
 	"golang-fave/engine/sessions"
 )
 
+const C_AssetsVersion = "1"
+
 type handleRun func(e *Wrapper) bool
 
 type tmplDataSystem struct {
@@ -44,15 +46,16 @@ type Wrapper struct {
 }
 
 func (e *Wrapper) tmplGetSystemData() tmplDataSystem {
+	verion := "?v=" + C_AssetsVersion
 	return tmplDataSystem{
-		PathIcoFav:       e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/fave.ico",
-		PathSvgLogo:      e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/logo.svg",
-		PathCssStyles:    e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/styles.css",
-		PathCssCpStyles:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/styles.css",
-		PathCssBootstrap: e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.css",
-		PathJsJquery:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/jquery.js",
-		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js",
-		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js",
+		PathIcoFav:       e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/fave.ico" + verion,
+		PathSvgLogo:      e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/logo.svg" + verion,
+		PathCssStyles:    e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/styles.css" + verion,
+		PathCssCpStyles:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/styles.css" + verion,
+		PathCssBootstrap: e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.css" + verion,
+		PathJsJquery:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/jquery.js" + verion,
+		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js" + verion,
+		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js" + verion,
 	}
 }
 
