@@ -2,6 +2,7 @@ package wrapper
 
 import (
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -103,9 +104,16 @@ func (e *Wrapper) printPage404() {
 	}
 
 	// Default error page
+	tmpl, err := template.New("template").Parse(string(Templates.PageError404))
+	if err != nil {
+		e.printTmplPageError(err)
+		return
+	}
 	(*e.W).WriteHeader(http.StatusNotFound)
 	(*e.W).Header().Set("Content-Type", "text/html")
-	(*e.W).Write(Templates.PageError404)
+	tmpl.Execute(*e.W, tmplDataAll{
+		System: e.tmplGetSystemData(),
+	})
 }
 
 func (e *Wrapper) printTmplPageError(err error) {
