@@ -10,7 +10,7 @@ type Action struct {
 	W         *http.ResponseWriter
 	R         *http.Request
 	VHost     string
-	vhosthome string
+	VHostHome string
 	RemoteIp  string
 	list      map[string]hRun
 }

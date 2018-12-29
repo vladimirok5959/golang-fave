@@ -2,16 +2,11 @@ package actions
 
 import (
 	"fmt"
+
+	utils "golang-fave/engine/wrapper/utils"
 )
 
 func action_mysql(e *Action) {
-	/*
-	action := e.R.FormValue("action")
-	e.write(fmt.Sprintf(`
-		ModalShowMsg('MySQL Action', 'Hello from web server (%s)');
-	`, action))
-	*/
-
 	pf_host := e.R.FormValue("host")
 	pf_name := e.R.FormValue("name")
 	pf_user := e.R.FormValue("user")
@@ -34,19 +29,13 @@ func action_mysql(e *Action) {
 
 	// Try connect to mysql
 
-
 	// Try to install all tables
 
 	// Save mysql config file
-	err := e.MySqlConfigWrite(pf_host, pf_name, pf_user, pf_password)
-	
-
-	/*
-	if pf_host == "" || pf_name == "" || pf_user == "" || pf_password == "" {
-		e.write(fmt.Sprintf(`ModalShowMsg('Error', 'Not all fields are filed');`))
-		return
+	err := utils.MySqlConfigWrite(e.VHostHome, pf_host, pf_name, pf_user, pf_password)
+	if err != nil {
+		e.write(fmt.Sprintf(`ModalShowMsg('Error', '%s');`, err))
 	}
-	*/
 
 	// Reload current page
 	e.write(fmt.Sprintf(`window.location.reload(false);`))

@@ -1,4 +1,4 @@
-package wrapper
+package utils
 
 import (
 	"encoding/json"
@@ -12,11 +12,11 @@ type ConfigMySql struct {
 	Password string
 }
 
-func (e *Wrapper) IsMySqlConfigExists() bool {
-	f, err := os.Open(e.DirVhostHome + "/config/mysql.json")
+func IsMySqlConfigExists(homedir string) bool {
+	f, err := os.Open(homedir + "/config/mysql.json")
 	if err == nil {
 		defer f.Close()
-		st, err := os.Stat(e.DirVhostHome + "/config/mysql.json")
+		st, err := os.Stat(homedir + "/config/mysql.json")
 		if err == nil {
 			if !st.Mode().IsDir() {
 				return true
@@ -26,8 +26,8 @@ func (e *Wrapper) IsMySqlConfigExists() bool {
 	return false
 }
 
-func (e *Wrapper) MySqlConfigRead() (*ConfigMySql, error) {
-	f, err := os.Open(e.DirVhostHome + "/config/mysql.json")
+func MySqlConfigRead(homedir string) (*ConfigMySql, error) {
+	f, err := os.Open(homedir + "/config/mysql.json")
 	if err == nil {
 		defer f.Close()
 		dec := json.NewDecoder(f)
@@ -40,7 +40,7 @@ func (e *Wrapper) MySqlConfigRead() (*ConfigMySql, error) {
 	return nil, err
 }
 
-func (e *Wrapper) MySqlConfigWrite(host string, name string, user string, password string) error {
+func MySqlConfigWrite(homedir string, host string, name string, user string, password string) error {
 	r, err := json.Marshal(&ConfigMySql{
 		Host:     host,
 		Name:     name,
@@ -48,7 +48,7 @@ func (e *Wrapper) MySqlConfigWrite(host string, name string, user string, passwo
 		Password: password,
 	})
 	if err == nil {
-		f, err := os.Create(e.DirVhostHome + "/config/mysql.json")
+		f, err := os.Create(homedir + "/config/mysql.json")
 		if err == nil {
 			defer f.Close()
 			_, err = f.WriteString(string(r))
