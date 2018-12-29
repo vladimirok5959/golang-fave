@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"golang-fave/engine/sessions"
 )
 
 type hRun func(e *Action)
@@ -14,6 +16,7 @@ type Action struct {
 	VHost     string
 	VHostHome string
 	RemoteIp  string
+	Session   *sessions.Session
 	list      map[string]hRun
 }
 
@@ -40,8 +43,8 @@ func (e *Action) msg_error(msg string) {
 	e.msg_show("Error", msg)
 }
 
-func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string, remoteip string) *Action {
-	act := Action{w, r, vhost, vhosthome, remoteip, make(map[string]hRun)}
+func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string, remoteip string, session *sessions.Session) *Action {
+	act := Action{w, r, vhost, vhosthome, remoteip, session, make(map[string]hRun)}
 
 	// Register all action here
 	act.register("mysql", action_mysql)

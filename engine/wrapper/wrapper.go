@@ -146,7 +146,7 @@ func (e *Wrapper) Run(hRun handleRun) {
 	}
 
 	// Create action
-	e.Action = actions.New(e.W, e.R, e.VHost, e.DirVhostHome, e.RemoteIp)
+	e.Action = actions.New(e.W, e.R, e.VHost, e.DirVhostHome, e.RemoteIp, e.Session)
 
 	// Call action
 	if e.Action.Call() {
