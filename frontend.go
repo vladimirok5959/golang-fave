@@ -2,6 +2,7 @@ package main
 
 import (
 	"golang-fave/engine/wrapper"
+	"net/http"
 )
 
 type MenuItem struct {
@@ -18,6 +19,14 @@ type TmplData struct {
 }
 
 func handleFrontEnd(e *wrapper.Wrapper) bool {
+	// Redirect to CP, if MySQL config file is not exists
+	if !e.IsMySqlConfigExists() {
+		(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		http.Redirect(*e.W, e.R, e.R.URL.Scheme+"://"+e.R.Host+"/cp/", 302)
+		return true
+	}
+
+	// Else logic here
 	if e.R.URL.Path == "/" {
 		return e.TmplFrontEnd("index", TmplData{
 			MetaTitle:       "Meta Title",
