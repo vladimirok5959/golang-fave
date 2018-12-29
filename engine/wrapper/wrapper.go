@@ -13,7 +13,7 @@ import (
 	Templates "golang-fave/engine/wrapper/resources/templates"
 )
 
-const C_AssetsVersion = "2"
+const C_AssetsVersion = "3"
 
 type handleRun func(e *Wrapper) bool
 
