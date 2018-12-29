@@ -1,4 +1,20 @@
+(function($) {
+	$.fn.hasScrollBar = function() {
+		return this.get(0).scrollHeight > this.get(0).clientHeight;
+	}
+})(jQuery);
+
+function DetectBodyScroll() {
+	var body = $('body');
+	if($(body).hasScrollBar()) {
+		$(body).removeClass('no-scroll');
+	} else {
+		$(body).addClass('no-scroll');
+	}
+}
+
 function ModalSysMsg(title, html) {
+	DetectBodyScroll();
 	var dialog = $('#sys-modal-msg');
 	$('#sysModalMsgLabel').text(title);
 	$('#sysModalMsgBody').html(html);
@@ -11,6 +27,13 @@ function ModalShowMsg(title, message) {
 }
 
 $(document).ready(function() {
+	// Fix body scroll
+	$(window).resize(function() {
+		DetectBodyScroll();
+	});
+	DetectBodyScroll();
+
+	// Ajax forms
 	$('form').each(function() {
 		$(this).submit(function(e) {
 			var form = $(this);

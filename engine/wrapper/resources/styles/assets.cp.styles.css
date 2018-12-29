@@ -1,3 +1,8 @@
+/* Bootstrap scroll fix */
+body.no-scroll {
+	padding-right: 0px !important;
+}
+
 /* Login/MySQL form */
 body.cp-login,
 body.cp-mysql {
