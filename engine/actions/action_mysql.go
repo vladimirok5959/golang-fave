@@ -1,7 +1,10 @@
 package actions
 
 import (
+	"database/sql"
 	"fmt"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	utils "golang-fave/engine/wrapper/utils"
 )
@@ -13,28 +16,40 @@ func action_mysql(e *Action) {
 	pf_password := e.R.FormValue("password")
 
 	if pf_host == "" {
-		e.write(fmt.Sprintf(`ModalShowMsg('Error', 'Please specify host for mysql connection');`))
+		e.msg_error(`Please specify host for mysql connection`)
 		return
 	}
 
 	if pf_name == "" {
-		e.write(fmt.Sprintf(`ModalShowMsg('Error', 'Please specify mysql database name');`))
+		e.msg_error(`Please specify mysql database name`)
 		return
 	}
 
 	if pf_user == "" {
-		e.write(fmt.Sprintf(`ModalShowMsg('Error', 'Please specify mysql user');`))
+		e.msg_error(`Please specify mysql user`)
 		return
 	}
 
 	// Try connect to mysql
+	db, err := sql.Open("mysql", pf_user+":"+pf_password+"@tcp("+pf_host+":3306)/"+pf_name)
+	if err != nil {
+		e.msg_error(err.Error())
+		return
+	}
+	defer db.Close()
+	err = db.Ping()
+	if err != nil {
+		e.msg_error(err.Error())
+		return
+	}
 
 	// Try to install all tables
 
 	// Save mysql config file
-	err := utils.MySqlConfigWrite(e.VHostHome, pf_host, pf_name, pf_user, pf_password)
+	err = utils.MySqlConfigWrite(e.VHostHome, pf_host, pf_name, pf_user, pf_password)
 	if err != nil {
-		e.write(fmt.Sprintf(`ModalShowMsg('Error', '%s');`, err))
+		e.msg_error(err.Error())
+		return
 	}
 
 	// Reload current page
