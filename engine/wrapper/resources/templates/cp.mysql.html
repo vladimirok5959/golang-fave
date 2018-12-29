@@ -15,14 +15,16 @@
 		<form class="form-signin" action="/cp/" method="post">
 			<input type="hidden" name="action" value="mysql">
 			<h1 class="h3 mb-3 font-weight-normal">Configure MySQL</h1>
-			<label for="host" class="sr-only">Host</label>
-			<input type="text" id="host" name="host" class="form-control mb-3" placeholder="DB Host" value="localhost" required>
-			<label for="name" class="sr-only">Name</label>
-			<input type="text" id="name" name="name" class="form-control mb-3" placeholder="DB Name" required autofocus>
-			<label for="user" class="sr-only">User</label>
-			<input type="text" id="user" name="user" class="form-control mb-3" placeholder="DB User" required>
-			<label for="password" class="sr-only">Password</label>
-			<input type="password" id="password" name="password" class="form-control mb-3" placeholder="DB User Password">
+			<label for="host" class="sr-only">Database host</label>
+			<input type="text" id="host" name="host" class="form-control mb-3" placeholder="Database host" value="localhost" required>
+			<label for="host" class="sr-only">Database host port</label>
+			<input type="text" id="host" name="port" class="form-control mb-3" placeholder="Database host port" value="3306" required>
+			<label for="name" class="sr-only">Database name</label>
+			<input type="text" id="name" name="name" class="form-control mb-3" placeholder="Database name" required autofocus>
+			<label for="user" class="sr-only">Database user name</label>
+			<input type="text" id="user" name="user" class="form-control mb-3" placeholder="Database user name" required>
+			<label for="password" class="sr-only">Database user password</label>
+			<input type="password" id="password" name="password" class="form-control mb-3" placeholder="Database user password">
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Configure</button>
 		</form>
 		<script src="{{$.System.PathJsJquery}}"></script>

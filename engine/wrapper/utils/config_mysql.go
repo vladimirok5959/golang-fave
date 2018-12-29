@@ -7,6 +7,7 @@ import (
 
 type ConfigMySql struct {
 	Host     string
+	Port     string
 	Name     string
 	User     string
 	Password string
@@ -40,9 +41,10 @@ func MySqlConfigRead(homedir string) (*ConfigMySql, error) {
 	return nil, err
 }
 
-func MySqlConfigWrite(homedir string, host string, name string, user string, password string) error {
+func MySqlConfigWrite(homedir string, host string, port string, name string, user string, password string) error {
 	r, err := json.Marshal(&ConfigMySql{
 		Host:     host,
+		Port:     port,
 		Name:     name,
 		User:     user,
 		Password: password,

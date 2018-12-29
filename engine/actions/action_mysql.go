@@ -3,6 +3,7 @@ package actions
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -11,12 +12,23 @@ import (
 
 func action_mysql(e *Action) {
 	pf_host := e.R.FormValue("host")
+	pf_port := e.R.FormValue("port")
 	pf_name := e.R.FormValue("name")
 	pf_user := e.R.FormValue("user")
 	pf_password := e.R.FormValue("password")
 
 	if pf_host == "" {
 		e.msg_error(`Please specify host for mysql connection`)
+		return
+	}
+
+	if pf_port == "" {
+		e.msg_error(`Please specify host port for mysql connection`)
+		return
+	}
+
+	if _, err := strconv.Atoi(pf_port); err != nil {
+		e.msg_error(`MySql host port must be integer number`)
 		return
 	}
 
@@ -31,7 +43,7 @@ func action_mysql(e *Action) {
 	}
 
 	// Try connect to mysql
-	db, err := sql.Open("mysql", pf_user+":"+pf_password+"@tcp("+pf_host+":3306)/"+pf_name)
+	db, err := sql.Open("mysql", pf_user+":"+pf_password+"@tcp("+pf_host+":"+pf_port+")/"+pf_name)
 	if err != nil {
 		e.msg_error(err.Error())
 		return
@@ -46,7 +58,7 @@ func action_mysql(e *Action) {
 	// Try to install all tables
 
 	// Save mysql config file
-	err = utils.MySqlConfigWrite(e.VHostHome, pf_host, pf_name, pf_user, pf_password)
+	err = utils.MySqlConfigWrite(e.VHostHome, pf_host, pf_port, pf_name, pf_user, pf_password)
 	if err != nil {
 		e.msg_error(err.Error())
 		return
