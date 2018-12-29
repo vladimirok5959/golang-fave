@@ -18,27 +18,27 @@ func action_mysql(e *Action) {
 	pf_password := e.R.FormValue("password")
 
 	if pf_host == "" {
-		e.msg_error(`Please specify host for mysql connection`)
+		e.msg_error(`Please specify host for MySQL connection`)
 		return
 	}
 
 	if pf_port == "" {
-		e.msg_error(`Please specify host port for mysql connection`)
+		e.msg_error(`Please specify host port for MySQL connection`)
 		return
 	}
 
 	if _, err := strconv.Atoi(pf_port); err != nil {
-		e.msg_error(`MySql host port must be integer number`)
+		e.msg_error(`MySQL host port must be integer number`)
 		return
 	}
 
 	if pf_name == "" {
-		e.msg_error(`Please specify mysql database name`)
+		e.msg_error(`Please specify MySQL database name`)
 		return
 	}
 
 	if pf_user == "" {
-		e.msg_error(`Please specify mysql user`)
+		e.msg_error(`Please specify MySQL user`)
 		return
 	}
 
