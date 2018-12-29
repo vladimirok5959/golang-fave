@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"golang-fave/engine/actions"
 	"golang-fave/engine/wrapper"
 )
 
@@ -117,10 +118,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Create and start engine
 	wrapper.New(&w, r, host, port, FParamWwwDir, FVhostHomeDir, C_Debug).
 		Run(func(e *wrapper.Wrapper) bool {
-			if e.R.URL.Path == "/cp" || strings.HasPrefix(e.R.URL.Path, "/cp/") {
-				return handleBackEnd(e)
-			} else {
+			// Actions
+			action := actions.New(e)
+			if action.Call() {
+				e.Log("200")
+				e.Session.Save()
+				return true
+			}
+
+			// Pages
+			if !(e.R.URL.Path == "/cp" || strings.HasPrefix(e.R.URL.Path, "/cp/")) {
 				return handleFrontEnd(e)
+			} else {
+				return handleBackEnd(e)
 			}
 		})
 }

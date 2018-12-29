@@ -11,11 +11,11 @@ import (
 )
 
 func action_mysql(e *Action) {
-	pf_host := e.R.FormValue("host")
-	pf_port := e.R.FormValue("port")
-	pf_name := e.R.FormValue("name")
-	pf_user := e.R.FormValue("user")
-	pf_password := e.R.FormValue("password")
+	pf_host := e.w.R.FormValue("host")
+	pf_port := e.w.R.FormValue("port")
+	pf_name := e.w.R.FormValue("name")
+	pf_user := e.w.R.FormValue("user")
+	pf_password := e.w.R.FormValue("password")
 
 	if pf_host == "" {
 		e.msg_error(`Please specify host for MySQL connection`)
@@ -58,7 +58,7 @@ func action_mysql(e *Action) {
 	// Try to install all tables
 
 	// Save mysql config file
-	err = utils.MySqlConfigWrite(e.VHostHome, pf_host, pf_port, pf_name, pf_user, pf_password)
+	err = utils.MySqlConfigWrite(e.w.DirVhostHome, pf_host, pf_port, pf_name, pf_user, pf_password)
 	if err != nil {
 		e.msg_error(err.Error())
 		return
