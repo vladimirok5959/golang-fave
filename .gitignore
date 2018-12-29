@@ -25,3 +25,6 @@
 
 # Test virtual host dir
 /hosts/example.com
+
+# Default host mysql config file
+/hosts/localhost/config/mysql.json
