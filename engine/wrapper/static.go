@@ -115,6 +115,7 @@ func (e *Wrapper) printPageDefault() {
 		e.printTmplPageError(err)
 		return
 	}
+	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	(*e.W).Header().Set("Content-Type", "text/html")
 	tmpl.Execute(*e.W, tmplDataAll{
 		System: e.tmplGetSystemData(),
@@ -137,6 +138,7 @@ func (e *Wrapper) printPage404() {
 		e.printTmplPageError(err)
 		return
 	}
+	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	(*e.W).WriteHeader(http.StatusNotFound)
 	(*e.W).Header().Set("Content-Type", "text/html")
 	tmpl.Execute(*e.W, tmplDataAll{
@@ -147,12 +149,14 @@ func (e *Wrapper) printPage404() {
 func (e *Wrapper) printTmplPageError(perr error) {
 	tmpl, err := template.New("template").Parse(string(Templates.PageTmplError))
 	if err != nil {
+		(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		(*e.W).WriteHeader(http.StatusInternalServerError)
 		(*e.W).Header().Set("Content-Type", "text/html")
 		(*e.W).Write([]byte("<h1>Critical engine error!</h1>"))
 		(*e.W).Write([]byte("<h2>" + perr.Error() + "</h2>"))
 		return
 	}
+	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	(*e.W).WriteHeader(http.StatusInternalServerError)
 	(*e.W).Header().Set("Content-Type", "text/html")
 	tmpl.Execute(*e.W, tmplDataAll{

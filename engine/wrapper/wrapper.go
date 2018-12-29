@@ -194,6 +194,7 @@ func (e *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
 		e.printTmplPageError(err)
 		return true
 	}
+	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	tmpl.Execute(*e.W, tmplDataAll{
 		System: e.tmplGetSystemData(),
 		Data:   data,
@@ -207,6 +208,7 @@ func (e *Wrapper) TmplBackEnd(tcont []byte, data interface{}) bool {
 		e.printTmplPageError(err)
 		return true
 	}
+	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	tmpl.Execute(*e.W, tmplDataAll{
 		System: e.tmplGetSystemData(),
 		Data:   data,
