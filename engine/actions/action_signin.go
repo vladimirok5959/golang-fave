@@ -6,7 +6,7 @@ import (
 
 func action_signin(e *Action) {
 	action := e.R.FormValue("action")
-	(*e.W).Write([]byte(fmt.Sprintf(`
+	e.write(fmt.Sprintf(`
 		ModalShowMsg('Login Action', 'Hello from web server (%s)');
-	`, action)))
+	`, action))
 }

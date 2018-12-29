@@ -19,6 +19,10 @@ func (e *Action) register(name string, handle hRun) {
 	e.list[name] = handle
 }
 
+func (e *Action) write(data string) {
+	(*e.W).Write([]byte(data))
+}
+
 func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string, remoteip string) *Action {
 	act := Action{w, r, vhost, vhosthome, remoteip, make(map[string]hRun)}
 
