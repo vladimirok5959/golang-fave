@@ -7,6 +7,11 @@ import (
 )
 
 func handleBackEnd(e *wrapper.Wrapper) bool {
-	//return e.TmplBackEnd(Templates.CpLogin, nil)
-	return e.TmplBackEnd(Templates.CpMySQL, nil)
+	// MySQL config page
+	if !e.IsMySqlConfigExists() {
+		return e.TmplBackEnd(Templates.CpMySQL, nil)
+	}
+
+	// Login page
+	return e.TmplBackEnd(Templates.CpLogin, nil)
 }
