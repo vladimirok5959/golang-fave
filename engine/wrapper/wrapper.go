@@ -10,6 +10,7 @@ import (
 
 	"golang-fave/engine/actions"
 	"golang-fave/engine/sessions"
+	Templates "golang-fave/engine/wrapper/resources/templates"
 )
 
 const C_AssetsVersion = "2"
@@ -26,6 +27,7 @@ type tmplDataSystem struct {
 	PathJsPopper     string
 	PathJsBootstrap  string
 	PathJsCpScripts  string
+	BlockModalSysMsg template.HTML
 }
 
 type tmplDataAll struct {
@@ -60,6 +62,7 @@ func (e *Wrapper) tmplGetSystemData() tmplDataSystem {
 		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js" + version,
 		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js" + version,
 		PathJsCpScripts:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/scripts.js" + version,
+		BlockModalSysMsg: template.HTML(Templates.BlockModalSysMsg),
 	}
 }
 
