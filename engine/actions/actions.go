@@ -23,6 +23,7 @@ func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string
 	act := Action{w, r, vhost, vhosthome, remoteip, make(map[string]hRun)}
 
 	// Register all action here
+	act.register("mysql", action_mysql)
 	act.register("signin", action_signin)
 
 	return &act
