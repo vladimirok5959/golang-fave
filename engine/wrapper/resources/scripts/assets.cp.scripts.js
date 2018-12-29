@@ -55,8 +55,8 @@ $(document).ready(function() {
 					eval(data);
 				} catch(e) {
 					if(e instanceof SyntaxError) {
-						console.log('JavaScript eval error:', e.message);
 						console.log(data);
+						ModalShowMsg('JavaScript Eval Error', e.message)
 					}
 				}
 			}).fail(function() {
