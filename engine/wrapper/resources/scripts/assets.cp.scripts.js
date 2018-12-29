@@ -1,3 +1,15 @@
+function ModalSysMsg(title, html) {
+	var dialog = $('#sys-modal-msg');
+	$('#sysModalMsgLabel').text(title);
+	$('#sysModalMsgBody').html(html);
+	return dialog;
+}
+
+function ModalShowMsg(title, message) {
+	var dialog = ModalSysMsg(title, message);
+	dialog.modal('show');
+}
+
 $(document).ready(function() {
 	$('form').each(function() {
 		$(this).submit(function(e) {
