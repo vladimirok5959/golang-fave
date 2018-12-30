@@ -8,7 +8,7 @@ import (
 
 func handleBackEnd(wrapper *wrapper.Wrapper) bool {
 	// MySQL config page
-	if !utils.IsMySqlConfigExists(wrapper.DirVhostHome) {
+	if !utils.IsMySqlConfigExists(wrapper.DirVHostHome) {
 		return wrapper.TmplBackEnd(templates.CpMySQL, nil)
 	}
 

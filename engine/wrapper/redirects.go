@@ -7,7 +7,7 @@ import (
 )
 
 func (this *Wrapper) redirectToMainDomain() bool {
-	file, err := ioutil.ReadFile(this.DirVhostHome + "/config/domain")
+	file, err := ioutil.ReadFile(this.DirVHostHome + "/config/domain")
 	if err == nil {
 		maindomain := strings.TrimSpace(string(file))
 		port := ""

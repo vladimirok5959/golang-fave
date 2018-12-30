@@ -80,31 +80,31 @@ func (this *Wrapper) staticResource() bool {
 func (this *Wrapper) staticFile() bool {
 	file := this.R.URL.Path
 	if file != "/" {
-		f, err := os.Open(this.DirVhostHome + "/htdocs" + file)
+		f, err := os.Open(this.DirVHostHome + "/htdocs" + file)
 		if err == nil {
 			defer f.Close()
-			st, err := os.Stat(this.DirVhostHome + "/htdocs" + file)
+			st, err := os.Stat(this.DirVHostHome + "/htdocs" + file)
 			if err != nil {
 				return false
 			}
 			if st.Mode().IsDir() {
 				return false
 			}
-			http.ServeFile(*this.W, this.R, this.DirVhostHome+"/htdocs"+file)
+			http.ServeFile(*this.W, this.R, this.DirVHostHome+"/htdocs"+file)
 			return true
 		}
 	} else {
-		f, err := os.Open(this.DirVhostHome + "/htdocs/index.html")
+		f, err := os.Open(this.DirVHostHome + "/htdocs/index.html")
 		if err == nil {
 			defer f.Close()
-			st, err := os.Stat(this.DirVhostHome + "/htdocs/index.html")
+			st, err := os.Stat(this.DirVHostHome + "/htdocs/index.html")
 			if err != nil {
 				return false
 			}
 			if st.Mode().IsDir() {
 				return false
 			}
-			http.ServeFile(*this.W, this.R, this.DirVhostHome+"/htdocs/index.html")
+			http.ServeFile(*this.W, this.R, this.DirVHostHome+"/htdocs/index.html")
 			return true
 		}
 	}
@@ -113,10 +113,10 @@ func (this *Wrapper) staticFile() bool {
 
 func (this *Wrapper) printPageDefault() {
 	// Custom page
-	f, err := os.Open(this.DirVhostHome + "/htdocs" + "/index.html")
+	f, err := os.Open(this.DirVHostHome + "/htdocs" + "/index.html")
 	if err == nil {
 		defer f.Close()
-		http.ServeFile(*this.W, this.R, this.DirVhostHome+"/htdocs"+"/index.html")
+		http.ServeFile(*this.W, this.R, this.DirVHostHome+"/htdocs"+"/index.html")
 		return
 	}
 
@@ -135,7 +135,7 @@ func (this *Wrapper) printPageDefault() {
 
 func (this *Wrapper) printPage404() {
 	// Custom 404 error page
-	f, err := ioutil.ReadFile(this.DirVhostHome + "/htdocs" + "/404.html")
+	f, err := ioutil.ReadFile(this.DirVHostHome + "/htdocs" + "/404.html")
 	if err == nil {
 		(*this.W).WriteHeader(http.StatusNotFound)
 		(*this.W).Header().Set("Content-Type", "text/html")

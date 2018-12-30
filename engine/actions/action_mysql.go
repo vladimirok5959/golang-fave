@@ -58,7 +58,7 @@ func (this *Action) Action_mysql() {
 	// Try to install all tables
 
 	// Save mysql config file
-	err = utils.MySqlConfigWrite(this.wrapper.DirVhostHome, pf_host, pf_port, pf_name, pf_user, pf_password)
+	err = utils.MySqlConfigWrite(this.wrapper.DirVHostHome, pf_host, pf_port, pf_name, pf_user, pf_password)
 	if err != nil {
 		this.msg_error(err.Error())
 		return

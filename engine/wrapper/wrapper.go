@@ -40,7 +40,7 @@ type Wrapper struct {
 	VHost        string
 	Port         string
 	DirWww       string
-	DirVhostHome string
+	DirVHostHome string
 	RemoteIp     string
 	LoggerAcc    *log.Logger
 	LoggerErr    *log.Logger
@@ -69,7 +69,7 @@ func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, www
 		VHost:        vhost,
 		Port:         port,
 		DirWww:       wwwdir,
-		DirVhostHome: vhosthome,
+		DirVHostHome: vhosthome,
 		W:            w,
 		R:            r,
 		Debug:        debug,
@@ -86,7 +86,7 @@ func (this *Wrapper) Run(hRun handleRun) {
 
 	// Attach file for access log
 	if !this.Debug {
-		acclogfile, acclogfileerr := os.OpenFile(this.DirVhostHome+"/logs/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		acclogfile, acclogfileerr := os.OpenFile(this.DirVHostHome+"/logs/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if acclogfileerr == nil {
 			defer acclogfile.Close()
 			this.LoggerAcc.SetOutput(acclogfile)
@@ -95,7 +95,7 @@ func (this *Wrapper) Run(hRun handleRun) {
 
 	// Attach file for access log
 	if !this.Debug {
-		errlogfile, errlogfileerr := os.OpenFile(this.DirVhostHome+"/logs/error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		errlogfile, errlogfileerr := os.OpenFile(this.DirVHostHome+"/logs/error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if errlogfileerr == nil {
 			defer errlogfile.Close()
 			this.LoggerErr.SetOutput(errlogfile)
@@ -132,7 +132,7 @@ func (this *Wrapper) Run(hRun handleRun) {
 	}
 
 	// Create and load session
-	this.Session = sessions.New(this.W, this.R, this.VHost, this.DirVhostHome, this.RemoteIp)
+	this.Session = sessions.New(this.W, this.R, this.VHost, this.DirVHostHome, this.RemoteIp)
 	this.Session.Load()
 
 	// Set session vars
@@ -176,10 +176,10 @@ func (this *Wrapper) LogError(value string) {
 
 func (this *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
 	tmpl, err := template.ParseFiles(
-		this.DirVhostHome+"/template"+"/"+tname+".html",
-		this.DirVhostHome+"/template"+"/header.html",
-		this.DirVhostHome+"/template"+"/sidebar.html",
-		this.DirVhostHome+"/template"+"/footer.html",
+		this.DirVHostHome+"/template"+"/"+tname+".html",
+		this.DirVHostHome+"/template"+"/header.html",
+		this.DirVHostHome+"/template"+"/sidebar.html",
+		this.DirVHostHome+"/template"+"/footer.html",
 	)
 	if err != nil {
 		this.printTmplPageError(err)
