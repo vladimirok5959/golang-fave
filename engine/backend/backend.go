@@ -2,6 +2,7 @@ package backend
 
 import (
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 
 	"golang-fave/engine/wrapper"
 
