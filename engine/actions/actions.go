@@ -8,8 +8,6 @@ import (
 	"golang-fave/engine/wrapper"
 )
 
-type hRun func(this *Action)
-
 type Action struct {
 	wrapper *wrapper.Wrapper
 }
