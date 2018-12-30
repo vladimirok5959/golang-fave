@@ -13,9 +13,9 @@ import (
 )
 
 type Vars struct {
-	FInt    map[string]int
-	FString map[string]string
-	FBool   map[string]bool
+	Int    map[string]int
+	String map[string]string
+	Bool   map[string]bool
 }
 
 type Session struct {
@@ -25,7 +25,7 @@ type Session struct {
 	DirVHostHome string
 	RemoteIp     string
 	vars         *Vars
-	Ident        string
+	ident        string
 	changed      bool
 }
 
@@ -37,9 +37,9 @@ func (s *Session) Load() {
 	var session, err = s.R.Cookie("fsession")
 	if err == nil && len(session.Value) == 40 {
 		// Load session
-		s.Ident = session.Value
+		s.ident = session.Value
 		StartNewSession := true
-		fsessfile := s.DirVHostHome + "/tmp/" + s.Ident
+		fsessfile := s.DirVHostHome + "/tmp/" + s.ident
 		file, ferr := os.Open(fsessfile)
 		if ferr == nil {
 			defer file.Close()
@@ -51,9 +51,9 @@ func (s *Session) Load() {
 		}
 		if StartNewSession {
 			sessdata := Vars{}
-			sessdata.FInt = map[string]int{}
-			sessdata.FString = map[string]string{}
-			sessdata.FBool = map[string]bool{}
+			sessdata.Int = map[string]int{}
+			sessdata.String = map[string]string{}
+			sessdata.Bool = map[string]bool{}
 			s.vars = &sessdata
 			s.changed = true
 		}
@@ -66,13 +66,13 @@ func (s *Session) Load() {
 			strconv.FormatInt((int64(time.Now().Unix())), 10) +
 			strconv.FormatInt(int64(rnd), 10)
 		userhashstr := fmt.Sprintf("%x", sha1.Sum([]byte(userstr)))
-		s.Ident = userhashstr
+		s.ident = userhashstr
 
 		// Try to create session file
 		sessdata := Vars{}
-		sessdata.FInt = map[string]int{}
-		sessdata.FString = map[string]string{}
-		sessdata.FBool = map[string]bool{}
+		sessdata.Int = map[string]int{}
+		sessdata.String = map[string]string{}
+		sessdata.Bool = map[string]bool{}
 		s.vars = &sessdata
 		s.changed = true
 
@@ -87,7 +87,7 @@ func (s *Session) Save() bool {
 	if !s.changed {
 		return false
 	}
-	fsessfile := s.DirVHostHome + "/tmp/" + s.Ident
+	fsessfile := s.DirVHostHome + "/tmp/" + s.ident
 	r, err := json.Marshal(s.vars)
 	if err == nil {
 		file, ferr := os.Create(fsessfile)
@@ -104,7 +104,7 @@ func (s *Session) Save() bool {
 }
 
 func (s *Session) IsSetInt(name string) bool {
-	if _, ok := s.vars.FInt[name]; ok {
+	if _, ok := s.vars.Int[name]; ok {
 		return true
 	} else {
 		return false
@@ -112,7 +112,7 @@ func (s *Session) IsSetInt(name string) bool {
 }
 
 func (s *Session) IsSetString(name string) bool {
-	if _, ok := s.vars.FString[name]; ok {
+	if _, ok := s.vars.String[name]; ok {
 		return true
 	} else {
 		return false
@@ -120,7 +120,7 @@ func (s *Session) IsSetString(name string) bool {
 }
 
 func (s *Session) IsSetBool(name string) bool {
-	if _, ok := s.vars.FBool[name]; ok {
+	if _, ok := s.vars.Bool[name]; ok {
 		return true
 	} else {
 		return false
@@ -128,23 +128,23 @@ func (s *Session) IsSetBool(name string) bool {
 }
 
 func (s *Session) SetInt(name string, value int) {
-	s.vars.FInt[name] = value
+	s.vars.Int[name] = value
 	s.changed = true
 }
 
 func (s *Session) SetString(name string, value string) {
-	s.vars.FString[name] = value
+	s.vars.String[name] = value
 	s.changed = true
 }
 
 func (s *Session) SetBool(name string, value bool) {
-	s.vars.FBool[name] = value
+	s.vars.Bool[name] = value
 	s.changed = true
 }
 
 func (s *Session) GetInt(name string) (int, error) {
 	if s.IsSetInt(name) {
-		return s.vars.FInt[name], nil
+		return s.vars.Int[name], nil
 	} else {
 		return 0, errors.New("Variable is not found")
 	}
@@ -152,7 +152,7 @@ func (s *Session) GetInt(name string) (int, error) {
 
 func (s *Session) GetString(name string) (string, error) {
 	if s.IsSetString(name) {
-		return s.vars.FString[name], nil
+		return s.vars.String[name], nil
 	} else {
 		return "", errors.New("Variable is not found")
 	}
@@ -160,7 +160,7 @@ func (s *Session) GetString(name string) (string, error) {
 
 func (s *Session) GetBool(name string) (bool, error) {
 	if s.IsSetBool(name) {
-		return s.vars.FBool[name], nil
+		return s.vars.Bool[name], nil
 	} else {
 		return false, errors.New("Variable is not found")
 	}
@@ -168,21 +168,21 @@ func (s *Session) GetBool(name string) (bool, error) {
 
 func (s *Session) DelInt(name string) {
 	if s.IsSetInt(name) {
-		delete(s.vars.FInt, name)
+		delete(s.vars.Int, name)
 		s.changed = true
 	}
 }
 
 func (s *Session) DelString(name string) {
 	if s.IsSetString(name) {
-		delete(s.vars.FString, name)
+		delete(s.vars.String, name)
 		s.changed = true
 	}
 }
 
 func (s *Session) DelBool(name string) {
 	if s.IsSetBool(name) {
-		delete(s.vars.FBool, name)
+		delete(s.vars.Bool, name)
 		s.changed = true
 	}
 }
