@@ -5,7 +5,8 @@ body.no-scroll {
 
 /* Login/MySQL form */
 body.cp-login,
-body.cp-mysql {
+body.cp-mysql,
+body.cp-first-user {
 	height: 100%;
 	display: -ms-flexbox;
 	display: -webkit-box;
@@ -23,7 +24,8 @@ body.cp-mysql {
 }
 
 .cp-login .form-signin,
-.cp-mysql .form-signin {
+.cp-mysql .form-signin,
+.cp-first-user .form-signin {
 	width: 100%;
 	max-width: 330px;
 	padding: 15px;
@@ -31,12 +33,14 @@ body.cp-mysql {
 }
 
 .cp-login .form-signin label,
-.cp-mysql .form-signin label {
+.cp-mysql .form-signin label,
+.cp-first-user .form-signin label {
 	cursor: pointer;
 }
 
 .cp-login .form-signin .form-control,
-.cp-mysql .form-signin .form-control {
+.cp-mysql .form-signin .form-control,
+.cp-first-user .form-signin .form-control {
 	position: relative;
 	box-sizing: border-box;
 	height: auto;
@@ -45,7 +49,8 @@ body.cp-mysql {
 }
 
 .cp-login .form-signin .form-control:focus,
-.cp-mysql .form-signin .form-control:focus {
+.cp-mysql .form-signin .form-control:focus,
+.cp-first-user .form-signin .form-control:focus {
 	z-index: 2;
 }
 

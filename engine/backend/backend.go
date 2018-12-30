@@ -19,10 +19,15 @@ func New(wrapper *wrapper.Wrapper, db *sql.DB) *Backend {
 }
 
 func (this *Backend) Run() bool {
-	// TODO:
-	// Check if any user exists
-	// If not - display form to create first user
-	// DO NOT FORGET!
+	// Show add user form if no any user in db
+	var count int
+	err := this.db.QueryRow("SELECT COUNT(*) FROM `users`;").Scan(&count)
+	if this.wrapper.EngineErrMsgOnError(err) {
+		return true
+	}
+	if count <= 0 {
+		return this.wrapper.TmplBackEnd(templates.CpFirstUser, nil)
+	}
 
 	// Login page
 	return this.wrapper.TmplBackEnd(templates.CpLogin, nil)
