@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	//"golang-fave/constants"
+	"golang-fave/constants"
 	"golang-fave/engine/actions"
 	"golang-fave/engine/wrapper"
 )
@@ -112,10 +112,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	r.URL.Scheme = "http"
 
 	// Set server name
-	w.Header().Set("Server", "fave.pro")
+	w.Header().Set("Server", "fave.pro/"+constants.ServerVersion)
 
 	// Create and start engine
-	//wrapper.New(&w, r, host, port, ParamWwwDir, VhostHomeDir, C_Debug).
 	wrapper.New(&w, r, host, port, ParamWwwDir, VhostHomeDir).
 		Run(func(wrapper *wrapper.Wrapper) bool {
 			// Actions
