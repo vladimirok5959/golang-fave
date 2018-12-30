@@ -121,7 +121,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			// Actions
 			action := actions.New(wrapper)
 			if action.Call() {
-				wrapper.Log("200")
 				wrapper.Session.Save()
 				return true
 			}

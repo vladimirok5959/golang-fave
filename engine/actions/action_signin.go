@@ -4,9 +4,9 @@ import (
 	"fmt"
 )
 
-func action_signin(e *Action) {
-	action := e.w.R.FormValue("action")
-	e.write(fmt.Sprintf(`
+func (this *Action) Action_signin() {
+	action := this.wrapper.R.FormValue("action")
+	this.write(fmt.Sprintf(`
 		ModalShowMsg('Login Action', 'Hello from web server (%s)');
 	`, action))
 }
