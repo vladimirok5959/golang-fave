@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"golang-fave/constants"
 	"golang-fave/engine/sessions"
 	templates "golang-fave/engine/wrapper/resources/templates"
 )
@@ -45,7 +46,6 @@ type Wrapper struct {
 	LoggerAcc    *log.Logger
 	LoggerErr    *log.Logger
 	Session      *sessions.Session
-	Debug        bool
 }
 
 func (this *Wrapper) tmplGetSystemData() tmplDataSystem {
@@ -64,7 +64,7 @@ func (this *Wrapper) tmplGetSystemData() tmplDataSystem {
 	}
 }
 
-func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, wwwdir string, vhosthome string, debug bool) *Wrapper {
+func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, wwwdir string, vhosthome string) *Wrapper {
 	return &Wrapper{
 		VHost:        vhost,
 		Port:         port,
@@ -72,7 +72,6 @@ func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, www
 		DirVHostHome: vhosthome,
 		W:            w,
 		R:            r,
-		Debug:        debug,
 	}
 }
 
@@ -85,7 +84,7 @@ func (this *Wrapper) Run(hRun handleRun) {
 	this.LoggerErr = log.New(os.Stdout, this.VHost+", ", log.LstdFlags)
 
 	// Attach file for access log
-	if !this.Debug {
+	if !constants.Debug {
 		acclogfile, acclogfileerr := os.OpenFile(this.DirVHostHome+"/logs/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if acclogfileerr == nil {
 			defer acclogfile.Close()
@@ -94,7 +93,7 @@ func (this *Wrapper) Run(hRun handleRun) {
 	}
 
 	// Attach file for access log
-	if !this.Debug {
+	if !constants.Debug {
 		errlogfile, errlogfileerr := os.OpenFile(this.DirVHostHome+"/logs/error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if errlogfileerr == nil {
 			defer errlogfile.Close()

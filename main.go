@@ -12,11 +12,10 @@ import (
 	"strings"
 	"time"
 
+	//"golang-fave/constants"
 	"golang-fave/engine/actions"
 	"golang-fave/engine/wrapper"
 )
-
-const C_Debug = !false
 
 var ParamHost string
 var ParamPort int
@@ -116,7 +115,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Server", "fave.pro")
 
 	// Create and start engine
-	wrapper.New(&w, r, host, port, ParamWwwDir, VhostHomeDir, C_Debug).
+	//wrapper.New(&w, r, host, port, ParamWwwDir, VhostHomeDir, C_Debug).
+	wrapper.New(&w, r, host, port, ParamWwwDir, VhostHomeDir).
 		Run(func(wrapper *wrapper.Wrapper) bool {
 			// Actions
 			action := actions.New(wrapper)
