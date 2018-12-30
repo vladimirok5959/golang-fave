@@ -33,18 +33,18 @@ func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string
 	return &Session{w, r, vhost, vhosthome, remoteip, &Vars{}, "", false}
 }
 
-func (s *Session) Load() {
-	var session, err = s.R.Cookie("fsession")
+func (this *Session) Load() {
+	var session, err = this.R.Cookie("fsession")
 	if err == nil && len(session.Value) == 40 {
 		// Load session
-		s.ident = session.Value
+		this.ident = session.Value
 		StartNewSession := true
-		fsessfile := s.DirVHostHome + "/tmp/" + s.ident
+		fsessfile := this.DirVHostHome + "/tmp/" + this.ident
 		file, ferr := os.Open(fsessfile)
 		if ferr == nil {
 			defer file.Close()
 			dec := json.NewDecoder(file)
-			ferr = dec.Decode(&s.vars)
+			ferr = dec.Decode(&this.vars)
 			if ferr == nil {
 				StartNewSession = false
 			}
@@ -54,48 +54,48 @@ func (s *Session) Load() {
 			sessdata.Int = map[string]int{}
 			sessdata.String = map[string]string{}
 			sessdata.Bool = map[string]bool{}
-			s.vars = &sessdata
-			s.changed = true
+			this.vars = &sessdata
+			this.changed = true
 		}
 	} else {
 		// Create new session
 		// Generate unique hash
 		rand.Seed(time.Now().Unix())
 		rnd := rand.Intn(9999999-99) + 99
-		userstr := s.VHost + s.RemoteIp + s.R.Header.Get("User-Agent") +
+		userstr := this.VHost + this.RemoteIp + this.R.Header.Get("User-Agent") +
 			strconv.FormatInt((int64(time.Now().Unix())), 10) +
 			strconv.FormatInt(int64(rnd), 10)
 		userhashstr := fmt.Sprintf("%x", sha1.Sum([]byte(userstr)))
-		s.ident = userhashstr
+		this.ident = userhashstr
 
 		// Try to create session file
 		sessdata := Vars{}
 		sessdata.Int = map[string]int{}
 		sessdata.String = map[string]string{}
 		sessdata.Bool = map[string]bool{}
-		s.vars = &sessdata
-		s.changed = true
+		this.vars = &sessdata
+		this.changed = true
 
 		// Set session cookie
 		expiration := time.Now().Add(365 * 24 * time.Hour)
 		cookie := http.Cookie{Name: "fsession", Value: userhashstr, Expires: expiration}
-		http.SetCookie(*s.W, &cookie)
+		http.SetCookie(*this.W, &cookie)
 	}
 }
 
-func (s *Session) Save() bool {
-	if !s.changed {
+func (this *Session) Save() bool {
+	if !this.changed {
 		return false
 	}
-	fsessfile := s.DirVHostHome + "/tmp/" + s.ident
-	r, err := json.Marshal(s.vars)
+	fsessfile := this.DirVHostHome + "/tmp/" + this.ident
+	r, err := json.Marshal(this.vars)
 	if err == nil {
 		file, ferr := os.Create(fsessfile)
 		if ferr == nil {
 			defer file.Close()
 			_, ferr = file.WriteString(string(r))
 			if ferr == nil {
-				s.changed = false
+				this.changed = false
 				return true
 			}
 		}
@@ -103,86 +103,86 @@ func (s *Session) Save() bool {
 	return false
 }
 
-func (s *Session) IsSetInt(name string) bool {
-	if _, ok := s.vars.Int[name]; ok {
+func (this *Session) IsSetInt(name string) bool {
+	if _, ok := this.vars.Int[name]; ok {
 		return true
 	} else {
 		return false
 	}
 }
 
-func (s *Session) IsSetString(name string) bool {
-	if _, ok := s.vars.String[name]; ok {
+func (this *Session) IsSetString(name string) bool {
+	if _, ok := this.vars.String[name]; ok {
 		return true
 	} else {
 		return false
 	}
 }
 
-func (s *Session) IsSetBool(name string) bool {
-	if _, ok := s.vars.Bool[name]; ok {
+func (this *Session) IsSetBool(name string) bool {
+	if _, ok := this.vars.Bool[name]; ok {
 		return true
 	} else {
 		return false
 	}
 }
 
-func (s *Session) SetInt(name string, value int) {
-	s.vars.Int[name] = value
-	s.changed = true
+func (this *Session) SetInt(name string, value int) {
+	this.vars.Int[name] = value
+	this.changed = true
 }
 
-func (s *Session) SetString(name string, value string) {
-	s.vars.String[name] = value
-	s.changed = true
+func (this *Session) SetString(name string, value string) {
+	this.vars.String[name] = value
+	this.changed = true
 }
 
-func (s *Session) SetBool(name string, value bool) {
-	s.vars.Bool[name] = value
-	s.changed = true
+func (this *Session) SetBool(name string, value bool) {
+	this.vars.Bool[name] = value
+	this.changed = true
 }
 
-func (s *Session) GetInt(name string) (int, error) {
-	if s.IsSetInt(name) {
-		return s.vars.Int[name], nil
+func (this *Session) GetInt(name string) (int, error) {
+	if this.IsSetInt(name) {
+		return this.vars.Int[name], nil
 	} else {
 		return 0, errors.New("Variable is not found")
 	}
 }
 
-func (s *Session) GetString(name string) (string, error) {
-	if s.IsSetString(name) {
-		return s.vars.String[name], nil
+func (this *Session) GetString(name string) (string, error) {
+	if this.IsSetString(name) {
+		return this.vars.String[name], nil
 	} else {
 		return "", errors.New("Variable is not found")
 	}
 }
 
-func (s *Session) GetBool(name string) (bool, error) {
-	if s.IsSetBool(name) {
-		return s.vars.Bool[name], nil
+func (this *Session) GetBool(name string) (bool, error) {
+	if this.IsSetBool(name) {
+		return this.vars.Bool[name], nil
 	} else {
 		return false, errors.New("Variable is not found")
 	}
 }
 
-func (s *Session) DelInt(name string) {
-	if s.IsSetInt(name) {
-		delete(s.vars.Int, name)
-		s.changed = true
+func (this *Session) DelInt(name string) {
+	if this.IsSetInt(name) {
+		delete(this.vars.Int, name)
+		this.changed = true
 	}
 }
 
-func (s *Session) DelString(name string) {
-	if s.IsSetString(name) {
-		delete(s.vars.String, name)
-		s.changed = true
+func (this *Session) DelString(name string) {
+	if this.IsSetString(name) {
+		delete(this.vars.String, name)
+		this.changed = true
 	}
 }
 
-func (s *Session) DelBool(name string) {
-	if s.IsSetBool(name) {
-		delete(s.vars.Bool, name)
-		s.changed = true
+func (this *Session) DelBool(name string) {
+	if this.IsSetBool(name) {
+		delete(this.vars.Bool, name)
+		this.changed = true
 	}
 }
