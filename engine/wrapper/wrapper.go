@@ -206,3 +206,11 @@ func (this *Wrapper) TmplBackEnd(tcont []byte, data interface{}) bool {
 	})
 	return true
 }
+
+func (this *Wrapper) EngineErrMsgOnError(err error) bool {
+	if err != nil {
+		this.printEnginePageError(err)
+		return true
+	}
+	return false
+}

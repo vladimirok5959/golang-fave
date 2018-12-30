@@ -28,6 +28,8 @@ func handlerFrontEnd(wrapper *wrapper.Wrapper) bool {
 		return true
 	}
 
+	// Connect to database
+
 	// Else logic here
 	if wrapper.R.URL.Path == "/" {
 		return wrapper.TmplFrontEnd("index", TmplData{

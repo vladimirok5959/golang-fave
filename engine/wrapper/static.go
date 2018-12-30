@@ -177,3 +177,24 @@ func (this *Wrapper) printTmplPageError(perr error) {
 		},
 	})
 }
+
+func (this *Wrapper) printEnginePageError(perr error) {
+	tmpl, err := template.New("template").Parse(string(templates.PageEngError))
+	if err != nil {
+		(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		(*this.W).WriteHeader(http.StatusInternalServerError)
+		(*this.W).Header().Set("Content-Type", "text/html")
+		(*this.W).Write([]byte("<h1>Critical engine error!</h1>"))
+		(*this.W).Write([]byte("<h2>" + perr.Error() + "</h2>"))
+		return
+	}
+	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	(*this.W).WriteHeader(http.StatusInternalServerError)
+	(*this.W).Header().Set("Content-Type", "text/html")
+	tmpl.Execute(*this.W, tmplDataAll{
+		System: this.tmplGetSystemData(),
+		Data: tmplDataErrorMsg{
+			ErrorMessage: perr.Error(),
+		},
+	})
+}
