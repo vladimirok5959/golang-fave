@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"database/sql"
 
@@ -36,3 +37,4 @@ func handlerBackEnd(wrapper *wrapper.Wrapper) bool {
 	// Login page
 	return wrapper.TmplBackEnd(templates.CpLogin, nil)
 }
+*/

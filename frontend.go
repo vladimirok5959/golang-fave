@@ -1,12 +1,15 @@
 package main
 
+/*
 import (
 	"net/http"
 
 	"golang-fave/engine/wrapper"
 	utils "golang-fave/engine/wrapper/utils"
 )
+*/
 
+/*
 type MenuItem struct {
 	Name   string
 	Link   string
@@ -19,7 +22,9 @@ type TmplData struct {
 	MetaDescription string
 	MenuItems       []MenuItem
 }
+*/
 
+/*
 func handlerFrontEnd(wrapper *wrapper.Wrapper) bool {
 	// Redirect to CP, if MySQL config file is not exists
 	if !utils.IsMySqlConfigExists(wrapper.DirVHostHome) {
@@ -31,6 +36,10 @@ func handlerFrontEnd(wrapper *wrapper.Wrapper) bool {
 	// Connect to database
 
 	// Else logic here
+	if wrapper.R.URL.Path == "/" {
+		return wrapper.TmplFrontEnd("index", nil)
+	}
+
 	if wrapper.R.URL.Path == "/" {
 		return wrapper.TmplFrontEnd("index", TmplData{
 			MetaTitle:       "Meta Title",
@@ -45,5 +54,7 @@ func handlerFrontEnd(wrapper *wrapper.Wrapper) bool {
 			},
 		})
 	}
+
 	return false
 }
+*/
