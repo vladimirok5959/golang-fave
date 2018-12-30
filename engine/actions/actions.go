@@ -35,7 +35,7 @@ func New(wrapper *wrapper.Wrapper) *Action {
 	return &Action{wrapper}
 }
 
-func (this *Action) Call() bool {
+func (this *Action) Run() bool {
 	if this.wrapper.R.Method != "POST" {
 		return false
 	}

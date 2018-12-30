@@ -120,7 +120,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		Run(func(wrapper *wrapper.Wrapper) bool {
 			// Actions
 			action := actions.New(wrapper)
-			if action.Call() {
+			if action.Run() {
 				wrapper.Session.Save()
 				return true
 			}
