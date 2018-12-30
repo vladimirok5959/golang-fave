@@ -19,14 +19,14 @@ type Vars struct {
 }
 
 type Session struct {
-	W         *http.ResponseWriter
-	R         *http.Request
-	VHost     string
-	VHostHome string
-	RemoteIp  string
-	vars      *Vars
-	Ident     string
-	changed   bool
+	W            *http.ResponseWriter
+	R            *http.Request
+	VHost        string
+	DirVHostHome string
+	RemoteIp     string
+	vars         *Vars
+	Ident        string
+	changed      bool
 }
 
 func New(w *http.ResponseWriter, r *http.Request, vhost string, vhosthome string, remoteip string) *Session {
@@ -39,7 +39,7 @@ func (s *Session) Load() {
 		// Load session
 		s.Ident = session.Value
 		StartNewSession := true
-		fsessfile := s.VHostHome + "/tmp/" + s.Ident
+		fsessfile := s.DirVHostHome + "/tmp/" + s.Ident
 		file, ferr := os.Open(fsessfile)
 		if ferr == nil {
 			defer file.Close()
@@ -87,7 +87,7 @@ func (s *Session) Save() bool {
 	if !s.changed {
 		return false
 	}
-	fsessfile := s.VHostHome + "/tmp/" + s.Ident
+	fsessfile := s.DirVHostHome + "/tmp/" + s.Ident
 	r, err := json.Marshal(s.vars)
 	if err == nil {
 		file, ferr := os.Create(fsessfile)
