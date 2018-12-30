@@ -47,17 +47,16 @@ type Wrapper struct {
 }
 
 func (this *Wrapper) tmplGetSystemData() tmplDataSystem {
-	version := "?v=" + constants.AssetsVersion
 	return tmplDataSystem{
-		PathIcoFav:       this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/fave.ico" + version,
-		PathSvgLogo:      this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/logo.svg" + version,
-		PathCssStyles:    this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/styles.css" + version,
-		PathCssCpStyles:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/styles.css" + version,
-		PathCssBootstrap: this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.css" + version,
-		PathJsJquery:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/jquery.js" + version,
-		PathJsPopper:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/popper.js" + version,
-		PathJsBootstrap:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.js" + version,
-		PathJsCpScripts:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/scripts.js" + version,
+		PathIcoFav:       this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/fave.ico?v=" + constants.AssetsVersion,
+		PathSvgLogo:      this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/logo.svg?v=" + constants.AssetsVersion,
+		PathCssStyles:    this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/styles.css?v=" + constants.AssetsVersion,
+		PathCssCpStyles:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/styles.css?v=" + constants.AssetsVersion,
+		PathCssBootstrap: this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.css?v=" + constants.AssetsVersion,
+		PathJsJquery:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/jquery.js?v=" + constants.AssetsVersion,
+		PathJsPopper:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/popper.js?v=" + constants.AssetsVersion,
+		PathJsBootstrap:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.js?v=" + constants.AssetsVersion,
+		PathJsCpScripts:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/scripts.js?v=" + constants.AssetsVersion,
 		BlockModalSysMsg: template.HTML(templates.BlockModalSysMsg),
 	}
 }
