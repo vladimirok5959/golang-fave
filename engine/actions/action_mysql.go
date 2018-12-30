@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"strconv"
 
-	_ "github.com/go-sql-driver/mysql"
-
 	utils "golang-fave/engine/wrapper/utils"
 )
 
