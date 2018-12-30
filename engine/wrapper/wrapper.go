@@ -14,7 +14,7 @@ import (
 
 const C_AssetsVersion = "3"
 
-type handleRun func(e *Wrapper) bool
+type handleRun func(wrapper *Wrapper) bool
 
 type tmplDataSystem struct {
 	PathIcoFav       string
@@ -48,18 +48,18 @@ type Wrapper struct {
 	Debug        bool
 }
 
-func (e *Wrapper) tmplGetSystemData() tmplDataSystem {
+func (this *Wrapper) tmplGetSystemData() tmplDataSystem {
 	version := "?v=" + C_AssetsVersion
 	return tmplDataSystem{
-		PathIcoFav:       e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/fave.ico" + version,
-		PathSvgLogo:      e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/logo.svg" + version,
-		PathCssStyles:    e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/styles.css" + version,
-		PathCssCpStyles:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/styles.css" + version,
-		PathCssBootstrap: e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.css" + version,
-		PathJsJquery:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/jquery.js" + version,
-		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js" + version,
-		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js" + version,
-		PathJsCpScripts:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/scripts.js" + version,
+		PathIcoFav:       this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/fave.ico" + version,
+		PathSvgLogo:      this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/logo.svg" + version,
+		PathCssStyles:    this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/styles.css" + version,
+		PathCssCpStyles:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/styles.css" + version,
+		PathCssBootstrap: this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.css" + version,
+		PathJsJquery:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/jquery.js" + version,
+		PathJsPopper:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/popper.js" + version,
+		PathJsBootstrap:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.js" + version,
+		PathJsCpScripts:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/scripts.js" + version,
 		BlockModalSysMsg: template.HTML(templates.BlockModalSysMsg),
 	}
 }
@@ -76,132 +76,132 @@ func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, www
 	}
 }
 
-func (e *Wrapper) Run(hRun handleRun) {
+func (this *Wrapper) Run(hRun handleRun) {
 	// Populate some values
-	e.RemoteIp = e.R.RemoteAddr
+	this.RemoteIp = this.R.RemoteAddr
 
 	// Create loggers
-	e.LoggerAcc = log.New(os.Stdout, e.VHost+", ", log.LstdFlags)
-	e.LoggerErr = log.New(os.Stdout, e.VHost+", ", log.LstdFlags)
+	this.LoggerAcc = log.New(os.Stdout, this.VHost+", ", log.LstdFlags)
+	this.LoggerErr = log.New(os.Stdout, this.VHost+", ", log.LstdFlags)
 
 	// Attach file for access log
-	if !e.Debug {
-		acclogfile, acclogfileerr := os.OpenFile(e.DirVhostHome+"/logs/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if !this.Debug {
+		acclogfile, acclogfileerr := os.OpenFile(this.DirVhostHome+"/logs/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if acclogfileerr == nil {
 			defer acclogfile.Close()
-			e.LoggerAcc.SetOutput(acclogfile)
+			this.LoggerAcc.SetOutput(acclogfile)
 		}
 	}
 
 	// Attach file for access log
-	if !e.Debug {
-		errlogfile, errlogfileerr := os.OpenFile(e.DirVhostHome+"/logs/error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if !this.Debug {
+		errlogfile, errlogfileerr := os.OpenFile(this.DirVhostHome+"/logs/error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if errlogfileerr == nil {
 			defer errlogfile.Close()
-			e.LoggerErr.SetOutput(errlogfile)
+			this.LoggerErr.SetOutput(errlogfile)
 		}
 	}
 
 	// Fix remote IP
-	if strings.ContainsRune(e.R.RemoteAddr, ':') {
-		e.RemoteIp, _, _ = net.SplitHostPort(e.R.RemoteAddr)
+	if strings.ContainsRune(this.R.RemoteAddr, ':') {
+		this.RemoteIp, _, _ = net.SplitHostPort(this.R.RemoteAddr)
 	}
 
 	// Redirect to main domain
-	if e.redirectToMainDomain() {
-		e.Log("301")
+	if this.redirectToMainDomain() {
+		this.Log("301")
 		return
 	}
 
 	// Static resource
-	if e.staticResource() {
-		e.Log("200")
+	if this.staticResource() {
+		this.Log("200")
 		return
 	}
 
 	// Static file
-	if e.staticFile() {
-		e.Log("200")
+	if this.staticFile() {
+		this.Log("200")
 		return
 	}
 
 	// Friendly search engine url
-	if e.redirectSeoFix() {
-		e.Log("301")
+	if this.redirectSeoFix() {
+		this.Log("301")
 		return
 	}
 
 	// Create and load session
-	e.Session = sessions.New(e.W, e.R, e.VHost, e.DirVhostHome, e.RemoteIp)
-	e.Session.Load()
+	this.Session = sessions.New(this.W, this.R, this.VHost, this.DirVhostHome, this.RemoteIp)
+	this.Session.Load()
 
 	// Set session vars
-	if !e.Session.IsSetInt("UserId") {
-		e.Session.SetInt("UserId", 0)
+	if !this.Session.IsSetInt("UserId") {
+		this.Session.SetInt("UserId", 0)
 	}
-	if !e.Session.IsSetBool("IsLogged") {
-		e.Session.SetBool("IsLogged", false)
+	if !this.Session.IsSetBool("IsLogged") {
+		this.Session.SetBool("IsLogged", false)
 	}
 
 	// Logic
 	if hRun != nil {
-		if hRun(e) {
-			e.Log("200")
-			e.Session.Save()
+		if hRun(this) {
+			this.Log("200")
+			this.Session.Save()
 			return
 		}
 	}
 
 	// Show default page
-	if e.R.URL.Path == "/" {
-		e.Log("200")
-		e.printPageDefault()
+	if this.R.URL.Path == "/" {
+		this.Log("200")
+		this.printPageDefault()
 	} else {
-		e.LogError("404")
-		e.printPage404()
+		this.LogError("404")
+		this.printPage404()
 	}
 }
 
-func (e *Wrapper) Log(value string) {
-	e.LoggerAcc.Println("[ACC] [" + e.R.Method + "] [" + value + "] [" + e.RemoteIp +
-		"] [" + e.R.URL.Scheme + "://" + e.R.Host + e.R.URL.RequestURI() +
-		"] [" + e.R.Header.Get("User-Agent") + "]")
+func (this *Wrapper) Log(value string) {
+	this.LoggerAcc.Println("[ACC] [" + this.R.Method + "] [" + value + "] [" + this.RemoteIp +
+		"] [" + this.R.URL.Scheme + "://" + this.R.Host + this.R.URL.RequestURI() +
+		"] [" + this.R.Header.Get("User-Agent") + "]")
 }
 
-func (e *Wrapper) LogError(value string) {
-	e.LoggerErr.Println("[ERR] [" + e.R.Method + "] [" + value + "] [" + e.RemoteIp +
-		"] [" + e.R.URL.Scheme + "://" + e.R.Host + e.R.URL.RequestURI() +
-		"] [" + e.R.Header.Get("User-Agent") + "]")
+func (this *Wrapper) LogError(value string) {
+	this.LoggerErr.Println("[ERR] [" + this.R.Method + "] [" + value + "] [" + this.RemoteIp +
+		"] [" + this.R.URL.Scheme + "://" + this.R.Host + this.R.URL.RequestURI() +
+		"] [" + this.R.Header.Get("User-Agent") + "]")
 }
 
-func (e *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
+func (this *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
 	tmpl, err := template.ParseFiles(
-		e.DirVhostHome+"/template"+"/"+tname+".html",
-		e.DirVhostHome+"/template"+"/header.html",
-		e.DirVhostHome+"/template"+"/sidebar.html",
-		e.DirVhostHome+"/template"+"/footer.html",
+		this.DirVhostHome+"/template"+"/"+tname+".html",
+		this.DirVhostHome+"/template"+"/header.html",
+		this.DirVhostHome+"/template"+"/sidebar.html",
+		this.DirVhostHome+"/template"+"/footer.html",
 	)
 	if err != nil {
-		e.printTmplPageError(err)
+		this.printTmplPageError(err)
 		return true
 	}
-	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	tmpl.Execute(*e.W, tmplDataAll{
-		System: e.tmplGetSystemData(),
+	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	tmpl.Execute(*this.W, tmplDataAll{
+		System: this.tmplGetSystemData(),
 		Data:   data,
 	})
 	return true
 }
 
-func (e *Wrapper) TmplBackEnd(tcont []byte, data interface{}) bool {
+func (this *Wrapper) TmplBackEnd(tcont []byte, data interface{}) bool {
 	tmpl, err := template.New("template").Parse(string(tcont))
 	if err != nil {
-		e.printTmplPageError(err)
+		this.printTmplPageError(err)
 		return true
 	}
-	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	tmpl.Execute(*e.W, tmplDataAll{
-		System: e.tmplGetSystemData(),
+	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	tmpl.Execute(*this.W, tmplDataAll{
+		System: this.tmplGetSystemData(),
 		Data:   data,
 	})
 	return true

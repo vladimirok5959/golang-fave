@@ -6,29 +6,29 @@ import (
 	"strings"
 )
 
-func (e *Wrapper) redirectToMainDomain() bool {
-	file, err := ioutil.ReadFile(e.DirVhostHome + "/config/domain")
+func (this *Wrapper) redirectToMainDomain() bool {
+	file, err := ioutil.ReadFile(this.DirVhostHome + "/config/domain")
 	if err == nil {
 		maindomain := strings.TrimSpace(string(file))
 		port := ""
-		if e.Port != "80" {
-			port = ":" + e.Port
+		if this.Port != "80" {
+			port = ":" + this.Port
 		}
-		if maindomain+port != e.R.Host {
-			http.Redirect(*e.W, e.R, e.R.URL.Scheme+"://"+maindomain+
-				port+e.R.URL.RequestURI(), 301)
+		if maindomain+port != this.R.Host {
+			http.Redirect(*this.W, this.R, this.R.URL.Scheme+"://"+maindomain+
+				port+this.R.URL.RequestURI(), 301)
 			return true
 		}
 	}
 	return false
 }
 
-func (e *Wrapper) redirectSeoFix() bool {
-	full := e.R.URL.RequestURI()
-	uris := full[len(e.R.URL.Path):]
-	if len(e.R.URL.Path) > 0 {
-		if e.R.URL.Path[len(e.R.URL.Path)-1] != '/' {
-			http.Redirect(*e.W, e.R, e.R.URL.Path+"/"+uris, 301)
+func (this *Wrapper) redirectSeoFix() bool {
+	full := this.R.URL.RequestURI()
+	uris := full[len(this.R.URL.Path):]
+	if len(this.R.URL.Path) > 0 {
+		if this.R.URL.Path[len(this.R.URL.Path)-1] != '/' {
+			http.Redirect(*this.W, this.R, this.R.URL.Path+"/"+uris, 301)
 			return true
 		}
 	} else {

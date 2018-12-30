@@ -17,161 +17,161 @@ type tmplDataErrorMsg struct {
 	ErrorMessage string
 }
 
-func (e *Wrapper) staticResource() bool {
-	if e.R.URL.Path == "/assets/sys/styles.css" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "text/css")
-		(*e.W).Write(styles.File_assets_sys_styles_css)
+func (this *Wrapper) staticResource() bool {
+	if this.R.URL.Path == "/assets/sys/styles.css" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "text/css")
+		(*this.W).Write(styles.File_assets_sys_styles_css)
 		return true
-	} else if e.R.URL.Path == "/assets/cp/styles.css" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "text/css")
-		(*e.W).Write(styles.File_assets_cp_styles_css)
+	} else if this.R.URL.Path == "/assets/cp/styles.css" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "text/css")
+		(*this.W).Write(styles.File_assets_cp_styles_css)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/bootstrap.css" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "text/css")
-		(*e.W).Write(styles.File_assets_sys_bootstrap_css)
+	} else if this.R.URL.Path == "/assets/sys/bootstrap.css" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "text/css")
+		(*this.W).Write(styles.File_assets_sys_bootstrap_css)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/jquery.js" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
-		(*e.W).Write(scripts.File_assets_sys_jquery_js)
+	} else if this.R.URL.Path == "/assets/sys/jquery.js" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
+		(*this.W).Write(scripts.File_assets_sys_jquery_js)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/popper.js" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
-		(*e.W).Write(scripts.File_assets_sys_popper_js)
+	} else if this.R.URL.Path == "/assets/sys/popper.js" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
+		(*this.W).Write(scripts.File_assets_sys_popper_js)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/bootstrap.js" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
-		(*e.W).Write(scripts.File_assets_sys_bootstrap_js)
+	} else if this.R.URL.Path == "/assets/sys/bootstrap.js" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
+		(*this.W).Write(scripts.File_assets_sys_bootstrap_js)
 		return true
-	} else if e.R.URL.Path == "/assets/cp/scripts.js" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
-		(*e.W).Write(scripts.File_assets_cp_scripts_js)
+	} else if this.R.URL.Path == "/assets/cp/scripts.js" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "application/javascript; charset=utf-8")
+		(*this.W).Write(scripts.File_assets_cp_scripts_js)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/logo.svg" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "image/svg+xml")
-		(*e.W).Write(others.File_assets_sys_logo_svg)
+	} else if this.R.URL.Path == "/assets/sys/logo.svg" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "image/svg+xml")
+		(*this.W).Write(others.File_assets_sys_logo_svg)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/bg.png" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "image/png")
-		(*e.W).Write(images.File_assets_sys_bg_png)
+	} else if this.R.URL.Path == "/assets/sys/bg.png" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "image/png")
+		(*this.W).Write(images.File_assets_sys_bg_png)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/logo.png" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "image/png")
-		(*e.W).Write(images.File_assets_sys_logo_png)
+	} else if this.R.URL.Path == "/assets/sys/logo.png" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "image/png")
+		(*this.W).Write(images.File_assets_sys_logo_png)
 		return true
-	} else if e.R.URL.Path == "/assets/sys/fave.ico" {
-		(*e.W).Header().Set("Cache-Control", "public, max-age=31536000")
-		(*e.W).Header().Set("Content-Type", "image/x-icon")
-		(*e.W).Write(others.File_assets_sys_fave_ico)
+	} else if this.R.URL.Path == "/assets/sys/fave.ico" {
+		(*this.W).Header().Set("Cache-Control", "public, max-age=31536000")
+		(*this.W).Header().Set("Content-Type", "image/x-icon")
+		(*this.W).Write(others.File_assets_sys_fave_ico)
 		return true
 	}
 	return false
 }
 
-func (e *Wrapper) staticFile() bool {
-	file := e.R.URL.Path
+func (this *Wrapper) staticFile() bool {
+	file := this.R.URL.Path
 	if file != "/" {
-		f, err := os.Open(e.DirVhostHome + "/htdocs" + file)
+		f, err := os.Open(this.DirVhostHome + "/htdocs" + file)
 		if err == nil {
 			defer f.Close()
-			st, err := os.Stat(e.DirVhostHome + "/htdocs" + file)
+			st, err := os.Stat(this.DirVhostHome + "/htdocs" + file)
 			if err != nil {
 				return false
 			}
 			if st.Mode().IsDir() {
 				return false
 			}
-			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+file)
+			http.ServeFile(*this.W, this.R, this.DirVhostHome+"/htdocs"+file)
 			return true
 		}
 	} else {
-		f, err := os.Open(e.DirVhostHome + "/htdocs/index.html")
+		f, err := os.Open(this.DirVhostHome + "/htdocs/index.html")
 		if err == nil {
 			defer f.Close()
-			st, err := os.Stat(e.DirVhostHome + "/htdocs/index.html")
+			st, err := os.Stat(this.DirVhostHome + "/htdocs/index.html")
 			if err != nil {
 				return false
 			}
 			if st.Mode().IsDir() {
 				return false
 			}
-			http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs/index.html")
+			http.ServeFile(*this.W, this.R, this.DirVhostHome+"/htdocs/index.html")
 			return true
 		}
 	}
 	return false
 }
 
-func (e *Wrapper) printPageDefault() {
+func (this *Wrapper) printPageDefault() {
 	// Custom page
-	f, err := os.Open(e.DirVhostHome + "/htdocs" + "/index.html")
+	f, err := os.Open(this.DirVhostHome + "/htdocs" + "/index.html")
 	if err == nil {
 		defer f.Close()
-		http.ServeFile(*e.W, e.R, e.DirVhostHome+"/htdocs"+"/index.html")
+		http.ServeFile(*this.W, this.R, this.DirVhostHome+"/htdocs"+"/index.html")
 		return
 	}
 
 	// Default page
 	tmpl, err := template.New("template").Parse(string(templates.PageDefault))
 	if err != nil {
-		e.printTmplPageError(err)
+		this.printTmplPageError(err)
 		return
 	}
-	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	(*e.W).Header().Set("Content-Type", "text/html")
-	tmpl.Execute(*e.W, tmplDataAll{
-		System: e.tmplGetSystemData(),
+	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	(*this.W).Header().Set("Content-Type", "text/html")
+	tmpl.Execute(*this.W, tmplDataAll{
+		System: this.tmplGetSystemData(),
 	})
 }
 
-func (e *Wrapper) printPage404() {
+func (this *Wrapper) printPage404() {
 	// Custom 404 error page
-	f, err := ioutil.ReadFile(e.DirVhostHome + "/htdocs" + "/404.html")
+	f, err := ioutil.ReadFile(this.DirVhostHome + "/htdocs" + "/404.html")
 	if err == nil {
-		(*e.W).WriteHeader(http.StatusNotFound)
-		(*e.W).Header().Set("Content-Type", "text/html")
-		(*e.W).Write(f)
+		(*this.W).WriteHeader(http.StatusNotFound)
+		(*this.W).Header().Set("Content-Type", "text/html")
+		(*this.W).Write(f)
 		return
 	}
 
 	// Default error page
 	tmpl, err := template.New("template").Parse(string(templates.PageError404))
 	if err != nil {
-		e.printTmplPageError(err)
+		this.printTmplPageError(err)
 		return
 	}
-	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	(*e.W).WriteHeader(http.StatusNotFound)
-	(*e.W).Header().Set("Content-Type", "text/html")
-	tmpl.Execute(*e.W, tmplDataAll{
-		System: e.tmplGetSystemData(),
+	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	(*this.W).WriteHeader(http.StatusNotFound)
+	(*this.W).Header().Set("Content-Type", "text/html")
+	tmpl.Execute(*this.W, tmplDataAll{
+		System: this.tmplGetSystemData(),
 	})
 }
 
-func (e *Wrapper) printTmplPageError(perr error) {
+func (this *Wrapper) printTmplPageError(perr error) {
 	tmpl, err := template.New("template").Parse(string(templates.PageTmplError))
 	if err != nil {
-		(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		(*e.W).WriteHeader(http.StatusInternalServerError)
-		(*e.W).Header().Set("Content-Type", "text/html")
-		(*e.W).Write([]byte("<h1>Critical engine error!</h1>"))
-		(*e.W).Write([]byte("<h2>" + perr.Error() + "</h2>"))
+		(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		(*this.W).WriteHeader(http.StatusInternalServerError)
+		(*this.W).Header().Set("Content-Type", "text/html")
+		(*this.W).Write([]byte("<h1>Critical engine error!</h1>"))
+		(*this.W).Write([]byte("<h2>" + perr.Error() + "</h2>"))
 		return
 	}
-	(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	(*e.W).WriteHeader(http.StatusInternalServerError)
-	(*e.W).Header().Set("Content-Type", "text/html")
-	tmpl.Execute(*e.W, tmplDataAll{
-		System: e.tmplGetSystemData(),
+	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	(*this.W).WriteHeader(http.StatusInternalServerError)
+	(*this.W).Header().Set("Content-Type", "text/html")
+	tmpl.Execute(*this.W, tmplDataAll{
+		System: this.tmplGetSystemData(),
 		Data: tmplDataErrorMsg{
 			ErrorMessage: perr.Error(),
 		},
