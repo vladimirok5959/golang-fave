@@ -22,6 +22,7 @@ func (this *Backend) Run() bool {
 	// TODO:
 	// Check if any user exists
 	// If not - display form to create first user
+	// DO NOT FORGET!
 
 	// Login page
 	return this.wrapper.TmplBackEnd(templates.CpLogin, nil)
