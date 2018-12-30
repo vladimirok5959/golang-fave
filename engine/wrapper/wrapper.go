@@ -13,8 +13,6 @@ import (
 	templates "golang-fave/engine/wrapper/resources/templates"
 )
 
-const C_AssetsVersion = "3"
-
 type handleRun func(wrapper *Wrapper) bool
 
 type tmplDataSystem struct {
@@ -49,7 +47,7 @@ type Wrapper struct {
 }
 
 func (this *Wrapper) tmplGetSystemData() tmplDataSystem {
-	version := "?v=" + C_AssetsVersion
+	version := "?v=" + constants.AssetsVersion
 	return tmplDataSystem{
 		PathIcoFav:       this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/fave.ico" + version,
 		PathSvgLogo:      this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/logo.svg" + version,
