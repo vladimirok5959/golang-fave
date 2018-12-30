@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"golang-fave/engine/sessions"
-	Templates "golang-fave/engine/wrapper/resources/templates"
+	templates "golang-fave/engine/wrapper/resources/templates"
 )
 
 const C_AssetsVersion = "3"
@@ -60,7 +60,7 @@ func (e *Wrapper) tmplGetSystemData() tmplDataSystem {
 		PathJsPopper:     e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/popper.js" + version,
 		PathJsBootstrap:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/sys/bootstrap.js" + version,
 		PathJsCpScripts:  e.R.URL.Scheme + "://" + e.R.Host + "/assets/cp/scripts.js" + version,
-		BlockModalSysMsg: template.HTML(Templates.BlockModalSysMsg),
+		BlockModalSysMsg: template.HTML(templates.BlockModalSysMsg),
 	}
 }
 

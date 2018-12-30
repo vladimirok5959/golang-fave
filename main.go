@@ -117,20 +117,20 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	// Create and start engine
 	wrapper.New(&w, r, host, port, FParamWwwDir, FVhostHomeDir, C_Debug).
-		Run(func(e *wrapper.Wrapper) bool {
+		Run(func(wrapper *wrapper.Wrapper) bool {
 			// Actions
-			action := actions.New(e)
+			action := actions.New(wrapper)
 			if action.Call() {
-				e.Log("200")
-				e.Session.Save()
+				wrapper.Log("200")
+				wrapper.Session.Save()
 				return true
 			}
 
 			// Pages
-			if !(e.R.URL.Path == "/cp" || strings.HasPrefix(e.R.URL.Path, "/cp/")) {
-				return handleFrontEnd(e)
+			if !(wrapper.R.URL.Path == "/cp" || strings.HasPrefix(wrapper.R.URL.Path, "/cp/")) {
+				return handleFrontEnd(wrapper)
 			} else {
-				return handleBackEnd(e)
+				return handleBackEnd(wrapper)
 			}
 		})
 }

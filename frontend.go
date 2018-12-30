@@ -20,17 +20,17 @@ type TmplData struct {
 	MenuItems       []MenuItem
 }
 
-func handleFrontEnd(e *wrapper.Wrapper) bool {
+func handleFrontEnd(wrapper *wrapper.Wrapper) bool {
 	// Redirect to CP, if MySQL config file is not exists
-	if !utils.IsMySqlConfigExists(e.DirVhostHome) {
-		(*e.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		http.Redirect(*e.W, e.R, e.R.URL.Scheme+"://"+e.R.Host+"/cp/", 302)
+	if !utils.IsMySqlConfigExists(wrapper.DirVhostHome) {
+		(*wrapper.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		http.Redirect(*wrapper.W, wrapper.R, wrapper.R.URL.Scheme+"://"+wrapper.R.Host+"/cp/", 302)
 		return true
 	}
 
 	// Else logic here
-	if e.R.URL.Path == "/" {
-		return e.TmplFrontEnd("index", TmplData{
+	if wrapper.R.URL.Path == "/" {
+		return wrapper.TmplFrontEnd("index", TmplData{
 			MetaTitle:       "Meta Title",
 			MetaKeywords:    "Meta Keywords",
 			MetaDescription: "Meta Description",
