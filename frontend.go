@@ -20,7 +20,7 @@ type TmplData struct {
 	MenuItems       []MenuItem
 }
 
-func handleFrontEnd(wrapper *wrapper.Wrapper) bool {
+func handlerFrontEnd(wrapper *wrapper.Wrapper) bool {
 	// Redirect to CP, if MySQL config file is not exists
 	if !utils.IsMySqlConfigExists(wrapper.DirVHostHome) {
 		(*wrapper.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")

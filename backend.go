@@ -6,7 +6,7 @@ import (
 	utils "golang-fave/engine/wrapper/utils"
 )
 
-func handleBackEnd(wrapper *wrapper.Wrapper) bool {
+func handlerBackEnd(wrapper *wrapper.Wrapper) bool {
 	// MySQL config page
 	if !utils.IsMySqlConfigExists(wrapper.DirVHostHome) {
 		return wrapper.TmplBackEnd(templates.CpMySQL, nil)

@@ -127,9 +127,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 			// Pages
 			if !(wrapper.R.URL.Path == "/cp" || strings.HasPrefix(wrapper.R.URL.Path, "/cp/")) {
-				return handleFrontEnd(wrapper)
+				return handlerFrontEnd(wrapper)
 			} else {
-				return handleBackEnd(wrapper)
+				return handlerBackEnd(wrapper)
 			}
 		})
 }
