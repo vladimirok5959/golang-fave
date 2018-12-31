@@ -79,5 +79,5 @@ func (this *Action) Action_mysql() {
 	}
 
 	// Reload current page
-	this.write(fmt.Sprintf(`window.location.reload(false);`))
+	this.write(`window.location.reload(false);`)
 }

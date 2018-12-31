@@ -3,8 +3,6 @@ package actions
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-
-	"fmt"
 )
 
 func (this *Action) Action_signin() {
@@ -57,5 +55,5 @@ func (this *Action) Action_signin() {
 	this.wrapper.Session.SetInt("UserId", user_id)
 
 	// Reload current page
-	this.write(fmt.Sprintf(`window.location.reload(false);`))
+	this.write(`window.location.reload(false);`)
 }

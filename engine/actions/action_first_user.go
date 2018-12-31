@@ -1,9 +1,5 @@
 package actions
 
-import (
-	"fmt"
-)
-
 func (this *Action) Action_first_user() {
 	if dbe := this.use_database(); dbe != nil {
 		this.msg_error(dbe.Error())
@@ -41,5 +37,5 @@ func (this *Action) Action_first_user() {
 	}
 
 	// Reload current page
-	this.write(fmt.Sprintf(`window.location.reload(false);`))
+	this.write(`window.location.reload(false);`)
 }
