@@ -33,6 +33,11 @@ func (this *Action) Action_signin() {
 		return
 	}
 
+	if this.wrapper.Session.GetIntDef("UserId", 0) > 0 {
+		this.msg_error(`You already logined`)
+		return
+	}
+
 	var user_id int
 	err := this.db.QueryRow(
 		"SELECT `id` FROM `users` WHERE `email` = ? and `password` = MD5(?) LIMIT 1;",
