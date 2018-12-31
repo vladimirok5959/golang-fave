@@ -88,6 +88,21 @@ func (this *Wrapper) staticFile() bool {
 				return false
 			}
 			if st.Mode().IsDir() {
+				if file[len(file)-1] == '/' {
+					fi, err := os.Open(this.DirVHostHome + "/htdocs" + file + "/index.html")
+					if err == nil {
+						defer fi.Close()
+						sti, err := os.Stat(this.DirVHostHome + "/htdocs" + file + "/index.html")
+						if err != nil {
+							return false
+						}
+						if sti.Mode().IsDir() {
+							return false
+						}
+						http.ServeFile(*this.W, this.R, this.DirVHostHome+"/htdocs"+file+"/index.html")
+						return true
+					}
+				}
 				return false
 			}
 			http.ServeFile(*this.W, this.R, this.DirVHostHome+"/htdocs"+file)
