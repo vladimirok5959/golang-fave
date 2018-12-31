@@ -166,6 +166,30 @@ func (this *Session) GetBool(name string) (bool, error) {
 	}
 }
 
+func (this *Session) GetIntDef(name string, def int) int {
+	if this.IsSetInt(name) {
+		return this.vars.Int[name]
+	} else {
+		return def
+	}
+}
+
+func (this *Session) GetStringDef(name string, def string) string {
+	if this.IsSetString(name) {
+		return this.vars.String[name]
+	} else {
+		return def
+	}
+}
+
+func (this *Session) GetBoolDef(name string, def bool) bool {
+	if this.IsSetBool(name) {
+		return this.vars.Bool[name]
+	} else {
+		return def
+	}
+}
+
 func (this *Session) DelInt(name string) {
 	if this.IsSetInt(name) {
 		delete(this.vars.Int, name)
