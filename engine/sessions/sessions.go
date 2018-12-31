@@ -78,7 +78,12 @@ func (this *Session) Load() {
 
 		// Set session cookie
 		expiration := time.Now().Add(365 * 24 * time.Hour)
-		cookie := http.Cookie{Name: "fsession", Value: userhashstr, Expires: expiration}
+		cookie := http.Cookie{
+			Name:    "fsession",
+			Value:   userhashstr,
+			Path:    "/",
+			Expires: expiration,
+		}
 		http.SetCookie(*this.W, &cookie)
 	}
 }
