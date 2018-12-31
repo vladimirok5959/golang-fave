@@ -99,7 +99,7 @@ func (this *Session) Save() bool {
 		file, ferr := os.Create(fsessfile)
 		if ferr == nil {
 			defer file.Close()
-			_, ferr = file.WriteString(string(r))
+			_, ferr = file.Write(r)
 			if ferr == nil {
 				this.changed = false
 				return true
