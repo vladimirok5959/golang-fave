@@ -48,33 +48,10 @@ func (this *Action) Action_signin() {
 		return
 	}
 
-	/*
-	if !this.Session.IsSetInt("UserId") {
-		this.Session.SetInt("UserId", 0)
-	}
-	if !this.Session.IsSetBool("IsLogged") {
-		this.Session.SetBool("IsLogged", false)
-	}
-	*/
-
-	var session_user_id int
-	session_user_id, _ = this.wrapper.Session.GetInt("UserId")
-
-	this.msg_success(fmt.Sprintf(
-		`Test: (%d), (%d)`,
-		user_id, session_user_id))
+	// Save to current session
+	this.wrapper.Session.SetInt("UserId", user_id)
+	this.wrapper.Session.SetBool("IsLogged", true)
 
 	// Reload current page
-	//this.write(fmt.Sprintf(`window.location.reload(false);`))
-
-	//this.msg_success(`Hello from web server`)
-	//this.write(fmt.Sprintf(``))
-
-	/*
-	if count <= 0 {
-		return this.wrapper.TmplBackEnd(templates.CpFirstUser, nil)
-	}
-	*/
-
-	//this.msg_success(`Hello from web server`)
+	this.write(fmt.Sprintf(`window.location.reload(false);`))
 }
