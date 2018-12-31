@@ -3,6 +3,8 @@ package actions
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+
+	utils "golang-fave/engine/wrapper/utils"
 )
 
 func (this *Action) Action_signin() {
@@ -21,7 +23,7 @@ func (this *Action) Action_signin() {
 		return
 	}
 
-	if !this.is_valid_email(pf_email) {
+	if !utils.EmailIsValid(pf_email) {
 		this.msg_error(`Please specify correct user email`)
 		return
 	}

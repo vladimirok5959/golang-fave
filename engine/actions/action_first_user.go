@@ -1,5 +1,9 @@
 package actions
 
+import (
+	utils "golang-fave/engine/wrapper/utils"
+)
+
 func (this *Action) Action_first_user() {
 	if dbe := this.use_database(); dbe != nil {
 		this.msg_error(dbe.Error())
@@ -18,7 +22,7 @@ func (this *Action) Action_first_user() {
 		return
 	}
 
-	if !this.is_valid_email(pf_email) {
+	if !utils.EmailIsValid(pf_email) {
 		this.msg_error(`Please specify correct user email`)
 		return
 	}
