@@ -30,5 +30,10 @@ func (this *Backend) Run() bool {
 	}
 
 	// Login page
-	return this.wrapper.TmplBackEnd(templates.CpLogin, nil)
+	if this.wrapper.Session.GetIntDef("UserId", 0) <= 0 {
+		return this.wrapper.TmplBackEnd(templates.CpLogin, nil)
+	}
+
+	(*this.wrapper.W).Write([]byte(`Admin panel here...`))
+	return true
 }
