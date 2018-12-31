@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"golang-fave/engine/wrapper"
@@ -59,6 +60,11 @@ func (this *Action) use_database() error {
 		return err
 	}
 	return nil
+}
+
+func (this *Action) is_valid_email(email string) bool {
+	regexpe := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+	return regexpe.MatchString(email)
 }
 
 func New(wrapper *wrapper.Wrapper) *Action {

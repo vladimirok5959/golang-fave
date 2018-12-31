@@ -2,10 +2,7 @@ package actions
 
 import (
 	"fmt"
-	"regexp"
 )
-
-var regexpe = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 
 func (this *Action) Action_first_user() {
 	if dbe := this.use_database(); dbe != nil {
@@ -25,7 +22,7 @@ func (this *Action) Action_first_user() {
 		return
 	}
 
-	if !regexpe.MatchString(pf_email) {
+	if !this.is_valid_email(pf_email) {
 		this.msg_error(`Please specify correct user email`)
 		return
 	}

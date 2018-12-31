@@ -8,5 +8,23 @@ func (this *Action) Action_signin() {
 		defer this.db.Close()
 	}
 
-	this.msg_success(`Hello from web server`)
+	pf_email := this.wrapper.R.FormValue("email")
+	pf_password := this.wrapper.R.FormValue("password")
+
+	if pf_email == "" {
+		this.msg_error(`Please specify user email`)
+		return
+	}
+
+	if !this.is_valid_email(pf_email) {
+		this.msg_error(`Please specify correct user email`)
+		return
+	}
+
+	if pf_password == "" {
+		this.msg_error(`Please specify user password`)
+		return
+	}
+
+	//this.msg_success(`Hello from web server`)
 }
