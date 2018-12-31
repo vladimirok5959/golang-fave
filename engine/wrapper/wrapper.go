@@ -135,9 +135,6 @@ func (this *Wrapper) Run(hRun handleRun) {
 	if !this.Session.IsSetInt("UserId") {
 		this.Session.SetInt("UserId", 0)
 	}
-	if !this.Session.IsSetBool("IsLogged") {
-		this.Session.SetBool("IsLogged", false)
-	}
 
 	// Logic
 	if hRun != nil {

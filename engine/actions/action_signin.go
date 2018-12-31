@@ -50,7 +50,6 @@ func (this *Action) Action_signin() {
 
 	// Save to current session
 	this.wrapper.Session.SetInt("UserId", user_id)
-	this.wrapper.Session.SetBool("IsLogged", true)
 
 	// Reload current page
 	this.write(fmt.Sprintf(`window.location.reload(false);`))
