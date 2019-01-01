@@ -9,9 +9,9 @@
 		<link rel="stylesheet" href="/assets/sys/styles.css">
 		<style type="text/css">
 			body.cp {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 				background: initial;
 				background-color: #fff;
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 				font-size: 1rem;
 				font-weight: 400;
 				line-height: 1.5;
@@ -26,17 +26,29 @@
 			}
 
 			body.cp .wrap {
-				display: table;
-				align-items: stretch;
 				width: 100%;
 				height: 100%;
+				display: table;
+				align-items: stretch;
 			}
 
 			body.cp .wrap .sidebar,
 			body.cp .wrap .content {
 				display: table-cell;
-				padding-top: 56px;
 				position: relative;
+				padding-top: 56px;
+			}
+
+			body.cp .wrap .sidebar {
+				display: none;
+			}
+
+			body.cp.cp-sidebar-left .wrap .sidebar.sidebar-left {
+				display: table-cell;
+			}
+
+			body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right {
+				display: table-cell;
 			}
 
 			body.cp .wrap .sidebar .padd,
@@ -51,8 +63,8 @@
 			}
 
 			body.cp .wrap .sidebar {
-				background: #eee;
 				width: 245px;
+				background: #eee;
 				box-shadow: 0 0.5em 0.5em rgba(0,0,0,.3);
 			}
 
@@ -69,7 +81,7 @@
 
 		<link rel="shortcut icon" href="/assets/sys/fave.ico" type="image/x-icon" />
 	</head>
-	<body class="cp">
+	<body class="cp cp-sidebar-left cp-sidebar-right">
 		<nav class="navbar main navbar-expand-md navbar-dark fixed-top bg-dark">
 			<a class="navbar-brand" href="/">Control Panel</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +90,7 @@
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="nbModulesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a class="nav-link dropdown-toggle" href="javascript:;" id="nbModulesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							Modules
 						</a>
 						<div class="dropdown-menu" aria-labelledby="nbModulesDropdown">
@@ -86,7 +98,7 @@
 						</div>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="nbSystemDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a class="nav-link dropdown-toggle" href="javascript:;" id="nbSystemDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							System
 						</a>
 						<div class="dropdown-menu" aria-labelledby="nbSystemDropdown">
@@ -98,7 +110,7 @@
 				</ul>
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="nbAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a class="nav-link dropdown-toggle" href="javascript:;" id="nbAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							example@example.com
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="nbAccountDropdown">
