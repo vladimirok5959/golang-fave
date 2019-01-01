@@ -77,14 +77,23 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="/#1">Modules</a>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="nbModulesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Modules
+						</a>
+						<div class="dropdown-menu" aria-labelledby="nbModulesDropdown">
+							<a class="dropdown-item" href="#">Pages</a>
+						</div>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/#3">System</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/#3">Settings</a>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="nbSystemDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							System
+						</a>
+						<div class="dropdown-menu" aria-labelledby="nbSystemDropdown">
+							<a class="dropdown-item" href="#">Users</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Settings</a>
+						</div>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
