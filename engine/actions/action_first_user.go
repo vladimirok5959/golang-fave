@@ -5,8 +5,8 @@ import (
 )
 
 func (this *Action) Action_first_user() {
-	if dbe := this.use_database(); dbe != nil {
-		this.msg_error(dbe.Error())
+	if err := this.use_database(); err != nil {
+		this.msg_error(err.Error())
 		return
 	} else {
 		defer this.db.Close()

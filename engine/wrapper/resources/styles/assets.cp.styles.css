@@ -3,6 +3,15 @@ body.no-scroll {
 	padding-right: 0px !important;
 }
 
+/* Bootstrap dropdown hover fix */
+.dropdown-item:focus, .dropdown-item:hover {
+	background-color: #f1f1f1;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+	background-color: #007bff;
+}
+
 /* Login/MySQL form */
 body.cp-login,
 body.cp-mysql,
@@ -64,4 +73,125 @@ body.cp-first-user {
 	margin-bottom: 10px;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
+}
+
+/* Control panel skeleton */
+body.cp {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	background: initial;
+	background-color: #fff;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #212529;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+body.cp nav.main {
+	height: 56px;
+	box-shadow: 0 0 5px 4px rgba(0,0,0,0.25);
+}
+
+body.cp nav.main.bg-dark {
+	background: #205081 url(/assets/sys/bg.png) repeat 0 0!important;
+}
+
+body.cp nav.main a.navbar-brand {
+	font-weight: bold;
+}
+
+body.cp nav.main .navbar-nav .nav-item a img {
+	width: 35px;
+	width: 35px;
+	margin-right: 10px;
+	margin-top: -30px;
+	margin-bottom: -30px;
+}
+
+body.cp .wrap {
+	width: 100%;
+	height: 100%;
+	display: table;
+	align-items: stretch;
+}
+
+body.cp .wrap .sidebar,
+body.cp .wrap .content {
+	display: table-cell;
+	position: relative;
+	padding-top: 56px;
+	vertical-align: top;
+}
+
+body.cp .wrap .sidebar {
+	display: none;
+}
+
+body.cp.cp-sidebar-left .wrap .sidebar.sidebar-left {
+	display: table-cell;
+}
+
+body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right {
+	display: table-cell;
+}
+
+body.cp .wrap .sidebar-right .padd,
+body.cp .wrap .content .padd {
+	padding: 1rem 1rem;
+}
+
+body.cp .wrap .scroll {
+	height: 100%;
+	overflow: hidden;
+	overflow-y: auto;
+}
+
+body.cp .wrap .sidebar {
+	width: 245px;
+	background: #eee;
+	box-shadow: 0 0.5em 0.5em rgba(0,0,0,.3);
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav {
+	padding: 1rem 0px;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item a {
+	color: #444;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active {
+	background-color: #417cb9;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active a {
+	color: #fff;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item:hover {
+	background-color: #e7e7e7;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active:hover {
+	background-color: #417cb9;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav {
+	background: #eee;
+	padding-top: 0px;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item a {
+	color: #444;
+	padding-left: 2rem;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active {
+	background-color: #e7e7e7;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active a {
+	color: #417cb9;
 }

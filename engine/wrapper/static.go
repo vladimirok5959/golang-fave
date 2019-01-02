@@ -143,8 +143,8 @@ func (this *Wrapper) printPageDefault() {
 	}
 	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	(*this.W).Header().Set("Content-Type", "text/html")
-	tmpl.Execute(*this.W, tmplDataAll{
-		System: this.tmplGetSystemData(),
+	tmpl.Execute(*this.W, TmplDataAll{
+		System: this.TmplGetSystemData(),
 	})
 }
 
@@ -167,8 +167,8 @@ func (this *Wrapper) printPage404() {
 	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	(*this.W).WriteHeader(http.StatusNotFound)
 	(*this.W).Header().Set("Content-Type", "text/html")
-	tmpl.Execute(*this.W, tmplDataAll{
-		System: this.tmplGetSystemData(),
+	tmpl.Execute(*this.W, TmplDataAll{
+		System: this.TmplGetSystemData(),
 	})
 }
 
@@ -185,8 +185,8 @@ func (this *Wrapper) printTmplPageError(perr error) {
 	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	(*this.W).WriteHeader(http.StatusInternalServerError)
 	(*this.W).Header().Set("Content-Type", "text/html")
-	tmpl.Execute(*this.W, tmplDataAll{
-		System: this.tmplGetSystemData(),
+	tmpl.Execute(*this.W, TmplDataAll{
+		System: this.TmplGetSystemData(),
 		Data: tmplDataErrorMsg{
 			ErrorMessage: perr.Error(),
 		},
@@ -206,8 +206,8 @@ func (this *Wrapper) printEnginePageError(perr error) {
 	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	(*this.W).WriteHeader(http.StatusInternalServerError)
 	(*this.W).Header().Set("Content-Type", "text/html")
-	tmpl.Execute(*this.W, tmplDataAll{
-		System: this.tmplGetSystemData(),
+	tmpl.Execute(*this.W, TmplDataAll{
+		System: this.TmplGetSystemData(),
 		Data: tmplDataErrorMsg{
 			ErrorMessage: perr.Error(),
 		},

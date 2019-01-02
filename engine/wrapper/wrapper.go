@@ -1,6 +1,7 @@
 package wrapper
 
 import (
+	"bytes"
 	"html/template"
 	"log"
 	"net"
@@ -28,7 +29,7 @@ type tmplDataSystem struct {
 	BlockModalSysMsg template.HTML
 }
 
-type tmplDataAll struct {
+type TmplDataAll struct {
 	System tmplDataSystem
 	Data   interface{}
 }
@@ -44,21 +45,6 @@ type Wrapper struct {
 	LoggerAcc    *log.Logger
 	LoggerErr    *log.Logger
 	Session      *sessions.Session
-}
-
-func (this *Wrapper) tmplGetSystemData() tmplDataSystem {
-	return tmplDataSystem{
-		PathIcoFav:       this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/fave.ico?v=" + constants.AssetsVersion,
-		PathSvgLogo:      this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/logo.svg?v=" + constants.AssetsVersion,
-		PathCssStyles:    this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/styles.css?v=" + constants.AssetsVersion,
-		PathCssCpStyles:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/styles.css?v=" + constants.AssetsVersion,
-		PathCssBootstrap: this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.css?v=" + constants.AssetsVersion,
-		PathJsJquery:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/jquery.js?v=" + constants.AssetsVersion,
-		PathJsPopper:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/popper.js?v=" + constants.AssetsVersion,
-		PathJsBootstrap:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.js?v=" + constants.AssetsVersion,
-		PathJsCpScripts:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/scripts.js?v=" + constants.AssetsVersion,
-		BlockModalSysMsg: template.HTML(templates.BlockModalSysMsg),
-	}
 }
 
 func New(w *http.ResponseWriter, r *http.Request, vhost string, port string, wwwdir string, vhosthome string) *Wrapper {
@@ -167,6 +153,33 @@ func (this *Wrapper) LogError(value string) {
 		"] [" + this.R.Header.Get("User-Agent") + "]")
 }
 
+func (this *Wrapper) TmplGetSystemData() tmplDataSystem {
+	return tmplDataSystem{
+		PathIcoFav:       this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/fave.ico?v=" + constants.AssetsVersion,
+		PathSvgLogo:      this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/logo.svg?v=" + constants.AssetsVersion,
+		PathCssStyles:    this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/styles.css?v=" + constants.AssetsVersion,
+		PathCssCpStyles:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/styles.css?v=" + constants.AssetsVersion,
+		PathCssBootstrap: this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.css?v=" + constants.AssetsVersion,
+		PathJsJquery:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/jquery.js?v=" + constants.AssetsVersion,
+		PathJsPopper:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/popper.js?v=" + constants.AssetsVersion,
+		PathJsBootstrap:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.js?v=" + constants.AssetsVersion,
+		PathJsCpScripts:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/scripts.js?v=" + constants.AssetsVersion,
+		BlockModalSysMsg: template.HTML(templates.BlockModalSysMsg),
+	}
+}
+
+func (this *Wrapper) TmplParseToString(tcont []byte, data interface{}) string {
+	tmpl, err := template.New("template").Parse(string(tcont))
+	if err != nil {
+		return err.Error()
+	}
+	var tpl bytes.Buffer
+	if err := tmpl.Execute(&tpl, data); err != nil {
+		return err.Error()
+	}
+	return tpl.String()
+}
+
 func (this *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
 	tmpl, err := template.ParseFiles(
 		this.DirVHostHome+"/template"+"/"+tname+".html",
@@ -179,8 +192,8 @@ func (this *Wrapper) TmplFrontEnd(tname string, data interface{}) bool {
 		return true
 	}
 	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	tmpl.Execute(*this.W, tmplDataAll{
-		System: this.tmplGetSystemData(),
+	tmpl.Execute(*this.W, TmplDataAll{
+		System: this.TmplGetSystemData(),
 		Data:   data,
 	})
 	return true
@@ -193,8 +206,8 @@ func (this *Wrapper) TmplBackEnd(tcont []byte, data interface{}) bool {
 		return true
 	}
 	(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	tmpl.Execute(*this.W, tmplDataAll{
-		System: this.tmplGetSystemData(),
+	tmpl.Execute(*this.W, TmplDataAll{
+		System: this.TmplGetSystemData(),
 		Data:   data,
 	})
 	return true

@@ -17,6 +17,7 @@ import (
 type Action struct {
 	wrapper *wrapper.Wrapper
 	db      *sql.DB
+	user    *utils.MySql_user
 }
 
 func (this *Action) write(data string) {
@@ -61,8 +62,30 @@ func (this *Action) use_database() error {
 	return nil
 }
 
+func (this *Action) load_session_user() error {
+	if this.db == nil {
+		return errors.New("not connected to database")
+	}
+	if this.user != nil {
+		return errors.New("user already loaded")
+	}
+	if this.wrapper.Session.GetIntDef("UserId", 0) <= 0 {
+		return errors.New("session user id is not defined")
+	}
+	this.user = &utils.MySql_user{}
+	err := this.db.QueryRow("SELECT `id`, `first_name`, `last_name`, `email`, `password` FROM `users` WHERE `id` = ? LIMIT 1;", this.wrapper.Session.GetIntDef("UserId", 0)).Scan(
+		&this.user.A_id, &this.user.A_first_name, &this.user.A_last_name, &this.user.A_email, &this.user.A_password)
+	if err != nil {
+		return err
+	}
+	if this.user.A_id != this.wrapper.Session.GetIntDef("UserId", 0) {
+		return errors.New("can't load user from session user id")
+	}
+	return nil
+}
+
 func New(wrapper *wrapper.Wrapper) *Action {
-	return &Action{wrapper, nil}
+	return &Action{wrapper, nil, nil}
 }
 
 func (this *Action) Run() bool {
