@@ -18,19 +18,38 @@
 		<div class="modal fade" id="sys-modal-user-settings" tabindex="-1" role="dialog" aria-labelledby="sysModalUserSettingsLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="sysModalUserSettingsLabel">Settings</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body text-left">
-						Body<br>Body<br>Body<br>Body<br>Body<br>Body<br>Body<br>Body<br>Body<br>Body<br>Body<br>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary">Save changes</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					</div>
+					<form class="form-user-settings" action="/cp/" method="post" autocomplete="off">
+						<input type="hidden" name="action" value="usersettings">
+						<input type="hidden" name="id" value="1">
+						<div class="modal-header">
+							<h5 class="modal-title" id="sysModalUserSettingsLabel">Settings</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body text-left">
+							<div class="form-group">
+								<label for="first_name">User first name</label>
+								<input type="text" class="form-control" id="first_name" name="first_name" placeholder="User first name" autocomplete="off">
+							</div>
+							<div class="form-group">
+								<label for="last_name">User last name</label>
+								<input type="text" class="form-control" id="last_name" name="last_name" placeholder="User last name" autocomplete="off">
+							</div>
+							<div class="form-group">
+								<label for="email">User email</label>
+								<input type="email" class="form-control" id="email" name="email" placeholder="User email" autocomplete="off" required>
+							</div>
+							<div class="form-group">
+								<label for="password">User new password</label>
+								<input type="password" class="form-control" id="password" name="password" placeholder="User new password" autocomplete="off">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Save changes</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
