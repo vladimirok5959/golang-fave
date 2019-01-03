@@ -11,6 +11,44 @@
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 	</head>
 	<body class="cp cp-sidebar-left cp-sidebar-right">
+		<div class="modal fade" id="sys-modal-user-settings" tabindex="-1" role="dialog" aria-labelledby="sysModalUserSettingsLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<form class="form-user-settings" action="/cp/" method="post" autocomplete="off">
+						<input type="hidden" name="action" value="usersettings">
+						<input type="hidden" name="id" value="1">
+						<div class="modal-header">
+							<h5 class="modal-title" id="sysModalUserSettingsLabel">Settings</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body text-left">
+							<div class="form-group">
+								<label for="first_name">User first name</label>
+								<input type="text" class="form-control" id="first_name" name="first_name" value="{{$.Data.UserFirstName}}" placeholder="User first name" autocomplete="off">
+							</div>
+							<div class="form-group">
+								<label for="last_name">User last name</label>
+								<input type="text" class="form-control" id="last_name" name="last_name" value="{{$.Data.UserLastName}}" placeholder="User last name" autocomplete="off">
+							</div>
+							<div class="form-group">
+								<label for="email">User email</label>
+								<input type="email" class="form-control" id="email" name="email" value="{{$.Data.UserEmail}}" placeholder="User email" autocomplete="off" required>
+							</div>
+							<div class="form-group">
+								<label for="password">User new password</label>
+								<input type="password" class="form-control" id="password" name="password" value="{{$.Data.UserPassword}}" placeholder="User new password" autocomplete="off">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Save changes</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 		<nav class="navbar main navbar-expand-md navbar-dark fixed-top bg-dark">
 			<a class="navbar-brand" href="/">{{$.Data.Title}}</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
