@@ -3,6 +3,11 @@ body.no-scroll {
 	padding-right: 0px !important;
 }
 
+/* Bootstrap modal CP padding fix */
+.cp .navbar {
+	padding: .5rem 1rem !important;
+}
+
 /* Bootstrap dropdown hover fix */
 .dropdown-item:focus, .dropdown-item:hover {
 	background-color: #f1f1f1;
