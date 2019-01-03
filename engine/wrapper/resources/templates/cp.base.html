@@ -16,7 +16,7 @@
 				<div class="modal-content">
 					<form class="form-user-settings" action="/cp/" method="post" autocomplete="off">
 						<input type="hidden" name="action" value="usersettings">
-						<input type="hidden" name="id" value="1">
+						<input type="hidden" name="id" value="{{$.Data.UserId}}">
 						<div class="modal-header">
 							<h5 class="modal-title" id="sysModalUserSettingsLabel">Settings</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -81,7 +81,7 @@
 							<img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==">{{$.Data.UserEmail}}
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="nbAccountDropdown">
-							<a class="dropdown-item" href="javascript:;">Settings</a>
+							<a class="dropdown-item" href="javascript:;" data-toggle="modal" data-target="#sys-modal-user-settings">Settings</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="javascript:ActionSingOut();">Sing out</a>
 						</div>

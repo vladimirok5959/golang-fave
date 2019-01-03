@@ -19,11 +19,15 @@ type Backend struct {
 }
 
 type TmplData struct {
-	Title        string
-	UserEmail    string
-	SidebarLeft  template.HTML
-	Content      template.HTML
-	SidebarRight template.HTML
+	Title         string
+	UserId        int
+	UserFirstName string
+	UserLastName  string
+	UserEmail     string
+	UserPassword  string
+	SidebarLeft   template.HTML
+	Content       template.HTML
+	SidebarRight  template.HTML
 }
 
 func New(wrapper *wrapper.Wrapper, db *sql.DB) *Backend {
@@ -113,11 +117,15 @@ func (this *Backend) Run() bool {
 	page := this.wrapper.TmplParseToString(templates.CpBase, wrapper.TmplDataAll{
 		System: this.wrapper.TmplGetSystemData(),
 		Data: TmplData{
-			Title:        "Fave " + constants.ServerVersion,
-			UserEmail:    this.user.A_email,
-			SidebarLeft:  template.HTML(sidebar_left),
-			Content:      template.HTML("Content"),
-			SidebarRight: template.HTML("Sidebar right"),
+			Title:         "Fave " + constants.ServerVersion,
+			UserId:        this.user.A_id,
+			UserFirstName: this.user.A_first_name,
+			UserLastName:  this.user.A_last_name,
+			UserEmail:     this.user.A_email,
+			UserPassword:  "",
+			SidebarLeft:   template.HTML(sidebar_left),
+			Content:       template.HTML("Content"),
+			SidebarRight:  template.HTML("Sidebar right"),
 		},
 	})
 	(*this.wrapper.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
