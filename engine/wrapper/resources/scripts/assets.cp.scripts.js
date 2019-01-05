@@ -4,6 +4,9 @@ function GetModalAlertTmpl(title, message, error) {
 
 function ShowSystemMsg(title, message, error) {
 	var modal_alert_place = $('.modal.show .sys-messages');
+	if(!modal_alert_place.length) {
+		modal_alert_place = $('form.alert-here .sys-messages');
+	}
 	if(modal_alert_place.length) {
 		modal_alert_place.html(GetModalAlertTmpl(title, message, error));
 	}
@@ -63,7 +66,7 @@ $(document).ready(function() {
 			}
 
 			// Block send button
-			form.addClass('loading');
+			form.addClass('loading').addClass('alert-here');
 			var button = $(this).find('button[type=submit]');
 			button.addClass('progress-bar-striped').addClass('progress-bar-animated');
 
@@ -79,8 +82,11 @@ $(document).ready(function() {
 			}).fail(function() {
 				AjaxFail();
 			}).always(function() {
-				form.removeClass('loading');
-				button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+				// Add delay for one second
+				setTimeout(function() {
+					form.removeClass('loading').removeClass('alert-here');
+					button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+				}, 500);
 			});
 
 			e.preventDefault();
