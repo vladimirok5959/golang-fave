@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 	"strings"
+	//"log"
 
 	"golang-fave/engine/backend"
 	"golang-fave/engine/frontend"
@@ -50,14 +51,38 @@ func handlerPage(wrapper *wrapper.Wrapper) bool {
 		return true
 	}
 
+	// Parse url
+	/*
+		url_buff := wrapper.R.URL.Path
+		if len(url_buff) >= 1 && url_buff[:1] == "/" {
+			url_buff = url_buff[1:]
+		}
+		if len(url_buff) >= 1 && url_buff[len(url_buff)-1:] == "/" {
+			url_buff = url_buff[:len(url_buff)-1]
+		}
+
+		log.Printf("###############")
+		log.Printf("(%s)", url_buff)
+	*/
+
+	/*
+		url_args := utils.UrlToArray(wrapper.R.URL.Path)
+		log.Printf("############### (%d)", len(url_args))
+		for key, value := range url_args {
+			log.Printf(">>> (%d) -> (%s)", key, value)
+		}
+	*/
+
+	// log.Printf("###############")
+
+	url_args := utils.UrlToArray(wrapper.R.URL.Path)
+
 	// Run WebSite or CP
 	if is_front_end {
 		// Front-end
-		part := frontend.New(wrapper, db)
-		return part.Run()
+		return frontend.New(wrapper, db, &url_args).Run()
 	} else {
 		// Back-end
-		part := backend.New(wrapper, db)
-		return part.Run()
+		return backend.New(wrapper, db, &url_args).Run()
 	}
 }

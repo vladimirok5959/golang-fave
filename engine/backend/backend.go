@@ -16,6 +16,7 @@ type Backend struct {
 	wrapper *wrapper.Wrapper
 	db      *sql.DB
 	user    *utils.MySql_user
+	urls    *[]string
 }
 
 type TmplData struct {
@@ -31,8 +32,8 @@ type TmplData struct {
 	SidebarRight   template.HTML
 }
 
-func New(wrapper *wrapper.Wrapper, db *sql.DB) *Backend {
-	return &Backend{wrapper, db, nil}
+func New(wrapper *wrapper.Wrapper, db *sql.DB, url_args *[]string) *Backend {
+	return &Backend{wrapper, db, nil, url_args}
 }
 
 func (this *Backend) Run() bool {
@@ -61,6 +62,8 @@ func (this *Backend) Run() bool {
 	if this.user.A_id != this.wrapper.Session.GetIntDef("UserId", 0) {
 		return this.wrapper.TmplBackEnd(templates.CpLogin, nil)
 	}
+
+	// wrapper.R.URL.Path
 
 	// Display cp page
 	/*
@@ -92,28 +95,34 @@ func (this *Backend) Run() bool {
 
 	// http://localhost:8080/admin/
 
-	sidebar_left := string(`<ul class="nav flex-column">
-		<li class="nav-item active">
-			<a class="nav-link" href="#">Pages</a>
-			<ul class="nav flex-column">
-				<li class="nav-item active">
-					<a class="nav-link" href="#">List of pages</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Add new page</a>
-				</li>
-			</ul>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#">Link 2</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#">Link 3</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#">Link 4</a>
-		</li>
-	</ul>`)
+	/*
+		sidebar_left := string(`<ul class="nav flex-column">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Pages</a>
+				<ul class="nav flex-column">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">List of pages</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Add new page</a>
+					</li>
+				</ul>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 2</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 3</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 4</a>
+			</li>
+		</ul>`)
+	*/
+
+	sidebar_left := ""
+	content := "Content"
+	sidebar_right := "Sidebar right"
 
 	page := this.wrapper.TmplParseToString(templates.CpBase, wrapper.TmplDataAll{
 		System: this.wrapper.TmplGetSystemData(),
@@ -126,8 +135,8 @@ func (this *Backend) Run() bool {
 			UserPassword:   "",
 			UserAvatarLink: "https://s.gravatar.com/avatar/" + utils.GetMd5(this.user.A_email) + "?s=80&r=g",
 			SidebarLeft:    template.HTML(sidebar_left),
-			Content:        template.HTML("Content"),
-			SidebarRight:   template.HTML("Sidebar right"),
+			Content:        template.HTML(content),
+			SidebarRight:   template.HTML(sidebar_right),
 		},
 	})
 	(*this.wrapper.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")

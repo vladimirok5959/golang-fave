@@ -5,6 +5,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"golang-fave/engine/wrapper"
+
+	utils "golang-fave/engine/wrapper/utils"
 )
 
 // --- Demo
@@ -26,10 +28,12 @@ type TmplData struct {
 type Frontend struct {
 	wrapper *wrapper.Wrapper
 	db      *sql.DB
+	user    *utils.MySql_user
+	urls    *[]string
 }
 
-func New(wrapper *wrapper.Wrapper, db *sql.DB) *Frontend {
-	return &Frontend{wrapper, db}
+func New(wrapper *wrapper.Wrapper, db *sql.DB, url_args *[]string) *Frontend {
+	return &Frontend{wrapper, db, nil, url_args}
 }
 
 func (this *Frontend) Run() bool {
