@@ -86,7 +86,7 @@ $(document).ready(function() {
 				setTimeout(function() {
 					form.removeClass('loading').removeClass('alert-here');
 					button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
-				}, 500);
+				}, 100);
 			});
 
 			e.preventDefault();
