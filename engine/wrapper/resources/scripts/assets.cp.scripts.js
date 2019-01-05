@@ -42,6 +42,11 @@ function AjaxFail() {
 	window.location.reload(false);
 }
 
+function ActionUserSettings() {
+	// Reset form to remove autocomplete
+	$('form.form-user-settings')[0].reset();
+}
+
 function ActionSingOut() {
 	$.ajax({
 		type: "POST",
