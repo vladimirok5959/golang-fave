@@ -79,6 +79,12 @@ body.cp-first-user {
 	border-top-right-radius: 0;
 }
 
+.cp-login .sys-messages,
+.cp-mysql .sys-messages,
+.cp-first-user .sys-messages {
+	text-align: left;
+}
+
 /* Control panel skeleton */
 body.cp {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
