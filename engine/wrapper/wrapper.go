@@ -11,7 +11,6 @@ import (
 
 	"golang-fave/constants"
 	"golang-fave/engine/sessions"
-	templates "golang-fave/engine/wrapper/resources/templates"
 )
 
 type handleRun func(wrapper *Wrapper) bool
@@ -26,7 +25,6 @@ type tmplDataSystem struct {
 	PathJsPopper     string
 	PathJsBootstrap  string
 	PathJsCpScripts  string
-	BlockModalSysMsg template.HTML
 }
 
 type TmplDataAll struct {
@@ -164,7 +162,6 @@ func (this *Wrapper) TmplGetSystemData() tmplDataSystem {
 		PathJsPopper:     this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/popper.js?v=" + constants.AssetsVersion,
 		PathJsBootstrap:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/sys/bootstrap.js?v=" + constants.AssetsVersion,
 		PathJsCpScripts:  this.R.URL.Scheme + "://" + this.R.Host + "/assets/cp/scripts.js?v=" + constants.AssetsVersion,
-		BlockModalSysMsg: template.HTML(templates.BlockModalSysMsg),
 	}
 }
 

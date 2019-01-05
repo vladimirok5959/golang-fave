@@ -11,7 +11,6 @@
 		<style type="text/css">html{height:100%;}</style>
 	</head>
 	<body class="cp-first-user text-center">
-		{{$.System.BlockModalSysMsg}}
 		<form class="form-signin card" action="/cp/" method="post">
 			<input type="hidden" name="action" value="first_user">
 			<h1 class="h3 mb-3 font-weight-normal">Creating first user</h1>
@@ -23,6 +22,7 @@
 			<input type="email" id="email" name="email" class="form-control mb-3" placeholder="User email" required>
 			<label for="password" class="sr-only">User password</label>
 			<input type="password" id="password" name="password" class="form-control mb-3" placeholder="User password" required>
+			<div class="sys-messages"></div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
 		</form>
 		<script src="{{$.System.PathJsJquery}}"></script>

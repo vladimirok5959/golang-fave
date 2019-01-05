@@ -11,7 +11,6 @@
 		<style type="text/css">html{height:100%;}</style>
 	</head>
 	<body class="cp-mysql text-center">
-		{{$.System.BlockModalSysMsg}}
 		<form class="form-signin card" action="/cp/" method="post">
 			<input type="hidden" name="action" value="mysql">
 			<h1 class="h3 mb-3 font-weight-normal">Configure MySQL</h1>
@@ -25,6 +24,7 @@
 			<input type="text" id="user" name="user" class="form-control mb-3" placeholder="Database user name" required>
 			<label for="password" class="sr-only">Database user password</label>
 			<input type="password" id="password" name="password" class="form-control mb-3" placeholder="Database user password">
+			<div class="sys-messages"></div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Configure</button>
 		</form>
 		<script src="{{$.System.PathJsJquery}}"></script>
