@@ -1,12 +1,5 @@
 package actions
 
-import (
-//"database/sql"
-//_ "github.com/go-sql-driver/mysql"
-
-//utils "golang-fave/engine/wrapper/utils"
-)
-
 func (this *Action) Action_singout() {
 	if err := this.use_database(); err != nil {
 		this.msg_error(err.Error())
