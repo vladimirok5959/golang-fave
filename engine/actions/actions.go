@@ -24,19 +24,16 @@ func (this *Action) write(data string) {
 	(*this.wrapper.W).Write([]byte(data))
 }
 
-func (this *Action) msg_show(title string, msg string) {
+func (this *Action) msg_success(msg string) {
 	this.write(fmt.Sprintf(
-		`ModalShowMsg('%s', '%s');`,
-		strings.Replace(strings.Replace(title, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1),
+		`ShowSystemMsgSuccess('Success!', '%s', false);`,
 		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
 }
 
-func (this *Action) msg_success(msg string) {
-	this.msg_show("Success", msg)
-}
-
 func (this *Action) msg_error(msg string) {
-	this.msg_show("Error", msg)
+	this.write(fmt.Sprintf(
+		`ShowSystemMsgError('Error!', '%s', true);`,
+		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
 }
 
 func (this *Action) use_database() error {

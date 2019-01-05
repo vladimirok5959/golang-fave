@@ -1,13 +1,20 @@
-function ModalSysMsg(title, html) {
-	var dialog = $('#sys-modal-msg');
-	$('#sysModalMsgLabel').text(title);
-	$('#sysModalMsgBody').html(html);
-	return dialog;
+function GetModalAlertTmpl(title, message, error) {
+	return '<div class="alert alert-' + (!error?'success':'danger') + ' alert-dismissible fade show" role="alert"><strong>' + title + '</strong> ' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 }
 
-function ModalShowMsg(title, message) {
-	var dialog = ModalSysMsg(title, message);
-	dialog.modal('show');
+function ShowSystemMsg(title, message, error) {
+	var modal_alert_place = $('.modal.show .sys-messages');
+	if(modal_alert_place.length) {
+		modal_alert_place.html(GetModalAlertTmpl(title, message, error));
+	}
+}
+
+function ShowSystemMsgSuccess(title, message) {
+	ShowSystemMsg(title, message, false);
+}
+
+function ShowSystemMsgError(title, message) {
+	ShowSystemMsg(title, message, true);
 }
 
 function AjaxDone(data) {
@@ -50,14 +57,18 @@ $(document).ready(function() {
 	$('form').each(function() {
 		$(this).submit(function(e) {
 			var form = $(this);
-			if($(form).hasClass('loading')) {
+			if(form.hasClass('loading')) {
 				e.preventDefault();
 				return;
 			}
 
-			$(form).addClass('loading');
+			// Block send button
+			form.addClass('loading');
 			var button = $(this).find('button[type=submit]');
-			$(button).addClass('progress-bar-striped').addClass('progress-bar-animated');
+			button.addClass('progress-bar-striped').addClass('progress-bar-animated');
+
+			// Clear form messages
+			form.find('.sys-messages').html('');
 
 			$.ajax({
 				type: "POST",
@@ -68,8 +79,8 @@ $(document).ready(function() {
 			}).fail(function() {
 				AjaxFail();
 			}).always(function() {
-				$(form).removeClass('loading');
-				$(button).removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+				form.removeClass('loading');
+				button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
 			});
 
 			e.preventDefault();
