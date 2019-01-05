@@ -92,4 +92,12 @@ $(document).ready(function() {
 			e.preventDefault();
 		});
 	});
+
+	// Remove alert from modal on close
+	$('.modal.fade').on('hidden.bs.modal', function() {
+		modal_alert_place = $(this).find('.sys-messages');
+		if(modal_alert_place.length) {
+			modal_alert_place.html('');
+		}
+	});
 });
