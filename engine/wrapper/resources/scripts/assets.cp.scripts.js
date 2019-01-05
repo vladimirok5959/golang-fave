@@ -99,5 +99,11 @@ $(document).ready(function() {
 		if(form.length) {
 			form[0].reset();
 		}
+	}).on('show.bs.modal', function() {
+		// Reset form at modal open
+		form = $(this).find('form');
+		if(form.length) {
+			form[0].reset();
+		}
 	});
 });
