@@ -36,11 +36,6 @@ function AjaxFail() {
 	window.location.reload(false);
 }
 
-function ActionUserSettings() {
-	// Reset form to remove autocomplete
-	$('form.form-user-settings')[0].reset();
-}
-
 function ActionSingOut() {
 	$.ajax({
 		type: "POST",
@@ -98,6 +93,11 @@ $(document).ready(function() {
 		modal_alert_place = $(this).find('.sys-messages');
 		if(modal_alert_place.length) {
 			modal_alert_place.html('');
+		}
+		// Reset form at modal close
+		form = $(this).find('form');
+		if(form.length) {
+			form[0].reset();
 		}
 	});
 });
