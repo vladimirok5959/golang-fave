@@ -8,6 +8,10 @@ func (this *Module) Module_index() {
 	// Do something here...
 }
 
+func (this *Module) Module_index_display() bool {
+	return true
+}
+
 func (this *Module) Module_index_alias() string {
 	return "index"
 }

@@ -32,6 +32,15 @@ func (this *Module) module_get_name(name string) string {
 	return ""
 }
 
+func (this *Module) module_get_display(name string) bool {
+	mname := "Module_" + name + "_display"
+	if _, ok := reflect.TypeOf(this).MethodByName(mname); ok {
+		result := reflect.ValueOf(this).MethodByName(mname).Call([]reflect.Value{})
+		return result[0].Bool()
+	}
+	return false
+}
+
 func (this *Module) module_get_submenu(name string) string {
 	mname := "Module_" + name + "_submenu"
 	if _, ok := reflect.TypeOf(this).MethodByName(mname); ok {
@@ -80,6 +89,10 @@ func (this *Module) Run() bool {
 	return false
 }
 
+func (this *Module) GetNavMenuModules() string {
+	return ""
+}
+
 func (this *Module) GetSidebarLeft() string {
 	sidebar := `<ul class="nav flex-column">`
 
@@ -90,21 +103,22 @@ func (this *Module) GetSidebarLeft() string {
 		if strings.HasPrefix(aMethod.Name, "Module_") && strings.HasSuffix(aMethod.Name, "_alias") {
 			// Extract module alias
 			alias := aMethod.Name[7:][:5]
+			if this.module_get_display(alias) {
+				// Item active class
+				class := ""
+				if alias == this.mmod {
+					class = " active"
+				}
 
-			// Item active class
-			class := ""
-			if alias == this.mmod {
-				class = " active"
+				// Active item sub menu
+				submenu := ""
+				if alias == this.mmod {
+					submenu = this.module_get_submenu(alias)
+				}
+
+				// Add module to list
+				sidebar += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + alias + `/">` + this.module_get_name(alias) + `</a>` + submenu + `</li>`
 			}
-
-			// Active item sub menu
-			submenu := ""
-			if alias == this.mmod {
-				submenu = this.module_get_submenu(alias)
-			}
-
-			// Add module to list
-			sidebar += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + alias + `/">` + this.module_get_name(alias) + `</a>` + submenu + `</li>`
 		}
 	}
 

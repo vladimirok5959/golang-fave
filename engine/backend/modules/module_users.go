@@ -8,6 +8,10 @@ func (this *Module) Module_users() {
 	// Do something here...
 }
 
+func (this *Module) Module_users_display() bool {
+	return false
+}
+
 func (this *Module) Module_users_alias() string {
 	return "users"
 }
