@@ -6,6 +6,7 @@ import (
 	"html/template"
 
 	"golang-fave/constants"
+	"golang-fave/engine/backend/modules"
 	"golang-fave/engine/wrapper"
 
 	templates "golang-fave/engine/wrapper/resources/templates"
@@ -21,6 +22,7 @@ type Backend struct {
 
 type TmplData struct {
 	Title          string
+	BodyClasses    string
 	UserId         int
 	UserFirstName  string
 	UserLastName   string
@@ -63,80 +65,47 @@ func (this *Backend) Run() bool {
 		return this.wrapper.TmplBackEnd(templates.CpLogin, nil)
 	}
 
-	// wrapper.R.URL.Path
-
 	// Display cp page
-	/*
-		(*this.wrapper.W).Write([]byte(`Admin panel here...`))
-		return true
-	*/
-	// return this.wrapper.TmplBackEnd(templates.CpBase, nil)
+	body_class := "cp"
 
-	/*
-		tmpl, err := template.New("template").Parse(string(templates.CpBase))
-		if err == nil {
-			(*this.wrapper.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-			tmpl.Execute(*this.wrapper.W, wrapper.TmplDataAll{
-				System: this.wrapper.TmplGetSystemData(),
-				Data: TmplData{
-					Title: "Fave " + constants.ServerVersion,
-					UserEmail: this.user.A_email,
-					SidebarLeft: "Sidebar left",
-					Content: "Content",
-					SidebarRight: "Sidebar right",
-				},
-			})
-			return true
-		}
-	*/
+	// Get module content here
+	page_sb_left := ""
+	page_content := ""
+	page_sb_right := ""
 
-	// Get parsed template as string
-	// https://coderwall.com/p/ns60fq/simply-output-go-html-template-execution-to-strings
+	mdl := modules.New(this.wrapper, this.db, this.user, this.urls)
+	if mdl.Run() {
+		page_content = mdl.GetContent()
+		page_sb_right = mdl.GetSidebarRight()
+	}
+	page_sb_left = mdl.GetSidebarLeft()
 
-	// http://localhost:8080/admin/
-
-	/*
-		sidebar_left := string(`<ul class="nav flex-column">
-			<li class="nav-item active">
-				<a class="nav-link" href="#">Pages</a>
-				<ul class="nav flex-column">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">List of pages</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Add new page</a>
-					</li>
-				</ul>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Link 2</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Link 3</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Link 4</a>
-			</li>
-		</ul>`)
-	*/
-
-	sidebar_left := ""
-	content := "Content"
-	sidebar_right := "Sidebar right"
+	// If right sidebar and content need to show
+	if page_sb_left != "" {
+		body_class = body_class + " cp-sidebar-left"
+	}
+	if page_content == "" {
+		body_class = body_class + " cp-404"
+		page_content = "Panel 404"
+	}
+	if page_sb_right != "" {
+		body_class = body_class + " cp-sidebar-right"
+	}
 
 	page := this.wrapper.TmplParseToString(templates.CpBase, wrapper.TmplDataAll{
 		System: this.wrapper.TmplGetSystemData(),
 		Data: TmplData{
 			Title:          "Fave " + constants.ServerVersion,
+			BodyClasses:    body_class,
 			UserId:         this.user.A_id,
 			UserFirstName:  this.user.A_first_name,
 			UserLastName:   this.user.A_last_name,
 			UserEmail:      this.user.A_email,
 			UserPassword:   "",
 			UserAvatarLink: "https://s.gravatar.com/avatar/" + utils.GetMd5(this.user.A_email) + "?s=80&r=g",
-			SidebarLeft:    template.HTML(sidebar_left),
-			Content:        template.HTML(content),
-			SidebarRight:   template.HTML(sidebar_right),
+			SidebarLeft:    template.HTML(page_sb_left),
+			Content:        template.HTML(page_content),
+			SidebarRight:   template.HTML(page_sb_right),
 		},
 	})
 	(*this.wrapper.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
