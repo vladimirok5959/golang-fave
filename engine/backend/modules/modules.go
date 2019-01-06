@@ -90,7 +90,24 @@ func (this *Module) Run() bool {
 }
 
 func (this *Module) GetNavMenuModules() string {
-	return ""
+	html := ""
+	aType := reflect.TypeOf(this)
+	for i := 0; i < aType.NumMethod(); i++ {
+		aMethod := aType.Method(i)
+		if strings.HasPrefix(aMethod.Name, "Module_") && strings.HasSuffix(aMethod.Name, "_alias") {
+			// Extract module alias
+			alias := aMethod.Name[7:][:5]
+			if this.module_get_display(alias) {
+				// Item active class
+				class := ""
+				if alias == this.mmod {
+					class = " active"
+				}
+				html += `<a class="dropdown-item` + class + `" href="/cp/` + alias + `/">` + this.module_get_name(alias) + `</a>`
+			}
+		}
+	}
+	return html
 }
 
 func (this *Module) GetSidebarLeft() string {
