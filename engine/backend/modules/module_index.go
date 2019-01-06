@@ -20,6 +20,10 @@ func (this *Module) Module_index_name() string {
 	return "Pages"
 }
 
+func (this *Module) Module_index_order() int {
+	return 1
+}
+
 func (this *Module) Module_index_submenu() []utils.ModuleSubMenu {
 	result := make([]utils.ModuleSubMenu, 0)
 	result = append(result, utils.ModuleSubMenu{Alias: "default", Name: "List of pages"})

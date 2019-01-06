@@ -20,6 +20,10 @@ func (this *Module) Module_empty_name() string {
 	return "Empty"
 }
 
+func (this *Module) Module_empty_order() int {
+	return 999
+}
+
 func (this *Module) Module_empty_submenu() []utils.ModuleSubMenu {
 	result := make([]utils.ModuleSubMenu, 0)
 	result = append(result, utils.ModuleSubMenu{Alias: "default", Name: "Some list"})

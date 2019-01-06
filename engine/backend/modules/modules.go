@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -12,6 +13,13 @@ import (
 
 	utils "golang-fave/engine/wrapper/utils"
 )
+
+type ModuleItem struct {
+	Alias   string
+	Display bool
+	Name    string
+	Order   int
+}
 
 type Module struct {
 	wrapper *wrapper.Wrapper
@@ -21,6 +29,16 @@ type Module struct {
 	mmod    string
 	smod    string
 	imod    int
+	modlist []ModuleItem
+}
+
+func (this *Module) module_get_display(name string) bool {
+	mname := "Module_" + name + "_display"
+	if _, ok := reflect.TypeOf(this).MethodByName(mname); ok {
+		result := reflect.ValueOf(this).MethodByName(mname).Call([]reflect.Value{})
+		return result[0].Bool()
+	}
+	return false
 }
 
 func (this *Module) module_get_name(name string) string {
@@ -32,13 +50,13 @@ func (this *Module) module_get_name(name string) string {
 	return ""
 }
 
-func (this *Module) module_get_display(name string) bool {
-	mname := "Module_" + name + "_display"
+func (this *Module) module_get_order(name string) int {
+	mname := "Module_" + name + "_order"
 	if _, ok := reflect.TypeOf(this).MethodByName(mname); ok {
 		result := reflect.ValueOf(this).MethodByName(mname).Call([]reflect.Value{})
-		return result[0].Bool()
+		return int(result[0].Int())
 	}
-	return false
+	return 0
 }
 
 func (this *Module) module_get_submenu(name string) string {
@@ -62,6 +80,28 @@ func (this *Module) module_get_submenu(name string) string {
 	return ""
 }
 
+func (this *Module) module_get_list_of_modules() *[]ModuleItem {
+	if len(this.modlist) <= 0 {
+		t := reflect.TypeOf(this)
+		for i := 0; i < t.NumMethod(); i++ {
+			m := t.Method(i)
+			if strings.HasPrefix(m.Name, "Module_") && strings.HasSuffix(m.Name, "_alias") {
+				alias := m.Name[7:][:5]
+				this.modlist = append(this.modlist, ModuleItem{
+					alias,
+					this.module_get_display(alias),
+					this.module_get_name(alias),
+					this.module_get_order(alias),
+				})
+			}
+		}
+		sort.Slice(this.modlist, func(i, j int) bool {
+			return this.modlist[i].Order < this.modlist[j].Order
+		})
+	}
+	return &this.modlist
+}
+
 func New(wrapper *wrapper.Wrapper, db *sql.DB, user *utils.MySql_user, url_args *[]string) *Module {
 	mmod := "index"
 	smod := "default"
@@ -77,7 +117,7 @@ func New(wrapper *wrapper.Wrapper, db *sql.DB, user *utils.MySql_user, url_args 
 			imod = val
 		}
 	}
-	return &Module{wrapper, db, user, url_args, mmod, smod, imod}
+	return &Module{wrapper, db, user, url_args, mmod, smod, imod, make([]ModuleItem, 0)}
 }
 
 func (this *Module) Run() bool {
@@ -91,20 +131,14 @@ func (this *Module) Run() bool {
 
 func (this *Module) GetNavMenuModules() string {
 	html := ""
-	aType := reflect.TypeOf(this)
-	for i := 0; i < aType.NumMethod(); i++ {
-		aMethod := aType.Method(i)
-		if strings.HasPrefix(aMethod.Name, "Module_") && strings.HasSuffix(aMethod.Name, "_alias") {
-			// Extract module alias
-			alias := aMethod.Name[7:][:5]
-			if this.module_get_display(alias) {
-				// Item active class
-				class := ""
-				if alias == this.mmod {
-					class = " active"
-				}
-				html += `<a class="dropdown-item` + class + `" href="/cp/` + alias + `/">` + this.module_get_name(alias) + `</a>`
+	list := this.module_get_list_of_modules()
+	for _, value := range *list {
+		if value.Display {
+			class := ""
+			if value.Alias == this.mmod {
+				class = " active"
 			}
+			html += `<a class="dropdown-item` + class + `" href="/cp/` + value.Alias + `/">` + value.Name + `</a>`
 		}
 	}
 	return html
@@ -112,33 +146,18 @@ func (this *Module) GetNavMenuModules() string {
 
 func (this *Module) GetSidebarLeft() string {
 	sidebar := `<ul class="nav flex-column">`
-
-	// Make module list
-	aType := reflect.TypeOf(this)
-	for i := 0; i < aType.NumMethod(); i++ {
-		aMethod := aType.Method(i)
-		if strings.HasPrefix(aMethod.Name, "Module_") && strings.HasSuffix(aMethod.Name, "_alias") {
-			// Extract module alias
-			alias := aMethod.Name[7:][:5]
-			if this.module_get_display(alias) {
-				// Item active class
-				class := ""
-				if alias == this.mmod {
-					class = " active"
-				}
-
-				// Active item sub menu
-				submenu := ""
-				if alias == this.mmod {
-					submenu = this.module_get_submenu(alias)
-				}
-
-				// Add module to list
-				sidebar += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + alias + `/">` + this.module_get_name(alias) + `</a>` + submenu + `</li>`
+	list := this.module_get_list_of_modules()
+	for _, value := range *list {
+		if value.Display {
+			class := ""
+			submenu := ""
+			if value.Alias == this.mmod {
+				class = " active"
+				submenu = this.module_get_submenu(value.Alias)
 			}
+			sidebar += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + value.Alias + `/">` + value.Name + `</a>` + submenu + `</li>`
 		}
 	}
-
 	sidebar += `</ul>`
 	return sidebar
 }
