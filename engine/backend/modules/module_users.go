@@ -23,7 +23,7 @@ func (this *Module) Module_users_name() string {
 func (this *Module) Module_users_submenu() []utils.ModuleSubMenu {
 	result := make([]utils.ModuleSubMenu, 0)
 	result = append(result, utils.ModuleSubMenu{Alias: "default", Name: "List of users"})
-	result = append(result, utils.ModuleSubMenu{Alias: "add", Name: "Add new user"})
+	result = append(result, utils.ModuleSubMenu{Alias: "modify", Name: "Add new user"})
 	return result
 }
 

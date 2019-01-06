@@ -23,7 +23,7 @@ func (this *Module) Module_index_name() string {
 func (this *Module) Module_index_submenu() []utils.ModuleSubMenu {
 	result := make([]utils.ModuleSubMenu, 0)
 	result = append(result, utils.ModuleSubMenu{Alias: "default", Name: "List of pages"})
-	result = append(result, utils.ModuleSubMenu{Alias: "add", Name: "Add new page"})
+	result = append(result, utils.ModuleSubMenu{Alias: "modify", Name: "Add new page"})
 	return result
 }
 
