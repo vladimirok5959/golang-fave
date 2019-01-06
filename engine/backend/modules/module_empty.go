@@ -17,7 +17,7 @@ func (this *Module) Module_empty_alias() string {
 }
 
 func (this *Module) Module_empty_name() string {
-	return "Empty"
+	return "Empty module"
 }
 
 func (this *Module) Module_empty_order() int {
@@ -26,14 +26,14 @@ func (this *Module) Module_empty_order() int {
 
 func (this *Module) Module_empty_submenu() []utils.ModuleSubMenu {
 	result := make([]utils.ModuleSubMenu, 0)
-	result = append(result, utils.ModuleSubMenu{Alias: "default", Name: "Some list"})
+	result = append(result, utils.ModuleSubMenu{Alias: "default", Name: "Sub-menu item"})
 	return result
 }
 
 func (this *Module) Module_empty_content() string {
-	return "Empty content"
+	return "Empty module content"
 }
 
 func (this *Module) Module_empty_sidebar() string {
-	return "Empty right sidebar"
+	return "Empty module right sidebar"
 }
