@@ -21,17 +21,18 @@ type Backend struct {
 }
 
 type TmplData struct {
-	Title          string
-	BodyClasses    string
-	UserId         int
-	UserFirstName  string
-	UserLastName   string
-	UserEmail      string
-	UserPassword   string
-	UserAvatarLink string
-	SidebarLeft    template.HTML
-	Content        template.HTML
-	SidebarRight   template.HTML
+	Title              string
+	BodyClasses        string
+	UserId             int
+	UserFirstName      string
+	UserLastName       string
+	UserEmail          string
+	UserPassword       string
+	UserAvatarLink     string
+	ModuleCurrentAlias string
+	SidebarLeft        template.HTML
+	Content            template.HTML
+	SidebarRight       template.HTML
 }
 
 func New(wrapper *wrapper.Wrapper, db *sql.DB, url_args *[]string) *Backend {
@@ -92,20 +93,28 @@ func (this *Backend) Run() bool {
 		body_class = body_class + " cp-sidebar-right"
 	}
 
+	// Current module alias
+	malias := "index"
+	if len(*this.urls) >= 2 {
+		malias = (*this.urls)[1]
+	}
+
+	// Render page
 	page := this.wrapper.TmplParseToString(templates.CpBase, wrapper.TmplDataAll{
 		System: this.wrapper.TmplGetSystemData(),
 		Data: TmplData{
-			Title:          "Fave " + constants.ServerVersion,
-			BodyClasses:    body_class,
-			UserId:         this.user.A_id,
-			UserFirstName:  this.user.A_first_name,
-			UserLastName:   this.user.A_last_name,
-			UserEmail:      this.user.A_email,
-			UserPassword:   "",
-			UserAvatarLink: "https://s.gravatar.com/avatar/" + utils.GetMd5(this.user.A_email) + "?s=80&r=g",
-			SidebarLeft:    template.HTML(page_sb_left),
-			Content:        template.HTML(page_content),
-			SidebarRight:   template.HTML(page_sb_right),
+			Title:              "Fave " + constants.ServerVersion,
+			BodyClasses:        body_class,
+			UserId:             this.user.A_id,
+			UserFirstName:      this.user.A_first_name,
+			UserLastName:       this.user.A_last_name,
+			UserEmail:          this.user.A_email,
+			UserPassword:       "",
+			UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(this.user.A_email) + "?s=80&r=g",
+			ModuleCurrentAlias: malias,
+			SidebarLeft:        template.HTML(page_sb_left),
+			Content:            template.HTML(page_content),
+			SidebarRight:       template.HTML(page_sb_right),
 		},
 	})
 	(*this.wrapper.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")

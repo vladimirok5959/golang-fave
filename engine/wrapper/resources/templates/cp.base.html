@@ -70,9 +70,9 @@
 							System
 						</a>
 						<div class="dropdown-menu" aria-labelledby="nbSystemDropdown">
-							<a class="dropdown-item" href="/cp/users/">Users</a>
+							<a class="dropdown-item{{if eq $.Data.ModuleCurrentAlias "users"}} active{{end}}" href="/cp/users/">Users</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="/cp/settings/">Settings</a>
+							<a class="dropdown-item{{if eq $.Data.ModuleCurrentAlias "settings"}} active{{end}}" href="/cp/settings/">Settings</a>
 						</div>
 					</li>
 				</ul>
