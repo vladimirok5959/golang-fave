@@ -26,7 +26,7 @@ func (this *Module) Module_users_icon() string {
 }
 
 func (this *Module) Module_users_order() int {
-	return 0
+	return 100
 }
 
 func (this *Module) Module_users_submenu() []utils.ModuleSubMenu {

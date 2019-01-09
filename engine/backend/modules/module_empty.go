@@ -26,7 +26,7 @@ func (this *Module) Module_empty_icon() string {
 }
 
 func (this *Module) Module_empty_order() int {
-	return 999
+	return 2
 }
 
 func (this *Module) Module_empty_submenu() []utils.ModuleSubMenu {

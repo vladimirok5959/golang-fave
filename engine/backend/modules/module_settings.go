@@ -26,7 +26,7 @@ func (this *Module) Module_settings_icon() string {
 }
 
 func (this *Module) Module_settings_order() int {
-	return 0
+	return 101
 }
 
 func (this *Module) Module_settings_submenu() []utils.ModuleSubMenu {
