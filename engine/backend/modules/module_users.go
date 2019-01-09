@@ -22,7 +22,7 @@ func (this *Module) Module_users_name() string {
 }
 
 func (this *Module) Module_users_icon() string {
-	return others.File_assets_sys_svg_gear
+	return others.File_assets_sys_svg_user
 }
 
 func (this *Module) Module_users_order() int {

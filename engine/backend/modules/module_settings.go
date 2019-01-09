@@ -33,8 +33,8 @@ func (this *Module) Module_settings_submenu() []utils.ModuleSubMenu {
 	result := make([]utils.ModuleSubMenu, 0)
 	result = append(result, utils.ModuleSubMenu{
 		Alias: "default",
-		Name:  "Settings",
-		Icon:  others.File_assets_sys_svg_list,
+		Name:  "Main settings",
+		Icon:  others.File_assets_sys_svg_gear,
 	})
 	return result
 }
