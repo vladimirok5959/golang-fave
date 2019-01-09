@@ -97,7 +97,7 @@ func (this *Module) module_get_list_of_modules() *[]ModuleItem {
 			m := t.Method(i)
 			if strings.HasPrefix(m.Name, "Module_") && strings.HasSuffix(m.Name, "_alias") {
 				alias := m.Name[7:]
-				alias = alias[0:len(alias)-6]
+				alias = alias[0 : len(alias)-6]
 				this.modlist = append(this.modlist, ModuleItem{
 					alias,
 					this.module_get_display(alias),
@@ -159,19 +159,7 @@ func (this *Module) GetNavMenuModules() string {
 func (this *Module) GetSidebarLeft() string {
 	list := this.module_get_list_of_modules()
 
-	// Add system module to sidebar if selected
-	sbsys := ``
-	for _, value := range *list {
-		if !value.Display && value.Alias == this.mmod {
-			sbsys += `<ul class="nav flex-column">`
-			sbsys += `<li class="nav-item active"><a class="nav-link" href="/cp/` + value.Alias + `/">` + value.Icon + value.Name + `</a>` + this.module_get_submenu(value.Alias) + `</li>`
-			sbsys += `</ul>`
-			sbsys += `<div class="dropdown-divider" style="border-color:#d6d6d6;margin:0px;"></div>`
-			break
-		}
-	}
-
-	sidebar := `<ul class="nav flex-column">`
+	modules_all := `<ul class="nav flex-column">`
 	for _, value := range *list {
 		if value.Display {
 			class := ""
@@ -180,11 +168,26 @@ func (this *Module) GetSidebarLeft() string {
 				class = " active"
 				submenu = this.module_get_submenu(value.Alias)
 			}
-			sidebar += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + value.Alias + `/">` + value.Icon + value.Name + `</a>` + submenu + `</li>`
+			modules_all += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + value.Alias + `/">` + value.Icon + value.Name + `</a>` + submenu + `</li>`
 		}
 	}
-	sidebar += `</ul>`
-	return sbsys + sidebar
+	modules_all += `</ul>`
+
+	modules_sys := `<ul class="nav flex-column">`
+	for _, value := range *list {
+		if !value.Display {
+			class := ""
+			submenu := ""
+			if value.Alias == this.mmod {
+				class = " active"
+				submenu = this.module_get_submenu(value.Alias)
+			}
+			modules_sys += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + value.Alias + `/">` + value.Icon + value.Name + `</a>` + submenu + `</li>`
+		}
+	}
+	modules_sys += `</ul>`
+
+	return modules_all + `<div class="dropdown-divider" style="border-color:#d6d6d6;margin:0px;"></div>` + modules_sys
 }
 
 func (this *Module) GetContent() string {
