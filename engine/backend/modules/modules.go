@@ -156,6 +156,21 @@ func (this *Module) GetNavMenuModules() string {
 	return html
 }
 
+func (this *Module) GetNavMenuModulesSys() string {
+	html := ""
+	list := this.module_get_list_of_modules()
+	for _, value := range *list {
+		if !value.Display {
+			class := ""
+			if value.Alias == this.mmod {
+				class = " active"
+			}
+			html += `<a class="dropdown-item` + class + `" href="/cp/` + value.Alias + `/">` + value.Name + `</a>`
+		}
+	}
+	return html
+}
+
 func (this *Module) GetSidebarLeft() string {
 	list := this.module_get_list_of_modules()
 

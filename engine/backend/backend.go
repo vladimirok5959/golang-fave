@@ -30,6 +30,7 @@ type TmplData struct {
 	UserPassword       string
 	UserAvatarLink     string
 	NavBarModules      template.HTML
+	NavBarModulesSys   template.HTML
 	ModuleCurrentAlias string
 	SidebarLeft        template.HTML
 	Content            template.HTML
@@ -76,7 +77,8 @@ func (this *Backend) Run() bool {
 
 	mdl := modules.New(this.wrapper, this.db, this.user, this.urls)
 	page_sb_left := mdl.GetSidebarLeft()
-	nav_bar_modules := mdl.GetNavMenuModules()
+	nav_bar_modules_all := mdl.GetNavMenuModules()
+	nav_bar_modules_sys := mdl.GetNavMenuModulesSys()
 
 	if mdl.Run() {
 		page_content = mdl.GetContent()
@@ -113,7 +115,8 @@ func (this *Backend) Run() bool {
 			UserEmail:          this.user.A_email,
 			UserPassword:       "",
 			UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(this.user.A_email) + "?s=80&r=g",
-			NavBarModules:      template.HTML(nav_bar_modules),
+			NavBarModules:      template.HTML(nav_bar_modules_all),
+			NavBarModulesSys:   template.HTML(nav_bar_modules_sys),
 			ModuleCurrentAlias: malias,
 			SidebarLeft:        template.HTML(page_sb_left),
 			Content:            template.HTML(page_content),
