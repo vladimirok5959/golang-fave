@@ -187,7 +187,7 @@ func (this *Module) GetSidebarLeft() string {
 	}
 	modules_sys += `</ul>`
 
-	return modules_all + `<div class="dropdown-divider" style="border-color:#d6d6d6;margin:0px;"></div>` + modules_sys
+	return modules_all + `<div class="dropdown-divider"></div>` + modules_sys
 }
 
 func (this *Module) GetContent() string {

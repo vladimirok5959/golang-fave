@@ -165,6 +165,11 @@ body.cp .wrap .sidebar {
 	box-shadow: 0 0.5em 0.5em rgba(0,0,0,.3);
 }
 
+body.cp .wrap .sidebar .dropdown-divider {
+	border-color: #d6d6d6;
+	margin: 0px;
+}
+
 body.cp .wrap .sidebar.sidebar-left ul.nav {
 	padding: 1rem 0px;
 }
@@ -205,6 +210,10 @@ body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active {
 
 body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active a {
 	color: #417cb9;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item:last-child ul {
+	padding-bottom: 0px;
 }
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
