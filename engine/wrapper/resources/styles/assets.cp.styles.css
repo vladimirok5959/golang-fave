@@ -206,3 +206,8 @@ body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active {
 body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active a {
 	color: #417cb9;
 }
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
+	fill: currentColor;
+	margin-right: 5px;
+}

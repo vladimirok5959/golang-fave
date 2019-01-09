@@ -18,6 +18,7 @@ type ModuleItem struct {
 	Alias   string
 	Display bool
 	Name    string
+	Icon    string
 	Order   int
 }
 
@@ -50,6 +51,15 @@ func (this *Module) module_get_name(name string) string {
 	return ""
 }
 
+func (this *Module) module_get_icon(name string) string {
+	mname := "Module_" + name + "_icon"
+	if _, ok := reflect.TypeOf(this).MethodByName(mname); ok {
+		result := reflect.ValueOf(this).MethodByName(mname).Call([]reflect.Value{})
+		return result[0].String()
+	}
+	return ""
+}
+
 func (this *Module) module_get_order(name string) int {
 	mname := "Module_" + name + "_order"
 	if _, ok := reflect.TypeOf(this).MethodByName(mname); ok {
@@ -70,7 +80,7 @@ func (this *Module) module_get_submenu(name string) string {
 			if name == this.mmod && value.Alias == this.smod {
 				class = " active"
 			}
-			result_html += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + name + `/` + value.Alias + `/">` + value.Name + `</a></li>`
+			result_html += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + name + `/` + value.Alias + `/">` + value.Icon + value.Name + `</a></li>`
 		}
 		if result_html != "" {
 			result_html = `<ul class="nav flex-column">` + result_html + `</ul>`
@@ -91,6 +101,7 @@ func (this *Module) module_get_list_of_modules() *[]ModuleItem {
 					alias,
 					this.module_get_display(alias),
 					this.module_get_name(alias),
+					this.module_get_icon(alias),
 					this.module_get_order(alias),
 				})
 			}
@@ -155,7 +166,7 @@ func (this *Module) GetSidebarLeft() string {
 				class = " active"
 				submenu = this.module_get_submenu(value.Alias)
 			}
-			sidebar += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + value.Alias + `/">` + value.Name + `</a>` + submenu + `</li>`
+			sidebar += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + value.Alias + `/">` + value.Icon + value.Name + `</a>` + submenu + `</li>`
 		}
 	}
 	sidebar += `</ul>`

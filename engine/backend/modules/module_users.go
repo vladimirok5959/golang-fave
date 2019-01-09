@@ -1,6 +1,7 @@
 package modules
 
 import (
+	others "golang-fave/engine/wrapper/resources/others"
 	utils "golang-fave/engine/wrapper/utils"
 )
 
@@ -20,14 +21,26 @@ func (this *Module) Module_users_name() string {
 	return "Users"
 }
 
+func (this *Module) Module_users_icon() string {
+	return others.File_assets_sys_svg_gear
+}
+
 func (this *Module) Module_users_order() int {
 	return 0
 }
 
 func (this *Module) Module_users_submenu() []utils.ModuleSubMenu {
 	result := make([]utils.ModuleSubMenu, 0)
-	result = append(result, utils.ModuleSubMenu{Alias: "default", Name: "List of users"})
-	result = append(result, utils.ModuleSubMenu{Alias: "modify", Name: "Add new user"})
+	result = append(result, utils.ModuleSubMenu{
+		Alias: "default",
+		Name:  "List of users",
+		Icon:  others.File_assets_sys_svg_list,
+	})
+	result = append(result, utils.ModuleSubMenu{
+		Alias: "modify",
+		Name:  "Add new user",
+		Icon:  others.File_assets_sys_svg_plus,
+	})
 	return result
 }
 
