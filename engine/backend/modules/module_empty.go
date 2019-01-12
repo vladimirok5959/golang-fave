@@ -1,5 +1,6 @@
 package modules
 
+/*
 import (
 	others "golang-fave/engine/wrapper/resources/others"
 	utils "golang-fave/engine/wrapper/utils"
@@ -46,3 +47,4 @@ func (this *Module) Module_empty_content() string {
 func (this *Module) Module_empty_sidebar() string {
 	return "Empty module right sidebar"
 }
+*/
