@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -114,17 +115,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Set server name
 	w.Header().Set("Server", "fave.pro/"+constants.ServerVersion)
 
-	// Create and start engine
-	wrapper.New(&w, r, host, port, ParamWwwDir, VhostHomeDir).
-		Run(func(wrapper *wrapper.Wrapper) bool {
-			// Actions
-			action := actions.New(wrapper)
-			if action.Run() {
-				wrapper.Session.Save()
-				return true
-			}
+	wrap := wrapper.New(&w, r, host, port, ParamWwwDir, VhostHomeDir)
 
-			// Pages
-			return handlerPage(wrapper)
-		})
+	// Check if localhost exists
+	if !vhExists(VhostHomeDir) && !strings.HasPrefix(r.URL.Path, "/assets/") {
+		wrap.PrintEnginePageError(errors.New("Folder " + VhostHomeDir + " is not found"))
+		return
+	}
+
+	// Create and start engine
+	wrap.Run(func(wrapper *wrapper.Wrapper) bool {
+		// Actions
+		action := actions.New(wrapper)
+		if action.Run() {
+			wrapper.Session.Save()
+			return true
+		}
+
+		// Pages
+		return handlerPage(wrapper)
+	})
 }

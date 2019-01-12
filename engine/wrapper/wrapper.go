@@ -212,7 +212,7 @@ func (this *Wrapper) TmplBackEnd(tcont []byte, data interface{}) bool {
 
 func (this *Wrapper) EngineErrMsgOnError(err error) bool {
 	if err != nil {
-		this.printEnginePageError(err)
+		this.PrintEnginePageError(err)
 		return true
 	}
 	return false

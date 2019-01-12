@@ -193,7 +193,7 @@ func (this *Wrapper) printTmplPageError(perr error) {
 	})
 }
 
-func (this *Wrapper) printEnginePageError(perr error) {
+func (this *Wrapper) PrintEnginePageError(perr error) {
 	tmpl, err := template.New("template").Parse(string(templates.PageEngError))
 	if err != nil {
 		(*this.W).Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
