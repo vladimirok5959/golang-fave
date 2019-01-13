@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"fmt"
+	"html"
 	"math"
 	"reflect"
 	"sort"
@@ -135,12 +136,12 @@ func (this *Module) breadcrumb(data []dataBreadcrumb) string {
 	result := ``
 	result += `<nav aria-label="breadcrumb">`
 	result += `<ol class="breadcrumb">`
-	result += `<li class="breadcrumb-item"><a href="/cp/` + this.mmod + `/">` + this.module_get_name(this.mmod) + `</a></li>`
+	result += `<li class="breadcrumb-item"><a href="/cp/` + this.mmod + `/">` + html.EscapeString(this.module_get_name(this.mmod)) + `</a></li>`
 	for _, item := range data {
 		if item.link == "" {
-			result += `<li class="breadcrumb-item active" aria-current="page">` + item.name + `</li>`
+			result += `<li class="breadcrumb-item active" aria-current="page">` + html.EscapeString(item.name) + `</li>`
 		} else {
-			result += `<li class="breadcrumb-item"><a href="` + item.link + `">` + item.name + `</a></li>`
+			result += `<li class="breadcrumb-item"><a href="` + item.link + `">` + html.EscapeString(item.name) + `</a></li>`
 		}
 	}
 	result += `</ol>`
@@ -179,7 +180,7 @@ func (this *Module) data_table(table string, order_by string, order_way string, 
 	sql := "SELECT"
 	for i, column := range data {
 		if column.nameInTable != "" {
-			result += `<th scope="col" class="col_` + column.dbField + `">` + column.nameInTable + `</th>`
+			result += `<th scope="col" class="col_` + column.dbField + `">` + html.EscapeString(column.nameInTable) + `</th>`
 		}
 		sql += " `" + column.dbField + "`"
 		if i+1 < len(data) {
@@ -207,7 +208,7 @@ func (this *Module) data_table(table string, order_by string, order_way string, 
 				for i, val := range values {
 					if data[i].nameInTable != "" {
 						if data[i].display == nil {
-							result += `<td class="col_` + data[i].dbField + `">` + string(val) + `</td>`
+							result += `<td class="col_` + data[i].dbField + `">` + html.EscapeString(string(val)) + `</td>`
 						} else {
 							result += `<td class="col_` + data[i].dbField + `">` + data[i].display(&values) + `</td>`
 						}

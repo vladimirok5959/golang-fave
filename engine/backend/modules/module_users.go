@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"html"
+
 	others "golang-fave/engine/wrapper/resources/others"
 	utils "golang-fave/engine/wrapper/utils"
 )
@@ -53,7 +55,7 @@ func (this *Module) Module_users_content() string {
 			{"id", "", nil},
 			{"email", "Email", func(values *[]string) string {
 				return `<a href="/cp/users/modify/` + (*values)[0] + `/">` +
-					(*values)[1] + `</a>`
+					html.EscapeString((*values)[1]) + `</a>`
 			}},
 			{"first_name", "First name", nil},
 			{"last_name", "Last name", nil},
