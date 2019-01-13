@@ -176,24 +176,24 @@ func (this *Module) data_table(table string, order_by string, order_way string, 
 	result := `<table class="table table-striped table-bordered table_` + table + `">`
 	result += `<thead>`
 	result += `<tr>`
-	sqld := "SELECT"
+	sql := "SELECT"
 	for i, column := range data {
 		if column.nameInTable != "" {
 			result += `<th scope="col" class="col_` + column.dbField + `">` + column.nameInTable + `</th>`
 		}
-		sqld += " `" + column.dbField + "`"
+		sql += " `" + column.dbField + "`"
 		if i+1 < len(data) {
-			sqld += ","
+			sql += ","
 		}
 	}
-	sqld += " FROM `" + table + "` ORDER BY `" + order_by + "` " + order_way + " LIMIT ?, ?;"
+	sql += " FROM `" + table + "` ORDER BY `" + order_by + "` " + order_way + " LIMIT ?, ?;"
 	if action != nil {
 		result += `<th scope="col" class="col_action">Action</th>`
 	}
 	result += `</tr>`
 	result += `</thead>`
 	result += `<tbody>`
-	rows, err := this.db.Query(sqld, limit_offset, pear_page)
+	rows, err := this.db.Query(sql, limit_offset, pear_page)
 	if err == nil {
 		values := make([]string, len(data))
 		scan := make([]interface{}, len(values))
