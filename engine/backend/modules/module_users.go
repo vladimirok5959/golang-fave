@@ -51,7 +51,10 @@ func (this *Module) Module_users_content() string {
 		})
 		data_table := this.data_table("users", "email", "ASC", []dataTableRow{
 			{"id", "", nil},
-			{"email", "Email", nil},
+			{"email", "Email", func(values *[]string) string {
+				return `<a href="/cp/users/modify/` + (*values)[0] + `/">` +
+					(*values)[1] + `</a>`
+			}},
 			{"first_name", "First name", nil},
 			{"last_name", "Last name", nil},
 		}, func(values *[]string) string {
