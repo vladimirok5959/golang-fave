@@ -46,39 +46,23 @@ func (this *Module) Module_users_submenu() []utils.ModuleSubMenu {
 
 func (this *Module) Module_users_content() string {
 	if this.smod == "default" {
-		// List
-		result := `<table class="table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th scope="col">Email</th>
-					<th scope="col">First name</th>
-					<th scope="col">Last name</th>
-					<th scope="col">Action</th>
-				</tr>
-			</thead>
-		<tbody>`
-		rows, err := this.db.Query("SELECT `id`, `first_name`, `last_name`, `email` FROM `users`;")
-		if err == nil {
-			var id int
-			var first_name string
-			var last_name string
-			var email string
-			for rows.Next() {
-				err = rows.Scan(&id, &first_name, &last_name, &email)
-				if err == nil {
-					result += `<tr>
-						<td>` + email + `</td>
-						<td>` + first_name + `</td>
-						<td>` + last_name + `</td>
-						<td><a href="#">` + others.File_assets_sys_svg_edit + `</a> <a href="#">` + others.File_assets_sys_svg_remove + `</a></td>
-					</tr>`
-				}
-			}
-		}
-		result += `</tbody></table>`
-		return result
+		breadcrumb := this.breadcrumb([]dataBreadcrumb{
+			{"List of users", ""},
+		})
+		data_table := this.data_table("users", "email", "ASC", []dataTableRow{
+			{"id", "", nil},
+			{"email", "Email", nil},
+			{"first_name", "First name", nil},
+			{"last_name", "Last name", nil},
+		}, func(values *[]string) string {
+			return `<a href="/cp/users/modify/` + (*values)[0] + `/">` +
+				others.File_assets_sys_svg_edit + `</a>` +
+				`<a href="#">` + others.File_assets_sys_svg_remove + `</a>`
+		}, "/cp/users/default/")
+		return breadcrumb + data_table
 	} else if this.smod == "modify" {
 		// Add/Edit
+		return "Edit!"
 	}
 	return ""
 }
