@@ -2,7 +2,6 @@
 
 CREATE TABLE `pages` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
-	`parent` int(11) NOT NULL DEFAULT '0' COMMENT 'Parent page id',
 	`user` int(11) NOT NULL COMMENT 'User id',
 	`name` varchar(255) NOT NULL COMMENT 'Page name',
 	`slug` varchar(255) NOT NULL COMMENT 'Page url part',
