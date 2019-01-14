@@ -54,11 +54,18 @@ func (this *Module) Module_users_content() string {
 		data_table := this.data_table("users", "email", "ASC", []dataTableRow{
 			{"id", "", nil},
 			{"email", "Email", func(values *[]string) string {
-				return `<a href="/cp/users/modify/` + (*values)[0] + `/">` +
-					html.EscapeString((*values)[1]) + `</a>`
+				email := `<a href="/cp/users/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
+				name := html.EscapeString((*values)[2])
+				if name != "" && (*values)[3] != "" {
+					name += ` ` + (*values)[3]
+				}
+				if name != "" {
+					name = `<div><small>` + name + `</small></div>`
+				}
+				return `<div>` + email + `</div>` + name
 			}},
-			{"first_name", "First name", nil},
-			{"last_name", "Last name", nil},
+			{"first_name", "", nil},
+			{"last_name", "", nil},
 		}, func(values *[]string) string {
 			return `<a href="/cp/users/modify/` + (*values)[0] + `/">` +
 				others.File_assets_sys_svg_edit + `</a>` +
