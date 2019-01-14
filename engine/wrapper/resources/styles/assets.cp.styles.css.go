@@ -237,4 +237,20 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 .data-table a:hover svg {
 	color: #0056b3;
 }
-`)
+
+.data-table td.col_action a.ico {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 10px;
+}
+
+.data-table td.col_action a.ico:last-child {
+	margin-right: 0px;
+}
+
+/* Admin table: table_users */
+.data-table.table_users .col_action {
+	width: 90px;
+	text-align: right;
+}`)

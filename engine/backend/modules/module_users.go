@@ -67,9 +67,9 @@ func (this *Module) Module_users_content() string {
 			{"first_name", "", nil},
 			{"last_name", "", nil},
 		}, func(values *[]string) string {
-			return `<a href="/cp/users/modify/` + (*values)[0] + `/">` +
+			return `<a class="ico" href="/cp/users/modify/` + (*values)[0] + `/">` +
 				others.File_assets_sys_svg_edit + `</a>` +
-				`<a href="#">` + others.File_assets_sys_svg_remove + `</a>`
+				`<a class="ico" href="#">` + others.File_assets_sys_svg_remove + `</a>`
 		}, "/cp/users/default/")
 		return breadcrumb + data_table
 	} else if this.smod == "modify" {

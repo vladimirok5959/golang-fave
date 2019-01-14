@@ -189,7 +189,7 @@ func (this *Module) data_table(table string, order_by string, order_way string, 
 	}
 	sql += " FROM `" + table + "` ORDER BY `" + order_by + "` " + order_way + " LIMIT ?, ?;"
 	if action != nil {
-		result += `<th scope="col" class="col_action">Action</th>`
+		result += `<th scope="col" class="col_action">&nbsp;</th>`
 	}
 	result += `</tr>`
 	result += `</thead>`
