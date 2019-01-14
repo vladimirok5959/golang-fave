@@ -246,6 +246,16 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	margin-right: 0px;
 }
 
+.data-table thead tr {
+	background-color: #e9ecef;
+}
+
+.data-table.table-bordered td,
+.data-table.table-bordered th {
+	border: none;
+	border-top: 1px solid #dee2e6;
+}
+
 /* Admin table: table_users */
 .data-table.table_users .col_action {
 	width: 90px;
