@@ -220,3 +220,17 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	fill: currentColor;
 	margin-right: 5px;
 }
+
+/* Admin table */
+.data-table.table-hover tbody tr:hover {
+	background-color: #fffbdf;
+}
+
+.data-table a svg {
+	fill: currentColor;
+	color: #007bff;
+}
+
+.data-table a:hover svg {
+	color: #0056b3;
+}

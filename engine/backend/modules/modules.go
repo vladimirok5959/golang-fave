@@ -174,7 +174,7 @@ func (this *Module) data_table(table string, order_by string, order_way string, 
 		}
 	}
 	limit_offset := curr_page*pear_page - pear_page
-	result := `<table class="table table-striped table-bordered table_` + table + `">`
+	result := `<table class="table data-table table-striped table-bordered table-hover table_` + table + `">`
 	result += `<thead>`
 	result += `<tr>`
 	sql := "SELECT"
