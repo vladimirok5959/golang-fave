@@ -72,9 +72,16 @@ func (this *Module) Module_users_content() string {
 				`<a class="ico" href="#">` + others.File_assets_sys_svg_remove + `</a>`
 		}, "/cp/users/default/")
 		return breadcrumb + data_table
-	} else if this.smod == "modify" {
-		// Add/Edit
-		return "Edit!"
+	} else if this.smod == "modify" && this.imod == 0 {
+		breadcrumb := this.breadcrumb([]dataBreadcrumb{
+			{"Add new user", ""},
+		})
+		return breadcrumb
+	} else if this.smod == "modify" && this.imod != 0 {
+		breadcrumb := this.breadcrumb([]dataBreadcrumb{
+			{"Edit user", ""},
+		})
+		return breadcrumb
 	}
 	return ""
 }
