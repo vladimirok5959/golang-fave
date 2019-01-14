@@ -258,6 +258,6 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 
 /* Admin table: table_users */
 .data-table.table_users .col_action {
-	width: 90px;
+	width: 100px;
 	text-align: right;
 }
