@@ -90,7 +90,17 @@ func (this *Module) Module_users_content() string {
 		breadcrumb := this.breadcrumb([]dataBreadcrumb{
 			{"Edit user", ""},
 		})
-		return breadcrumb
+		// Load user data
+		data_form := this.data_form([]dataFormField{
+			{kind: dfkHidden, name: "action", value: "users_edit"},
+			{kind: dfkHidden, name: "id", value: "0"},
+			{kind: dfkText, caption: "User first name", name: "first_name", value: "1"},
+			{kind: dfkText, caption: "User last name", name: "last_name", value: "2"},
+			{kind: dfkEmail, caption: "User email", name: "email", value: "3"},
+			{kind: dfkPassword, caption: "User password", name: "password", hint: "Leave the field blank to not change the password"},
+			{kind: dfkSubmit, value: "Add", target: "add-edit-button"},
+		})
+		return breadcrumb + data_form
 	}
 	return ""
 }
