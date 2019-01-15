@@ -76,7 +76,16 @@ func (this *Module) Module_users_content() string {
 		breadcrumb := this.breadcrumb([]dataBreadcrumb{
 			{"Add new user", ""},
 		})
-		return breadcrumb
+		data_form := this.data_form([]dataFormField{
+			{kind: dfkHidden, name: "action", value: "users_add"},
+			{kind: dfkHidden, name: "id", value: "0"},
+			{kind: dfkText, caption: "User first name", name: "first_name"},
+			{kind: dfkText, caption: "User last name", name: "last_name"},
+			{kind: dfkEmail, caption: "User email", name: "email"},
+			{kind: dfkPassword, caption: "User password", name: "password"},
+			{kind: dfkSubmit, value: "Add", target: "add-edit-button"},
+		})
+		return breadcrumb + data_form
 	} else if this.smod == "modify" && this.imod != 0 {
 		breadcrumb := this.breadcrumb([]dataBreadcrumb{
 			{"Edit user", ""},
@@ -87,5 +96,10 @@ func (this *Module) Module_users_content() string {
 }
 
 func (this *Module) Module_users_sidebar() string {
+	if this.smod == "modify" && this.imod == 0 {
+		return `<button class="btn btn-primary" id="add-edit-button">Add</button>`
+	} else if this.smod == "modify" && this.imod != 0 {
+		return `<button class="btn btn-primary" id="add-edit-button">Save</button>`
+	}
 	return ""
 }

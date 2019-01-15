@@ -32,6 +32,33 @@ type dataBreadcrumb struct {
 	link string
 }
 
+const (
+	dfkHidden = iota
+	dfkText
+	dfkEmail
+	dfkPassword
+	dfkSubmit
+)
+
+type dataFormFieldOption struct {
+	caption string
+	value   string
+}
+
+type dataFormFieldHook func(field *dataFormField) string
+
+type dataFormField struct {
+	caption     string
+	kind        int
+	name        string
+	value       string
+	placeholder string
+	hint        string
+	target      string
+	options     []dataFormFieldOption
+	hook        dataFormFieldHook
+}
+
 type ModuleItem struct {
 	Alias   string
 	Display bool
@@ -255,6 +282,68 @@ func (this *Module) data_table(table string, order_by string, order_way string, 
 	result += `</li>`
 	result += `</ul>`
 	result += `</nav>`
+	return result
+}
+
+func (this *Module) data_form(data []dataFormField) string {
+	result := `<form class="data-form" action="/cp/" method="post" autocomplete="off">`
+	result += `<div class="hidden">`
+	for _, field := range data {
+		if field.kind == dfkHidden {
+			if field.hook != nil {
+				result += field.hook(&field)
+			} else {
+				result += `<input type="hidden" name="` + field.name + `" value="` + field.value + `">`
+			}
+		}
+	}
+	result += `</div>`
+	for _, field := range data {
+		if field.kind != dfkHidden && field.kind != dfkSubmit {
+			if field.hook != nil {
+				result += field.hook(&field)
+			} else {
+				result += `<div class="form-group">`
+				result += `<div class="row">`
+				result += `<div class="col-3">`
+				result += `<label for="lbl_` + field.name + `">` + field.caption + `</label>`
+				result += `</div>`
+				result += `<div class="col-9">`
+				result += `<div>`
+				if field.kind == dfkText {
+					result += `<input class="form-control" type="text" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+				} else if field.kind == dfkEmail {
+					result += `<input class="form-control" type="email" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+				} else if field.kind == dfkPassword {
+					result += `<input class="form-control" type="password" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+				}
+				result += `</div>`
+				if field.hint != "" {
+					result += `<div><small>` + field.hint + `</small></div>`
+				}
+				result += `</div>`
+				result += `</div>`
+				result += `</div>`
+			}
+		}
+	}
+	for _, field := range data {
+		if field.kind == dfkSubmit {
+			if field.hook != nil {
+				result += field.hook(&field)
+			} else {
+				result += `<div class="row hidden">`
+				result += `<div class="col-3">`
+				result += `&nbsp;`
+				result += `</div>`
+				result += `<div class="col-9">`
+				result += `<button type="submit" class="btn btn-primary" data-target="` + field.target + `">` + field.value + `</button>`
+				result += `</div>`
+				result += `</div>`
+			}
+		}
+	}
+	result += `</form>`
 	return result
 }
 

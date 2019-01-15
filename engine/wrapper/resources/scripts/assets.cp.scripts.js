@@ -26,7 +26,7 @@ function AjaxDone(data) {
 	} catch(e) {
 		if(e instanceof SyntaxError) {
 			console.log(data);
-			ModalShowMsg('JavaScript Eval Error', e.message)
+			console.log('JavaScript Eval Error', e.message)
 		}
 	}
 }
@@ -65,6 +65,11 @@ $(document).ready(function() {
 			var button = $(this).find('button[type=submit]');
 			button.addClass('progress-bar-striped').addClass('progress-bar-animated');
 
+			// Another button
+			if(button.attr('data-target') != '') {
+				$('#' + button.attr('data-target')).addClass('progress-bar-striped').addClass('progress-bar-animated');
+			}
+
 			// Clear form messages
 			form.find('.sys-messages').html('');
 
@@ -81,11 +86,23 @@ $(document).ready(function() {
 				setTimeout(function() {
 					form.removeClass('loading').removeClass('alert-here');
 					button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+					// Another button
+					if(button.attr('data-target') != '') {
+						$('#' + button.attr('data-target')).removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+					}
 				}, 100);
 			});
 
 			e.preventDefault();
 		});
+
+		// Bind to another button
+		var button = $(this).find('button[type=submit]');
+		if(button.attr('data-target') != '') {
+			$('#' + button.attr('data-target')).click(function() {
+				button.click();
+			});
+		}
 	});
 
 	// Remove alert from modal on close

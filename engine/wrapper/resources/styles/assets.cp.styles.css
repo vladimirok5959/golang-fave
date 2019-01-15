@@ -261,3 +261,22 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	width: 100px;
 	text-align: right;
 }
+
+/* Admin data form */
+.data-form .hidden {
+	display: none;
+}
+
+.data-form label {
+	font-weight: bold;
+	margin-top: .45rem;
+	margin-bottom: .45rem;
+}
+
+.data-form small {
+	color: #aeb8bc;
+}
+
+.data-form > div:nth-last-child(2) {
+	margin-bottom: 0px;
+}
