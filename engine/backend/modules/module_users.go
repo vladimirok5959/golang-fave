@@ -82,7 +82,7 @@ func (this *Module) Module_users_content() string {
 			{kind: dfkText, caption: "User first name", name: "first_name"},
 			{kind: dfkText, caption: "User last name", name: "last_name"},
 			{kind: dfkEmail, caption: "User email", name: "email", required: true},
-			{kind: dfkPassword, caption: "User password", name: "password"},
+			{kind: dfkPassword, caption: "User password", name: "password", hint: "Please specify new user password", required: true},
 			{kind: dfkSubmit, value: "Add", target: "add-edit-button"},
 		})
 		return breadcrumb + data_form
