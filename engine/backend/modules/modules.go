@@ -294,7 +294,7 @@ func (this *Module) data_form(data []dataFormField) string {
 			if field.hook != nil {
 				result += field.hook(&field)
 			} else {
-				result += `<input type="hidden" name="` + field.name + `" value="` + field.value + `">`
+				result += `<input type="hidden" name="` + field.name + `" value="` + html.EscapeString(field.value) + `">`
 			}
 		}
 	}
@@ -312,13 +312,13 @@ func (this *Module) data_form(data []dataFormField) string {
 				result += `<div class="col-9">`
 				result += `<div>`
 				if field.kind == dfkText {
-					result += `<input class="form-control" type="text" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+					result += `<input class="form-control" type="text" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off">`
 				} else if field.kind == dfkEmail {
-					result += `<input class="form-control" type="email" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+					result += `<input class="form-control" type="email" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off">`
 				} else if field.kind == dfkPassword {
-					result += `<input class="form-control" type="password" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+					result += `<input class="form-control" type="password" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off">`
 				} else if field.kind == dfkTextArea {
-					result += `<textarea class="form-control" id="lbl_` + field.name + `" name="` + field.name + `" placeholder="` + field.placeholder + `" autocomplete="off">` + field.value + `</textarea>`
+					result += `<textarea class="form-control" id="lbl_` + field.name + `" name="` + field.name + `" placeholder="` + field.placeholder + `" autocomplete="off">` + html.EscapeString(field.value) + `</textarea>`
 				}
 				result += `</div>`
 				if field.hint != "" {
@@ -340,7 +340,7 @@ func (this *Module) data_form(data []dataFormField) string {
 				result += `&nbsp;`
 				result += `</div>`
 				result += `<div class="col-9">`
-				result += `<button type="submit" class="btn btn-primary" data-target="` + field.target + `">` + field.value + `</button>`
+				result += `<button type="submit" class="btn btn-primary" data-target="` + field.target + `">` + html.EscapeString(field.value) + `</button>`
 				result += `</div>`
 				result += `</div>`
 			}
