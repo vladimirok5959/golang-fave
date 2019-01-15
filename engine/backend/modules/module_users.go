@@ -107,9 +107,9 @@ func (this *Module) Module_users_content() string {
 
 func (this *Module) Module_users_sidebar() string {
 	if this.smod == "modify" && this.imod == 0 {
-		return `<button class="btn btn-primary" id="add-edit-button">Add</button>`
+		return `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Add</button>`
 	} else if this.smod == "modify" && this.imod != 0 {
-		return `<button class="btn btn-primary" id="add-edit-button">Save</button>`
+		return `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
 	}
 	return ""
 }
