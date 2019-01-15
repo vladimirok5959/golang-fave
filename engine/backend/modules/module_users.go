@@ -81,7 +81,7 @@ func (this *Module) Module_users_content() string {
 			{kind: dfkHidden, name: "id", value: "0"},
 			{kind: dfkText, caption: "User first name", name: "first_name"},
 			{kind: dfkText, caption: "User last name", name: "last_name"},
-			{kind: dfkEmail, caption: "User email", name: "email"},
+			{kind: dfkEmail, caption: "User email", name: "email", required: true},
 			{kind: dfkPassword, caption: "User password", name: "password"},
 			{kind: dfkSubmit, value: "Add", target: "add-edit-button"},
 		})
@@ -96,7 +96,7 @@ func (this *Module) Module_users_content() string {
 			{kind: dfkHidden, name: "id", value: "0"},
 			{kind: dfkText, caption: "User first name", name: "first_name", value: "1"},
 			{kind: dfkText, caption: "User last name", name: "last_name", value: "2"},
-			{kind: dfkEmail, caption: "User email", name: "email", value: "3"},
+			{kind: dfkEmail, caption: "User email", name: "email", value: "3", required: true},
 			{kind: dfkPassword, caption: "User password", name: "password", hint: "Leave the field blank to not change the password"},
 			{kind: dfkSubmit, value: "Add", target: "add-edit-button"},
 		})

@@ -56,6 +56,7 @@ type dataFormField struct {
 	placeholder string
 	hint        string
 	target      string
+	required    bool
 	options     []dataFormFieldOption
 	hook        dataFormFieldHook
 }
@@ -304,6 +305,10 @@ func (this *Module) data_form(data []dataFormField) string {
 			if field.hook != nil {
 				result += field.hook(&field)
 			} else {
+				required := ``
+				if field.required {
+					required = ` required`
+				}
 				result += `<div class="form-group">`
 				result += `<div class="row">`
 				result += `<div class="col-3">`
@@ -312,13 +317,13 @@ func (this *Module) data_form(data []dataFormField) string {
 				result += `<div class="col-9">`
 				result += `<div>`
 				if field.kind == dfkText {
-					result += `<input class="form-control" type="text" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+					result += `<input class="form-control" type="text" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.kind == dfkEmail {
-					result += `<input class="form-control" type="email" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+					result += `<input class="form-control" type="email" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.kind == dfkPassword {
-					result += `<input class="form-control" type="password" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+					result += `<input class="form-control" type="password" id="lbl_` + field.name + `" name="` + field.name + `" value="` + html.EscapeString(field.value) + `" placeholder="` + field.placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.kind == dfkTextArea {
-					result += `<textarea class="form-control" id="lbl_` + field.name + `" name="` + field.name + `" placeholder="` + field.placeholder + `" autocomplete="off">` + html.EscapeString(field.value) + `</textarea>`
+					result += `<textarea class="form-control" id="lbl_` + field.name + `" name="` + field.name + `" placeholder="` + field.placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.value) + `</textarea>`
 				}
 				result += `</div>`
 				if field.hint != "" {
