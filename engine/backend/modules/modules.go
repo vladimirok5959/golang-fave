@@ -122,7 +122,7 @@ func (this *Module) module_get_submenu(name string) string {
 		result_html := ""
 		for _, value := range result_array {
 			class := ""
-			if name == this.mmod && value.Alias == this.smod {
+			if name == this.mmod && value.Alias == this.smod && this.imod == 0 {
 				class = " active"
 			}
 			result_html += `<li class="nav-item` + class + `"><a class="nav-link" href="/cp/` + name + `/` + value.Alias + `/">` + value.Icon + value.Name + `</a></li>`
