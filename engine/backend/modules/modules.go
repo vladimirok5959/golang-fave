@@ -37,6 +37,7 @@ const (
 	dfkText
 	dfkEmail
 	dfkPassword
+	dfkTextArea
 	dfkSubmit
 )
 
@@ -316,6 +317,8 @@ func (this *Module) data_form(data []dataFormField) string {
 					result += `<input class="form-control" type="email" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
 				} else if field.kind == dfkPassword {
 					result += `<input class="form-control" type="password" id="lbl_` + field.name + `" name="` + field.name + `" value="` + field.value + `" placeholder="` + field.placeholder + `" autocomplete="off">`
+				} else if field.kind == dfkTextArea {
+					result += `<textarea class="form-control" id="lbl_` + field.name + `" name="` + field.name + `" placeholder="` + field.placeholder + `" autocomplete="off">` + field.value + `</textarea>`
 				}
 				result += `</div>`
 				if field.hint != "" {

@@ -280,3 +280,7 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 .data-form > div:nth-last-child(2) {
 	margin-bottom: 0px;
 }
+
+.data-form textarea {
+	min-height: 5.4rem;
+}
