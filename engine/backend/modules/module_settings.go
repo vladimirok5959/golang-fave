@@ -44,5 +44,5 @@ func (this *Module) Module_settings_content() string {
 }
 
 func (this *Module) Module_settings_sidebar() string {
-	return "Settings right sidebar"
+	return `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
 }
