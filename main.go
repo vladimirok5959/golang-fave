@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
+	"github.com/vladimirok5959/golang-server-resources/resource"
 	/*
 		"context"
 		"errors"
@@ -48,9 +50,19 @@ func main() {
 		return
 	}
 
+	res := resource.New()
+	res.Add("assets/sys/styles.css", "text/css", assets.SysStylesCss)
+
 	bootstrap.Start("127.0.0.1:8080", 30, "assets", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
+
+		// Mounted assets
+		if res.Response(w, r, func(w http.ResponseWriter, r *http.Request, i *resource.Resource) {
+			w.Header().Set("Cache-Control", "public, max-age=31536000")
+		}, nil) {
+			return
+		}
 
 		/*
 			// After callback

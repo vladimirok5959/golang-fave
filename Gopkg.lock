@@ -9,9 +9,20 @@
   revision = "1afc55739623b0d65c665abaa71624b4b48fa0df"
   version = "v1.0.0"
 
+[[projects]]
+  digest = "1:3d823a99a747dbcdfb547754418ca792a57dfef66c2d1f540bffbf12c07bd7bf"
+  name = "github.com/vladimirok5959/golang-server-resources"
+  packages = ["resource"]
+  pruneopts = "UT"
+  revision = "4fce983c6e02d13313582a3c9f089c06c7979e8f"
+  version = "v1.0.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/vladimirok5959/golang-server-bootstrap/bootstrap"]
+  input-imports = [
+    "github.com/vladimirok5959/golang-server-bootstrap/bootstrap",
+    "github.com/vladimirok5959/golang-server-resources/resource",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
