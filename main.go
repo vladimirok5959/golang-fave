@@ -51,6 +51,12 @@ func main() {
 	}
 
 	res := resource.New()
+	res.Add("assets/cp/scripts.js", "application/javascript; charset=utf-8", assets.CpScriptsJs)
+	res.Add("assets/cp/styles.css", "text/css", assets.CpStylesCss)
+	res.Add("assets/sys/bg.png", "image/png", assets.SysBgPng)
+	res.Add("assets/sys/fave.ico", "image/x-icon", assets.SysFaveIco)
+	res.Add("assets/sys/logo.png", "image/png", assets.SysLogoPng)
+	res.Add("assets/sys/logo.svg", "image/svg+xml", assets.SysLogoSvg)
 	res.Add("assets/sys/styles.css", "text/css", assets.SysStylesCss)
 
 	bootstrap.Start("127.0.0.1:8080", 30, "assets", func(w http.ResponseWriter, r *http.Request) {
