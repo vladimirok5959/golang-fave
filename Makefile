@@ -3,6 +3,7 @@ VERSION="1.0.1"
 default: debug
 
 debug:
+	@go vet ./...
 	@go build -o ./fave
 
 build: clean
