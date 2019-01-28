@@ -59,7 +59,7 @@ func main() {
 	res.Add("assets/sys/logo.svg", "image/svg+xml", assets.SysLogoSvg)
 	res.Add("assets/sys/styles.css", "text/css", assets.SysStylesCss)
 
-	bootstrap.Start("127.0.0.1:8080", 30, "assets", func(w http.ResponseWriter, r *http.Request) {
+	bootstrap.Start(fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, "assets", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
 
