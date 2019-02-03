@@ -17,12 +17,21 @@
   revision = "4fce983c6e02d13313582a3c9f089c06c7979e8f"
   version = "v1.0.0"
 
+[[projects]]
+  digest = "1:287426c516549a444caa7e6bab8a44f4e23af54eb3a87fd49f13d7c5a7b06038"
+  name = "github.com/vladimirok5959/golang-server-sessions"
+  packages = ["session"]
+  pruneopts = "UT"
+  revision = "c6d341a14a93caab1ba52fb552527ad88a5fa53b"
+  version = "v1.0.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/vladimirok5959/golang-server-bootstrap/bootstrap",
     "github.com/vladimirok5959/golang-server-resources/resource",
+    "github.com/vladimirok5959/golang-server-sessions/session",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
