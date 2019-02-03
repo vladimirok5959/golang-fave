@@ -9,12 +9,12 @@ import (
 
 	"golang-fave/assets"
 	"golang-fave/consts"
-	"golang-fave/static"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
 	"github.com/vladimirok5959/golang-server-resources/resource"
 	"github.com/vladimirok5959/golang-server-sessions/session"
+	"github.com/vladimirok5959/golang-server-static/static"
 )
 
 var ParamHost string
@@ -36,6 +36,7 @@ func main() {
 		return
 	}
 
+	// Init mounted resources
 	res := resource.New()
 	res.Add(consts.AssetsCpScriptsJs, "application/javascript; charset=utf-8", assets.CpScriptsJs)
 	res.Add(consts.AssetsCpStylesCss, "text/css", assets.CpStylesCss)
@@ -45,7 +46,7 @@ func main() {
 	res.Add(consts.AssetsSysLogoSvg, "image/svg+xml", assets.SysLogoSvg)
 	res.Add(consts.AssetsSysStylesCss, "text/css", assets.SysStylesCss)
 
-	// TODO: Move this to `"github.com/vladimirok5959/golang-server-static/static"`
+	// Init static files helper
 	stat := static.New(consts.DirIndexFile)
 
 	// TODO: Logic as object here

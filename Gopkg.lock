@@ -25,6 +25,14 @@
   revision = "e000912f70a8354cc4d0bd05617629970e05c9b9"
   version = "v1.0.1"
 
+[[projects]]
+  digest = "1:6f6c69e51e5661d173aef0a46bbe99761ff947cc84d2a33a6be71bb483db73a1"
+  name = "github.com/vladimirok5959/golang-server-static"
+  packages = ["static"]
+  pruneopts = "UT"
+  revision = "00804ab7b07769acb79f9e13b1f91c91ec812393"
+  version = "v1.0.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -32,6 +40,7 @@
     "github.com/vladimirok5959/golang-server-bootstrap/bootstrap",
     "github.com/vladimirok5959/golang-server-resources/resource",
     "github.com/vladimirok5959/golang-server-sessions/session",
+    "github.com/vladimirok5959/golang-server-static/static",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
