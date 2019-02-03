@@ -77,23 +77,23 @@ func main() {
 		vhost_dir_tmp := vhost_dir + string(os.PathSeparator) + "tmp"
 
 		if !utils.IsHostDirExists(vhost_dir_config) {
-			utils.SystemErrorPage(w, errors.New("Folder "+vhost_dir_config+" is not found"))
+			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_config+" is not found"))
 			return
 		}
 		if !utils.IsHostDirExists(vhost_dir_htdocs) {
-			utils.SystemErrorPage(w, errors.New("Folder "+vhost_dir_htdocs+" is not found"))
+			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_htdocs+" is not found"))
 			return
 		}
 		if !utils.IsHostDirExists(vhost_dir_logs) {
-			utils.SystemErrorPage(w, errors.New("Folder "+vhost_dir_logs+" is not found"))
+			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_logs+" is not found"))
 			return
 		}
 		if !utils.IsHostDirExists(vhost_dir_template) {
-			utils.SystemErrorPage(w, errors.New("Folder "+vhost_dir_template+" is not found"))
+			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_template+" is not found"))
 			return
 		}
 		if !utils.IsHostDirExists(vhost_dir_tmp) {
-			utils.SystemErrorPage(w, errors.New("Folder "+vhost_dir_tmp+" is not found"))
+			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_tmp+" is not found"))
 			return
 		}
 
@@ -118,13 +118,10 @@ func main() {
 		}
 
 		// Error 404
-		// TODO: display default template
-		w.WriteHeader(http.StatusNotFound)
-		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		w.Header().Set("Content-Type", "text/html")
-		w.Write([]byte(`404`))
+		utils.SystemErrorPage404(w)
 	})
 
+	// TODO: call it in background time by time
 	// Delete expired session files
 	// session.Clean("./tmp")
 }

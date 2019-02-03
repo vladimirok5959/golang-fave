@@ -86,10 +86,10 @@ func GetTmplError(err error) consts.TmplError {
 	}
 }
 
-func SystemErrorPage(w http.ResponseWriter, err error) {
+func SystemErrorPageEngine(w http.ResponseWriter, err error) {
 	if tmpl, errr := template.New("template").Parse(string(assets.TmplPageErrorEngine)); errr == nil {
-		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Content-Type", "text/html")
 		tmpl.Execute(w, consts.TmplData{
 			System: GetTmplSystemData(),
@@ -97,9 +97,24 @@ func SystemErrorPage(w http.ResponseWriter, err error) {
 		})
 		return
 	}
-	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.WriteHeader(http.StatusInternalServerError)
+	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte("<h1>Critical engine error</h1>"))
 	w.Write([]byte("<h2>" + err.Error() + "</h2>"))
+}
+
+func SystemErrorPage404(w http.ResponseWriter) {
+	tmpl, err := template.New("template").Parse(string(assets.TmplPageError404))
+	if err != nil {
+		SystemErrorPageEngine(w, err)
+		return
+	}
+	w.WriteHeader(http.StatusNotFound)
+	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	w.Header().Set("Content-Type", "text/html")
+	tmpl.Execute(w, consts.TmplData{
+		System: GetTmplSystemData(),
+		Data:   nil,
+	})
 }
