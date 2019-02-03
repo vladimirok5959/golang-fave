@@ -5,16 +5,16 @@ import (
 	"os"
 )
 
-type static struct {
+type Static struct {
 	dirIndexFile string
 }
 
-func New(file string) *static {
-	r := static{dirIndexFile: file}
+func New(file string) *Static {
+	r := Static{dirIndexFile: file}
 	return &r
 }
 
-func (this *static) Response(dir string, w http.ResponseWriter, r *http.Request, before func(w http.ResponseWriter, r *http.Request), after func(w http.ResponseWriter, r *http.Request)) bool {
+func (this *Static) Response(dir string, w http.ResponseWriter, r *http.Request, before func(w http.ResponseWriter, r *http.Request), after func(w http.ResponseWriter, r *http.Request)) bool {
 	if r.URL.Path == "/" {
 		f, err := os.Open(dir + string(os.PathSeparator) + this.dirIndexFile)
 		if err == nil {
