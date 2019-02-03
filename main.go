@@ -10,6 +10,7 @@ import (
 	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine"
+	"golang-fave/logger"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
@@ -51,7 +52,7 @@ func main() {
 	stat := static.New(consts.DirIndexFile)
 
 	// Init and start web server
-	bootstrap.Start(nil, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
+	bootstrap.Start(logger.New, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
 		// Mounted assets
