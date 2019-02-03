@@ -18,12 +18,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:287426c516549a444caa7e6bab8a44f4e23af54eb3a87fd49f13d7c5a7b06038"
+  digest = "1:3e4c59e0a867aea93adbfe66eb86b41a718dc9066534a068d00325164731bdf6"
   name = "github.com/vladimirok5959/golang-server-sessions"
   packages = ["session"]
   pruneopts = "UT"
-  revision = "c6d341a14a93caab1ba52fb552527ad88a5fa53b"
-  version = "v1.0.0"
+  revision = "e000912f70a8354cc4d0bd05617629970e05c9b9"
+  version = "v1.0.1"
 
 [solve-meta]
   analyzer-name = "dep"

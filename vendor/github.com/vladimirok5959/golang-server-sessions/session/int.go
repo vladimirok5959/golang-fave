@@ -1,6 +1,6 @@
 package session
 
-func (this *session) IsSetInt(name string) bool {
+func (this *Session) IsSetInt(name string) bool {
 	if _, ok := this.v.Int[name]; ok {
 		return true
 	} else {
@@ -8,7 +8,7 @@ func (this *session) IsSetInt(name string) bool {
 	}
 }
 
-func (this *session) GetInt(name string, def int) int {
+func (this *Session) GetInt(name string, def int) int {
 	if v, ok := this.v.Int[name]; ok {
 		return v
 	} else {
@@ -16,7 +16,7 @@ func (this *session) GetInt(name string, def int) int {
 	}
 }
 
-func (this *session) SetInt(name string, value int) {
+func (this *Session) SetInt(name string, value int) {
 	this.v.Int[name] = value
 	this.c = true
 }

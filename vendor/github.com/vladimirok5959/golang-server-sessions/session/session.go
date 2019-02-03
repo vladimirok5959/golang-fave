@@ -16,7 +16,7 @@ type vars struct {
 	String map[string]string
 }
 
-type session struct {
+type Session struct {
 	w http.ResponseWriter
 	r *http.Request
 	d string
@@ -25,8 +25,8 @@ type session struct {
 	i string
 }
 
-func New(w http.ResponseWriter, r *http.Request, tmpdir string) *session {
-	sess := session{w: w, r: r, d: tmpdir, v: &vars{}, c: false, i: ""}
+func New(w http.ResponseWriter, r *http.Request, tmpdir string) *Session {
+	sess := Session{w: w, r: r, d: tmpdir, v: &vars{}, c: false, i: ""}
 
 	cookie, err := r.Cookie("session")
 	if err == nil && len(cookie.Value) == 40 {
@@ -68,7 +68,7 @@ func New(w http.ResponseWriter, r *http.Request, tmpdir string) *session {
 	return &sess
 }
 
-func (this *session) Close() bool {
+func (this *Session) Close() bool {
 	if !this.c {
 		return false
 	}

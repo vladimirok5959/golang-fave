@@ -1,6 +1,6 @@
 package session
 
-func (this *session) IsSetBool(name string) bool {
+func (this *Session) IsSetBool(name string) bool {
 	if _, ok := this.v.Bool[name]; ok {
 		return true
 	} else {
@@ -8,7 +8,7 @@ func (this *session) IsSetBool(name string) bool {
 	}
 }
 
-func (this *session) GetBool(name string, def bool) bool {
+func (this *Session) GetBool(name string, def bool) bool {
 	if v, ok := this.v.Bool[name]; ok {
 		return v
 	} else {
@@ -16,7 +16,7 @@ func (this *session) GetBool(name string, def bool) bool {
 	}
 }
 
-func (this *session) SetBool(name string, value bool) {
+func (this *Session) SetBool(name string, value bool) {
 	this.v.Bool[name] = value
 	this.c = true
 }

@@ -1,6 +1,6 @@
 package session
 
-func (this *session) IsSetString(name string) bool {
+func (this *Session) IsSetString(name string) bool {
 	if _, ok := this.v.String[name]; ok {
 		return true
 	} else {
@@ -8,7 +8,7 @@ func (this *session) IsSetString(name string) bool {
 	}
 }
 
-func (this *session) GetString(name string, def string) string {
+func (this *Session) GetString(name string, def string) string {
 	if v, ok := this.v.String[name]; ok {
 		return v
 	} else {
@@ -16,7 +16,7 @@ func (this *session) GetString(name string, def string) string {
 	}
 }
 
-func (this *session) SetString(name string, value string) {
+func (this *Session) SetString(name string, value string) {
 	this.v.String[name] = value
 	this.c = true
 }
