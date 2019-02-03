@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:32c86e5ce15a42e48631f1384891c840f6067333f4735b3e904a462d14344114"
+  digest = "1:43fda75367d9fc8a715e2f1484dd9290c5a111c33eaf883c0f19edc035ba41ec"
   name = "github.com/vladimirok5959/golang-server-bootstrap"
   packages = ["bootstrap"]
   pruneopts = "UT"
-  revision = "1afc55739623b0d65c665abaa71624b4b48fa0df"
-  version = "v1.0.0"
+  revision = "560c0e2d2ce09276299ab1d50ad80b2fe5f50382"
+  version = "v1.0.1"
 
 [[projects]]
   digest = "1:3d823a99a747dbcdfb547754418ca792a57dfef66c2d1f540bffbf12c07bd7bf"

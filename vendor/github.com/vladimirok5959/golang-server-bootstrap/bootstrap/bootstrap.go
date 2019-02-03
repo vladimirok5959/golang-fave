@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+type hndl func(h http.Handler) http.Handler
 type callback func(w http.ResponseWriter, r *http.Request)
 
 type bootstrap struct {
@@ -47,13 +48,23 @@ func (this *bootstrap) handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Start(host string, timeout time.Duration, path string, before callback, after callback) {
+func Start(h hndl, host string, timeout time.Duration, path string, before callback, after callback) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", new(path, before, after).handler)
-	srv := &http.Server{
-		Addr:    host,
-		Handler: mux,
+
+	var srv *http.Server
+	if h == nil {
+		srv = &http.Server{
+			Addr:    host,
+			Handler: mux,
+		}
+	} else {
+		srv = &http.Server{
+			Addr:    host,
+			Handler: h(mux),
+		}
 	}
+
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)
 	go func() {

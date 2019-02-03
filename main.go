@@ -51,7 +51,7 @@ func main() {
 	stat := static.New(consts.DirIndexFile)
 
 	// Init and start web server
-	bootstrap.Start(fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
+	bootstrap.Start(nil, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
 		// Mounted assets
@@ -74,7 +74,6 @@ func main() {
 		vhost_dir_logs := vhost_dir + string(os.PathSeparator) + "logs"
 		vhost_dir_template := vhost_dir + string(os.PathSeparator) + "template"
 		vhost_dir_tmp := vhost_dir + string(os.PathSeparator) + "tmp"
-
 		if !utils.IsHostDirExists(vhost_dir_config) {
 			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_config+" is not found"))
 			return
