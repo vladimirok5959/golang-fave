@@ -50,6 +50,7 @@ func main() {
 	stat := static.New(consts.DirIndexFile)
 
 	// TODO: Logic as object here
+	// Init logic
 
 	bootstrap.Start(fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
