@@ -9,6 +9,7 @@ import (
 
 	"golang-fave/assets"
 	"golang-fave/consts"
+	"golang-fave/engine"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
@@ -49,9 +50,7 @@ func main() {
 	// Init static files helper
 	stat := static.New(consts.DirIndexFile)
 
-	// TODO: Logic as object here
-	// Init logic
-
+	// Init and start web server
 	bootstrap.Start(fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
@@ -103,17 +102,11 @@ func main() {
 		}
 
 		// Session
-		//sess := session.New(w, r, vhost_dir_tmp)
-		//defer sess.Close()
-
-		// Session struct need to make public!
 		sess := session.New(w, r, vhost_dir_tmp)
 		defer sess.Close()
 
 		// Logic
-		// TODO: call from `logic.Response()`
-		// TODO: create logic object here???
-		if logic(host, port, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp, w, r) {
+		if engine.New(w, r, sess, host, port, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp).Response() {
 			return
 		}
 
@@ -124,22 +117,4 @@ func main() {
 	// TODO: call it in background time by time
 	// Delete expired session files
 	// session.Clean("./tmp")
-}
-
-func logic(host, port, dir_config, dir_htdocs, dir_logs, dir_template, dir_tmp string, w http.ResponseWriter, r *http.Request) bool {
-	if r.URL.Path == "/" {
-		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		w.Header().Set("Content-Type", "text/html")
-
-		//counter := sess.GetInt("counter", 0)
-		//w.Write([]byte(`Logic -> (` + fmt.Sprintf("%d", counter) + `)`))
-
-		w.Write([]byte(`Logic`))
-
-		//counter++
-		//sess.SetInt("counter", counter)
-
-		return true
-	}
-	return false
 }
