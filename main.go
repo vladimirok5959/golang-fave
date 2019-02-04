@@ -31,12 +31,20 @@ func init() {
 }
 
 func main() {
+	// Init logger
+	lg := logger.New()
+	defer lg.Close()
+
+	// Check www dir
 	ParamWwwDir = utils.FixPath(ParamWwwDir)
 	if !utils.IsHostDirExists(ParamWwwDir) {
-		fmt.Println("Virtual hosts directory is not exists")
-		fmt.Println("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts")
+		lg.Log("Virtual hosts directory is not exists")
+		lg.Log("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts")
 		return
 	}
+
+	// Attach www dir to logger
+	lg.SetWwwDir(ParamWwwDir)
 
 	// Init mounted resources
 	res := resource.New()
@@ -52,7 +60,7 @@ func main() {
 	stat := static.New(consts.DirIndexFile)
 
 	// Init and start web server
-	bootstrap.Start(logger.New, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
+	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
 		// Mounted assets
@@ -113,6 +121,9 @@ func main() {
 		// Error 404
 		utils.SystemErrorPage404(w)
 	})
+
+	// Close logger
+	//lg.Close()
 
 	// TODO: call it in background time by time
 	// Delete expired session files
