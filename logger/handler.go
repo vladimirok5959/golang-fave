@@ -12,11 +12,11 @@ import (
 type handler struct {
 	h http.Handler
 	w io.Writer
-	c chan string
+	c chan logMsg
 }
 
 func (this handler) log(w *writer, r *http.Request) {
-	str := fmt.Sprint(strings.Join([]string{
+	msg := fmt.Sprint(strings.Join([]string{
 		r.Host,
 		r.RemoteAddr,
 		"-",
@@ -32,7 +32,7 @@ func (this handler) log(w *writer, r *http.Request) {
 	// Do not wait
 	go func() {
 		select {
-		case this.c <- str:
+		case this.c <- logMsg{r.Host, msg, w.status >= 400}:
 			return
 		case <-time.After(1 * time.Second):
 			fmt.Println("Logger error, log channel is overflowed (2)")

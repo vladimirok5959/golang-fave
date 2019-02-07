@@ -30,7 +30,7 @@ func IsDir(filename string) bool {
 	return false
 }
 
-func IsHostDirExists(path string) bool {
+func IsDirExists(path string) bool {
 	if IsFileExists(path) && IsDir(path) {
 		return true
 	}

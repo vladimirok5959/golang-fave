@@ -5,23 +5,90 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"golang-fave/consts"
+	"golang-fave/utils"
 )
+
+type logMsg struct {
+	host    string
+	message string
+	isError bool
+}
 
 type Logger struct {
 	wwwDir string
-	cdata  chan string
+	cdata  chan logMsg
 	cclose chan bool
 }
 
-func (this *Logger) write(str string) {
-	// TODO: write to console or to file
-	// If www and host home dir are exists
-	fmt.Fprintln(os.Stdout, str)
+func (this *Logger) console(msg logMsg) {
+	if consts.Debug {
+		if !msg.isError {
+			fmt.Fprintln(os.Stdout, "[ACCESS] "+msg.message)
+		} else {
+			fmt.Fprintln(os.Stdout, "[ERROR] "+msg.message)
+		}
+		return
+	}
+
+	if !msg.isError {
+		fmt.Fprintln(os.Stdout, msg.message)
+	} else {
+		fmt.Fprintln(os.Stderr, msg.message)
+	}
+}
+
+func (this *Logger) write(msg logMsg) {
+	// Ignore file if debug
+	if consts.Debug {
+		this.console(msg)
+		return
+	}
+
+	// Ignore file if host not set
+	if msg.host == "" {
+		this.console(msg)
+		return
+	}
+
+	// Ignore file if www dir is not exists
+	if !utils.IsDirExists(this.wwwDir) {
+		this.console(msg)
+		return
+	}
+
+	// Extract host
+	host, _ := utils.ExtractHostPort(msg.host, false)
+	logs_dir := this.wwwDir + string(os.PathSeparator) + host + string(os.PathSeparator) + "logs"
+
+	// Ignore file if logs dir is not exists
+	if !utils.IsDirExists(logs_dir) {
+		this.console(msg)
+		return
+	}
+
+	// Detect which log file
+	log_file := logs_dir + string(os.PathSeparator) + "access.log"
+	if msg.isError {
+		log_file = logs_dir + string(os.PathSeparator) + "error.log"
+	}
+
+	// Try write to file
+	f, err := os.OpenFile(log_file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err == nil {
+		defer f.Close()
+		fmt.Fprintln(f, msg.message)
+		return
+	}
+
+	// By default
+	this.console(msg)
 }
 
 func New() *Logger {
 	// Logs channel
-	cdata := make(chan string)
+	cdata := make(chan logMsg)
 
 	// Close channel
 	cclose := make(chan bool)
@@ -33,8 +100,8 @@ func New() *Logger {
 	go func() {
 		for {
 			select {
-			case str := <-cdata:
-				lg.write(str)
+			case msg := <-cdata:
+				lg.write(msg)
 			case <-cclose:
 				cclose <- true
 				return
@@ -45,11 +112,16 @@ func New() *Logger {
 	return &lg
 }
 
-func (this *Logger) Log(str string) {
+func (this *Logger) Log(msg string, r *http.Request, isError bool) {
+	var host string = ""
+	if r != nil {
+		host = r.Host
+	}
+
 	// Do not wait
 	go func() {
 		select {
-		case this.cdata <- str:
+		case this.cdata <- logMsg{host, msg, isError}:
 			return
 		case <-time.After(1 * time.Second):
 			fmt.Println("Logger error, log channel is overflowed (1)")

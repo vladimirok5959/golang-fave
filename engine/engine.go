@@ -4,38 +4,39 @@ import (
 	"fmt"
 	"net/http"
 
+	"golang-fave/engine/wrapper"
+	"golang-fave/logger"
+
 	"github.com/vladimirok5959/golang-server-sessions/session"
 )
 
 type Engine struct {
-	w http.ResponseWriter
-	r *http.Request
-	s *session.Session
-
-	host string
-	port string
-
-	dConfig   string
-	dHtdocs   string
-	dLogs     string
-	dTemplate string
-	dTmp      string
+	Wrap *wrapper.Wrapper
+	// Database
+	// Actions
+	// Front-end or Back-end
 }
 
-func New(w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) *Engine {
-	return &Engine{w, r, s, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp}
+func Response(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
+	wrap := wrapper.New(l, w, r, s, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp)
+	eng := &Engine{Wrap: wrap}
+
+	return eng.Process()
 }
 
-func (this *Engine) Response() bool {
-	if this.r.URL.Path == "/" {
-		this.w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		this.w.Header().Set("Content-Type", "text/html")
+func (this *Engine) Process() bool {
+	if this.Wrap.R.URL.Path == "/" {
+		this.Wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		this.Wrap.W.Header().Set("Content-Type", "text/html")
 
-		counter := this.s.GetInt("counter", 0)
-		this.w.Write([]byte(`Logic -> (` + fmt.Sprintf("%d", counter) + `)`))
+		counter := this.Wrap.S.GetInt("counter", 0)
+		// this.Wrap.LogAccess(fmt.Sprintf("Counter value was: %d", counter))
+
+		this.Wrap.W.Write([]byte(`Logic -> (` + fmt.Sprintf("%d", counter) + `)`))
 
 		counter++
-		this.s.SetInt("counter", counter)
+		this.Wrap.S.SetInt("counter", counter)
+		// this.Wrap.LogAccess(fmt.Sprintf("Counter value now: %d", counter))
 
 		return true
 	}

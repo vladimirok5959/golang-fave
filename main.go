@@ -37,9 +37,9 @@ func main() {
 
 	// Check www dir
 	ParamWwwDir = utils.FixPath(ParamWwwDir)
-	if !utils.IsHostDirExists(ParamWwwDir) {
-		lg.Log("Virtual hosts directory is not exists")
-		lg.Log("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts")
+	if !utils.IsDirExists(ParamWwwDir) {
+		lg.Log("Virtual hosts directory is not exists", nil, true)
+		lg.Log("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts", nil, true)
 		return
 	}
 
@@ -73,7 +73,7 @@ func main() {
 		// Host and port
 		host, port := utils.ExtractHostPort(r.Host, false)
 		vhost_dir := ParamWwwDir + string(os.PathSeparator) + host
-		if !utils.IsHostDirExists(vhost_dir) {
+		if !utils.IsDirExists(vhost_dir) {
 			vhost_dir = ParamWwwDir + string(os.PathSeparator) + "localhost"
 		}
 
@@ -83,23 +83,23 @@ func main() {
 		vhost_dir_logs := vhost_dir + string(os.PathSeparator) + "logs"
 		vhost_dir_template := vhost_dir + string(os.PathSeparator) + "template"
 		vhost_dir_tmp := vhost_dir + string(os.PathSeparator) + "tmp"
-		if !utils.IsHostDirExists(vhost_dir_config) {
+		if !utils.IsDirExists(vhost_dir_config) {
 			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_config+" is not found"))
 			return
 		}
-		if !utils.IsHostDirExists(vhost_dir_htdocs) {
+		if !utils.IsDirExists(vhost_dir_htdocs) {
 			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_htdocs+" is not found"))
 			return
 		}
-		if !utils.IsHostDirExists(vhost_dir_logs) {
+		if !utils.IsDirExists(vhost_dir_logs) {
 			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_logs+" is not found"))
 			return
 		}
-		if !utils.IsHostDirExists(vhost_dir_template) {
+		if !utils.IsDirExists(vhost_dir_template) {
 			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_template+" is not found"))
 			return
 		}
-		if !utils.IsHostDirExists(vhost_dir_tmp) {
+		if !utils.IsDirExists(vhost_dir_tmp) {
 			utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_tmp+" is not found"))
 			return
 		}
@@ -114,16 +114,13 @@ func main() {
 		defer sess.Close()
 
 		// Logic
-		if engine.New(w, r, sess, host, port, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp).Response() {
+		if engine.Response(lg, w, r, sess, host, port, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
 			return
 		}
 
 		// Error 404
 		utils.SystemErrorPage404(w)
 	})
-
-	// Close logger
-	//lg.Close()
 
 	// TODO: call it in background time by time
 	// Delete expired session files
