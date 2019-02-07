@@ -4,8 +4,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"time"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
@@ -45,6 +47,32 @@ func main() {
 
 	// Attach www dir to logger
 	lg.SetWwwDir(ParamWwwDir)
+
+	// Session cleaner
+	sess_cleaner_chan := make(chan bool)
+	go func() {
+		for {
+			select {
+			case <-time.After(1 * time.Hour):
+				files, err := ioutil.ReadDir(ParamWwwDir)
+				if err == nil {
+					for _, file := range files {
+						tmpdir := ParamWwwDir + string(os.PathSeparator) + file.Name() + string(os.PathSeparator) + "tmp"
+						if utils.IsDirExists(tmpdir) {
+							session.Clean(tmpdir)
+						}
+					}
+				}
+			case <-sess_cleaner_chan:
+				sess_cleaner_chan <- true
+				return
+			}
+		}
+	}()
+	defer func() {
+		sess_cleaner_chan <- true
+		<-sess_cleaner_chan
+	}()
 
 	// Init mounted resources
 	res := resource.New()
