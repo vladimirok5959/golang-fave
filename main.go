@@ -47,8 +47,8 @@ func main() {
 	lg.SetWwwDir(ParamWwwDir)
 
 	// Session cleaner
-	sess_cl_ch := session_clean_start(ParamWwwDir)
-	defer session_clean_stop(sess_cl_ch)
+	sess_cl_ch, sess_cl_stop := session_clean_start(ParamWwwDir)
+	defer session_clean_stop(sess_cl_ch, sess_cl_stop)
 
 	// Init mounted resources
 	res := resource.New()
