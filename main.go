@@ -67,6 +67,9 @@ func main() {
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
+		// Schema
+		r.URL.Scheme = "http"
+
 		// Mounted assets
 		if res.Response(w, r, func(w http.ResponseWriter, r *http.Request, i *resource.Resource) {
 			w.Header().Set("Cache-Control", "public, max-age=31536000")

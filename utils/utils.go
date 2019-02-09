@@ -86,8 +86,22 @@ func GetTmplError(err error) consts.TmplError {
 	}
 }
 
+func SystemRenderTemplate(w http.ResponseWriter, c []byte, d interface{}) {
+	tmpl, err := template.New("template").Parse(string(c))
+	if err != nil {
+		SystemErrorPageEngine(w, err)
+		return
+	}
+	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	w.Header().Set("Content-Type", "text/html")
+	tmpl.Execute(w, consts.TmplData{
+		System: GetTmplSystemData(),
+		Data:   d,
+	})
+}
+
 func SystemErrorPageEngine(w http.ResponseWriter, err error) {
-	if tmpl, errr := template.New("template").Parse(string(assets.TmplPageErrorEngine)); errr == nil {
+	if tmpl, e := template.New("template").Parse(string(assets.TmplPageErrorEngine)); e == nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Content-Type", "text/html")
