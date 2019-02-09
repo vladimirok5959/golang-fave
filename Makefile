@@ -3,8 +3,8 @@ VERSION="1.0.1"
 default: debug
 
 debug:
-	@go vet ./...
-	@go build -o ./fave
+	go vet ./...
+	go build -o ./fave
 
 build: clean
 	@-mkdir ./bin
@@ -21,7 +21,7 @@ clean:
 	@-rm -r ./bin
 
 test:
-	@go test ./...
+	go test ./...
 
 run:
 	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts
