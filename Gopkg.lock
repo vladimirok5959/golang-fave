@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
+
+[[projects]]
   digest = "1:43fda75367d9fc8a715e2f1484dd9290c5a111c33eaf883c0f19edc035ba41ec"
   name = "github.com/vladimirok5959/golang-server-bootstrap"
   packages = ["bootstrap"]
@@ -33,10 +41,19 @@
   revision = "00804ab7b07769acb79f9e13b1f91c91ec812393"
   version = "v1.0.0"
 
+[[projects]]
+  digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
+  name = "google.golang.org/appengine"
+  packages = ["cloudsql"]
+  pruneopts = "UT"
+  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
+  version = "v1.4.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/go-sql-driver/mysql",
     "github.com/vladimirok5959/golang-server-bootstrap/bootstrap",
     "github.com/vladimirok5959/golang-server-resources/resource",
     "github.com/vladimirok5959/golang-server-sessions/session",
