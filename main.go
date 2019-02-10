@@ -11,6 +11,7 @@ import (
 	"golang-fave/consts"
 	"golang-fave/engine"
 	"golang-fave/logger"
+	"golang-fave/modules"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
@@ -62,6 +63,10 @@ func main() {
 
 	// Init static files helper
 	stat := static.New(consts.DirIndexFile)
+
+	// Init modules
+	mods := modules.New()
+	mods.Load()
 
 	// Init and start web server
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
@@ -121,7 +126,7 @@ func main() {
 		defer sess.Close()
 
 		// Logic
-		if engine.Response(lg, w, r, sess, host, port, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
+		if engine.Response(lg, mods, w, r, sess, host, port, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
 			return
 		}
 

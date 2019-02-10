@@ -9,6 +9,7 @@ import (
 	"golang-fave/assets"
 	"golang-fave/engine/wrapper"
 	"golang-fave/logger"
+	"golang-fave/modules"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-sessions/session"
@@ -16,13 +17,17 @@ import (
 
 type Engine struct {
 	Wrap *wrapper.Wrapper
+	Mods *modules.Modules
 	// Actions
 	// Front-end or Back-end
 }
 
-func Response(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
+func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
 	wrap := wrapper.New(l, w, r, s, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp)
-	eng := &Engine{Wrap: wrap}
+	eng := &Engine{
+		Wrap: wrap,
+		Mods: m,
+	}
 
 	return eng.Process()
 }
@@ -31,11 +36,10 @@ func (this *Engine) Process() bool {
 	this.Wrap.IsBackend = this.Wrap.R.URL.Path == "/cp" || strings.HasPrefix(this.Wrap.R.URL.Path, "/cp/")
 	this.Wrap.ConfMysqlExists = utils.IsMySqlConfigExists(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 
-	// All actions here...
-	// MySQL install
-	// MySQL first user
-	// User login
-	// User logout
+	// Action
+	if this.Mods.Action(this.Wrap) {
+		return true
+	}
 
 	// Redirect to CP for creating MySQL config file
 	if !this.Wrap.IsBackend && !this.Wrap.ConfMysqlExists {
