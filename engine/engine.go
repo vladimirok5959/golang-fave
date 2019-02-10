@@ -79,7 +79,7 @@ func (this *Engine) Process() bool {
 
 	// Separated logic
 	if this.Wrap.IsBackend {
-		return this.BackEnd()
+		return this.Mods.BackEnd(this.Wrap)
 	}
-	return this.FrontEnd()
+	return this.Mods.FrontEnd(this.Wrap)
 }
