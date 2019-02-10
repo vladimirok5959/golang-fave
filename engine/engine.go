@@ -2,7 +2,6 @@ package engine
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -32,7 +31,7 @@ func (this *Engine) Process() bool {
 	this.Wrap.IsBackend = this.Wrap.R.URL.Path == "/cp" || strings.HasPrefix(this.Wrap.R.URL.Path, "/cp/")
 	this.Wrap.ConfMysqlExists = utils.IsMySqlConfigExists(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 
-	// Some system actions here...
+	// All actions here...
 	// MySQL install
 	// MySQL first user
 	// User login
@@ -74,22 +73,9 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
-	// Front-end or back-end here...
-	if this.Wrap.R.URL.Path == "/" {
-		this.Wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		this.Wrap.W.Header().Set("Content-Type", "text/html")
-
-		counter := this.Wrap.S.GetInt("counter", 0)
-		// this.Wrap.LogAccess(fmt.Sprintf("Counter value was: %d", counter))
-
-		this.Wrap.W.Write([]byte(`Logic -> (` + fmt.Sprintf("%d", counter) + `)`))
-
-		counter++
-		this.Wrap.S.SetInt("counter", counter)
-		// this.Wrap.LogAccess(fmt.Sprintf("Counter value now: %d", counter))
-
-		return true
+	// Separated logic
+	if this.Wrap.IsBackend {
+		return this.BackEnd()
 	}
-
-	return false
+	return this.FrontEnd()
 }
