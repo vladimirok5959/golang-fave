@@ -37,7 +37,7 @@ func (this *Engine) Process() bool {
 	this.Wrap.ConfMysqlExists = utils.IsMySqlConfigExists(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 
 	// Action
-	if this.Mods.Action(this.Wrap) {
+	if this.Mods.XXXActionFire(this.Wrap) {
 		return true
 	}
 
@@ -79,7 +79,7 @@ func (this *Engine) Process() bool {
 
 	// Separated logic
 	if this.Wrap.IsBackend {
-		return this.Mods.BackEnd(this.Wrap)
+		return this.Mods.XXXBackEnd(this.Wrap)
 	}
-	return this.Mods.FrontEnd(this.Wrap)
+	return this.Mods.XXXFrontEnd(this.Wrap)
 }

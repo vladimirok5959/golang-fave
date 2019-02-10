@@ -66,7 +66,6 @@ func main() {
 
 	// Init modules
 	mods := modules.New()
-	mods.Load()
 
 	// Init and start web server
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
