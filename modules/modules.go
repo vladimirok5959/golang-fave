@@ -1,16 +1,19 @@
 package modules
 
 import (
+	//"fmt"
 	"net/http"
 	"reflect"
 	"strings"
 
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 type Module struct {
 	Id       string
 	WantDB   bool
+	Mount    string
 	Name     string
 	FrontEnd func(wrap *wrapper.Wrapper)
 	BackEnd  func(wrap *wrapper.Wrapper)
@@ -19,6 +22,7 @@ type Module struct {
 type Action struct {
 	Id      string
 	WantDB  bool
+	Mount   string
 	ActFunc func(wrap *wrapper.Wrapper)
 }
 
@@ -41,7 +45,7 @@ func (this *Modules) load() {
 				if len(result) >= 1 {
 					mod := result[0].Interface().(*Module)
 					mod.Id = id
-					this.mods[mod.Id] = mod
+					this.mods[mod.Mount] = mod
 				}
 			}
 		}
@@ -52,25 +56,27 @@ func (this *Modules) load() {
 				if len(result) >= 1 {
 					act := result[0].Interface().(*Action)
 					act.Id = id
-					this.acts[act.Id] = act
+					this.acts[act.Mount] = act
 				}
 			}
 		}
 	}
 }
 
-func (this *Modules) newModule(WantDB bool, Name string, ff func(wrap *wrapper.Wrapper), bf func(wrap *wrapper.Wrapper)) *Module {
+func (this *Modules) newModule(WantDB bool, Mount string, Name string, ff func(wrap *wrapper.Wrapper), bf func(wrap *wrapper.Wrapper)) *Module {
 	return &Module{
 		WantDB:   WantDB,
+		Mount:    Mount,
 		Name:     Name,
 		FrontEnd: ff,
 		BackEnd:  bf,
 	}
 }
 
-func (this *Modules) newAction(WantDB bool, af func(wrap *wrapper.Wrapper)) *Action {
+func (this *Modules) newAction(WantDB bool, Mount string, af func(wrap *wrapper.Wrapper)) *Action {
 	return &Action{
 		WantDB:  WantDB,
+		Mount:   Mount,
 		ActFunc: af,
 	}
 }
@@ -114,11 +120,42 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 }
 
 func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
-	//
+	var mod *Module = nil
+
+	// Some module
+	if len(wrap.UrlArgs) > 0 {
+		if m, ok := this.mods[wrap.UrlArgs[0]]; ok {
+			mod = m
+		}
+	}
+
+	// Default module
+	if mod == nil {
+		if m, ok := this.mods["index"]; ok {
+			mod = m
+		}
+	}
+
+	// Check and run
+	if mod != nil {
+		if mod.FrontEnd != nil {
+			if mod.WantDB {
+				err := wrap.UseDatabase()
+				if err != nil {
+					utils.SystemErrorPageEngine(wrap.W, err)
+					return true
+				}
+				defer wrap.DB.Close()
+			}
+			mod.FrontEnd(wrap)
+			return true
+		}
+	}
+
 	return false
 }
 
 func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
-	//
+	//fmt.Printf("Back: %v\n", wrap.UrlArgs)
 	return false
 }

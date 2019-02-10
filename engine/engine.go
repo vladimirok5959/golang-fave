@@ -18,8 +18,6 @@ import (
 type Engine struct {
 	Wrap *wrapper.Wrapper
 	Mods *modules.Modules
-	// Actions
-	// Front-end or Back-end
 }
 
 func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
@@ -28,7 +26,6 @@ func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *ht
 		Wrap: wrap,
 		Mods: m,
 	}
-
 	return eng.Process()
 }
 
