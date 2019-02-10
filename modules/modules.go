@@ -99,6 +99,7 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 							wrap.MsgError(err.Error())
 							return true
 						}
+						defer wrap.DB.Close()
 					}
 					act.ActFunc(wrap)
 					return true
