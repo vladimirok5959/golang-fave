@@ -1,20 +1,35 @@
 package modules
 
 import (
+	"fmt"
+
 	"golang-fave/engine/wrapper"
 )
 
+type FuncFrontEnd func(wrap *wrapper.Wrapper)
+type FuncBackEnd func(wrap *wrapper.Wrapper)
+
+type Module struct {
+	Id       string
+	Name     string
+	FrontEnd FuncFrontEnd
+	BackEnd  FuncBackEnd
+}
+
 type Modules struct {
-	//
+	list map[string]Module
 }
 
 func New() *Modules {
-	m := Modules{}
+	m := Modules{
+		list: map[string]Module{},
+	}
 	return &m
 }
 
 func (this *Modules) Load() {
 	// Called before server starts
+	fmt.Println("Load modules")
 }
 
 // All actions here...
