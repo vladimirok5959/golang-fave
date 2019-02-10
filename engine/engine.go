@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"database/sql"
+	//"database/sql"
 	"net/http"
 	"os"
 	"strings"
@@ -35,6 +35,7 @@ func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *ht
 func (this *Engine) Process() bool {
 	this.Wrap.IsBackend = this.Wrap.R.URL.Path == "/cp" || strings.HasPrefix(this.Wrap.R.URL.Path, "/cp/")
 	this.Wrap.ConfMysqlExists = utils.IsMySqlConfigExists(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
+	this.Wrap.UrlArgs = append(this.Wrap.UrlArgs, utils.UrlToArray(this.Wrap.R.URL.Path)...)
 
 	// Action
 	if this.Mods.XXXActionFire(this.Wrap) {
@@ -54,28 +55,30 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
-	// Read MySQL settings file
-	mc, err := utils.MySqlConfigRead(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
-	if err != nil {
-		utils.SystemErrorPageEngine(this.Wrap.W, err)
-		return true
-	}
+	/*
+		// Read MySQL settings file
+		mc, err := utils.MySqlConfigRead(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
+		if err != nil {
+			utils.SystemErrorPageEngine(this.Wrap.W, err)
+			return true
+		}
 
-	// Connect to MySQL server
-	db, err := sql.Open("mysql", mc.User+":"+mc.Password+"@tcp("+mc.Host+":"+mc.Port+")/"+mc.Name)
-	if err != nil {
-		utils.SystemErrorPageEngine(this.Wrap.W, err)
-		return true
-	}
-	this.Wrap.DB = db
-	defer db.Close()
-	err = db.Ping()
+		// Connect to MySQL server
+		db, err := sql.Open("mysql", mc.User+":"+mc.Password+"@tcp("+mc.Host+":"+mc.Port+")/"+mc.Name)
+		if err != nil {
+			utils.SystemErrorPageEngine(this.Wrap.W, err)
+			return true
+		}
+		this.Wrap.DB = db
+		defer db.Close()
+		err = db.Ping()
 
-	// Check if MySQL server alive
-	if err != nil {
-		utils.SystemErrorPageEngine(this.Wrap.W, err)
-		return true
-	}
+		// Check if MySQL server alive
+		if err != nil {
+			utils.SystemErrorPageEngine(this.Wrap.W, err)
+			return true
+		}
+	*/
 
 	// Separated logic
 	if this.Wrap.IsBackend {
