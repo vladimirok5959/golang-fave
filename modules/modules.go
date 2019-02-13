@@ -81,6 +81,29 @@ func (this *Modules) newAction(WantDB bool, Mount string, af func(wrap *wrapper.
 	}
 }
 
+func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper) (*Module, string) {
+	var mod *Module = nil
+	var modCurr string = ""
+
+	// Some module
+	if len(wrap.UrlArgs) > 0 {
+		if m, ok := this.mods[wrap.UrlArgs[0]]; ok {
+			mod = m
+			modCurr = wrap.UrlArgs[0]
+		}
+	}
+
+	// Default module
+	if mod == nil {
+		if m, ok := this.mods["index"]; ok {
+			mod = m
+			modCurr = "index"
+		}
+	}
+
+	return mod, modCurr
+}
+
 func New() *Modules {
 	m := Modules{
 		mods: map[string]*Module{},
@@ -120,24 +143,9 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 }
 
 func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
-	var mod *Module = nil
-
-	// Some module
-	if len(wrap.UrlArgs) > 0 {
-		if m, ok := this.mods[wrap.UrlArgs[0]]; ok {
-			mod = m
-		}
-	}
-
-	// Default module
-	if mod == nil {
-		if m, ok := this.mods["index"]; ok {
-			mod = m
-		}
-	}
-
-	// Check and run
+	mod, cm := this.getCurrentModule(wrap)
 	if mod != nil {
+		wrap.CurrModule = cm
 		if mod.FrontEnd != nil {
 			if mod.WantDB {
 				err := wrap.UseDatabase()
@@ -151,11 +159,25 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 			return true
 		}
 	}
-
 	return false
 }
 
 func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
-	//fmt.Printf("Back: %v\n", wrap.UrlArgs)
+	mod, cm := this.getCurrentModule(wrap)
+	if mod != nil {
+		wrap.CurrModule = cm
+		if mod.BackEnd != nil {
+			if mod.WantDB {
+				err := wrap.UseDatabase()
+				if err != nil {
+					utils.SystemErrorPageEngine(wrap.W, err)
+					return true
+				}
+				defer wrap.DB.Close()
+			}
+			mod.BackEnd(wrap)
+			return true
+		}
+	}
 	return false
 }

@@ -52,7 +52,7 @@ func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Se
 		DTemplate:  dirTemplate,
 		DTmp:       dirTmp,
 		UrlArgs:    []string{},
-		CurrModule: "index",
+		CurrModule: "",
 	}
 }
 
