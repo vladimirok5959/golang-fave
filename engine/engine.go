@@ -33,11 +33,18 @@ func (this *Engine) Process() bool {
 	this.Wrap.IsBackend = this.Wrap.R.URL.Path == "/cp" || strings.HasPrefix(this.Wrap.R.URL.Path, "/cp/")
 	this.Wrap.ConfMysqlExists = utils.IsMySqlConfigExists(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 	this.Wrap.UrlArgs = append(this.Wrap.UrlArgs, utils.UrlToArray(this.Wrap.R.URL.Path)...)
+	if this.Wrap.IsBackend && len(this.Wrap.UrlArgs) >= 1 && this.Wrap.UrlArgs[0] == "cp" {
+		this.Wrap.UrlArgs = this.Wrap.UrlArgs[1:]
+	}
 
 	// Action
 	if this.Mods.XXXActionFire(this.Wrap) {
 		return true
 	}
+
+	//
+	// TODO: make a redirect or display error page?
+	//
 
 	// Redirect to CP for creating MySQL config file
 	if !this.Wrap.IsBackend && !this.Wrap.ConfMysqlExists {
@@ -45,6 +52,10 @@ func (this *Engine) Process() bool {
 		http.Redirect(this.Wrap.W, this.Wrap.R, this.Wrap.R.URL.Scheme+"://"+this.Wrap.R.Host+"/cp/", 302)
 		return true
 	}
+
+	//
+	// TODO: show or not show configure MySQL form?
+	//
 
 	// Display MySQL install page on backend
 	if this.Wrap.IsBackend && !this.Wrap.ConfMysqlExists {

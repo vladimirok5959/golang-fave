@@ -1,7 +1,6 @@
 package modules
 
 import (
-	//"fmt"
 	"net/http"
 	"reflect"
 	"strings"
@@ -86,7 +85,7 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper) (*Module, string) {
 	var modCurr string = ""
 
 	// Some module
-	if len(wrap.UrlArgs) > 0 {
+	if len(wrap.UrlArgs) >= 1 {
 		if m, ok := this.mods[wrap.UrlArgs[0]]; ok {
 			mod = m
 			modCurr = wrap.UrlArgs[0]
