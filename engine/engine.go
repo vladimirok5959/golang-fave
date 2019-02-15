@@ -42,10 +42,6 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
-	//
-	// TODO: make a redirect or display error page?
-	//
-
 	// Redirect to CP for creating MySQL config file
 	if !this.Wrap.IsBackend && !this.Wrap.ConfMysqlExists {
 		this.Wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -53,44 +49,15 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
-	//
-	// TODO: show or not show configure MySQL form?
-	//
-
 	// Display MySQL install page on backend
 	if this.Wrap.IsBackend && !this.Wrap.ConfMysqlExists {
 		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpMySql, nil)
 		return true
 	}
 
-	/*
-		// Read MySQL settings file
-		mc, err := utils.MySqlConfigRead(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
-		if err != nil {
-			utils.SystemErrorPageEngine(this.Wrap.W, err)
-			return true
-		}
-
-		// Connect to MySQL server
-		db, err := sql.Open("mysql", mc.User+":"+mc.Password+"@tcp("+mc.Host+":"+mc.Port+")/"+mc.Name)
-		if err != nil {
-			utils.SystemErrorPageEngine(this.Wrap.W, err)
-			return true
-		}
-		this.Wrap.DB = db
-		defer db.Close()
-		err = db.Ping()
-
-		// Check if MySQL server alive
-		if err != nil {
-			utils.SystemErrorPageEngine(this.Wrap.W, err)
-			return true
-		}
-	*/
-
 	// Separated logic
-	if this.Wrap.IsBackend {
-		return this.Mods.XXXBackEnd(this.Wrap)
+	if !this.Wrap.IsBackend {
+		return this.Mods.XXXFrontEnd(this.Wrap)
 	}
-	return this.Mods.XXXFrontEnd(this.Wrap)
+	return this.Mods.XXXBackEnd(this.Wrap)
 }
