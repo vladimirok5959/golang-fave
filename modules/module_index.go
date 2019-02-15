@@ -7,7 +7,11 @@ import (
 )
 
 func (this *Modules) RegisterModule_Index() *Module {
-	return this.newModule(false, "index", "Pages", func(wrap *wrapper.Wrapper) {
+	return this.newModule(MInfo{
+		WantDB: false,
+		Mount:  "index",
+		Name:   "Pages",
+	}, func(wrap *wrapper.Wrapper) {
 		wrap.W.WriteHeader(http.StatusOK)
 		wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		wrap.W.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -21,7 +25,10 @@ func (this *Modules) RegisterModule_Index() *Module {
 }
 
 func (this *Modules) RegisterAction_MysqlSetup() *Action {
-	return this.newAction(false, "mysql", func(wrap *wrapper.Wrapper) {
+	return this.newAction(AInfo{
+		WantDB: false,
+		Mount:  "mysql",
+	}, func(wrap *wrapper.Wrapper) {
 		wrap.MsgError(`Some error`)
 	})
 }

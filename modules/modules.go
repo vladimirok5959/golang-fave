@@ -9,20 +9,28 @@ import (
 	"golang-fave/utils"
 )
 
+type MInfo struct {
+	Id     string
+	WantDB bool
+	Mount  string
+	Name   string
+}
+
 type Module struct {
-	Id       string
-	WantDB   bool
-	Mount    string
-	Name     string
-	FrontEnd func(wrap *wrapper.Wrapper)
-	BackEnd  func(wrap *wrapper.Wrapper)
+	Info  MInfo
+	Front func(wrap *wrapper.Wrapper)
+	Back  func(wrap *wrapper.Wrapper)
+}
+
+type AInfo struct {
+	Id     string
+	WantDB bool
+	Mount  string
 }
 
 type Action struct {
-	Id      string
-	WantDB  bool
-	Mount   string
-	ActFunc func(wrap *wrapper.Wrapper)
+	Info AInfo
+	Act  func(wrap *wrapper.Wrapper)
 }
 
 type Modules struct {
@@ -43,8 +51,8 @@ func (this *Modules) load() {
 				result := reflect.ValueOf(this).MethodByName("RegisterModule_" + id).Call([]reflect.Value{})
 				if len(result) >= 1 {
 					mod := result[0].Interface().(*Module)
-					mod.Id = id
-					this.mods[mod.Mount] = mod
+					mod.Info.Id = id
+					this.mods[mod.Info.Mount] = mod
 				}
 			}
 		}
@@ -54,30 +62,20 @@ func (this *Modules) load() {
 				result := reflect.ValueOf(this).MethodByName("RegisterAction_" + id).Call([]reflect.Value{})
 				if len(result) >= 1 {
 					act := result[0].Interface().(*Action)
-					act.Id = id
-					this.acts[act.Mount] = act
+					act.Info.Id = id
+					this.acts[act.Info.Mount] = act
 				}
 			}
 		}
 	}
 }
 
-func (this *Modules) newModule(WantDB bool, Mount string, Name string, ff func(wrap *wrapper.Wrapper), bf func(wrap *wrapper.Wrapper)) *Module {
-	return &Module{
-		WantDB:   WantDB,
-		Mount:    Mount,
-		Name:     Name,
-		FrontEnd: ff,
-		BackEnd:  bf,
-	}
+func (this *Modules) newModule(info MInfo, ff func(wrap *wrapper.Wrapper), bf func(wrap *wrapper.Wrapper)) *Module {
+	return &Module{Info: info, Front: ff, Back: bf}
 }
 
-func (this *Modules) newAction(WantDB bool, Mount string, af func(wrap *wrapper.Wrapper)) *Action {
-	return &Action{
-		WantDB:  WantDB,
-		Mount:   Mount,
-		ActFunc: af,
-	}
+func (this *Modules) newAction(info AInfo, af func(wrap *wrapper.Wrapper)) *Action {
+	return &Action{Info: info, Act: af}
 }
 
 func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper) (*Module, string) {
@@ -121,7 +119,7 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "text/html; charset=utf-8")
 				if act, ok := this.acts[name]; ok {
-					if act.WantDB {
+					if act.Info.WantDB {
 						err := wrap.UseDatabase()
 						if err != nil {
 							wrap.MsgError(err.Error())
@@ -129,7 +127,7 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 						}
 						defer wrap.DB.Close()
 					}
-					act.ActFunc(wrap)
+					act.Act(wrap)
 					return true
 				} else {
 					wrap.MsgError(`This action is not implemented`)
@@ -145,8 +143,8 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 	mod, cm := this.getCurrentModule(wrap)
 	if mod != nil {
 		wrap.CurrModule = cm
-		if mod.FrontEnd != nil {
-			if mod.WantDB {
+		if mod.Front != nil {
+			if mod.Info.WantDB {
 				err := wrap.UseDatabase()
 				if err != nil {
 					utils.SystemErrorPageEngine(wrap.W, err)
@@ -154,7 +152,7 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 				}
 				defer wrap.DB.Close()
 			}
-			mod.FrontEnd(wrap)
+			mod.Front(wrap)
 			return true
 		}
 	}
@@ -165,8 +163,8 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 	mod, cm := this.getCurrentModule(wrap)
 	if mod != nil {
 		wrap.CurrModule = cm
-		if mod.BackEnd != nil {
-			if mod.WantDB {
+		if mod.Back != nil {
+			if mod.Info.WantDB {
 				err := wrap.UseDatabase()
 				if err != nil {
 					utils.SystemErrorPageEngine(wrap.W, err)
@@ -174,7 +172,7 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 				}
 				defer wrap.DB.Close()
 			}
-			mod.BackEnd(wrap)
+			mod.Back(wrap)
 			return true
 		}
 	}

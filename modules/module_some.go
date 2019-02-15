@@ -8,7 +8,11 @@ import (
 )
 
 func (this *Modules) RegisterModule_Some() *Module {
-	return this.newModule(false, "some", "Some Module", func(wrap *wrapper.Wrapper) {
+	return this.newModule(MInfo{
+		WantDB: false,
+		Mount:  "some",
+		Name:   "Some Module",
+	}, func(wrap *wrapper.Wrapper) {
 		fmt.Printf("SOME FrontEnd func call\n")
 		wrap.W.WriteHeader(http.StatusOK)
 		wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
