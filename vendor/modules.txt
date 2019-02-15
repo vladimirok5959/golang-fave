@@ -1,0 +1,12 @@
+# github.com/go-sql-driver/mysql v1.4.1
+github.com/go-sql-driver/mysql
+# github.com/vladimirok5959/golang-server-bootstrap v1.0.1
+github.com/vladimirok5959/golang-server-bootstrap/bootstrap
+# github.com/vladimirok5959/golang-server-resources v1.0.0
+github.com/vladimirok5959/golang-server-resources/resource
+# github.com/vladimirok5959/golang-server-sessions v1.0.1
+github.com/vladimirok5959/golang-server-sessions/session
+# github.com/vladimirok5959/golang-server-static v1.0.0
+github.com/vladimirok5959/golang-server-static/static
+# google.golang.org/appengine v1.4.0
+google.golang.org/appengine/cloudsql
