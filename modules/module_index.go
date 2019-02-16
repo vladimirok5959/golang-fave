@@ -110,8 +110,44 @@ func (this *Modules) RegisterAction_MysqlSetup() *Action {
 	})
 }
 
+func (this *Modules) RegisterAction_CpFirstUser() *Action {
+	return this.newAction(AInfo{
+		WantDB: true,
+		Mount:  "first_user",
+	}, func(wrap *wrapper.Wrapper) {
+		pf_first_name := wrap.R.FormValue("first_name")
+		pf_last_name := wrap.R.FormValue("last_name")
+		pf_email := wrap.R.FormValue("email")
+		pf_password := wrap.R.FormValue("password")
+
+		if pf_email == "" {
+			wrap.MsgError(`Please specify user email`)
+			return
+		}
+
+		if !utils.IsValidEmail(pf_email) {
+			wrap.MsgError(`Please specify correct user email`)
+			return
+		}
+
+		if pf_password == "" {
+			wrap.MsgError(`Please specify user password`)
+			return
+		}
+
+		_, err := wrap.DB.Query(
+			"INSERT INTO `users` SET `first_name` = ?, `last_name` = ?, `email` = ?, `password` = MD5(?);",
+			pf_first_name, pf_last_name, pf_email, pf_password)
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Reload current page
+		wrap.Write(`window.location.reload(false);`)
+	})
+}
+
 // All actions here...
-// MySQL install
-// MySQL first user
 // User login
 // User logout
