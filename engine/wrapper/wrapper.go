@@ -88,6 +88,26 @@ func (this *Wrapper) UseDatabase() error {
 	return nil
 }
 
+func (this *Wrapper) LoadSessionUser() bool {
+	if this.S.GetInt("UserId", 0) <= 0 {
+		return false
+	}
+	if this.DB == nil {
+		return false
+	}
+	user := &utils.MySql_user{}
+	err := this.DB.QueryRow("SELECT `id`, `first_name`, `last_name`, `email`, `password` FROM `users` WHERE `id` = ? LIMIT 1;", this.S.GetInt("UserId", 0)).Scan(
+		&user.A_id, &user.A_first_name, &user.A_last_name, &user.A_email, &user.A_password)
+	if err != nil {
+		return false
+	}
+	if user.A_id != this.S.GetInt("UserId", 0) {
+		return false
+	}
+	this.User = user
+	return true
+}
+
 func (this *Wrapper) Write(data string) {
 	this.W.Write([]byte(data))
 }

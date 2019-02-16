@@ -91,6 +91,12 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
+	// Try load current user data
+	if !this.Wrap.LoadSessionUser() {
+		http.Redirect(this.Wrap.W, this.Wrap.R, "/", 302)
+		return true
+	}
+
 	// Render backend
 	return this.Mods.XXXBackEnd(this.Wrap)
 }
