@@ -1,7 +1,6 @@
 package engine
 
 import (
-	//"database/sql"
 	"net/http"
 	"os"
 	"strings"
@@ -57,7 +56,18 @@ func (this *Engine) Process() bool {
 
 	// Separated logic
 	if !this.Wrap.IsBackend {
+		// Render frontend
 		return this.Mods.XXXFrontEnd(this.Wrap)
 	}
+
+	// Backend must use MySQL anyway, so, check and connect
+	err := this.Wrap.UseDatabase()
+	if err != nil {
+		utils.SystemErrorPageEngine(this.Wrap.W, err)
+		return true
+	}
+	defer this.Wrap.DB.Close()
+
+	// Render backend
 	return this.Mods.XXXBackEnd(this.Wrap)
 }

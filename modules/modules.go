@@ -164,14 +164,6 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 	if mod != nil {
 		wrap.CurrModule = cm
 		if mod.Back != nil {
-			if mod.Info.WantDB {
-				err := wrap.UseDatabase()
-				if err != nil {
-					utils.SystemErrorPageEngine(wrap.W, err)
-					return true
-				}
-				defer wrap.DB.Close()
-			}
 			mod.Back(wrap)
 			return true
 		}
