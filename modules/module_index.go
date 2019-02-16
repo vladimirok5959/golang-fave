@@ -113,7 +113,7 @@ func (this *Modules) RegisterAction_MysqlSetup() *Action {
 func (this *Modules) RegisterAction_CpFirstUser() *Action {
 	return this.newAction(AInfo{
 		WantDB: true,
-		Mount:  "first_user",
+		Mount:  "first-user",
 	}, func(wrap *wrapper.Wrapper) {
 		pf_first_name := wrap.R.FormValue("first_name")
 		pf_last_name := wrap.R.FormValue("last_name")
