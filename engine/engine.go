@@ -68,6 +68,18 @@ func (this *Engine) Process() bool {
 	}
 	defer this.Wrap.DB.Close()
 
+	// Show add first user form if no any user in database
+	var count int
+	err = this.Wrap.DB.QueryRow("SELECT COUNT(*) FROM `users`;").Scan(&count)
+	if err != nil {
+		utils.SystemErrorPageEngine(this.Wrap.W, err)
+		return true
+	}
+	if count <= 0 {
+		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpFirstUser, nil)
+		return true
+	}
+
 	// Render backend
 	return this.Mods.XXXBackEnd(this.Wrap)
 }
