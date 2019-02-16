@@ -31,7 +31,8 @@ func (this *Modules) RegisterAction_MysqlSetup() *Action {
 		WantDB: false,
 		Mount:  "mysql",
 	}, func(wrap *wrapper.Wrapper) {
-		wrap.MsgError(`Install`)
+		// wrap.MsgError(`Install`)
+		
 	})
 }
 
