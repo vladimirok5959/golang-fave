@@ -35,7 +35,8 @@ type Wrapper struct {
 	UrlArgs         []string
 	CurrModule      string
 
-	DB *sql.DB
+	DB   *sql.DB
+	User *utils.MySql_user
 }
 
 func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) *Wrapper {
