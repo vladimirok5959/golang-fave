@@ -8,7 +8,7 @@ import (
 
 func (this *Modules) RegisterModule_Index() *Module {
 	return this.newModule(MInfo{
-		WantDB: false,
+		WantDB: true,
 		Mount:  "index",
 		Name:   "Pages",
 	}, func(wrap *wrapper.Wrapper) {
