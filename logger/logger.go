@@ -25,9 +25,9 @@ type Logger struct {
 func (this *Logger) console(msg logMsg) {
 	if consts.Debug {
 		if !msg.isError {
-			fmt.Fprintln(os.Stdout, "[ACCESS] "+msg.message)
+			fmt.Fprintln(os.Stdout, "\033[0;32m[ACCESS] "+msg.message+"\033[0m")
 		} else {
-			fmt.Fprintln(os.Stdout, "[ERROR] "+msg.message)
+			fmt.Fprintln(os.Stdout, "\033[0;31m[ERROR] "+msg.message+"\033[0m")
 		}
 		return
 	}
