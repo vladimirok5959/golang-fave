@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 
+	"golang-fave/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -20,10 +21,18 @@ func (this *Modules) RegisterModule_Index() *Module {
 		Name:   "Pages",
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
-		wrap.W.WriteHeader(http.StatusOK)
-		wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		wrap.W.Header().Set("Content-Type", "text/html; charset=utf-8")
-		wrap.W.Write([]byte(`INDEX FrontEnd func call (` + wrap.CurrModule + `)`))
+		wrap.RenderFrontEnd("index", consts.TmplDataModIndex{
+			MetaTitle:       "Meta Title",
+			MetaKeywords:    "Meta Keywords",
+			MetaDescription: "Meta Description",
+
+			MainMenuItems: []consts.TmplDataMainMenuItem{
+				{Name: "Home", Link: "/", Active: true},
+				{Name: "Item 1", Link: "/#1", Active: false},
+				{Name: "Item 2", Link: "/#2", Active: false},
+				{Name: "Item 3", Link: "/#3", Active: false},
+			},
+		})
 	}, func(wrap *wrapper.Wrapper) {
 		// Back-end
 		wrap.W.WriteHeader(http.StatusOK)

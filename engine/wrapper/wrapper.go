@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"html/template"
 	"net/http"
 	"os"
 	"strings"
 
+	"golang-fave/consts"
 	"golang-fave/logger"
 	"golang-fave/utils"
 
@@ -122,4 +124,24 @@ func (this *Wrapper) MsgError(msg string) {
 	this.Write(fmt.Sprintf(
 		`ShowSystemMsgError('Error!', '%s', true);`,
 		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
+}
+
+func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
+	tmpl, err := template.ParseFiles(
+		this.DTemplate+string(os.PathSeparator)+tname+".html",
+		this.DTemplate+string(os.PathSeparator)+"header.html",
+		this.DTemplate+string(os.PathSeparator)+"sidebar.html",
+		this.DTemplate+string(os.PathSeparator)+"footer.html",
+	)
+	if err != nil {
+		utils.SystemErrorPageEngine(this.W, err)
+		return
+	}
+	this.W.WriteHeader(http.StatusOK)
+	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
+	tmpl.Execute(this.W, consts.TmplData{
+		System: utils.GetTmplSystemData(),
+		Data:   data,
+	})
 }

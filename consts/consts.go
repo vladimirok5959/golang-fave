@@ -42,3 +42,16 @@ type TmplData struct {
 	System TmplSystem
 	Data   interface{}
 }
+
+type TmplDataMainMenuItem struct {
+	Name   string
+	Link   string
+	Active bool
+}
+
+type TmplDataModIndex struct {
+	MetaTitle       string
+	MetaKeywords    string
+	MetaDescription string
+	MainMenuItems   []TmplDataMainMenuItem
+}
