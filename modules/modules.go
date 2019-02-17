@@ -117,6 +117,11 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper) string {
 	return html
 }
 
+func (this *Modules) getNavMenuModulesSys(wrap *wrapper.Wrapper) string {
+	html := ""
+	return html
+}
+
 func New() *Modules {
 	m := Modules{
 		mods: map[string]*Module{},

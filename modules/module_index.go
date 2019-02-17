@@ -55,7 +55,6 @@ func (this *Modules) RegisterModule_Index() *Module {
 		*/
 
 		body_class := "cp"
-		nav_bar_modules_sys := ""
 		page_sb_left := "Left"
 		page_content := "Content"
 		page_sb_right := "Right"
@@ -70,7 +69,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 			UserPassword:       "",
 			UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(wrap.User.A_email) + "?s=80&r=g",
 			NavBarModules:      template.HTML(this.getNavMenuModules(wrap)),
-			NavBarModulesSys:   template.HTML(nav_bar_modules_sys),
+			NavBarModulesSys:   template.HTML(this.getNavMenuModulesSys(wrap)),
 			ModuleCurrentAlias: "index",
 			SidebarLeft:        template.HTML(page_sb_left),
 			Content:            template.HTML(page_content),
