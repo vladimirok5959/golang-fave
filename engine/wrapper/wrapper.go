@@ -1,6 +1,7 @@
 package wrapper
 
 import (
+	"bytes"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -124,6 +125,18 @@ func (this *Wrapper) MsgError(msg string) {
 	this.Write(fmt.Sprintf(
 		`ShowSystemMsgError('Error!', '%s', true);`,
 		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
+}
+
+func (this *Wrapper) RenderToString(tcont []byte, data interface{}) string {
+	tmpl, err := template.New("template").Parse(string(tcont))
+	if err != nil {
+		return err.Error()
+	}
+	var tpl bytes.Buffer
+	if err := tmpl.Execute(&tpl, data); err != nil {
+		return err.Error()
+	}
+	return tpl.String()
 }
 
 func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
