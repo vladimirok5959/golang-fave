@@ -106,6 +106,7 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Mod
 
 // TODO: add module ordering
 func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper) string {
+	// TODO: generate list, reorder, build html
 	html := ""
 	for _, mod := range this.mods {
 		if mod.Back != nil {
