@@ -27,18 +27,22 @@ func (this *bootstrap) handler(w http.ResponseWriter, r *http.Request) {
 		this.before(w, r)
 	}
 	if r.URL.Path == "/"+this.path+"/bootstrap.css" {
+		w.Header().Set("Cache-Control", "public, max-age=31536000")
 		w.Header().Set("Content-Type", "text/css")
 		w.Write(resource_bootstrap_css)
 		return
 	} else if r.URL.Path == "/"+this.path+"/bootstrap.js" {
+		w.Header().Set("Cache-Control", "public, max-age=31536000")
 		w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 		w.Write(resource_bootstrap_js)
 		return
 	} else if r.URL.Path == "/"+this.path+"/jquery.js" {
+		w.Header().Set("Cache-Control", "public, max-age=31536000")
 		w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 		w.Write(resource_jquery_js)
 		return
 	} else if r.URL.Path == "/"+this.path+"/popper.js" {
+		w.Header().Set("Cache-Control", "public, max-age=31536000")
 		w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 		w.Write(resource_popper_js)
 		return

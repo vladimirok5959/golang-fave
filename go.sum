@@ -3,6 +3,8 @@ github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/vladimirok5959/golang-server-bootstrap v1.0.1 h1:vdLfBYdgQORd83K4imnHJbz7UaGccEgJN0t8TqLb/e4=
 github.com/vladimirok5959/golang-server-bootstrap v1.0.1/go.mod h1:R5PGBuqlupYd0evIXoi81plWH/HpNQO2V/jHxZzg2y0=
+github.com/vladimirok5959/golang-server-bootstrap v1.0.2 h1:UiOKkiNGcEddnx9O0cuLM1euSWgKimQCFIMD0+W8njw=
+github.com/vladimirok5959/golang-server-bootstrap v1.0.2/go.mod h1:R5PGBuqlupYd0evIXoi81plWH/HpNQO2V/jHxZzg2y0=
 github.com/vladimirok5959/golang-server-resources v1.0.0 h1:zX2929ItoGHDmQD6OTpxoFbO7Cj7/9Q2eAgoSAA8gNI=
 github.com/vladimirok5959/golang-server-resources v1.0.0/go.mod h1:tsf2oAEf3E3ukiQSCO7dstl0IXbEXec68UUIiMWysBc=
 github.com/vladimirok5959/golang-server-sessions v1.0.1 h1:cQsLk8hz7pkIV7/XectfejDF2j+61FE+/s4xErxBNJw=

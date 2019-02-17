@@ -28,3 +28,4 @@ run:
 
 update:
 	go mod vendor
+	go mod download
