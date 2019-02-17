@@ -108,11 +108,13 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Mod
 func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper) string {
 	html := ""
 	for _, mod := range this.mods {
-		class := ""
-		if mod.Info.Mount == wrap.CurrModule {
-			class = " active"
+		if mod.Back != nil {
+			class := ""
+			if mod.Info.Mount == wrap.CurrModule {
+				class = " active"
+			}
+			html += `<a class="dropdown-item` + class + `" href="/cp/` + mod.Info.Mount + `/">` + mod.Info.Name + `</a>`
 		}
-		html += `<a class="dropdown-item` + class + `" href="/cp/` + mod.Info.Mount + `/">` + mod.Info.Name + `</a>`
 	}
 	return html
 }
