@@ -145,3 +145,18 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
 		Data:   data,
 	})
 }
+
+func (this *Wrapper) RenderBackEnd(tcont []byte, data interface{}) {
+	tmpl, err := template.New("template").Parse(string(tcont))
+	if err != nil {
+		utils.SystemErrorPageEngine(this.W, err)
+		return
+	}
+	this.W.WriteHeader(http.StatusOK)
+	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
+	tmpl.Execute(this.W, consts.TmplData{
+		System: utils.GetTmplSystemData(),
+		Data:   data,
+	})
+}
