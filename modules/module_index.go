@@ -5,10 +5,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"fmt"
-	"net/http"
+	"html/template"
 	"os"
 	"strconv"
 
+	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -35,10 +36,29 @@ func (this *Modules) RegisterModule_Index() *Module {
 		})
 	}, func(wrap *wrapper.Wrapper) {
 		// Back-end
-		wrap.W.WriteHeader(http.StatusOK)
-		wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		wrap.W.Header().Set("Content-Type", "text/html; charset=utf-8")
-		wrap.W.Write([]byte(`INDEX BackEnd func call (` + wrap.CurrModule + `)`))
+		body_class := "cp"
+		nav_bar_modules_all := ""
+		nav_bar_modules_sys := ""
+		page_sb_left := "Left"
+		page_content := "Content"
+		page_sb_right := "Right"
+
+		wrap.RenderBackEnd(assets.TmplCpBase, consts.TmplDataCpBase{
+			Title:              "Fave " + consts.ServerVersion,
+			BodyClasses:        body_class,
+			UserId:             wrap.User.A_id,
+			UserFirstName:      wrap.User.A_first_name,
+			UserLastName:       wrap.User.A_last_name,
+			UserEmail:          wrap.User.A_email,
+			UserPassword:       "",
+			UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(wrap.User.A_email) + "?s=80&r=g",
+			NavBarModules:      template.HTML(nav_bar_modules_all),
+			NavBarModulesSys:   template.HTML(nav_bar_modules_sys),
+			ModuleCurrentAlias: "index",
+			SidebarLeft:        template.HTML(page_sb_left),
+			Content:            template.HTML(page_content),
+			SidebarRight:       template.HTML(page_sb_right),
+		})
 	})
 }
 
@@ -262,5 +282,8 @@ func (this *Modules) RegisterAction_CpUserSettings() *Action {
 				return
 			}
 		}
+
+		// Reload current page
+		wrap.Write(`window.location.reload(false);`)
 	})
 }

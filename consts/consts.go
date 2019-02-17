@@ -1,5 +1,9 @@
 package consts
 
+import (
+	"html/template"
+)
+
 const Debug = true
 const ServerVersion = "1.0.1"
 const AssetsVersion = "1"
@@ -41,6 +45,23 @@ type TmplError struct {
 type TmplData struct {
 	System TmplSystem
 	Data   interface{}
+}
+
+type TmplDataCpBase struct {
+	Title              string
+	BodyClasses        string
+	UserId             int
+	UserFirstName      string
+	UserLastName       string
+	UserEmail          string
+	UserPassword       string
+	UserAvatarLink     string
+	NavBarModules      template.HTML
+	NavBarModulesSys   template.HTML
+	ModuleCurrentAlias string
+	SidebarLeft        template.HTML
+	Content            template.HTML
+	SidebarRight       template.HTML
 }
 
 type TmplDataMainMenuItem struct {
