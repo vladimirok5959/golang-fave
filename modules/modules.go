@@ -23,9 +23,10 @@ type Module struct {
 }
 
 type AInfo struct {
-	Id     string
-	WantDB bool
-	Mount  string
+	Id       string
+	WantDB   bool
+	Mount    string
+	WantUser bool
 }
 
 type Action struct {
@@ -126,6 +127,12 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 							return true
 						}
 						defer wrap.DB.Close()
+					}
+					if act.Info.WantUser {
+						if !wrap.LoadSessionUser() {
+							wrap.MsgError(`You must be loginned to run this action`)
+							return true
+						}
 					}
 					act.Act(wrap)
 					return true

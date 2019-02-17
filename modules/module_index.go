@@ -199,5 +199,16 @@ func (this *Modules) RegisterAction_CpUserLogin() *Action {
 	})
 }
 
-// All actions here...
-// User logout
+func (this *Modules) RegisterAction_CpUserLogout() *Action {
+	return this.newAction(AInfo{
+		WantDB:   true,
+		Mount:    "singout",
+		WantUser: true,
+	}, func(wrap *wrapper.Wrapper) {
+		// Reset session var
+		wrap.S.SetInt("UserId", 0)
+
+		// Reload current page
+		wrap.Write(`window.location.reload(false);`)
+	})
+}
