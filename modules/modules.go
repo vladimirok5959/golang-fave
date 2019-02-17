@@ -79,15 +79,17 @@ func (this *Modules) newAction(info AInfo, af func(wrap *wrapper.Wrapper)) *Acti
 	return &Action{Info: info, Act: af}
 }
 
-func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper) (*Module, string) {
+func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Module, string) {
 	var mod *Module = nil
 	var modCurr string = ""
 
 	// Some module
 	if len(wrap.UrlArgs) >= 1 {
 		if m, ok := this.mods[wrap.UrlArgs[0]]; ok {
-			mod = m
-			modCurr = wrap.UrlArgs[0]
+			if (!backend && m.Front != nil) || (backend && m.Back != nil) {
+				mod = m
+				modCurr = wrap.UrlArgs[0]
+			}
 		}
 	}
 
@@ -147,7 +149,7 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 }
 
 func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
-	mod, cm := this.getCurrentModule(wrap)
+	mod, cm := this.getCurrentModule(wrap, false)
 	if mod != nil {
 		wrap.CurrModule = cm
 		if mod.Front != nil {
@@ -167,7 +169,7 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 }
 
 func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
-	mod, cm := this.getCurrentModule(wrap)
+	mod, cm := this.getCurrentModule(wrap, true)
 	if mod != nil {
 		wrap.CurrModule = cm
 		if mod.Back != nil {
