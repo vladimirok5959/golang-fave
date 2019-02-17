@@ -216,7 +216,7 @@ func (this *Modules) RegisterAction_CpUserLogout() *Action {
 func (this *Modules) RegisterAction_CpUserSettings() *Action {
 	return this.newAction(AInfo{
 		WantDB:   true,
-		Mount:    "usersettings",
+		Mount:    "user-settings",
 		WantUser: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_first_name := wrap.R.FormValue("first_name")
