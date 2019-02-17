@@ -36,8 +36,25 @@ func (this *Modules) RegisterModule_Index() *Module {
 		})
 	}, func(wrap *wrapper.Wrapper) {
 		// Back-end
+
+		//page_sb_left := mdl.GetSidebarLeft()
+		//nav_bar_modules_all := mdl.GetNavMenuModules()
+		//nav_bar_modules_sys := mdl.GetNavMenuModulesSys()
+		// If right sidebar and content need to show
+		/*
+			if page_sb_left != "" {
+				body_class = body_class + " cp-sidebar-left"
+			}
+			if page_content == "" {
+				body_class = body_class + " cp-404"
+				page_content = "Panel 404"
+			}
+			if page_sb_right != "" {
+				body_class = body_class + " cp-sidebar-right"
+			}
+		*/
+
 		body_class := "cp"
-		nav_bar_modules_all := ""
 		nav_bar_modules_sys := ""
 		page_sb_left := "Left"
 		page_content := "Content"
@@ -52,7 +69,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 			UserEmail:          wrap.User.A_email,
 			UserPassword:       "",
 			UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(wrap.User.A_email) + "?s=80&r=g",
-			NavBarModules:      template.HTML(nav_bar_modules_all),
+			NavBarModules:      template.HTML(this.getNavMenuModules(wrap)),
 			NavBarModulesSys:   template.HTML(nav_bar_modules_sys),
 			ModuleCurrentAlias: "index",
 			SidebarLeft:        template.HTML(page_sb_left),

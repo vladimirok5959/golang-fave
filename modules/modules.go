@@ -104,6 +104,19 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Mod
 	return mod, modCurr
 }
 
+// TODO: add module ordering
+func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper) string {
+	html := ""
+	for _, mod := range this.mods {
+		class := ""
+		if mod.Info.Mount == wrap.CurrModule {
+			class = " active"
+		}
+		html += `<a class="dropdown-item` + class + `" href="/cp/` + mod.Info.Mount + `/">` + mod.Info.Name + `</a>`
+	}
+	return html
+}
+
 func New() *Modules {
 	m := Modules{
 		mods: map[string]*Module{},
