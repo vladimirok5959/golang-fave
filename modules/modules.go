@@ -1,10 +1,14 @@
 package modules
 
 import (
+	"html/template"
 	"net/http"
 	"reflect"
+	"sort"
 	"strings"
 
+	"golang-fave/assets"
+	"golang-fave/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -14,12 +18,14 @@ type MInfo struct {
 	WantDB bool
 	Mount  string
 	Name   string
+	Order  int
+	System bool
 }
 
 type Module struct {
 	Info  MInfo
 	Front func(wrap *wrapper.Wrapper)
-	Back  func(wrap *wrapper.Wrapper)
+	Back  func(wrap *wrapper.Wrapper) (string, string, string)
 }
 
 type AInfo struct {
@@ -71,7 +77,7 @@ func (this *Modules) load() {
 	}
 }
 
-func (this *Modules) newModule(info MInfo, ff func(wrap *wrapper.Wrapper), bf func(wrap *wrapper.Wrapper)) *Module {
+func (this *Modules) newModule(info MInfo, ff func(wrap *wrapper.Wrapper), bf func(wrap *wrapper.Wrapper) (string, string, string)) *Module {
 	return &Module{Info: info, Front: ff, Back: bf}
 }
 
@@ -104,24 +110,26 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Mod
 	return mod, modCurr
 }
 
-// TODO: add module ordering
-func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper) string {
-	// TODO: generate list, reorder, build html
-	html := ""
+func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
+	list := make([]*MInfo, 0)
 	for _, mod := range this.mods {
 		if mod.Back != nil {
-			class := ""
-			if mod.Info.Mount == wrap.CurrModule {
-				class = " active"
+			if mod.Info.System == sys {
+				list = append(list, &mod.Info)
 			}
-			html += `<a class="dropdown-item` + class + `" href="/cp/` + mod.Info.Mount + `/">` + mod.Info.Name + `</a>`
 		}
 	}
-	return html
-}
-
-func (this *Modules) getNavMenuModulesSys(wrap *wrapper.Wrapper) string {
+	sort.Slice(list, func(i, j int) bool {
+		return list[i].Order < list[j].Order
+	})
 	html := ""
+	for _, mod := range list {
+		class := ""
+		if mod.Mount == wrap.CurrModule {
+			class = " active"
+		}
+		html += `<a class="dropdown-item` + class + `" href="/cp/` + mod.Mount + `/">` + mod.Name + `</a>`
+	}
 	return html
 }
 
@@ -194,7 +202,37 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 	if mod != nil {
 		wrap.CurrModule = cm
 		if mod.Back != nil {
-			mod.Back(wrap)
+			sidebar_left, content, sidebar_right := mod.Back(wrap)
+
+			body_class := "cp"
+			if sidebar_left != "" {
+				body_class = body_class + " cp-sidebar-left"
+			}
+			if content == "" {
+				body_class = body_class + " cp-404"
+				content = "Panel 404"
+			}
+			if sidebar_right != "" {
+				body_class = body_class + " cp-sidebar-right"
+			}
+
+			wrap.RenderBackEnd(assets.TmplCpBase, consts.TmplDataCpBase{
+				Title:              "Fave " + consts.ServerVersion,
+				BodyClasses:        body_class,
+				UserId:             wrap.User.A_id,
+				UserFirstName:      wrap.User.A_first_name,
+				UserLastName:       wrap.User.A_last_name,
+				UserEmail:          wrap.User.A_email,
+				UserPassword:       "",
+				UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(wrap.User.A_email) + "?s=80&r=g",
+				NavBarModules:      template.HTML(this.getNavMenuModules(wrap, false)),
+				NavBarModulesSys:   template.HTML(this.getNavMenuModules(wrap, true)),
+				ModuleCurrentAlias: wrap.CurrModule,
+				SidebarLeft:        template.HTML(sidebar_left),
+				Content:            template.HTML(content),
+				SidebarRight:       template.HTML(sidebar_right),
+			})
+
 			return true
 		}
 	}

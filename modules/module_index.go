@@ -5,11 +5,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"fmt"
-	"html/template"
 	"os"
 	"strconv"
 
-	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -20,6 +18,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		WantDB: true,
 		Mount:  "index",
 		Name:   "Pages",
+		Order:  0,
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
 		wrap.RenderFrontEnd("index", consts.TmplDataModIndex{
@@ -34,47 +33,9 @@ func (this *Modules) RegisterModule_Index() *Module {
 				{Name: "Item 3", Link: "/#3", Active: false},
 			},
 		})
-	}, func(wrap *wrapper.Wrapper) {
+	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		// Back-end
-
-		//page_sb_left := mdl.GetSidebarLeft()
-		//nav_bar_modules_all := mdl.GetNavMenuModules()
-		//nav_bar_modules_sys := mdl.GetNavMenuModulesSys()
-		// If right sidebar and content need to show
-		/*
-			if page_sb_left != "" {
-				body_class = body_class + " cp-sidebar-left"
-			}
-			if page_content == "" {
-				body_class = body_class + " cp-404"
-				page_content = "Panel 404"
-			}
-			if page_sb_right != "" {
-				body_class = body_class + " cp-sidebar-right"
-			}
-		*/
-
-		body_class := "cp"
-		page_sb_left := "Left"
-		page_content := "Content"
-		page_sb_right := "Right"
-
-		wrap.RenderBackEnd(assets.TmplCpBase, consts.TmplDataCpBase{
-			Title:              "Fave " + consts.ServerVersion,
-			BodyClasses:        body_class,
-			UserId:             wrap.User.A_id,
-			UserFirstName:      wrap.User.A_first_name,
-			UserLastName:       wrap.User.A_last_name,
-			UserEmail:          wrap.User.A_email,
-			UserPassword:       "",
-			UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(wrap.User.A_email) + "?s=80&r=g",
-			NavBarModules:      template.HTML(this.getNavMenuModules(wrap)),
-			NavBarModulesSys:   template.HTML(this.getNavMenuModulesSys(wrap)),
-			ModuleCurrentAlias: "index",
-			SidebarLeft:        template.HTML(page_sb_left),
-			Content:            template.HTML(page_content),
-			SidebarRight:       template.HTML(page_sb_right),
-		})
+		return "1", "Index", "Index Sidebar"
 	})
 }
 
