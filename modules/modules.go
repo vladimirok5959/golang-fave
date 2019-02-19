@@ -172,7 +172,8 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
 }
 
 func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
-	html := `<ul class="nav flex-column">`
+	html_def := ""
+	html_sys := ""
 	list := this.getModulesList(wrap, false, true)
 	for _, mod := range list {
 		class := ""
@@ -189,10 +190,22 @@ func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
 		if mod.Mount == "index" {
 			href = "/cp/"
 		}
-		html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
+		if !mod.System {
+			html_def += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
+		} else {
+			html_sys += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
+		}
 	}
-	html += `</ul>`
-	return html
+	if html_def != "" {
+		html_def = `<ul class="nav flex-column">` + html_def + `</ul>`
+	}
+	if html_sys != "" {
+		html_sys = `<ul class="nav flex-column">` + html_sys + `</ul>`
+	}
+	if html_def != "" && html_sys != "" {
+		html_sys = `<div class="dropdown-divider"></div>` + html_sys
+	}
+	return html_def + html_sys
 }
 
 func New() *Modules {
