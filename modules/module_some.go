@@ -12,7 +12,7 @@ func (this *Modules) RegisterModule_Some() *Module {
 		Order:  1,
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		// Back-end
-		return "2", "Some", "Some Sidebar"
+		return this.getSidebarModules(wrap), "Some", "Some Sidebar"
 	})
 }
 
@@ -24,7 +24,7 @@ func (this *Modules) RegisterModule_More() *Module {
 		Order:  2,
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		// Back-end
-		return "3", "More", "More Sidebar"
+		return this.getSidebarModules(wrap), "More", "More Sidebar"
 	})
 }
 
@@ -37,6 +37,6 @@ func (this *Modules) RegisterModule_System() *Module {
 		System: true,
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		// Back-end
-		return "4", "System", "System Sidebar"
+		return this.getSidebarModules(wrap), "System", "System Sidebar"
 	})
 }

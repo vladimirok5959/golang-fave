@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 
+	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -19,6 +20,11 @@ func (this *Modules) RegisterModule_Index() *Module {
 		Mount:  "index",
 		Name:   "Pages",
 		Order:  0,
+		Icon:   assets.SysSvgIconPage,
+		Sub: &[]MISub{
+			{Mount: "default", Name: "List of pages", Icon: assets.SysSvgIconList},
+			{Mount: "add", Name: "Add new page", Icon: assets.SysSvgIconPlus},
+		},
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
 		wrap.RenderFrontEnd("index", consts.TmplDataModIndex{
@@ -35,7 +41,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		})
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		// Back-end
-		return "1", "Index", "Index Sidebar"
+		return this.getSidebarModules(wrap), "Index", "Index Sidebar"
 	})
 }
 

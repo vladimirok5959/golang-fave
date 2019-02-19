@@ -13,6 +13,12 @@ import (
 	"golang-fave/utils"
 )
 
+type MISub struct {
+	Mount string
+	Name  string
+	Icon  string
+}
+
 type MInfo struct {
 	Id     string
 	WantDB bool
@@ -20,6 +26,8 @@ type MInfo struct {
 	Name   string
 	Order  int
 	System bool
+	Icon   string
+	Sub    *[]MISub
 }
 
 type Module struct {
@@ -110,11 +118,11 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Mod
 	return mod, modCurr
 }
 
-func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
+func (this *Modules) getModulesList(wrap *wrapper.Wrapper, sys bool, all bool) []*MInfo {
 	list := make([]*MInfo, 0)
 	for _, mod := range this.mods {
 		if mod.Back != nil {
-			if mod.Info.System == sys {
+			if mod.Info.System == sys || all {
 				list = append(list, &mod.Info)
 			}
 		}
@@ -122,7 +130,37 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
 	sort.Slice(list, func(i, j int) bool {
 		return list[i].Order < list[j].Order
 	})
-	html := ""
+	return list
+}
+
+func (this *Modules) getSidebarModuleSubMenu(wrap *wrapper.Wrapper, mod *MInfo) string {
+	html := ``
+	if mod.Sub != nil {
+		for _, item := range *mod.Sub {
+			class := ""
+			if (item.Mount == "default" && len(wrap.UrlArgs) <= 1) || (len(wrap.UrlArgs) >= 2 && item.Mount == wrap.UrlArgs[1]) {
+				class = " active"
+			}
+			icon := item.Icon
+			if icon == "" {
+				icon = assets.SysSvgIconGear
+			}
+			href := "/cp/" + mod.Mount + "/" + item.Mount + "/"
+			if mod.Mount == "index" && item.Mount == "default" {
+				href = "/cp/"
+			}
+			html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + item.Name + `</a></li>`
+		}
+		if html != "" {
+			html = `<ul class="nav flex-column">` + html + `</ul>`
+		}
+	}
+	return html
+}
+
+func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
+	html := ``
+	list := this.getModulesList(wrap, sys, false)
 	for _, mod := range list {
 		class := ""
 		if mod.Mount == wrap.CurrModule {
@@ -130,6 +168,30 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
 		}
 		html += `<a class="dropdown-item` + class + `" href="/cp/` + mod.Mount + `/">` + mod.Name + `</a>`
 	}
+	return html
+}
+
+func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
+	html := `<ul class="nav flex-column">`
+	list := this.getModulesList(wrap, false, true)
+	for _, mod := range list {
+		class := ""
+		submenu := ""
+		if mod.Mount == wrap.CurrModule {
+			class = " active"
+			submenu = this.getSidebarModuleSubMenu(wrap, mod)
+		}
+		icon := mod.Icon
+		if icon == "" {
+			icon = assets.SysSvgIconGear
+		}
+		href := "/cp/" + mod.Mount + "/"
+		if mod.Mount == "index" {
+			href = "/cp/"
+		}
+		html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
+	}
+	html += `</ul>`
 	return html
 }
 
