@@ -25,6 +25,11 @@ const AssetsSysLogoPng = AssetsPath + "/sys/logo.png"
 const AssetsSysLogoSvg = AssetsPath + "/sys/logo.svg"
 const AssetsSysStylesCss = AssetsPath + "/sys/styles.css"
 
+type BreadCrumb struct {
+	Name string
+	Link string
+}
+
 // Template data
 type TmplSystem struct {
 	PathIcoFav       string

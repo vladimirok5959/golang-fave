@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"html"
 	"html/template"
 	"net/http"
 	"reflect"
@@ -148,6 +149,8 @@ func (this *Modules) getSidebarModuleSubMenu(wrap *wrapper.Wrapper, mod *MInfo) 
 			href := "/cp/" + mod.Mount + "/" + item.Mount + "/"
 			if mod.Mount == "index" && item.Mount == "default" {
 				href = "/cp/"
+			} else if item.Mount == "default" {
+				href = "/cp/" + mod.Mount + "/"
 			}
 			html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + item.Name + `</a></li>`
 		}
@@ -206,6 +209,22 @@ func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
 		html_sys = `<div class="dropdown-divider"></div>` + html_sys
 	}
 	return html_def + html_sys
+}
+
+func (this *Modules) getBreadCrumbs(wrap *wrapper.Wrapper, data *[]consts.BreadCrumb) string {
+	res := `<nav aria-label="breadcrumb">`
+	res += `<ol class="breadcrumb">`
+	res += `<li class="breadcrumb-item"><a href="/cp/` + this.mods[wrap.CurrModule].Info.Mount + `/">` + html.EscapeString(this.mods[wrap.CurrModule].Info.Name) + `</a></li>`
+	for _, item := range *data {
+		if item.Link == "" {
+			res += `<li class="breadcrumb-item active" aria-current="page">` + html.EscapeString(item.Name) + `</li>`
+		} else {
+			res += `<li class="breadcrumb-item"><a href="` + item.Link + `">` + html.EscapeString(item.Name) + `</a></li>`
+		}
+	}
+	res += `</ol>`
+	res += `</nav>`
+	return res
 }
 
 func New() *Modules {
@@ -276,6 +295,9 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 	mod, cm := this.getCurrentModule(wrap, true)
 	if mod != nil {
 		wrap.CurrModule = cm
+		if len(wrap.UrlArgs) >= 2 && wrap.UrlArgs[1] != "" {
+			wrap.CurrSubModule = wrap.UrlArgs[1]
+		}
 		if mod.Back != nil {
 			sidebar_left, content, sidebar_right := mod.Back(wrap)
 

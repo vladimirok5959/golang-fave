@@ -22,8 +22,8 @@ func (this *Modules) RegisterModule_Index() *Module {
 		Order:  0,
 		Icon:   assets.SysSvgIconPage,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "List of pages", Icon: assets.SysSvgIconList},
-			{Mount: "add", Name: "Add new page", Icon: assets.SysSvgIconPlus},
+			{Mount: "default", Name: "List of Pages", Icon: assets.SysSvgIconList},
+			{Mount: "add", Name: "Add New Page", Icon: assets.SysSvgIconPlus},
 		},
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
@@ -40,8 +40,18 @@ func (this *Modules) RegisterModule_Index() *Module {
 			},
 		})
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
-		// Back-end
-		return this.getSidebarModules(wrap), "Index", "Index Sidebar"
+		content := ""
+		sidebar := ""
+		if wrap.CurrSubModule == "" || wrap.CurrSubModule == "default" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "List of Pages"},
+			})
+		} else if wrap.CurrSubModule == "add" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Add New Page"},
+			})
+		}
+		return this.getSidebarModules(wrap), content, sidebar
 	})
 }
 

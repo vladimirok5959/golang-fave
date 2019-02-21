@@ -37,6 +37,7 @@ type Wrapper struct {
 	ConfMysqlExists bool
 	UrlArgs         []string
 	CurrModule      string
+	CurrSubModule   string
 
 	DB   *sql.DB
 	User *utils.MySql_user
@@ -44,19 +45,20 @@ type Wrapper struct {
 
 func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) *Wrapper {
 	return &Wrapper{
-		l:          l,
-		W:          w,
-		R:          r,
-		S:          s,
-		Host:       host,
-		Port:       port,
-		DConfig:    dirConfig,
-		DHtdocs:    dirHtdocs,
-		DLogs:      dirLogs,
-		DTemplate:  dirTemplate,
-		DTmp:       dirTmp,
-		UrlArgs:    []string{},
-		CurrModule: "",
+		l:             l,
+		W:             w,
+		R:             r,
+		S:             s,
+		Host:          host,
+		Port:          port,
+		DConfig:       dirConfig,
+		DHtdocs:       dirHtdocs,
+		DLogs:         dirLogs,
+		DTemplate:     dirTemplate,
+		DTmp:          dirTmp,
+		UrlArgs:       []string{},
+		CurrModule:    "",
+		CurrSubModule: "",
 	}
 }
 
