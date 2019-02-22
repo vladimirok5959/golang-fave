@@ -36,7 +36,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 					DBField:     "email",
 					NameInTable: "Email",
 					CallBack: func(values *[]string) string {
-						email := `<a href="/cp/users/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
+						email := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
 						name := html.EscapeString((*values)[2])
 						if name != "" && (*values)[3] != "" {
 							name += ` ` + (*values)[3]
@@ -54,10 +54,10 @@ func (this *Modules) RegisterModule_Users() *Module {
 					DBField: "last_name",
 				},
 			}, func(values *[]string) string {
-				return `<a class="ico" href="/cp/users/modify/` + (*values)[0] + `/">` +
+				return `<a class="ico" href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` +
 					assets.SysSvgIconEdit + `</a>` +
 					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
-			}, "/cp/users/")
+			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "modify" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Add New User"},
@@ -66,7 +66,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 				{
 					Kind:  builder.DFKHidden,
 					Name:  "action",
-					Value: "users_edit",
+					Value: "users-modify",
 				},
 				{
 					Kind:  builder.DFKHidden,
@@ -77,19 +77,19 @@ func (this *Modules) RegisterModule_Users() *Module {
 					Kind:    builder.DFKText,
 					Caption: "User first name",
 					Name:    "first_name",
-					Value:   "1",
+					Value:   "",
 				},
 				{
 					Kind:    builder.DFKText,
 					Caption: "User last name",
 					Name:    "last_name",
-					Value:   "2",
+					Value:   "",
 				},
 				{
 					Kind:     builder.DFKEmail,
 					Caption:  "User email",
 					Name:     "email",
-					Value:    "3",
+					Value:    "",
 					Required: true,
 				},
 				{
