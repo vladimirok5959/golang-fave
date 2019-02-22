@@ -109,10 +109,12 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Mod
 	}
 
 	// Default module
-	if mod == nil {
-		if m, ok := this.mods["index"]; ok {
-			mod = m
-			modCurr = "index"
+	if !backend || (backend && len(wrap.UrlArgs) <= 0) {
+		if mod == nil {
+			if m, ok := this.mods["index"]; ok {
+				mod = m
+				modCurr = "index"
+			}
 		}
 	}
 
