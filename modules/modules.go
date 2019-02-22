@@ -300,9 +300,30 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 		if len(wrap.UrlArgs) >= 2 && wrap.UrlArgs[1] != "" {
 			wrap.CurrSubModule = wrap.UrlArgs[1]
 		}
+
+		// Search for sub module mount
+		found := false
+		submount := "default"
+		if wrap.CurrSubModule != "" {
+			submount = wrap.CurrSubModule
+		}
+		for _, item := range *mod.Info.Sub {
+			if item.Mount == submount {
+				found = true
+				break
+			}
+		}
+
+		// Display standart 404 error page
+		if !found {
+			return found
+		}
+
+		// Call module function
 		if mod.Back != nil {
 			sidebar_left, content, sidebar_right := mod.Back(wrap)
 
+			// Prepare CP page
 			body_class := "cp"
 			if sidebar_left != "" {
 				body_class = body_class + " cp-sidebar-left"
