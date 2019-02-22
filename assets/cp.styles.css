@@ -225,11 +225,6 @@ body.cp .wrap .sidebar .btn-sidebar {
 	width: 100%;
 }
 
-/* CP module not found page */
-body.cp.cp-404 .wrap .content .scroll {
-	background: url(/assets/sys/bg404.jpg) no-repeat 50% 50%;
-}
-
 /* Admin table */
 .data-table.table-hover tbody tr:hover {
 	background-color: #fffbdf;
