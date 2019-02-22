@@ -53,6 +53,7 @@ func main() {
 
 	// Init mounted resources
 	res := resource.New()
+	res.Add(consts.AssetsSysBg404Jpg, "image/jpeg", assets.CpBg404Jpg)
 	res.Add(consts.AssetsCpScriptsJs, "application/javascript; charset=utf-8", assets.CpScriptsJs)
 	res.Add(consts.AssetsCpStylesCss, "text/css", assets.CpStylesCss)
 	res.Add(consts.AssetsSysBgPng, "image/png", assets.SysBgPng)

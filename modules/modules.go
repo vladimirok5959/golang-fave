@@ -307,7 +307,6 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 			}
 			if content == "" {
 				body_class = body_class + " cp-404"
-				content = "Panel 404"
 			}
 			if sidebar_right != "" {
 				body_class = body_class + " cp-sidebar-right"

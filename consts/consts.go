@@ -17,6 +17,7 @@ const AssetsJqueryJs = AssetsPath + "/jquery.js"
 const AssetsPopperJs = AssetsPath + "/popper.js"
 
 // System resources
+const AssetsSysBg404Jpg = AssetsPath + "/sys/bg404.jpg"
 const AssetsCpScriptsJs = AssetsPath + "/cp/scripts.js"
 const AssetsCpStylesCss = AssetsPath + "/cp/styles.css"
 const AssetsSysBgPng = AssetsPath + "/sys/bg.png"
