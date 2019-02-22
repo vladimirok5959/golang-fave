@@ -19,7 +19,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 		Icon:   assets.SysSvgIconUser,
 		Sub: &[]MISub{
 			{Mount: "default", Name: "List of Users", Icon: assets.SysSvgIconList},
-			{Mount: "add", Name: "Add New User", Icon: assets.SysSvgIconPlus},
+			{Mount: "modify", Name: "Add New User", Icon: assets.SysSvgIconPlus},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
@@ -58,9 +58,51 @@ func (this *Modules) RegisterModule_Users() *Module {
 					assets.SysSvgIconEdit + `</a>` +
 					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/users/")
-		} else if wrap.CurrSubModule == "add" {
+		} else if wrap.CurrSubModule == "modify" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Add New User"},
+			})
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "users_edit",
+				},
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "id",
+					Value: "0",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "User first name",
+					Name:    "first_name",
+					Value:   "1",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "User last name",
+					Name:    "last_name",
+					Value:   "2",
+				},
+				{
+					Kind:     builder.DFKEmail,
+					Caption:  "User email",
+					Name:     "email",
+					Value:    "3",
+					Required: true,
+				},
+				{
+					Kind:    builder.DFKPassword,
+					Caption: "User password",
+					Name:    "password",
+					Hint:    "Leave the field blank to not change the password",
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Add",
+					Target: "add-edit-button",
+				},
 			})
 		}
 		return this.getSidebarModules(wrap), content, sidebar
