@@ -221,10 +221,6 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	margin-right: 5px;
 }
 
-body.cp .wrap .sidebar .btn-sidebar {
-	width: 100%;
-}
-
 /* Admin table */
 .data-table.table-hover tbody tr:hover {
 	background-color: #fffbdf;
