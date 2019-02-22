@@ -104,6 +104,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 					Target: "add-edit-button",
 				},
 			})
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Add</button>`
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})
