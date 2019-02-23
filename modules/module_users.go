@@ -99,6 +99,9 @@ func (this *Modules) RegisterModule_Users() *Module {
 					Hint:    "Leave the field blank to not change the password",
 				},
 				{
+					Kind: builder.DFKMessage,
+				},
+				{
 					Kind:   builder.DFKSubmit,
 					Value:  "Add",
 					Target: "add-edit-button",

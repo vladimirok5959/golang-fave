@@ -13,6 +13,7 @@ const (
 	DFKPassword
 	DFKTextArea
 	DFKSubmit
+	DFKMessage
 )
 
 type DataFormField struct {
@@ -41,7 +42,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 	}
 	result += `</div>`
 	for _, field := range data {
-		if field.Kind != DFKHidden && field.Kind != DFKSubmit {
+		if field.Kind != DFKHidden && field.Kind != DFKSubmit && field.Kind != DFKMessage {
 			if field.CallBack != nil {
 				result += field.CallBack(&field)
 			} else {
@@ -75,6 +76,25 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 			}
 		}
 	}
+
+	// TODO: optimize this...
+
+	for _, field := range data {
+		if field.Kind == DFKMessage {
+			if field.CallBack != nil {
+				result += field.CallBack(&field)
+			} else {
+				result += `<div class="row">`
+				result += `<div class="col-3">`
+				result += `</div>`
+				result += `<div class="col-9">`
+				result += `<div class="sys-messages"></div>`
+				result += `</div>`
+				result += `</div>`
+			}
+		}
+	}
+
 	for _, field := range data {
 		if field.Kind == DFKSubmit {
 			if field.CallBack != nil {
