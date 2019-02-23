@@ -54,7 +54,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				},
 				{
 					DBField:     "name",
-					NameInTable: "Page",
+					NameInTable: "Page / Slug",
 					CallBack: func(values *[]string) string {
 						name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
 						slug := html.EscapeString((*values)[2])
@@ -66,7 +66,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				},
 				{
 					DBField:     "datetime",
-					NameInTable: "Date/Time",
+					NameInTable: "Date / Time",
 				},
 				{
 					DBField:     "status",

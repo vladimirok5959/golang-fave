@@ -34,7 +34,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 				},
 				{
 					DBField:     "email",
-					NameInTable: "Email",
+					NameInTable: "Email / Name",
 					CallBack: func(values *[]string) string {
 						email := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
 						name := html.EscapeString((*values)[2])
@@ -75,26 +75,26 @@ func (this *Modules) RegisterModule_Users() *Module {
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "User first name",
+					Caption: "First Name",
 					Name:    "first_name",
 					Value:   "",
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "User last name",
+					Caption: "Last Name",
 					Name:    "last_name",
 					Value:   "",
 				},
 				{
 					Kind:     builder.DFKEmail,
-					Caption:  "User email",
+					Caption:  "Email",
 					Name:     "email",
 					Value:    "",
 					Required: true,
 				},
 				{
 					Kind:    builder.DFKPassword,
-					Caption: "User password",
+					Caption: "Password",
 					Name:    "password",
 					Hint:    "Leave the field blank to not change the password",
 				},
