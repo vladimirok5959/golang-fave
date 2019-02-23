@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"golang-fave/assets"
@@ -44,6 +45,13 @@ func IsDirExists(path string) bool {
 func IsValidEmail(email string) bool {
 	regexpe := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 	return regexpe.MatchString(email)
+}
+
+func IsNumeric(str string) bool {
+	if _, err := strconv.Atoi(str); err == nil {
+		return true
+	}
+	return false
 }
 
 func FixPath(path string) string {
@@ -165,4 +173,12 @@ func UrlToArray(url string) []string {
 
 func IntToStr(num int) string {
 	return fmt.Sprintf("%d", num)
+}
+
+func StrToInt(str string) int {
+	num, err := strconv.Atoi(str)
+	if err == nil {
+		return num
+	}
+	return 0
 }

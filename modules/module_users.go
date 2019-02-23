@@ -78,6 +78,36 @@ func (this *Modules) RegisterModule_Users() *Module {
 				A_email:      "",
 			}
 
+			if wrap.CurrSubModule == "modify" {
+				if len(wrap.UrlArgs) != 3 {
+					return "", "", ""
+				}
+				if !utils.IsNumeric(wrap.UrlArgs[2]) {
+					return "", "", ""
+				}
+				err := wrap.DB.QueryRow(`
+					SELECT
+						id,
+						first_name,
+						last_name,
+						email
+					FROM
+						users
+					WHERE
+						id = ?
+					LIMIT 1;`,
+					utils.StrToInt(wrap.UrlArgs[2]),
+				).Scan(
+					&data.A_id,
+					&data.A_first_name,
+					&data.A_last_name,
+					&data.A_email,
+				)
+				if err != nil {
+					return "", "", ""
+				}
+			}
+
 			content += builder.DataForm(wrap, []builder.DataFormField{
 				{
 					Kind:  builder.DFKHidden,
