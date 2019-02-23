@@ -171,7 +171,11 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
 		if mod.Mount == wrap.CurrModule {
 			class = " active"
 		}
-		html += `<a class="dropdown-item` + class + `" href="/cp/` + mod.Mount + `/">` + mod.Name + `</a>`
+		href := `/cp/` + mod.Mount + `/`
+		if mod.Mount == "index" {
+			href = `/cp/`
+		}
+		html += `<a class="dropdown-item` + class + `" href="` + href + `">` + mod.Name + `</a>`
 	}
 	return html
 }
