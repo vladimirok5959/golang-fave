@@ -88,38 +88,43 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 		}
 	}
 	result += `</tbody></table>`
-	result += `<nav>`
-	result += `<ul class="pagination" style="margin-bottom:0px;">`
-	class := ""
-	if curr_page <= 1 {
-		class = " disabled"
-	}
-	result += `<li class="page-item` + class + `">`
-	result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page-1) + `" aria-label="Previous">`
-	result += `<span aria-hidden="true">&laquo;</span>`
-	result += `<span class="sr-only">Previous</span>`
-	result += `</a>`
-	result += `</li>`
-	for i := 1; i <= max_pages; i++ {
-		class = ""
-		if i == curr_page {
-			class = " active"
+
+	// Show page navigation only if pages more then one
+	if max_pages > 1 {
+		result += `<nav>`
+		result += `<ul class="pagination" style="margin-bottom:0px;">`
+		class := ""
+		if curr_page <= 1 {
+			class = " disabled"
 		}
 		result += `<li class="page-item` + class + `">`
-		result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", i) + `">` + fmt.Sprintf("%d", i) + `</a>`
+		result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page-1) + `" aria-label="Previous">`
+		result += `<span aria-hidden="true">&laquo;</span>`
+		result += `<span class="sr-only">Previous</span>`
+		result += `</a>`
 		result += `</li>`
+		for i := 1; i <= max_pages; i++ {
+			class = ""
+			if i == curr_page {
+				class = " active"
+			}
+			result += `<li class="page-item` + class + `">`
+			result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", i) + `">` + fmt.Sprintf("%d", i) + `</a>`
+			result += `</li>`
+		}
+		class = ""
+		if curr_page >= max_pages {
+			class = " disabled"
+		}
+		result += `<li class="page-item` + class + `">`
+		result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page+1) + `" aria-label="Next">`
+		result += `<span aria-hidden="true">&raquo;</span>`
+		result += `<span class="sr-only">Next</span>`
+		result += `</a>`
+		result += `</li>`
+		result += `</ul>`
+		result += `</nav>`
 	}
-	class = ""
-	if curr_page >= max_pages {
-		class = " disabled"
-	}
-	result += `<li class="page-item` + class + `">`
-	result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page+1) + `" aria-label="Next">`
-	result += `<span aria-hidden="true">&raquo;</span>`
-	result += `<span class="sr-only">Next</span>`
-	result += `</a>`
-	result += `</li>`
-	result += `</ul>`
-	result += `</nav>`
+
 	return result
 }
