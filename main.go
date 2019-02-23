@@ -53,13 +53,7 @@ func main() {
 
 	// Init mounted resources
 	res := resource.New()
-	res.Add(consts.AssetsCpScriptsJs, "application/javascript; charset=utf-8", assets.CpScriptsJs)
-	res.Add(consts.AssetsCpStylesCss, "text/css", assets.CpStylesCss)
-	res.Add(consts.AssetsSysBgPng, "image/png", assets.SysBgPng)
-	res.Add(consts.AssetsSysFaveIco, "image/x-icon", assets.SysFaveIco)
-	res.Add(consts.AssetsSysLogoPng, "image/png", assets.SysLogoPng)
-	res.Add(consts.AssetsSysLogoSvg, "image/svg+xml", assets.SysLogoSvg)
-	res.Add(consts.AssetsSysStylesCss, "text/css", assets.SysStylesCss)
+	assets.PopulateResources(res)
 
 	// Init static files helper
 	stat := static.New(consts.DirIndexFile)
@@ -75,7 +69,7 @@ func main() {
 		r.URL.Scheme = "http"
 
 		// Mounted assets
-		if res.Response(w, r, func(w http.ResponseWriter, r *http.Request, i *resource.Resource) {
+		if res.Response(w, r, func(w http.ResponseWriter, r *http.Request, i *resource.OneResource) {
 			w.Header().Set("Cache-Control", "public, max-age=31536000")
 		}, nil) {
 			return
