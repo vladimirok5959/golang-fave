@@ -137,14 +137,33 @@ func (this *Modules) RegisterAction_MysqlSetup() *Action {
 
 		// Try to install all tables
 		_, err = db.Query(fmt.Sprintf(
-			"CREATE TABLE `%s`.`users` (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI', `first_name` VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'User first name', `last_name` VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'User last name', `email` VARCHAR(64) NOT NULL COMMENT 'User email', `password` VARCHAR(32) NOT NULL COMMENT 'User password (MD5)', PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+			`CREATE TABLE %s.users (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				first_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'User first name',
+				last_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'User last name',
+				email VARCHAR(64) NOT NULL COMMENT 'User email',
+				password VARCHAR(32) NOT NULL COMMENT 'User password (MD5)',
+				PRIMARY KEY (id)
+			) ENGINE = InnoDB;`,
 			pf_name))
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return
 		}
 		_, err = db.Query(fmt.Sprintf(
-			"CREATE TABLE `%s`.`pages` (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI', `user` int(11) NOT NULL COMMENT 'User id', `name` varchar(255) NOT NULL COMMENT 'Page name', `slug` varchar(255) NOT NULL COMMENT 'Page url part', `content` text NOT NULL COMMENT 'Page content', `meta_title` varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta title', `meta_keywords` varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords', `meta_description` varchar(510) NOT NULL DEFAULT '' COMMENT 'Page meta description', `datetime` datetime NOT NULL COMMENT 'Creation date/time', `status` enum('draft','public','trash') NOT NULL COMMENT 'Page status', PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
+			`CREATE TABLE %s.pages (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				user int(11) NOT NULL COMMENT 'User id',
+				name varchar(255) NOT NULL COMMENT 'Page name',
+				slug varchar(255) NOT NULL COMMENT 'Page url part',
+				content text NOT NULL COMMENT 'Page content',
+				meta_title varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta title',
+				meta_keywords varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords',
+				meta_description varchar(510) NOT NULL DEFAULT '' COMMENT 'Page meta description',
+				datetime datetime NOT NULL COMMENT 'Creation date/time',
+				status enum('draft','public','trash') NOT NULL COMMENT 'Page status',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 			pf_name))
 		if err != nil {
 			wrap.MsgError(err.Error())
@@ -189,8 +208,17 @@ func (this *Modules) RegisterAction_CpFirstUser() *Action {
 		}
 
 		_, err := wrap.DB.Query(
-			"INSERT INTO `users` SET `first_name` = ?, `last_name` = ?, `email` = ?, `password` = MD5(?);",
-			pf_first_name, pf_last_name, pf_email, pf_password)
+			`INSERT INTO users SET
+				first_name = ?,
+				last_name = ?,
+				email = ?,
+				password = MD5(?)
+			;`,
+			pf_first_name,
+			pf_last_name,
+			pf_email,
+			pf_password,
+		)
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return
@@ -231,8 +259,19 @@ func (this *Modules) RegisterAction_CpUserLogin() *Action {
 
 		var user_id int
 		err := wrap.DB.QueryRow(
-			"SELECT `id` FROM `users` WHERE `email` = ? and `password` = MD5(?) LIMIT 1;",
-			pf_email, pf_password).Scan(&user_id)
+			`SELECT
+				id
+			FROM
+				users
+			WHERE
+				email = ? and
+				password = MD5(?)
+			LIMIT 1;`,
+			pf_email,
+			pf_password,
+		).Scan(
+			&user_id,
+		)
 
 		if err != nil && err != sql.ErrNoRows {
 			wrap.MsgError(err.Error())
@@ -290,8 +329,20 @@ func (this *Modules) RegisterAction_CpUserSettings() *Action {
 		if pf_password != "" {
 			// Update with password if set
 			_, err := wrap.DB.Query(
-				"UPDATE `users` SET `first_name` = ?, `last_name` = ?, `email` = ?, `password` = MD5(?) WHERE `id` = ?;",
-				pf_first_name, pf_last_name, pf_email, pf_password, wrap.User.A_id)
+				`UPDATE users SET
+					first_name = ?,
+					last_name = ?,
+					email = ?,
+					password = MD5(?)
+				WHERE
+					id = ?
+				;`,
+				pf_first_name,
+				pf_last_name,
+				pf_email,
+				pf_password,
+				wrap.User.A_id,
+			)
 			if err != nil {
 				wrap.MsgError(err.Error())
 				return
@@ -299,8 +350,18 @@ func (this *Modules) RegisterAction_CpUserSettings() *Action {
 		} else {
 			// Update without password if not set
 			_, err := wrap.DB.Query(
-				"UPDATE `users` SET `first_name` = ?, `last_name` = ?, `email` = ? WHERE `id` = ?;",
-				pf_first_name, pf_last_name, pf_email, wrap.User.A_id)
+				`UPDATE users SET
+					first_name = ?,
+					last_name = ?,
+					email = ?
+				WHERE
+					id = ?
+				;`,
+				pf_first_name,
+				pf_last_name,
+				pf_email,
+				wrap.User.A_id,
+			)
 			if err != nil {
 				wrap.MsgError(err.Error())
 				return

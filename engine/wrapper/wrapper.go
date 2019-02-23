@@ -103,8 +103,26 @@ func (this *Wrapper) LoadSessionUser() bool {
 		return false
 	}
 	user := &utils.MySql_user{}
-	err := this.DB.QueryRow("SELECT `id`, `first_name`, `last_name`, `email`, `password` FROM `users` WHERE `id` = ? LIMIT 1;", this.S.GetInt("UserId", 0)).Scan(
-		&user.A_id, &user.A_first_name, &user.A_last_name, &user.A_email, &user.A_password)
+	err := this.DB.QueryRow(`
+		SELECT
+			id,
+			first_name,
+			last_name,
+			email,
+			password
+		FROM
+			users
+		WHERE
+			id = ?
+		LIMIT 1;`,
+		this.S.GetInt("UserId", 0),
+	).Scan(
+		&user.A_id,
+		&user.A_first_name,
+		&user.A_last_name,
+		&user.A_email,
+		&user.A_password,
+	)
 	if err != nil {
 		return false
 	}

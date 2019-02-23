@@ -75,7 +75,15 @@ func (this *Engine) Process() bool {
 
 	// Show add first user form if no any user in database
 	var count int
-	err = this.Wrap.DB.QueryRow("SELECT COUNT(*) FROM `users`;").Scan(&count)
+	err = this.Wrap.DB.QueryRow(`
+		SELECT
+			COUNT(*)
+		FROM
+			users
+		;`,
+	).Scan(
+		&count,
+	)
 	if err != nil {
 		utils.SystemErrorPageEngine(this.Wrap.W, err)
 		return true
