@@ -54,15 +54,15 @@ func (this *Modules) RegisterModule_Index() *Module {
 				},
 				{
 					DBField:     "name",
-					NameInTable: "Page / Slug",
+					NameInTable: "Page / Alias",
 					CallBack: func(values *[]string) string {
 						name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
-						slug := html.EscapeString((*values)[2])
-						return `<div>` + name + `</div><div><small>` + slug + `</small></div>`
+						alias := html.EscapeString((*values)[2])
+						return `<div>` + name + `</div><div><small>` + alias + `</small></div>`
 					},
 				},
 				{
-					DBField: "slug",
+					DBField: "alias",
 				},
 				{
 					DBField:     "datetime",
@@ -155,7 +155,7 @@ func (this *Modules) RegisterAction_MysqlSetup() *Action {
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Page name',
-				slug varchar(255) NOT NULL COMMENT 'Page url part',
+				alias varchar(255) NOT NULL COMMENT 'Page url part',
 				content text NOT NULL COMMENT 'Page content',
 				meta_title varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta title',
 				meta_keywords varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords',

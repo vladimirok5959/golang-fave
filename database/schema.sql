@@ -11,7 +11,7 @@ CREATE TABLE `pages` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	`user` int(11) NOT NULL COMMENT 'User id',
 	`name` varchar(255) NOT NULL COMMENT 'Page name',
-	`slug` varchar(255) NOT NULL COMMENT 'Page url part',
+	`alias` varchar(255) NOT NULL COMMENT 'Page url part',
 	`content` text NOT NULL COMMENT 'Page content',
 	`meta_title` varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta title',
 	`meta_keywords` varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords',
