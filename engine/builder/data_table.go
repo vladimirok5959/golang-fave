@@ -60,32 +60,36 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 	result += `</tr>`
 	result += `</thead>`
 	result += `<tbody>`
-	rows, err := wrap.DB.Query(sql, limit_offset, pear_page)
-	if err == nil {
-		values := make([]string, len(data))
-		scan := make([]interface{}, len(values))
-		for i := range values {
-			scan[i] = &values[i]
-		}
-		for rows.Next() {
-			err = rows.Scan(scan...)
-			if err == nil {
-				result += `<tr>`
-				for i, val := range values {
-					if data[i].NameInTable != "" {
-						if data[i].CallBack == nil {
-							result += `<td class="col_` + data[i].DBField + `">` + html.EscapeString(string(val)) + `</td>`
-						} else {
-							result += `<td class="col_` + data[i].DBField + `">` + data[i].CallBack(&values) + `</td>`
+	if num > 0 {
+		rows, err := wrap.DB.Query(sql, limit_offset, pear_page)
+		if err == nil {
+			values := make([]string, len(data))
+			scan := make([]interface{}, len(values))
+			for i := range values {
+				scan[i] = &values[i]
+			}
+			for rows.Next() {
+				err = rows.Scan(scan...)
+				if err == nil {
+					result += `<tr>`
+					for i, val := range values {
+						if data[i].NameInTable != "" {
+							if data[i].CallBack == nil {
+								result += `<td class="col_` + data[i].DBField + `">` + html.EscapeString(string(val)) + `</td>`
+							} else {
+								result += `<td class="col_` + data[i].DBField + `">` + data[i].CallBack(&values) + `</td>`
+							}
 						}
 					}
+					if action != nil {
+						result += `<td class="col_action">` + action(&values) + `</td>`
+					}
+					result += `</tr>`
 				}
-				if action != nil {
-					result += `<td class="col_action">` + action(&values) + `</td>`
-				}
-				result += `</tr>`
 			}
 		}
+	} else {
+		result += `<tr><td colspan="50">No any data found</td></tr>`
 	}
 	result += `</tbody></table>`
 
