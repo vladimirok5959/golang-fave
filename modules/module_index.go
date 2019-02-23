@@ -5,11 +5,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"fmt"
+	"html"
 	"os"
 	"strconv"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
+	"golang-fave/engine/builder"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -46,6 +48,35 @@ func (this *Modules) RegisterModule_Index() *Module {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "List of Pages"},
 			})
+			content += builder.DataTable(wrap, "pages", "id", "DESC", []builder.DataTableRow{
+				{
+					DBField: "id",
+				},
+				{
+					DBField:     "name",
+					NameInTable: "Page",
+					CallBack: func(values *[]string) string {
+						name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
+						slug := html.EscapeString((*values)[2])
+						return `<div>` + name + `</div><div><small>` + slug + `</small></div>`
+					},
+				},
+				{
+					DBField: "slug",
+				},
+				{
+					DBField:     "datetime",
+					NameInTable: "Date/Time",
+				},
+				{
+					DBField:     "status",
+					NameInTable: "Active",
+				},
+			}, func(values *[]string) string {
+				return `<a class="ico" href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` +
+					assets.SysSvgIconEdit + `</a>` +
+					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
+			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Add New Page"},
