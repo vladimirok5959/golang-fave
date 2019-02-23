@@ -10,5 +10,5 @@ type MySql_page struct {
 	A_meta_keywords    string
 	A_meta_description string
 	A_datetime         int
-	A_status           int
+	A_active           int
 }

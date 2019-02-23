@@ -105,6 +105,12 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
+	// Only active admins can use backend
+	if !(this.Wrap.User.A_admin == 1 && this.Wrap.User.A_active == 1) {
+		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpLogin, nil)
+		return true
+	}
+
 	// Render backend
 	return this.Mods.XXXBackEnd(this.Wrap)
 }

@@ -284,3 +284,9 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 .data-form textarea {
 	min-height: 5.4rem;
 }
+
+.data-form input[type=checkbox].form-control {
+	cursor: pointer;
+	display: inline-block;
+	width: calc(2.25rem + 0px);
+}

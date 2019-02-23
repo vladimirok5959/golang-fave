@@ -55,6 +55,14 @@ func (this *Modules) RegisterModule_Users() *Module {
 				{
 					DBField: "last_name",
 				},
+				{
+					DBField:     "admin",
+					NameInTable: "Admin",
+				},
+				{
+					DBField:     "active",
+					NameInTable: "Active",
+				},
 			}, func(values *[]string) string {
 				return `<a class="ico" href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` +
 					assets.SysSvgIconEdit + `</a>` +
@@ -76,6 +84,8 @@ func (this *Modules) RegisterModule_Users() *Module {
 				A_first_name: "",
 				A_last_name:  "",
 				A_email:      "",
+				A_admin:      0,
+				A_active:     0,
 			}
 
 			if wrap.CurrSubModule == "modify" {
@@ -90,7 +100,9 @@ func (this *Modules) RegisterModule_Users() *Module {
 						id,
 						first_name,
 						last_name,
-						email
+						email,
+						admin,
+						active
 					FROM
 						users
 					WHERE
@@ -102,10 +114,19 @@ func (this *Modules) RegisterModule_Users() *Module {
 					&data.A_first_name,
 					&data.A_last_name,
 					&data.A_email,
+					&data.A_admin,
+					&data.A_active,
 				)
 				if err != nil {
 					return "", "", ""
 				}
+			}
+
+			pass_req := true
+			pass_hint := ""
+			if wrap.CurrSubModule == "modify" {
+				pass_req = false
+				pass_hint = "Leave the field blank to not change the password"
 			}
 
 			content += builder.DataForm(wrap, []builder.DataFormField{
@@ -139,10 +160,23 @@ func (this *Modules) RegisterModule_Users() *Module {
 					Required: true,
 				},
 				{
-					Kind:    builder.DFKPassword,
-					Caption: "Password",
-					Name:    "password",
-					Hint:    "Leave the field blank to not change the password",
+					Kind:     builder.DFKPassword,
+					Caption:  "Password",
+					Name:     "password",
+					Required: pass_req,
+					Hint:     pass_hint,
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Admin",
+					Name:    "admin",
+					Value:   utils.IntToStr(data.A_admin),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Active",
+					Name:    "active",
+					Value:   utils.IntToStr(data.A_active),
 				},
 				{
 					Kind: builder.DFKMessage,
@@ -153,7 +187,12 @@ func (this *Modules) RegisterModule_Users() *Module {
 					Target: "add-edit-button",
 				},
 			})
-			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Add</button>`
+
+			if wrap.CurrSubModule == "add" {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Add</button>`
+			} else {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+			}
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})

@@ -12,6 +12,7 @@ const (
 	DFKEmail
 	DFKPassword
 	DFKTextArea
+	DFKCheckBox
 	DFKSubmit
 	DFKMessage
 )
@@ -65,6 +66,12 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 					result += `<input class="form-control" type="password" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKTextArea {
 					result += `<textarea class="form-control" id="lbl_` + field.Name + `" name="` + field.Name + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.Value) + `</textarea>`
+				} else if field.Kind == DFKCheckBox {
+					checked := ""
+					if field.Value != "0" {
+						checked = " checked"
+					}
+					result += `<input class="form-control" type="checkbox" id="lbl_` + field.Name + `" name="` + field.Name + `" value="1"` + `" autocomplete="off"` + required + checked + `>`
 				}
 				result += `</div>`
 				if field.Hint != "" {

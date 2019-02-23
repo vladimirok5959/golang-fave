@@ -109,7 +109,9 @@ func (this *Wrapper) LoadSessionUser() bool {
 			first_name,
 			last_name,
 			email,
-			password
+			password,
+			admin,
+			active
 		FROM
 			users
 		WHERE
@@ -122,6 +124,8 @@ func (this *Wrapper) LoadSessionUser() bool {
 		&user.A_last_name,
 		&user.A_email,
 		&user.A_password,
+		&user.A_admin,
+		&user.A_active,
 	)
 	if err != nil {
 		return false

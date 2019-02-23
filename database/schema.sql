@@ -4,6 +4,8 @@ CREATE TABLE `users` (
 	`last_name` varchar(64) NOT NULL DEFAULT '' COMMENT 'User last name',
 	`email` varchar(64) NOT NULL COMMENT 'User email',
 	`password` varchar(32) NOT NULL COMMENT 'User password (MD5)',
+	`admin` int(1) NOT NULL COMMENT 'Is admin user or not',
+	`active` int(1) NOT NULL COMMENT 'Is active user or not',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -17,6 +19,6 @@ CREATE TABLE `pages` (
 	`meta_keywords` varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords',
 	`meta_description` varchar(510) NOT NULL DEFAULT '' COMMENT 'Page meta description',
 	`datetime` datetime NOT NULL COMMENT 'Creation date/time',
-	`status` enum('draft','public','trash') NOT NULL COMMENT 'Page status',
+	`active` int(1) NOT NULL COMMENT 'Is active page or not',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

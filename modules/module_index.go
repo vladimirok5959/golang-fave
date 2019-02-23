@@ -70,7 +70,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					NameInTable: "Date / Time",
 				},
 				{
-					DBField:     "status",
+					DBField:     "active",
 					NameInTable: "Active",
 				},
 			}, func(values *[]string) string {
@@ -144,6 +144,8 @@ func (this *Modules) RegisterAction_MysqlSetup() *Action {
 				last_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'User last name',
 				email VARCHAR(64) NOT NULL COMMENT 'User email',
 				password VARCHAR(32) NOT NULL COMMENT 'User password (MD5)',
+				admin int(1) NOT NULL COMMENT 'Is admin user or not',
+				active int(1) NOT NULL COMMENT 'Is active user or not',
 				PRIMARY KEY (id)
 			) ENGINE = InnoDB;`,
 			pf_name))
@@ -162,7 +164,7 @@ func (this *Modules) RegisterAction_MysqlSetup() *Action {
 				meta_keywords varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords',
 				meta_description varchar(510) NOT NULL DEFAULT '' COMMENT 'Page meta description',
 				datetime datetime NOT NULL COMMENT 'Creation date/time',
-				status enum('draft','public','trash') NOT NULL COMMENT 'Page status',
+				active int(1) NOT NULL COMMENT 'Is active page or not',
 				PRIMARY KEY (id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 			pf_name))
@@ -213,7 +215,9 @@ func (this *Modules) RegisterAction_CpFirstUser() *Action {
 				first_name = ?,
 				last_name = ?,
 				email = ?,
-				password = MD5(?)
+				password = MD5(?),
+				admin = 1,
+				active = 1
 			;`,
 			pf_first_name,
 			pf_last_name,
@@ -266,7 +270,9 @@ func (this *Modules) RegisterAction_CpUserLogin() *Action {
 				users
 			WHERE
 				email = ? and
-				password = MD5(?)
+				password = MD5(?) and
+				admin = 1 and
+				active = 1
 			LIMIT 1;`,
 			pf_email,
 			pf_password,
