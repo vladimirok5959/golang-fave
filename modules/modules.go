@@ -330,6 +330,11 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 		if mod.Back != nil {
 			sidebar_left, content, sidebar_right := mod.Back(wrap)
 
+			// Display standart 404 error page
+			if sidebar_left == "" && content == "" && sidebar_right == "" {
+				return false
+			}
+
 			// Prepare CP page
 			body_class := "cp"
 			if sidebar_left != "" {
