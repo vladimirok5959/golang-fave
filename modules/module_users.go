@@ -214,6 +214,16 @@ func (this *Modules) RegisterAction_CpAddModifyUser() *Action {
 		pf_last_name := wrap.R.FormValue("last_name")
 		pf_email := wrap.R.FormValue("email")
 		pf_password := wrap.R.FormValue("password")
+		pf_admin := wrap.R.FormValue("admin")
+		pf_active := wrap.R.FormValue("active")
+
+		if pf_admin == "" {
+			pf_admin = "0"
+		}
+
+		if pf_active == "" {
+			pf_active = "0"
+		}
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)
@@ -241,12 +251,16 @@ func (this *Modules) RegisterAction_CpAddModifyUser() *Action {
 					first_name = ?,
 					last_name = ?,
 					email = ?,
-					password = MD5(?)
+					password = MD5(?),
+					admin = ?,
+					active = ?
 				;`,
 				pf_first_name,
 				pf_last_name,
 				pf_email,
 				pf_password,
+				pf_admin,
+				pf_active,
 			)
 			if err != nil {
 				wrap.MsgError(err.Error())
@@ -260,13 +274,17 @@ func (this *Modules) RegisterAction_CpAddModifyUser() *Action {
 					`UPDATE users SET
 						first_name = ?,
 						last_name = ?,
-						email = ?
+						email = ?,
+						admin = ?,
+						active = ?
 					WHERE
 						id = ?
 					;`,
 					pf_first_name,
 					pf_last_name,
 					pf_email,
+					pf_admin,
+					pf_active,
 					utils.StrToInt(pf_id),
 				)
 				if err != nil {
