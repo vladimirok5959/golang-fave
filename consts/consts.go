@@ -54,6 +54,7 @@ type TmplData struct {
 
 type TmplDataCpBase struct {
 	Title              string
+	Caption            string
 	BodyClasses        string
 	UserId             int
 	UserFirstName      string
