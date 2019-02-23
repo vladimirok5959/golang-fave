@@ -158,3 +158,98 @@ func (this *Modules) RegisterModule_Users() *Module {
 		return this.getSidebarModules(wrap), content, sidebar
 	})
 }
+
+func (this *Modules) RegisterAction_CpAddModifyUser() *Action {
+	return this.newAction(AInfo{
+		WantDB: true,
+		Mount:  "users-modify",
+	}, func(wrap *wrapper.Wrapper) {
+		pf_id := wrap.R.FormValue("id")
+		pf_first_name := wrap.R.FormValue("first_name")
+		pf_last_name := wrap.R.FormValue("last_name")
+		pf_email := wrap.R.FormValue("email")
+		pf_password := wrap.R.FormValue("password")
+
+		if !utils.IsNumeric(pf_id) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		if pf_email == "" {
+			wrap.MsgError(`Please specify user email`)
+			return
+		}
+
+		if !utils.IsValidEmail(pf_email) {
+			wrap.MsgError(`Please specify correct user email`)
+			return
+		}
+
+		if pf_id == "0" {
+			// Add new user
+			if pf_password == "" {
+				wrap.MsgError(`Please specify user password`)
+				return
+			}
+			_, err := wrap.DB.Query(
+				`INSERT INTO users SET
+					first_name = ?,
+					last_name = ?,
+					email = ?,
+					password = MD5(?)
+				;`,
+				pf_first_name,
+				pf_last_name,
+				pf_email,
+				pf_password,
+			)
+			if err != nil {
+				wrap.MsgError(err.Error())
+				return
+			}
+			wrap.Write(`window.location='/cp/users/';`)
+		} else {
+			// Update user
+			if pf_password == "" {
+				_, err := wrap.DB.Query(
+					`UPDATE users SET
+						first_name = ?,
+						last_name = ?,
+						email = ?
+					WHERE
+						id = ?
+					;`,
+					pf_first_name,
+					pf_last_name,
+					pf_email,
+					utils.StrToInt(pf_id),
+				)
+				if err != nil {
+					wrap.MsgError(err.Error())
+					return
+				}
+			} else {
+				_, err := wrap.DB.Query(
+					`UPDATE users SET
+						first_name = ?,
+						last_name = ?,
+						email = ?,
+						password = MD5(?)
+					WHERE
+						id = ?
+					;`,
+					pf_first_name,
+					pf_last_name,
+					pf_email,
+					pf_password,
+					utils.StrToInt(pf_id),
+				)
+				if err != nil {
+					wrap.MsgError(err.Error())
+					return
+				}
+			}
+			wrap.Write(`window.location='/cp/users/modify/` + pf_id + `/';`)
+		}
+	})
+}
