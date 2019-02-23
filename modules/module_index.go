@@ -26,7 +26,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		Sub: &[]MISub{
 			{Mount: "default", Name: "List of Pages", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "add", Name: "Add New Page", Show: true, Icon: assets.SysSvgIconPlus},
-			{Mount: "modify", Name: "Modify page", Show: false},
+			{Mount: "modify", Name: "Modify Page", Show: false},
 		},
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end

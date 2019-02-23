@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"html/template"
 	"net/http"
 	"os"
@@ -160,4 +161,8 @@ func UrlToArray(url string) []string {
 	} else {
 		return strings.Split(url_buff, "/")
 	}
+}
+
+func IntToStr(num int) string {
+	return fmt.Sprintf("%d", num)
 }

@@ -7,6 +7,7 @@ import (
 	"golang-fave/consts"
 	"golang-fave/engine/builder"
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterModule_Users() *Module {
@@ -20,7 +21,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 		Sub: &[]MISub{
 			{Mount: "default", Name: "List of Users", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "add", Name: "Add New User", Show: true, Icon: assets.SysSvgIconPlus},
-			{Mount: "modify", Name: "Modify user", Show: false},
+			{Mount: "modify", Name: "Modify User", Show: false},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
@@ -60,9 +61,23 @@ func (this *Modules) RegisterModule_Users() *Module {
 					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
-			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-				{Name: "Add New User"},
-			})
+			if wrap.CurrSubModule == "add" {
+				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+					{Name: "Add New User"},
+				})
+			} else {
+				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+					{Name: "Modify User"},
+				})
+			}
+
+			data := utils.MySql_user{
+				A_id:         0,
+				A_first_name: "",
+				A_last_name:  "",
+				A_email:      "",
+			}
+
 			content += builder.DataForm(wrap, []builder.DataFormField{
 				{
 					Kind:  builder.DFKHidden,
@@ -72,25 +87,25 @@ func (this *Modules) RegisterModule_Users() *Module {
 				{
 					Kind:  builder.DFKHidden,
 					Name:  "id",
-					Value: "0",
+					Value: utils.IntToStr(data.A_id),
 				},
 				{
 					Kind:    builder.DFKText,
 					Caption: "First Name",
 					Name:    "first_name",
-					Value:   "",
+					Value:   data.A_first_name,
 				},
 				{
 					Kind:    builder.DFKText,
 					Caption: "Last Name",
 					Name:    "last_name",
-					Value:   "",
+					Value:   data.A_last_name,
 				},
 				{
 					Kind:     builder.DFKEmail,
 					Caption:  "Email",
 					Name:     "email",
-					Value:    "",
+					Value:    data.A_email,
 					Required: true,
 				},
 				{
