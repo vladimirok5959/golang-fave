@@ -15,7 +15,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		System: true,
 		Icon:   assets.SysSvgIconGear,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "Main Settings", Icon: assets.SysSvgIconList},
+			{Mount: "default", Name: "Main Settings", Show: true, Icon: assets.SysSvgIconList},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
