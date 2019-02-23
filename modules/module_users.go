@@ -18,8 +18,9 @@ func (this *Modules) RegisterModule_Users() *Module {
 		System: true,
 		Icon:   assets.SysSvgIconUser,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "List of Users", Icon: assets.SysSvgIconList},
-			{Mount: "modify", Name: "Add New User", Icon: assets.SysSvgIconPlus},
+			{Mount: "default", Name: "List of Users", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "add", Name: "Add New User", Show: true, Icon: assets.SysSvgIconPlus},
+			{Mount: "modify", Name: "Modify user", Show: false},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
@@ -58,7 +59,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 					assets.SysSvgIconEdit + `</a>` +
 					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
-		} else if wrap.CurrSubModule == "modify" {
+		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Add New User"},
 			})

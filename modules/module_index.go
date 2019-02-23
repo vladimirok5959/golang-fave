@@ -24,8 +24,9 @@ func (this *Modules) RegisterModule_Index() *Module {
 		Order:  0,
 		Icon:   assets.SysSvgIconPage,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "List of Pages", Icon: assets.SysSvgIconList},
-			{Mount: "add", Name: "Add New Page", Icon: assets.SysSvgIconPlus},
+			{Mount: "default", Name: "List of Pages", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "add", Name: "Add New Page", Show: true, Icon: assets.SysSvgIconPlus},
+			{Mount: "modify", Name: "Modify page", Show: false},
 		},
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
@@ -77,7 +78,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					assets.SysSvgIconEdit + `</a>` +
 					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
-		} else if wrap.CurrSubModule == "add" {
+		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Add New Page"},
 			})

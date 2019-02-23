@@ -18,6 +18,7 @@ type MISub struct {
 	Mount string
 	Name  string
 	Icon  string
+	Show  bool
 }
 
 type MInfo struct {
@@ -140,21 +141,23 @@ func (this *Modules) getSidebarModuleSubMenu(wrap *wrapper.Wrapper, mod *MInfo) 
 	html := ``
 	if mod.Sub != nil {
 		for _, item := range *mod.Sub {
-			class := ""
-			if (item.Mount == "default" && len(wrap.UrlArgs) <= 1) || (len(wrap.UrlArgs) >= 2 && item.Mount == wrap.UrlArgs[1]) {
-				class = " active"
+			if item.Show {
+				class := ""
+				if (item.Mount == "default" && len(wrap.UrlArgs) <= 1) || (len(wrap.UrlArgs) >= 2 && item.Mount == wrap.UrlArgs[1]) {
+					class = " active"
+				}
+				icon := item.Icon
+				if icon == "" {
+					icon = assets.SysSvgIconGear
+				}
+				href := "/cp/" + mod.Mount + "/" + item.Mount + "/"
+				if mod.Mount == "index" && item.Mount == "default" {
+					href = "/cp/"
+				} else if item.Mount == "default" {
+					href = "/cp/" + mod.Mount + "/"
+				}
+				html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + item.Name + `</a></li>`
 			}
-			icon := item.Icon
-			if icon == "" {
-				icon = assets.SysSvgIconGear
-			}
-			href := "/cp/" + mod.Mount + "/" + item.Mount + "/"
-			if mod.Mount == "index" && item.Mount == "default" {
-				href = "/cp/"
-			} else if item.Mount == "default" {
-				href = "/cp/" + mod.Mount + "/"
-			}
-			html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + item.Name + `</a></li>`
 		}
 		if html != "" {
 			html = `<ul class="nav flex-column">` + html + `</ul>`
