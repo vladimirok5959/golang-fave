@@ -336,7 +336,7 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 			}
 
 			wrap.RenderBackEnd(assets.TmplCpBase, consts.TmplDataCpBase{
-				Title:              "Fave " + consts.ServerVersion,
+				Title:              wrap.CurrHost + " - Fave " + consts.ServerVersion,
 				BodyClasses:        body_class,
 				UserId:             wrap.User.A_id,
 				UserFirstName:      wrap.User.A_first_name,

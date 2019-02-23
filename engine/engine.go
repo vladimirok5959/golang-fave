@@ -19,8 +19,8 @@ type Engine struct {
 	Mods *modules.Modules
 }
 
-func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
-	wrap := wrapper.New(l, w, r, s, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp)
+func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
+	wrap := wrapper.New(l, w, r, s, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp)
 	eng := &Engine{
 		Wrap: wrap,
 		Mods: m,

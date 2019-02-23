@@ -83,8 +83,10 @@ func main() {
 
 		// Host and port
 		host, port := utils.ExtractHostPort(r.Host, false)
+		curr_host := host
 		vhost_dir := ParamWwwDir + string(os.PathSeparator) + host
 		if !utils.IsDirExists(vhost_dir) {
+			curr_host = "localhost"
 			vhost_dir = ParamWwwDir + string(os.PathSeparator) + "localhost"
 		}
 
@@ -125,7 +127,7 @@ func main() {
 		defer sess.Close()
 
 		// Logic
-		if engine.Response(lg, mods, w, r, sess, host, port, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
+		if engine.Response(lg, mods, w, r, sess, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
 			return
 		}
 

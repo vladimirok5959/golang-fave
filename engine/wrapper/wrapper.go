@@ -24,8 +24,9 @@ type Wrapper struct {
 	R *http.Request
 	S *session.Session
 
-	Host string
-	Port string
+	Host     string
+	Port     string
+	CurrHost string
 
 	DConfig   string
 	DHtdocs   string
@@ -43,7 +44,7 @@ type Wrapper struct {
 	User *utils.MySql_user
 }
 
-func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) *Wrapper {
+func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) *Wrapper {
 	return &Wrapper{
 		l:             l,
 		W:             w,
@@ -51,6 +52,7 @@ func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Se
 		S:             s,
 		Host:          host,
 		Port:          port,
+		CurrHost:      chost,
 		DConfig:       dirConfig,
 		DHtdocs:       dirHtdocs,
 		DLogs:         dirLogs,
