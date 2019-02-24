@@ -221,6 +221,17 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	margin-right: 5px;
 }
 
+/* SVG colors */
+.svg-green svg {
+	fill: currentColor;
+	color: #28a745;
+}
+
+.svg-red svg {
+	fill: currentColor;
+	color: #cb2431;
+}
+
 /* Admin table */
 .data-table.table-hover tbody tr:hover {
 	background-color: #fffbdf;

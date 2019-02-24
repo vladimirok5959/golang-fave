@@ -6,7 +6,7 @@ import (
 
 func CheckBox(value int) string {
 	if value > 0 {
-		return assets.SysSvgIconChecked
+		return `<span class="svg-green">` + assets.SysSvgIconChecked + `</span>`
 	}
-	return assets.SysSvgIconAlert
+	return `<span class="svg-red">` + assets.SysSvgIconError + `</span>`
 }
