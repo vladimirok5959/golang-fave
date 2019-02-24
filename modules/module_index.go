@@ -185,10 +185,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 	})
 }
 
-func (this *Modules) RegisterAction_CpFirstUser() *Action {
+func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 	return this.newAction(AInfo{
 		WantDB: true,
-		Mount:  "first-user",
+		Mount:  "index-first-user",
 	}, func(wrap *wrapper.Wrapper) {
 		pf_first_name := wrap.R.FormValue("first_name")
 		pf_last_name := wrap.R.FormValue("last_name")
