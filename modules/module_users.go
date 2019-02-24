@@ -206,8 +206,9 @@ func (this *Modules) RegisterModule_Users() *Module {
 
 func (this *Modules) RegisterAction_CpAddModifyUser() *Action {
 	return this.newAction(AInfo{
-		WantDB: true,
-		Mount:  "users-modify",
+		WantDB:    true,
+		Mount:     "users-modify",
+		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_id := wrap.R.FormValue("id")
 		pf_first_name := wrap.R.FormValue("first_name")

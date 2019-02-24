@@ -39,10 +39,11 @@ type Module struct {
 }
 
 type AInfo struct {
-	Id       string
-	WantDB   bool
-	Mount    string
-	WantUser bool
+	Id        string
+	WantDB    bool
+	Mount     string
+	WantUser  bool
+	WantAdmin bool
 }
 
 type Action struct {
@@ -262,9 +263,21 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 						}
 						defer wrap.DB.Close()
 					}
-					if act.Info.WantUser {
+					if act.Info.WantUser || act.Info.WantAdmin {
 						if !wrap.LoadSessionUser() {
 							wrap.MsgError(`You must be loginned to run this action`)
+							return true
+						}
+						if wrap.User.A_active <= 0 {
+							if !wrap.LoadSessionUser() {
+								wrap.MsgError(`You do not have rights to run this action`)
+								return true
+							}
+						}
+					}
+					if act.Info.WantAdmin && wrap.User.A_admin <= 0 {
+						if !wrap.LoadSessionUser() {
+							wrap.MsgError(`You do not have rights to run this action`)
 							return true
 						}
 					}
