@@ -204,7 +204,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 	})
 }
 
-func (this *Modules) RegisterAction_CpAddModifyUser() *Action {
+func (this *Modules) RegisterAction_UsersModify() *Action {
 	return this.newAction(AInfo{
 		WantDB:    true,
 		Mount:     "users-modify",
@@ -315,5 +315,15 @@ func (this *Modules) RegisterAction_CpAddModifyUser() *Action {
 			}
 			wrap.Write(`window.location='/cp/users/modify/` + pf_id + `/';`)
 		}
+	})
+}
+
+func (this *Modules) RegisterAction_UsersDelete() *Action {
+	return this.newAction(AInfo{
+		WantDB:    true,
+		Mount:     "users-delete",
+		WantAdmin: true,
+	}, func(wrap *wrapper.Wrapper) {
+		// pf_id := wrap.R.FormValue("id")
 	})
 }
