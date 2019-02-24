@@ -298,10 +298,10 @@ func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 	})
 }
 
-func (this *Modules) RegisterAction_CpUserLogout() *Action {
+func (this *Modules) RegisterAction_IndexUserLogout() *Action {
 	return this.newAction(AInfo{
 		WantDB:   true,
-		Mount:    "singout",
+		Mount:    "index-user-logout",
 		WantUser: true,
 	}, func(wrap *wrapper.Wrapper) {
 		// Reset session var

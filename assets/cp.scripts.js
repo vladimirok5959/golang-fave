@@ -36,12 +36,12 @@ function AjaxFail() {
 	window.location.reload(false);
 }
 
-function ActionSingOut() {
+function ActionIndexUserLogout() {
 	$.ajax({
 		type: "POST",
 		url: '/cp/',
 		data: {
-			action: 'singout',
+			action: 'index-user-logout',
 		}
 	}).done(function(data) {
 		AjaxDone(data)
