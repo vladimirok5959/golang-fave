@@ -241,6 +241,13 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 			return
 		}
 
+		// First user always super admin
+		// Rewrite active and admin status
+		if pf_id == "1" {
+			pf_admin = "1"
+			pf_active = "1"
+		}
+
 		if pf_id == "0" {
 			// Add new user
 			if pf_password == "" {
