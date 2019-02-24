@@ -87,10 +87,10 @@ func (this *Modules) RegisterModule_Index() *Module {
 	})
 }
 
-func (this *Modules) RegisterAction_MysqlSetup() *Action {
+func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 	return this.newAction(AInfo{
 		WantDB: false,
-		Mount:  "mysql",
+		Mount:  "index-mysql-setup",
 	}, func(wrap *wrapper.Wrapper) {
 		pf_host := wrap.R.FormValue("host")
 		pf_port := wrap.R.FormValue("port")
