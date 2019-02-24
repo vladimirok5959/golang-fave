@@ -312,10 +312,10 @@ func (this *Modules) RegisterAction_IndexUserLogout() *Action {
 	})
 }
 
-func (this *Modules) RegisterAction_CpUserSettings() *Action {
+func (this *Modules) RegisterAction_IndexUserUpdateProfile() *Action {
 	return this.newAction(AInfo{
 		WantDB:   true,
-		Mount:    "user-settings",
+		Mount:    "index-user-update-profile",
 		WantUser: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_first_name := wrap.R.FormValue("first_name")
