@@ -234,10 +234,10 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 	})
 }
 
-func (this *Modules) RegisterAction_CpUserLogin() *Action {
+func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 	return this.newAction(AInfo{
 		WantDB: true,
-		Mount:  "signin",
+		Mount:  "index-user-sign-in",
 	}, func(wrap *wrapper.Wrapper) {
 		pf_email := wrap.R.FormValue("email")
 		pf_password := wrap.R.FormValue("password")
