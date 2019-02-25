@@ -267,7 +267,17 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	border-top: 1px solid #dee2e6;
 }
 
+/* Admin table: table_pages */
+.data-table.table_pages .col_active {
+	width: 85px;
+}
+
 /* Admin table: table_users */
+.data-table.table_users .col_active,
+.data-table.table_users .col_admin {
+	width: 85px;
+}
+
 .data-table.table_users .col_action {
 	width: 100px;
 	text-align: right;
