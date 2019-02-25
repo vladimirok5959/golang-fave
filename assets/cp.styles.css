@@ -272,6 +272,11 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	width: 85px;
 }
 
+.data-table.table_pages .col_action {
+	width: 100px;
+	text-align: right;
+}
+
 /* Admin table: table_users */
 .data-table.table_users .col_active,
 .data-table.table_users .col_admin {
