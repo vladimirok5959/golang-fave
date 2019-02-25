@@ -56,15 +56,15 @@ func (this *Modules) RegisterModule_Users() *Module {
 					DBField: "last_name",
 				},
 				{
-					DBField:     "admin",
-					NameInTable: "Admin",
+					DBField:     "active",
+					NameInTable: "Active",
 					CallBack: func(values *[]string) string {
 						return builder.CheckBox(utils.StrToInt((*values)[4]))
 					},
 				},
 				{
-					DBField:     "active",
-					NameInTable: "Active",
+					DBField:     "admin",
+					NameInTable: "Admin",
 					CallBack: func(values *[]string) string {
 						return builder.CheckBox(utils.StrToInt((*values)[5]))
 					},
@@ -174,15 +174,15 @@ func (this *Modules) RegisterModule_Users() *Module {
 				},
 				{
 					Kind:    builder.DFKCheckBox,
-					Caption: "Admin",
-					Name:    "admin",
-					Value:   utils.IntToStr(data.A_admin),
-				},
-				{
-					Kind:    builder.DFKCheckBox,
 					Caption: "Active",
 					Name:    "active",
 					Value:   utils.IntToStr(data.A_active),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Admin",
+					Name:    "admin",
+					Value:   utils.IntToStr(data.A_admin),
 				},
 				{
 					Kind: builder.DFKMessage,
