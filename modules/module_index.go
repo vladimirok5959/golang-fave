@@ -79,9 +79,138 @@ func (this *Modules) RegisterModule_Index() *Module {
 					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
-			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-				{Name: "Add New Page"},
+			if wrap.CurrSubModule == "add" {
+				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+					{Name: "Add New Page"},
+				})
+			} else {
+				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+					{Name: "Modify Page"},
+				})
+			}
+
+			data := utils.MySql_page{
+				A_id:               0,
+				A_user:             0,
+				A_name:             "",
+				A_alias:            "",
+				A_content:          "",
+				A_meta_title:       "",
+				A_meta_keywords:    "",
+				A_meta_description: "",
+				A_datetime:         0,
+				A_active:           0,
+			}
+
+			if wrap.CurrSubModule == "modify" {
+				if len(wrap.UrlArgs) != 3 {
+					return "", "", ""
+				}
+				if !utils.IsNumeric(wrap.UrlArgs[2]) {
+					return "", "", ""
+				}
+				err := wrap.DB.QueryRow(`
+					SELECT
+						id,
+						user,
+						name,
+						alias,
+						content,
+						meta_title,
+						meta_keywords,
+						meta_description,
+						active
+					FROM
+						pages
+					WHERE
+						id = ?
+					LIMIT 1;`,
+					utils.StrToInt(wrap.UrlArgs[2]),
+				).Scan(
+					&data.A_id,
+					&data.A_user,
+					&data.A_name,
+					&data.A_alias,
+					&data.A_content,
+					&data.A_meta_title,
+					&data.A_meta_keywords,
+					&data.A_meta_description,
+					&data.A_active,
+				)
+				if err != nil {
+					return "", "", ""
+				}
+			}
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "index-modify",
+				},
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "id",
+					Value: utils.IntToStr(data.A_id),
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Page Name",
+					Name:    "name",
+					Value:   data.A_name,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Page Alias",
+					Name:    "alias",
+					Value:   data.A_alias,
+					Hint:    "Example: /about-us/ or /about-us.html or /about/team.html",
+				},
+				{
+					Kind:    builder.DFKTextArea,
+					Caption: "Page Content",
+					Name:    "content",
+					Value:   data.A_content,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Meta Title",
+					Name:    "meta_title",
+					Value:   data.A_meta_title,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Meta Keywords",
+					Name:    "meta_keywords",
+					Value:   data.A_meta_keywords,
+				},
+				{
+					Kind:    builder.DFKTextArea,
+					Caption: "Meta Description",
+					Name:    "meta_description",
+					Value:   data.A_meta_description,
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Active",
+					Name:    "active",
+					Value:   utils.IntToStr(data.A_active),
+				},
+				{
+					Kind: builder.DFKMessage,
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Add",
+					Target: "add-edit-button",
+				},
 			})
+
+			if wrap.CurrSubModule == "add" {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Add</button>`
+			} else {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+			}
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})
