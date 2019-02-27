@@ -54,7 +54,13 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				result += `<div class="form-group">`
 				result += `<div class="row">`
 				result += `<div class="col-3">`
-				result += `<label for="lbl_` + field.Name + `">` + field.Caption + `</label>`
+
+				if field.Kind != DFKCheckBox {
+					result += `<label for="lbl_` + field.Name + `">` + field.Caption + `</label>`
+				} else {
+					result += `<label>` + field.Caption + `</label>`
+				}
+
 				result += `</div>`
 				result += `<div class="col-9">`
 				result += `<div>`
@@ -71,7 +77,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 					if field.Value != "0" {
 						checked = " checked"
 					}
-					result += `<input class="form-control" type="checkbox" id="lbl_` + field.Name + `" name="` + field.Name + `" value="1"` + `" autocomplete="off"` + required + checked + `>`
+					result += `<div class="checkbox-ios"><input class="form-control" type="checkbox" id="lbl_` + field.Name + `" name="` + field.Name + `" value="1"` + `" autocomplete="off"` + required + checked + `><label for="lbl_` + field.Name + `"></label></div>`
 				}
 				result += `</div>`
 				if field.Hint != "" {

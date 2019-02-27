@@ -311,8 +311,67 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	min-height: 5.4rem;
 }
 
-.data-form input[type=checkbox].form-control {
-	cursor: pointer;
+/* Checkbox style iOS */
+.checkbox-ios {
 	display: inline-block;
-	width: calc(2.25rem + 0px);
+}
+
+.checkbox-ios input[type=checkbox] {
+	max-height: 0;
+	max-width: 0;
+	opacity: 0;
+	position: absolute;
+}
+
+.checkbox-ios input[type=checkbox] + label {
+	display: block;
+	position: relative;
+	box-shadow: inset 0 0 0 1px #ced4da;
+	background: #ced4da;
+	text-indent: -5000px;
+	height: 30px;
+	width: 60px;
+	border-radius: 15px;
+	cursor: pointer;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.checkbox-ios input[type=checkbox] + label:before {
+	content: "";
+	position: absolute;
+	display: block;
+	height: 30px;
+	width: 30px;
+	top: 0px;
+	left: 0px;
+	border-radius: 15px;
+	background: rgba(19,191,17,0);
+	-moz-transition: .25s ease-in-out;
+	-webkit-transition: .25s ease-in-out;
+	transition: .25s ease-in-out;
+}
+
+.checkbox-ios input[type=checkbox] + label:after {
+	content: "";
+	position: absolute;
+	display: block;
+	height: 26px;
+	width: 26px;
+	top: 2px;
+	left: 2px;
+	border-radius: 15px;
+	background: #fff;
+	-moz-transition: .25s ease-in-out;
+	-webkit-transition: .25s ease-in-out;
+	transition: .25s ease-in-out;
+}
+
+.checkbox-ios input[type=checkbox]:checked + label:before {
+	width: 60px;
+	background: #007bff;
+}
+
+.checkbox-ios input[type=checkbox]:checked + label:after {
+	left: 32px;
 }
