@@ -72,7 +72,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 			}, func(values *[]string) string {
 				return `<a class="ico" href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` +
 					assets.SysSvgIconEdit + `</a>` +
-					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
+					`<a class="ico" href="javascript:ActionDataTableDelete(this,'users-delete','` + (*values)[0] + `','Are you sure want to delete user?');">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
@@ -331,6 +331,7 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 		Mount:     "users-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		// pf_id := wrap.R.FormValue("id")
+		pf_id := wrap.R.FormValue("id")
+		wrap.Write(`alert('Delete (` + pf_id + `)!');`)
 	})
 }
