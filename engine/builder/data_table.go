@@ -11,6 +11,7 @@ import (
 
 type DataTableRow struct {
 	DBField     string
+	DBExp       string
 	NameInTable string
 	CallBack    func(values *[]string) string
 }
@@ -48,7 +49,11 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 		if column.NameInTable != "" {
 			result += `<th scope="col" class="col_` + column.DBField + `">` + html.EscapeString(column.NameInTable) + `</th>`
 		}
-		sql += " `" + column.DBField + "`"
+		if column.DBExp == "" {
+			sql += " `" + column.DBField + "`"
+		} else {
+			sql += " " + column.DBExp + " as `" + column.DBField + "`"
+		}
 		if i+1 < len(data) {
 			sql += ","
 		}

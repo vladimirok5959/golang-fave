@@ -67,6 +67,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				},
 				{
 					DBField:     "datetime",
+					DBExp:       "UNIX_TIMESTAMP(`datetime`)",
 					NameInTable: "Date / Time",
 				},
 				{
