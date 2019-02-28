@@ -234,3 +234,11 @@ func UnixTimestampToMySqlDateTime(sec int64) string {
 func UnixTimestampToFormat(sec int64, format string) string {
 	return time.Unix(sec, 0).Format(format)
 }
+
+func ExtractGetParams(str string) string {
+	i := strings.Index(str, "?")
+	if i == -1 {
+		return ""
+	}
+	return "?" + str[i+1:]
+}

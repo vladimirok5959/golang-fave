@@ -95,6 +95,13 @@ func (this *Engine) Process() bool {
 
 	// Show login page if need
 	if this.Wrap.S.GetInt("UserId", 0) <= 0 {
+		// Redirect to main url if needs
+		if this.Wrap.R.URL.Path != "/cp/" {
+			http.Redirect(this.Wrap.W, this.Wrap.R, "/cp/"+utils.ExtractGetParams(this.Wrap.R.RequestURI), 302)
+			return true
+		}
+
+		// Show login form
 		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpLogin, nil)
 		return true
 	}
@@ -107,6 +114,13 @@ func (this *Engine) Process() bool {
 
 	// Only active admins can use backend
 	if !(this.Wrap.User.A_admin == 1 && this.Wrap.User.A_active == 1) {
+		// Redirect to main url if needs
+		if this.Wrap.R.URL.Path != "/cp/" {
+			http.Redirect(this.Wrap.W, this.Wrap.R, "/cp/"+utils.ExtractGetParams(this.Wrap.R.RequestURI), 302)
+			return true
+		}
+
+		// Show login form
 		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpLogin, nil)
 		return true
 	}
