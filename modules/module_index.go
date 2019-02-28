@@ -85,7 +85,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 			}, func(values *[]string) string {
 				return `<a class="ico" href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` +
 					assets.SysSvgIconEdit + `</a>` +
-					`<a class="ico" href="#">` + assets.SysSvgIconRemove + `</a>`
+					`<a class="ico" href="javascript:ActionDataTableDelete(this,'index-delete','` + (*values)[0] + `','Are you sure want to delete page?');">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
@@ -321,6 +321,17 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 			}
 			wrap.Write(`window.location='/cp/index/modify/` + pf_id + `/';`)
 		}
+	})
+}
+
+func (this *Modules) RegisterAction_IndexDelete() *Action {
+	return this.newAction(AInfo{
+		WantDB:    true,
+		Mount:     "index-delete",
+		WantAdmin: true,
+	}, func(wrap *wrapper.Wrapper) {
+		pf_id := wrap.R.FormValue("id")
+		wrap.Write(`alert('Delete (` + pf_id + `)!');`)
 	})
 }
 
