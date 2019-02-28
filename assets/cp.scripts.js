@@ -70,8 +70,8 @@ function ActionDataTableDelete(object, action, id, message) {
 }
 
 $(document).ready(function() {
-	// Ajax forms
 	$('form').each(function() {
+		// Ajax forms
 		$(this).submit(function(e) {
 			var form = $(this);
 			if(form.hasClass('loading')) {
@@ -97,6 +97,7 @@ $(document).ready(function() {
 				url: form.attr('action'),
 				data: form.serialize()
 			}).done(function(data) {
+				$('body').removeClass('data-changed');
 				AjaxDone(data)
 			}).fail(function() {
 				AjaxFail();
@@ -122,6 +123,11 @@ $(document).ready(function() {
 				button.click();
 			});
 		}
+
+		// Mark body if any data in form was changed
+		$(this).find('input, textarea, select').on('input', function() {
+			$('body').addClass('data-changed');
+		});
 	});
 
 	// Remove alert from modal on close
@@ -140,6 +146,13 @@ $(document).ready(function() {
 		form = $(this).find('form');
 		if(form.length) {
 			form[0].reset();
+		}
+	});
+
+	// Prevent page reload if data was changed
+	$(window).bind('beforeunload', function(){
+		if($('body').hasClass('data-changed')) {
+			return 'Some data was changed without saving, are you sure want to leave page?';
 		}
 	});
 });
