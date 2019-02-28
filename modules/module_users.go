@@ -72,7 +72,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 			}, func(values *[]string) string {
 				return `<a class="ico" title="Edit" href="/cp/` + wrap.CurrModule + `/modify/` +
 					(*values)[0] + `/">` + assets.SysSvgIconEdit + `</a>` +
-					`<a class="ico" title="Delete" href="javascript:ActionDataTableDelete(this,'users-delete','` +
+					`<a class="ico" title="Delete" href="javascript:fave.ActionDataTableDelete(this,'users-delete','` +
 					(*values)[0] + `','Are you sure want to delete user?');">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {

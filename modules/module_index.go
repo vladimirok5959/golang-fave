@@ -86,7 +86,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				return `<a class="ico" title="View" href="` + (*values)[2] + `" target="_blank">` +
 					assets.SysSvgIconView + `</a>` + `<a class="ico" title="Edit" href="/cp/` +
 					wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + assets.SysSvgIconEdit + `</a>` +
-					`<a class="ico" title="Delete" href="javascript:ActionDataTableDelete(this,'index-delete','` +
+					`<a class="ico" title="Delete" href="javascript:fave.ActionDataTableDelete(this,'index-delete','` +
 					(*values)[0] + `','Are you sure want to delete page?');">` + assets.SysSvgIconRemove + `</a>`
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {

@@ -6,7 +6,7 @@ import (
 
 const Debug = true
 const ServerVersion = "1.0.0"
-const AssetsVersion = "7"
+const AssetsVersion = "8"
 const AssetsPath = "assets"
 const DirIndexFile = "index.html"
 

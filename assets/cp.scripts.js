@@ -1,160 +1,203 @@
-function GetModalAlertTmpl(title, message, error) {
-	return '<div class="alert alert-' + (!error?'success':'danger') + ' alert-dismissible fade show" role="alert"><strong>' + title + '</strong> ' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
-}
+(function(window, $) {
+	var fave = function(window, $) {
+		// Private
+		var FormDataWasChanged = false;
 
-function ShowSystemMsg(title, message, error) {
-	var modal_alert_place = $('.modal.show .sys-messages');
-	if(!modal_alert_place.length) {
-		modal_alert_place = $('form.alert-here .sys-messages');
-	}
-	if(modal_alert_place.length) {
-		modal_alert_place.html(GetModalAlertTmpl(title, message, error));
-	}
-}
+		function GetModalAlertTmpl(title, message, error) {
+			return '<div class="alert alert-' + (!error?'success':'danger') + ' alert-dismissible fade show" role="alert"><strong>' + title + '</strong> ' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+		};
 
-function ShowSystemMsgSuccess(title, message) {
-	ShowSystemMsg(title, message, false);
-}
-
-function ShowSystemMsgError(title, message) {
-	ShowSystemMsg(title, message, true);
-}
-
-function AjaxDone(data) {
-	try {
-		eval(data);
-	} catch(e) {
-		if(e instanceof SyntaxError) {
-			console.log(data);
-			console.log('JavaScript Eval Error', e.message)
-		}
-	}
-}
-
-function AjaxFail() {
-	console.log('Form send fail, page will be reloaded');
-	window.location.reload(false);
-}
-
-function ActionIndexUserLogout(message) {
-	if(confirm(message)) {
-		$.ajax({
-			type: "POST",
-			url: '/cp/',
-			data: {
-				action: 'index-user-logout',
+		function ShowSystemMsg(title, message, error) {
+			var modal_alert_place = $('.modal.show .sys-messages');
+			if(!modal_alert_place.length) {
+				modal_alert_place = $('form.alert-here .sys-messages');
 			}
-		}).done(function(data) {
-			AjaxDone(data)
-		}).fail(function() {
-			AjaxFail();
-		});
-	}
-}
-
-function ActionDataTableDelete(object, action, id, message) {
-	if(confirm(message)) {
-		$.ajax({
-			type: "POST",
-			url: '/cp/',
-			data: {
-				action: action,
-				id: id,
+			if(modal_alert_place.length) {
+				modal_alert_place.html(GetModalAlertTmpl(title, message, error));
 			}
-		}).done(function(data) {
-			AjaxDone(data)
-		}).fail(function() {
-			AjaxFail();
-		});
-	}
-}
+		};
 
-$(document).ready(function() {
-	$('form').each(function() {
-		// Ajax forms
-		$(this).submit(function(e) {
-			var form = $(this);
-			if(form.hasClass('loading')) {
-				e.preventDefault();
-				return;
+		function AjaxDone(data) {
+			try {
+				eval(data);
+			} catch(e) {
+				if(e instanceof SyntaxError) {
+					console.log(data);
+					console.log('Error: JavaScript code eval error', e.message)
+				}
 			}
+		};
 
-			// Block send button
-			form.addClass('loading').addClass('alert-here');
-			var button = $(this).find('button[type=submit]');
-			button.addClass('progress-bar-striped').addClass('progress-bar-animated');
+		function AjaxFail(data, status, error) {
+			console.log('Error: data sending error, page will be reloaded', data, status, error);
+			setTimeout(function() {
+				window.location.reload(false);
+			}, 1000);
+		};
 
-			// Another button
-			if(button.attr('data-target') != '') {
-				$('#' + button.attr('data-target')).addClass('progress-bar-striped').addClass('progress-bar-animated');
-			}
+		function FormToAjax() {
+			$('form').each(function() {
+				$(this).submit(function(e) {
+					var form = $(this);
+					if(form.hasClass('loading')) {
+						e.preventDefault();
+						return;
+					}
 
-			// Clear form messages
-			form.find('.sys-messages').html('');
+					// Block send button
+					form.addClass('loading').addClass('alert-here');
+					var button = $(this).find('button[type=submit]');
+					button.addClass('progress-bar-striped')
+						.addClass('progress-bar-animated');
 
-			$.ajax({
-				type: "POST",
-				url: form.attr('action'),
-				data: form.serialize()
-			}).done(function(data) {
-				$('body').removeClass('data-changed');
-				AjaxDone(data)
-			}).fail(function() {
-				AjaxFail();
-			}).always(function() {
-				// Add delay for one second
-				setTimeout(function() {
-					form.removeClass('loading').removeClass('alert-here');
-					button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
 					// Another button
 					if(button.attr('data-target') != '') {
-						$('#' + button.attr('data-target')).removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+						$('#' + button.attr('data-target')).addClass('progress-bar-striped')
+							.addClass('progress-bar-animated');
 					}
-				}, 100);
+
+					// Clear form messages
+					form.find('.sys-messages').html('');
+
+					$.ajax({
+						type: "POST",
+						url: form.attr('action'),
+						data: form.serialize()
+					}).done(function(data) {
+						FormDataWasChanged = false;
+						AjaxDone(data)
+					}).fail(function(xhr, status, error) {
+						AjaxFail(xhr.responseText, status, error);
+					}).always(function() {
+						// Add delay for one second
+						setTimeout(function() {
+							form.removeClass('loading').removeClass('alert-here');
+							button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+							// Another button
+							if(button.attr('data-target') != '') {
+								$('#' + button.attr('data-target')).removeClass('progress-bar-striped').removeClass('progress-bar-animated');
+							}
+						}, 100);
+					});
+
+					// Prevent submit action
+					e.preventDefault();
+				});
+
+				// Bind to another button
+				var button = $(this).find('button[type=submit]');
+				if(button.attr('data-target') != '') {
+					$('#' + button.attr('data-target')).click(function() {
+						button.click();
+					});
+				}
+
+				// Mark body if any data in form was changed
+				if($(this).hasClass('prev-data-lost')) {
+					$(this).find('input, textarea, select').on('input', function() {
+						if(!FormDataWasChanged) {
+							FormDataWasChanged = true;
+						}
+					});
+				}
 			});
+		};
 
-			e.preventDefault();
-		});
-
-		// Bind to another button
-		var button = $(this).find('button[type=submit]');
-		if(button.attr('data-target') != '') {
-			$('#' + button.attr('data-target')).click(function() {
-				button.click();
+		function FixFormInModal() {
+			// Remove alert from modal on close
+			$('.modal.fade').on('hidden.bs.modal', function() {
+				modal_alert_place = $(this).find('.sys-messages');
+				if(modal_alert_place.length) {
+					modal_alert_place.html('');
+				}
+				// Reset form at modal close
+				form = $(this).find('form');
+				if(form.length) {
+					form[0].reset();
+				}
+			}).on('show.bs.modal', function() {
+				// Reset form at modal open
+				form = $(this).find('form');
+				if(form.length) {
+					form[0].reset();
+				}
 			});
-		}
+		};
 
-		// Mark body if any data in form was changed
-		if($(this).hasClass('prev-data-lost')) {
-			$(this).find('input, textarea, select').on('input', function() {
-				$('body').addClass('data-changed');
+		function BindWindowBeforeUnload() {
+			// Prevent page reload if data was changed
+			$(window).bind('beforeunload', function(){
+				if(FormDataWasChanged) {
+					return 'Some data was changed and not saved. Are you sure want to leave page?';
+				}
 			});
-		}
-	});
+		};
 
-	// Remove alert from modal on close
-	$('.modal.fade').on('hidden.bs.modal', function() {
-		modal_alert_place = $(this).find('.sys-messages');
-		if(modal_alert_place.length) {
-			modal_alert_place.html('');
-		}
-		// Reset form at modal close
-		form = $(this).find('form');
-		if(form.length) {
-			form[0].reset();
-		}
-	}).on('show.bs.modal', function() {
-		// Reset form at modal open
-		form = $(this).find('form');
-		if(form.length) {
-			form[0].reset();
-		}
-	});
+		function Initialize() {
+			// Check if jQuery was loaded
+			if(typeof $ == 'function') {
+				FormToAjax();
+				FixFormInModal();
+				BindWindowBeforeUnload();
+			} else {
+				console.log('Error: jQuery is not loaded!');
+			}
+		};
 
-	// Prevent page reload if data was changed
-	$(window).bind('beforeunload', function(){
-		if($('body').hasClass('data-changed')) {
-			return 'Some data was changed without saving, are you sure want to leave page?';
-		}
-	});
-});
+		// Initialize
+		if(window.addEventListener) {
+			// W3C standard
+			window.addEventListener('load', Initialize, false);
+		} else if(window.attachEvent) {
+			// Microsoft
+			window.attachEvent('onload', Initialize);
+		};
+
+		// Public
+		return {
+			ShowMsgSuccess: function(title, message) {
+				ShowSystemMsg(title, message, false);
+			},
+
+			ShowMsgError: function(title, message) {
+				ShowSystemMsg(title, message, true);
+			},
+
+			ActionLogout: function(message) {
+				if(confirm(message)) {
+					$.ajax({
+						type: "POST",
+						url: '/cp/',
+						data: {
+							action: 'index-user-logout',
+						}
+					}).done(function(data) {
+						AjaxDone(data)
+					}).fail(function(xhr, status, error) {
+						AjaxFail(xhr.responseText, status, error);
+					});
+				}
+			},
+
+			ActionDataTableDelete: function(object, action, id, message) {
+				if(confirm(message)) {
+					$.ajax({
+						type: "POST",
+						url: '/cp/',
+						data: {
+							action: action,
+							id: id,
+						}
+					}).done(function(data) {
+						AjaxDone(data)
+					}).fail(function(xhr, status, error) {
+						AjaxFail(xhr.responseText, status, error);
+					});
+				}
+			},
+		};
+	}(window, $);
+
+	// Make it public
+	window.fave = fave;
+}(window, jQuery));

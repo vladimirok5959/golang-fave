@@ -143,13 +143,13 @@ func (this *Wrapper) Write(data string) {
 
 func (this *Wrapper) MsgSuccess(msg string) {
 	this.Write(fmt.Sprintf(
-		`ShowSystemMsgSuccess('Success!', '%s', false);`,
+		`fave.ShowMsgSuccess('Success!', '%s', false);`,
 		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
 }
 
 func (this *Wrapper) MsgError(msg string) {
 	this.Write(fmt.Sprintf(
-		`ShowSystemMsgError('Error!', '%s', true);`,
+		`fave.ShowMsgError('Error!', '%s', true);`,
 		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
 }
 
