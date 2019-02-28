@@ -56,8 +56,9 @@ func IsValidEmail(email string) bool {
 }
 
 func IsValidAlias(alias string) bool {
-	regexpe := regexp.MustCompile(`^\/([a-zA-Z0-9\/\-_\.]+)\/?$`)
-	return regexpe.MatchString(alias)
+	regexpeSlash := regexp.MustCompile(`[\/]{2,}`)
+	regexpeChars := regexp.MustCompile(`^\/([a-zA-Z0-9\/\-_\.]+)\/?$`)
+	return (!regexpeSlash.MatchString(alias) && regexpeChars.MatchString(alias)) || alias == "/"
 }
 
 func FixPath(path string) string {
@@ -211,12 +212,19 @@ func GenerateAlias(str string) string {
 	}
 	alias = strings.ToLower(alias)
 
-	// Cut repeated chars
+	// Cut repeated chars "-"
 	if reg, err := regexp.Compile("[\\-]+"); err == nil {
 		alias = strings.Trim(reg.ReplaceAllString(alias, "-"), "-")
 	}
 
-	return "/" + strings.Trim(alias, " ") + "/"
+	alias = "/" + alias + "/"
+
+	// Cut repeated chars "/"
+	if reg, err := regexp.Compile("[/]+"); err == nil {
+		alias = reg.ReplaceAllString(alias, "/")
+	}
+
+	return alias
 }
 
 func UnixTimestampToMySqlDateTime(value int64) string {
