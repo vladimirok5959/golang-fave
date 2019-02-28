@@ -72,6 +72,9 @@ func (this *Modules) RegisterModule_Index() *Module {
 				{
 					DBField:     "active",
 					NameInTable: "Active",
+					CallBack: func(values *[]string) string {
+						return builder.CheckBox(utils.StrToInt((*values)[4]))
+					},
 				},
 			}, func(values *[]string) string {
 				return `<a class="ico" href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` +
