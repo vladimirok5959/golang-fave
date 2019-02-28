@@ -41,7 +41,7 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 		}
 	}
 	limit_offset := curr_page*pear_page - pear_page
-	result := `<table class="table data-table table-striped table-bordered table-hover table_` + table + `">`
+	result := `<table id="cp-table-` + table + `" class="table data-table table-striped table-bordered table-hover table_` + table + `">`
 	result += `<thead>`
 	result += `<tr>`
 	sql := "SELECT"
