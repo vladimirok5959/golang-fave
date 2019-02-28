@@ -227,6 +227,10 @@ func GenerateAlias(str string) string {
 	return alias
 }
 
-func UnixTimestampToMySqlDateTime(value int64) string {
-	return time.Unix(value, 0).Format("2006-01-02 15:04:05")
+func UnixTimestampToMySqlDateTime(sec int64) string {
+	return time.Unix(sec, 0).Format("2006-01-02 15:04:05")
+}
+
+func UnixTimestampToFormat(sec int64, format string) string {
+	return time.Unix(sec, 0).Format(format)
 }

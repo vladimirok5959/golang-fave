@@ -69,6 +69,11 @@ func (this *Modules) RegisterModule_Index() *Module {
 					DBField:     "datetime",
 					DBExp:       "UNIX_TIMESTAMP(`datetime`)",
 					NameInTable: "Date / Time",
+					CallBack: func(values *[]string) string {
+						t := int64(utils.StrToInt((*values)[3]))
+						return `<div>` + utils.UnixTimestampToFormat(t, "02.01.2006") + `</div>` +
+							`<div><small>` + utils.UnixTimestampToFormat(t, "15:04:05") + `</small></div>`
+					},
 				},
 				{
 					DBField:     "active",
