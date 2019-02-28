@@ -332,6 +332,23 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_id := wrap.R.FormValue("id")
-		wrap.Write(`alert('Delete (` + pf_id + `)!');`)
+
+		if !utils.IsNumeric(pf_id) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		// Delete user
+		_, err := wrap.DB.Query(
+			`DELETE FROM users WHERE id = ? and id <> 1;`,
+			utils.StrToInt(pf_id),
+		)
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Reload current page
+		wrap.Write(`window.location.reload(false);`)
 	})
 }
