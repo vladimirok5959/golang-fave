@@ -30,7 +30,7 @@ type DataFormField struct {
 }
 
 func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
-	result := `<form class="data-form" action="/cp/" method="post" autocomplete="off">`
+	result := `<form class="data-form prev-data-lost" action="/cp/" method="post" autocomplete="off">`
 	result += `<div class="hidden">`
 	for _, field := range data {
 		if field.Kind == DFKHidden {

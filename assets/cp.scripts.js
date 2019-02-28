@@ -125,9 +125,11 @@ $(document).ready(function() {
 		}
 
 		// Mark body if any data in form was changed
-		$(this).find('input, textarea, select').on('input', function() {
-			$('body').addClass('data-changed');
-		});
+		if($(this).hasClass('prev-data-lost')) {
+			$(this).find('input, textarea, select').on('input', function() {
+				$('body').addClass('data-changed');
+			});
+		}
 	});
 
 	// Remove alert from modal on close
