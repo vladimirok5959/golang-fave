@@ -36,22 +36,24 @@ function AjaxFail() {
 	window.location.reload(false);
 }
 
-function ActionIndexUserLogout() {
-	$.ajax({
-		type: "POST",
-		url: '/cp/',
-		data: {
-			action: 'index-user-logout',
-		}
-	}).done(function(data) {
-		AjaxDone(data)
-	}).fail(function() {
-		AjaxFail();
-	});
+function ActionIndexUserLogout(message) {
+	if(confirm(message)) {
+		$.ajax({
+			type: "POST",
+			url: '/cp/',
+			data: {
+				action: 'index-user-logout',
+			}
+		}).done(function(data) {
+			AjaxDone(data)
+		}).fail(function() {
+			AjaxFail();
+		});
+	}
 }
 
-function ActionDataTableDelete(object, action, id, msg) {
-	if(confirm(msg)) {
+function ActionDataTableDelete(object, action, id, message) {
+	if(confirm(message)) {
 		$.ajax({
 			type: "POST",
 			url: '/cp/',
