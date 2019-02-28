@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
@@ -42,16 +43,21 @@ func IsDirExists(path string) bool {
 	return false
 }
 
-func IsValidEmail(email string) bool {
-	regexpe := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
-	return regexpe.MatchString(email)
-}
-
 func IsNumeric(str string) bool {
 	if _, err := strconv.Atoi(str); err == nil {
 		return true
 	}
 	return false
+}
+
+func IsValidEmail(email string) bool {
+	regexpe := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+	return regexpe.MatchString(email)
+}
+
+func IsValidAlias(alias string) bool {
+	regexpe := regexp.MustCompile(`^\/([a-zA-Z0-9\/\-_\.]+)\/?$`)
+	return regexpe.MatchString(alias)
 }
 
 func FixPath(path string) string {
@@ -107,6 +113,10 @@ func GetMd5(str string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(str))
 	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func GetCurrentUnixTimestamp() int64 {
+	return int64(time.Now().Unix())
 }
 
 func SystemRenderTemplate(w http.ResponseWriter, c []byte, d interface{}) {
@@ -181,4 +191,34 @@ func StrToInt(str string) int {
 		return num
 	}
 	return 0
+}
+
+func GenerateAlias(str string) string {
+	if str == "" {
+		return ""
+	}
+
+	lat := []string{"EH", "I", "i", "#", "eh", "A", "B", "V", "G", "D", "E", "JO", "ZH", "Z", "I", "JJ", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "F", "KH", "C", "CH", "SH", "SHH", "'", "Y", "", "EH", "YU", "YA", "a", "b", "v", "g", "d", "e", "jo", "zh", "z", "i", "jj", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f", "kh", "c", "ch", "sh", "shh", "", "y", "", "eh", "yu", "ya", "", "", "-", "-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "-", "-", ":", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M"}
+	cyr := []string{"Є", "І", "і", "№", "є", "А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "«", "»", "—", " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "", "", "a", "s", "d", "f", "g", "h", "j", "k", "l", "", "", "z", "x", "c", "v", "b", "n", "m", "", "", "", "(", ")", "", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M"}
+
+	var alias string = ""
+	for i := 0; i < len(str); i++ {
+		for j := 0; j < len(cyr); j++ {
+			if string(str[i]) == cyr[j] {
+				alias += lat[j]
+			}
+		}
+	}
+	alias = strings.ToLower(alias)
+
+	// Cut repeated chars
+	if reg, err := regexp.Compile("[\\-]+"); err == nil {
+		alias = strings.Trim(reg.ReplaceAllString(alias, "-"), "-")
+	}
+
+	return "/" + strings.Trim(alias, " ") + "/"
+}
+
+func UnixTimestampToMySqlDateTime(value int64) string {
+	return time.Unix(value, 0).Format("2006-01-02 15:04:05")
 }
