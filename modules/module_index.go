@@ -331,7 +331,24 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_id := wrap.R.FormValue("id")
-		wrap.Write(`alert('Delete (` + pf_id + `)!');`)
+
+		if !utils.IsNumeric(pf_id) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		// Delete page
+		_, err := wrap.DB.Query(
+			`DELETE FROM pages WHERE id = ?;`,
+			utils.StrToInt(pf_id),
+		)
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Reload current page
+		wrap.Write(`window.location.reload(false);`)
 	})
 }
 
