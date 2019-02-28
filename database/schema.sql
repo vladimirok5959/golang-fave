@@ -22,3 +22,5 @@ CREATE TABLE `pages` (
 	`active` int(1) NOT NULL COMMENT 'Is active page or not',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `pages` ADD UNIQUE KEY `alias` (`alias`);
