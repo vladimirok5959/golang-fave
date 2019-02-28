@@ -50,6 +50,23 @@ function ActionIndexUserLogout() {
 	});
 }
 
+function ActionDataTableDelete(object, action, id, msg) {
+	if(confirm(msg)) {
+		$.ajax({
+			type: "POST",
+			url: '/cp/',
+			data: {
+				action: action,
+				id: id,
+			}
+		}).done(function(data) {
+			AjaxDone(data)
+		}).fail(function() {
+			AjaxFail();
+		});
+	}
+}
+
 $(document).ready(function() {
 	// Ajax forms
 	$('form').each(function() {
