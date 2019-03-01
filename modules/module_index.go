@@ -6,6 +6,7 @@ import (
 
 	"fmt"
 	"html"
+	"html/template"
 	"os"
 	"strconv"
 
@@ -30,17 +31,83 @@ func (this *Modules) RegisterModule_Index() *Module {
 		},
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
-		wrap.RenderFrontEnd("index", consts.TmplDataModIndex{
-			MetaTitle:       "Meta Title",
-			MetaKeywords:    "Meta Keywords",
-			MetaDescription: "Meta Description",
 
-			MainMenuItems: []consts.TmplDataMainMenuItem{
-				{Name: "Home", Link: "/", Active: true},
-				{Name: "Item 1", Link: "/#1", Active: false},
-				{Name: "Item 2", Link: "/#2", Active: false},
-				{Name: "Item 3", Link: "/#3", Active: false},
-			},
+		/*
+			wrap.RenderFrontEnd("index", consts.TmplDataModIndex{
+				MetaTitle:       "Meta Title",
+				MetaKeywords:    "Meta Keywords",
+				MetaDescription: "Meta Description",
+
+				MainMenuItems: []consts.TmplDataMainMenuItem{
+					{Name: "Home", Link: "/", Active: true},
+					{Name: "Item 1", Link: "/#1", Active: false},
+					{Name: "Item 2", Link: "/#2", Active: false},
+					{Name: "Item 3", Link: "/#3", Active: false},
+				},
+			})
+		*/
+
+		row := &utils.MySql_page{}
+		err := wrap.DB.QueryRow(`
+			SELECT
+				id,
+				user,
+				name,
+				alias,
+				content,
+				meta_title,
+				meta_keywords,
+				meta_description,
+				UNIX_TIMESTAMP(datetime) as datetime,
+				active
+			FROM
+				pages
+			WHERE
+				active = 1 and
+				alias = ?
+			LIMIT 1;`,
+			wrap.R.URL.Path,
+		).Scan(
+			&row.A_id,
+			&row.A_user,
+			&row.A_name,
+			&row.A_alias,
+			&row.A_content,
+			&row.A_meta_title,
+			&row.A_meta_keywords,
+			&row.A_meta_description,
+			&row.A_datetime,
+			&row.A_active,
+		)
+		if err != nil && err != sql.ErrNoRows {
+			// Error 500
+			utils.SystemErrorPageEngine(wrap.W, err)
+			return
+		} else if err == sql.ErrNoRows {
+			// Error 404
+			utils.SystemErrorPage404(wrap.W)
+			return
+		}
+
+		// Replace title with page name
+		if row.A_meta_title == "" {
+			row.A_meta_title = row.A_name
+		}
+
+		// Which template
+		tmpl_name := "index"
+		if wrap.R.URL.Path != "/" {
+			tmpl_name = "page"
+		}
+
+		// Render template
+		wrap.RenderFrontEnd(tmpl_name, consts.TmplDataModIndex{
+			Name:            row.A_name,
+			Alias:           row.A_alias,
+			Content:         template.HTML(row.A_content),
+			MetaTitle:       row.A_meta_title,
+			MetaKeywords:    row.A_meta_keywords,
+			MetaDescription: row.A_meta_description,
 		})
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""

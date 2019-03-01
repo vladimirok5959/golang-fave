@@ -77,8 +77,11 @@ type TmplDataMainMenuItem struct {
 }
 
 type TmplDataModIndex struct {
+	Name            string
+	Alias           string
+	Content         template.HTML
 	MetaTitle       string
 	MetaKeywords    string
 	MetaDescription string
-	MainMenuItems   []TmplDataMainMenuItem
+	// MainMenuItems   []TmplDataMainMenuItem
 }
