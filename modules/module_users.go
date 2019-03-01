@@ -70,10 +70,19 @@ func (this *Modules) RegisterModule_Users() *Module {
 					},
 				},
 			}, func(values *[]string) string {
-				return `<a class="ico" title="Edit" href="/cp/` + wrap.CurrModule + `/modify/` +
-					(*values)[0] + `/">` + assets.SysSvgIconEdit + `</a>` +
-					`<a class="ico" title="Delete" href="javascript:fave.ActionDataTableDelete(this,'users-delete','` +
-					(*values)[0] + `','Are you sure want to delete user?');">` + assets.SysSvgIconRemove + `</a>`
+				return builder.DataTableAction(&[]builder.DataTableActionRow{
+					{
+						Icon: assets.SysSvgIconEdit,
+						Href: "/cp/" + wrap.CurrModule + "/modify/" + (*values)[0] + "/",
+						Hint: "Edit",
+					},
+					{
+						Icon: assets.SysSvgIconRemove,
+						Href: "javascript:fave.ActionDataTableDelete(this,'users-delete','" +
+							(*values)[0] + "','Are you sure want to delete user?');",
+						Hint: "Delete",
+					},
+				})
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {

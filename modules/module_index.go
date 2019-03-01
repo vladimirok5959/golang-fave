@@ -83,11 +83,25 @@ func (this *Modules) RegisterModule_Index() *Module {
 					},
 				},
 			}, func(values *[]string) string {
-				return `<a class="ico" title="View" href="` + (*values)[2] + `" target="_blank">` +
-					assets.SysSvgIconView + `</a>` + `<a class="ico" title="Edit" href="/cp/` +
-					wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + assets.SysSvgIconEdit + `</a>` +
-					`<a class="ico" title="Delete" href="javascript:fave.ActionDataTableDelete(this,'index-delete','` +
-					(*values)[0] + `','Are you sure want to delete page?');">` + assets.SysSvgIconRemove + `</a>`
+				return builder.DataTableAction(&[]builder.DataTableActionRow{
+					{
+						Icon:   assets.SysSvgIconView,
+						Href:   (*values)[2],
+						Hint:   "View",
+						Target: "_blank",
+					},
+					{
+						Icon: assets.SysSvgIconEdit,
+						Href: "/cp/" + wrap.CurrModule + "/modify/" + (*values)[0] + "/",
+						Hint: "Edit",
+					},
+					{
+						Icon: assets.SysSvgIconRemove,
+						Href: "javascript:fave.ActionDataTableDelete(this,'index-delete','" +
+							(*values)[0] + "','Are you sure want to delete page?');",
+						Hint: "Delete",
+					},
+				})
 			}, "/cp/"+wrap.CurrModule+"/")
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
