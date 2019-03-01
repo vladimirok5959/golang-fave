@@ -16,7 +16,7 @@ type DataTableRow struct {
 	CallBack    func(values *[]string) string
 }
 
-func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way string, data []DataTableRow, action func(values *[]string) string, pagination_url string) string {
+func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way string, data *[]DataTableRow, action func(values *[]string) string, pagination_url string) string {
 	var num int
 	err := wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
 	if err != nil {
@@ -45,7 +45,7 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 	result += `<thead>`
 	result += `<tr>`
 	sql := "SELECT"
-	for i, column := range data {
+	for i, column := range *data {
 		if column.NameInTable != "" {
 			result += `<th scope="col" class="col_` + column.DBField + `">` + html.EscapeString(column.NameInTable) + `</th>`
 		}
@@ -54,7 +54,7 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 		} else {
 			sql += " " + column.DBExp + " as `" + column.DBField + "`"
 		}
-		if i+1 < len(data) {
+		if i+1 < len(*data) {
 			sql += ","
 		}
 	}
@@ -68,7 +68,7 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 	if num > 0 {
 		rows, err := wrap.DB.Query(sql, limit_offset, pear_page)
 		if err == nil {
-			values := make([]string, len(data))
+			values := make([]string, len(*data))
 			scan := make([]interface{}, len(values))
 			for i := range values {
 				scan[i] = &values[i]
@@ -78,11 +78,11 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 				if err == nil {
 					result += `<tr>`
 					for i, val := range values {
-						if data[i].NameInTable != "" {
-							if data[i].CallBack == nil {
-								result += `<td class="col_` + data[i].DBField + `">` + html.EscapeString(string(val)) + `</td>`
+						if (*data)[i].NameInTable != "" {
+							if (*data)[i].CallBack == nil {
+								result += `<td class="col_` + (*data)[i].DBField + `">` + html.EscapeString(string(val)) + `</td>`
 							} else {
-								result += `<td class="col_` + data[i].DBField + `">` + data[i].CallBack(&values) + `</td>`
+								result += `<td class="col_` + (*data)[i].DBField + `">` + (*data)[i].CallBack(&values) + `</td>`
 							}
 						}
 					}

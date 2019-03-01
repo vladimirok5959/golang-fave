@@ -30,7 +30,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "List of Users"},
 			})
-			content += builder.DataTable(wrap, "users", "id", "DESC", []builder.DataTableRow{
+			content += builder.DataTable(wrap, "users", "id", "DESC", &[]builder.DataTableRow{
 				{
 					DBField: "id",
 				},
