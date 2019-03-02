@@ -8,6 +8,8 @@ import (
 type FERData struct {
 	Wrap    *wrapper.Wrapper
 	DataRow interface{}
+
+	bufferUser *utils.MySql_user
 }
 
 func New(wrap *wrapper.Wrapper, drow interface{}) *FERData {
