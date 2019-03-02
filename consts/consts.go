@@ -83,5 +83,4 @@ type TmplDataModIndex struct {
 	MetaTitle       string
 	MetaKeywords    string
 	MetaDescription string
-	// MainMenuItems   []TmplDataMainMenuItem
 }
