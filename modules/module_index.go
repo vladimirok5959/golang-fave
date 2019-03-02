@@ -31,22 +31,6 @@ func (this *Modules) RegisterModule_Index() *Module {
 		},
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
-
-		/*
-			wrap.RenderFrontEnd("index", consts.TmplDataModIndex{
-				MetaTitle:       "Meta Title",
-				MetaKeywords:    "Meta Keywords",
-				MetaDescription: "Meta Description",
-
-				MainMenuItems: []consts.TmplDataMainMenuItem{
-					{Name: "Home", Link: "/", Active: true},
-					{Name: "Item 1", Link: "/#1", Active: false},
-					{Name: "Item 2", Link: "/#2", Active: false},
-					{Name: "Item 3", Link: "/#3", Active: false},
-				},
-			})
-		*/
-
 		row := &utils.MySql_page{}
 		err := wrap.DB.QueryRow(`
 			SELECT
