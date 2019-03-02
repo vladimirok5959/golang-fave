@@ -73,6 +73,8 @@ func (this *Engine) Process() bool {
 	}
 	defer this.Wrap.DB.Close()
 
+	// ---
+	// TODO: Very expensive operation, optimize that by file flag
 	// Show add first user form if no any user in database
 	var count int
 	err = this.Wrap.DB.QueryRow(`
@@ -92,6 +94,7 @@ func (this *Engine) Process() bool {
 		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpFirstUser, nil)
 		return true
 	}
+	// ---
 
 	// Show login page if need
 	if this.Wrap.S.GetInt("UserId", 0) <= 0 {
