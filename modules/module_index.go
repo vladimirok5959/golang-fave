@@ -6,13 +6,13 @@ import (
 
 	"fmt"
 	"html"
-	"html/template"
 	"os"
 	"strconv"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine/builder"
+	"golang-fave/engine/fetdata"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -101,14 +101,8 @@ func (this *Modules) RegisterModule_Index() *Module {
 		}
 
 		// Render template
-		wrap.RenderFrontEnd(tmpl_name, consts.TmplDataModIndex{
-			Name:            row.A_name,
-			Alias:           row.A_alias,
-			Content:         template.HTML(row.A_content),
-			MetaTitle:       row.A_meta_title,
-			MetaKeywords:    row.A_meta_keywords,
-			MetaDescription: row.A_meta_description,
-		})
+		tmpl_data := fetdata.New(wrap, row)
+		wrap.RenderFrontEnd(tmpl_name, tmpl_data)
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""
