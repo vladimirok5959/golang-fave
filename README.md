@@ -31,7 +31,7 @@ hosts
 ├────── sidebar.html # Can be included in templates
 └──── tmp            # Temporary dir for session files
 ```
-Unlimited hosts count. Template variables in [WIKI](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)), and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).
+Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)), and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).
 
 ## Development
 * **make** - vet, test, build and run in debug mode locally
