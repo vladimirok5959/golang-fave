@@ -480,6 +480,13 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		_, err = db.Query(fmt.Sprintf(
+			`ALTER TABLE %s.users ADD UNIQUE KEY email (email);`,
+			pf_name))
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		_, err = db.Query(fmt.Sprintf(
 			`CREATE TABLE %s.pages (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',

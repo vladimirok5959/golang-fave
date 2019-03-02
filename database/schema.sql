@@ -9,6 +9,8 @@ CREATE TABLE `users` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `users` ADD UNIQUE KEY `email` (`email`);
+
 CREATE TABLE `pages` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	`user` int(11) NOT NULL COMMENT 'User id',
