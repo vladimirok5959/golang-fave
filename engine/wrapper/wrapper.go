@@ -178,10 +178,16 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
 	}
 	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tmpl.Execute(this.W, consts.TmplData{
+	var tpl bytes.Buffer
+	err = tmpl.Execute(&tpl, consts.TmplData{
 		System: utils.GetTmplSystemData(),
 		Data:   data,
 	})
+	if err != nil {
+		utils.SystemErrorPageEngine(this.W, err)
+		return
+	}
+	this.W.Write(tpl.Bytes())
 }
 
 func (this *Wrapper) RenderBackEnd(tcont []byte, data interface{}) {
@@ -192,8 +198,14 @@ func (this *Wrapper) RenderBackEnd(tcont []byte, data interface{}) {
 	}
 	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tmpl.Execute(this.W, consts.TmplData{
+	var tpl bytes.Buffer
+	err = tmpl.Execute(this.W, consts.TmplData{
 		System: utils.GetTmplSystemData(),
 		Data:   data,
 	})
+	if err != nil {
+		utils.SystemErrorPageEngine(this.W, err)
+		return
+	}
+	this.W.Write(tpl.Bytes())
 }

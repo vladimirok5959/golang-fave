@@ -4,7 +4,11 @@ default: debug
 
 debug:
 	go vet ./...
+	gofmt -d ./
 	go build -mod vendor -o ./fave
+
+fix:
+	gofmt -w ./
 
 build: clean
 	@-mkdir ./bin
