@@ -32,6 +32,23 @@ func init() {
 }
 
 func main() {
+	// Universal, params by env vars
+	if ParamHost == "0.0.0.0" {
+		if os.Getenv("FAVE_HOST") != "" {
+			ParamHost = os.Getenv("FAVE_HOST")
+		}
+	}
+	if ParamPort == 8080 {
+		if os.Getenv("FAVE_PORT") != "" {
+			ParamPort = utils.StrToInt(os.Getenv("FAVE_PORT"))
+		}
+	}
+	if ParamWwwDir == "" {
+		if os.Getenv("FAVE_DIR") != "" {
+			ParamWwwDir = os.Getenv("FAVE_DIR")
+		}
+	}
+
 	// Init logger
 	lg := logger.New()
 	defer lg.Close()
