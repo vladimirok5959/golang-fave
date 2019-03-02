@@ -56,4 +56,7 @@
 				<div><b>UserEmail:</b> {{$.Data.UserEmail}}</div>
 				<div><b>UserIsAdmin:</b> {{$.Data.UserIsAdmin}}</div>
 				<div><b>UserIsActive:</b> {{$.Data.UserIsActive}}</div>
+				{{if $.Data.UserIsLoggedIn}}
+					<div><b>Welcome, {{$.Data.UserFirstName}} {{$.Data.UserLastName}}!</b></div>
+				{{end}}
 			</div>
