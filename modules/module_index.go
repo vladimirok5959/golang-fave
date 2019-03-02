@@ -562,6 +562,28 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 			return
 		}
 
+		// Add home page
+		_, err = wrap.DB.Query(
+			`INSERT INTO pages SET
+				user = ?,
+				name = ?,
+				alias = ?,
+				content = ?,
+				datetime = ?,
+				active = ?
+			;`,
+			1,
+			"Home",
+			"/",
+			"Hello World from Fave CMS!",
+			utils.GetCurrentUnixTimestamp(),
+			1,
+		)
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})
