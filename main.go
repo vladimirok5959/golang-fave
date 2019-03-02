@@ -20,32 +20,34 @@ import (
 	"github.com/vladimirok5959/golang-server-static/static"
 )
 
-var ParamHost string
-var ParamPort int
-var ParamWwwDir string
-
 func init() {
-	flag.StringVar(&ParamHost, "host", "0.0.0.0", "server host")
-	flag.IntVar(&ParamPort, "port", 8080, "server port")
-	flag.StringVar(&ParamWwwDir, "dir", "", "virtual hosts directory")
+	flag.StringVar(&consts.ParamHost, "host", "0.0.0.0", "server host")
+	flag.IntVar(&consts.ParamPort, "port", 8080, "server port")
+	flag.StringVar(&consts.ParamWwwDir, "dir", "", "virtual hosts directory")
+	flag.BoolVar(&consts.ParamDebug, "debug", false, "debug mode with ignoring log files")
 	flag.Parse()
 }
 
 func main() {
 	// Universal, params by env vars
-	if ParamHost == "0.0.0.0" {
+	if consts.ParamHost == "0.0.0.0" {
 		if os.Getenv("FAVE_HOST") != "" {
-			ParamHost = os.Getenv("FAVE_HOST")
+			consts.ParamHost = os.Getenv("FAVE_HOST")
 		}
 	}
-	if ParamPort == 8080 {
+	if consts.ParamPort == 8080 {
 		if os.Getenv("FAVE_PORT") != "" {
-			ParamPort = utils.StrToInt(os.Getenv("FAVE_PORT"))
+			consts.ParamPort = utils.StrToInt(os.Getenv("FAVE_PORT"))
 		}
 	}
-	if ParamWwwDir == "" {
+	if consts.ParamWwwDir == "" {
 		if os.Getenv("FAVE_DIR") != "" {
-			ParamWwwDir = os.Getenv("FAVE_DIR")
+			consts.ParamWwwDir = os.Getenv("FAVE_DIR")
+		}
+	}
+	if consts.ParamDebug == false {
+		if os.Getenv("FAVE_DEBUG") == "true" {
+			consts.ParamDebug = true
 		}
 	}
 
@@ -54,18 +56,18 @@ func main() {
 	defer lg.Close()
 
 	// Check www dir
-	ParamWwwDir = utils.FixPath(ParamWwwDir)
-	if !utils.IsDirExists(ParamWwwDir) {
+	consts.ParamWwwDir = utils.FixPath(consts.ParamWwwDir)
+	if !utils.IsDirExists(consts.ParamWwwDir) {
 		lg.Log("Virtual hosts directory is not exists", nil, true)
 		lg.Log("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts", nil, true)
 		return
 	}
 
 	// Attach www dir to logger
-	lg.SetWwwDir(ParamWwwDir)
+	lg.SetWwwDir(consts.ParamWwwDir)
 
 	// Session cleaner
-	sess_cl_ch, sess_cl_stop := session_clean_start(ParamWwwDir)
+	sess_cl_ch, sess_cl_stop := session_clean_start(consts.ParamWwwDir)
 	defer session_clean_stop(sess_cl_ch, sess_cl_stop)
 
 	// Init mounted resources
@@ -79,7 +81,7 @@ func main() {
 	mods := modules.New()
 
 	// Init and start web server
-	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", ParamHost, ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
+	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
 		// Schema
@@ -95,10 +97,10 @@ func main() {
 		// Host and port
 		host, port := utils.ExtractHostPort(r.Host, false)
 		curr_host := host
-		vhost_dir := ParamWwwDir + string(os.PathSeparator) + host
+		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + host
 		if !utils.IsDirExists(vhost_dir) {
 			curr_host = "localhost"
-			vhost_dir = ParamWwwDir + string(os.PathSeparator) + "localhost"
+			vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
 		}
 
 		// Check for minimal dir structure

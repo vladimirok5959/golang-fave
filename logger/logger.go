@@ -23,7 +23,7 @@ type Logger struct {
 }
 
 func (this *Logger) console(msg logMsg) {
-	if consts.Debug {
+	if consts.ParamDebug {
 		if !msg.isError {
 			fmt.Fprintln(os.Stdout, "\033[0;32m[ACCESS] "+msg.message+"\033[0m")
 		} else {
@@ -41,7 +41,7 @@ func (this *Logger) console(msg logMsg) {
 
 func (this *Logger) write(msg logMsg) {
 	// Ignore file if debug
-	if consts.Debug {
+	if consts.ParamDebug {
 		this.console(msg)
 		return
 	}

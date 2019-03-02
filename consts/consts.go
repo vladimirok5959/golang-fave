@@ -4,7 +4,6 @@ import (
 	"html/template"
 )
 
-const Debug = true
 const ServerVersion = "1.0.0"
 const AssetsVersion = "8"
 const AssetsPath = "assets"
@@ -25,6 +24,13 @@ const AssetsSysLogoPng = AssetsPath + "/sys/logo.png"
 const AssetsSysLogoSvg = AssetsPath + "/sys/logo.svg"
 const AssetsSysStylesCss = AssetsPath + "/sys/styles.css"
 
+// Make global for other packages
+var ParamHost string
+var ParamPort int
+var ParamWwwDir string
+var ParamDebug bool
+
+// For admin panel
 type BreadCrumb struct {
 	Name string
 	Link string

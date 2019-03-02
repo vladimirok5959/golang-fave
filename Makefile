@@ -28,7 +28,7 @@ test:
 	go test ./...
 
 run:
-	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts
+	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true
 
 update:
 	go mod vendor
