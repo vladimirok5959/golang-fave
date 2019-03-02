@@ -576,7 +576,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 			"Home",
 			"/",
 			"Hello World from Fave CMS!",
-			utils.GetCurrentUnixTimestamp(),
+			utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
 			1,
 		)
 		if err != nil {
