@@ -1,12 +1,16 @@
 # golang-fave
+
+## Usage
 ```
 Usage of ./fave:
-  -dir string
-    	virtual hosts directory
-  -host string
-    	server host (default "0.0.0.0")
-  -port int
-    	server port (default 8080)
+	-debug
+		debug mode with ignoring log files
+	-dir string
+		virtual hosts directory
+	-host string
+		server host (default "0.0.0.0")
+	-port int
+		server port (default 8080)
 ```
 
 ## Development
