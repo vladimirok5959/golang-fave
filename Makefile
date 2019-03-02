@@ -1,14 +1,17 @@
 VERSION="1.0.0"
 
-default: debug
+default: debug test run
 
 debug:
 	go vet ./...
 	gofmt -d ./
 	go build -mod vendor -o ./fave
 
-fix:
-	gofmt -w ./
+test:
+	go test ./...
+
+run:
+	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true
 
 build: clean
 	@-mkdir ./bin
@@ -24,11 +27,8 @@ build: clean
 clean:
 	@-rm -r ./bin
 
-test:
-	go test ./...
-
-run:
-	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true
+fix:
+	gofmt -w ./
 
 update:
 	go mod vendor
