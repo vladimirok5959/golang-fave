@@ -27,7 +27,7 @@ build: clean
 clean:
 	@-rm -r ./bin
 
-fix:
+format:
 	gofmt -w ./
 
 update:
