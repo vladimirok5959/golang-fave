@@ -24,9 +24,6 @@ func (this *FERData) Alias() string {
 		if this.Wrap.CurrModule == "index" {
 			return this.DataRow.(*utils.MySql_page).A_alias
 		}
-	} else if this.Is404 {
-		// Return it from settings
-		return "404"
 	}
 	return ""
 }
