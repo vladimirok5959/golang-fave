@@ -26,3 +26,10 @@ func (this *FERData) Content() template.HTML {
 	}
 	return template.HTML("")
 }
+
+func (this *FERData) DateTime() int {
+	if this.Wrap.CurrModule == "index" {
+		return this.DataRow.(*utils.MySql_page).A_datetime
+	}
+	return 0
+}
