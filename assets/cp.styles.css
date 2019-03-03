@@ -293,10 +293,6 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 }
 
 /* Admin data form */
-.data-form .hidden {
-	display: none;
-}
-
 .data-form label {
 	font-weight: bold;
 	margin-top: .45rem;
@@ -378,4 +374,37 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 
 .checkbox-ios input[type=checkbox]:checked + label:after {
 	left: 32px;
+}
+
+/* Bootstrap fixes */
+#sys-modal-user-settings {
+	padding-right: 0px!important;
+}
+
+/* Mobile fixes */
+@media (max-width: 575px) {
+	/* Less then 576px */
+	body.cp {
+		height: auto;
+		overflow: scroll;
+	}
+
+	body.cp .wrap .sidebar {
+		width: auto;
+		box-shadow: none;
+	}
+
+	body.cp .wrap .content {
+		padding-top: 0.2rem;
+	}
+}
+
+@media (max-width: 767px) {
+	/* Less then 768px */
+	.navbar-expand-md .navbar-collapse {
+		padding: 1rem;
+		background: #417cb9;
+		box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, .3);
+		border-radius: .25rem;
+	}
 }

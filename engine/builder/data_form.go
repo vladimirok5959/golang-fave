@@ -53,7 +53,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				}
 				result += `<div class="form-group">`
 				result += `<div class="row">`
-				result += `<div class="col-3">`
+				result += `<div class="col-md-3">`
 
 				if field.Kind != DFKCheckBox {
 					result += `<label for="lbl_` + field.Name + `">` + field.Caption + `</label>`
@@ -62,7 +62,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				}
 
 				result += `</div>`
-				result += `<div class="col-9">`
+				result += `<div class="col-md-9">`
 				result += `<div>`
 				if field.Kind == DFKText {
 					result += `<input class="form-control" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
@@ -98,9 +98,9 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				result += field.CallBack(&field)
 			} else {
 				result += `<div class="row">`
-				result += `<div class="col-3">`
+				result += `<div class="col-md-3">`
 				result += `</div>`
-				result += `<div class="col-9">`
+				result += `<div class="col-md-9">`
 				result += `<div class="sys-messages"></div>`
 				result += `</div>`
 				result += `</div>`
@@ -113,11 +113,11 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 			if field.CallBack != nil {
 				result += field.CallBack(&field)
 			} else {
-				result += `<div class="row hidden">`
-				result += `<div class="col-3">`
+				result += `<div class="row d-lg-none">`
+				result += `<div class="col-md-3 d-none d-md-block">`
 				result += `&nbsp;`
 				result += `</div>`
-				result += `<div class="col-9">`
+				result += `<div class="col-md-9">`
 				result += `<button type="submit" class="btn btn-primary" data-target="` + field.Target + `">` + html.EscapeString(field.Value) + `</button>`
 				result += `</div>`
 				result += `</div>`
