@@ -24,6 +24,7 @@ hosts
 ├────── access.log   # Access log file
 ├────── error.log    # Error log file
 ├──── template       # Engine templates
+├────── 404.html     # Template for 404 page
 ├────── footer.html  # Footer
 ├────── header.html  # Header
 ├────── index.html   # Template for index page
