@@ -9,7 +9,7 @@
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
 
-		<title>{{$.Data.MetaTitle}}</title>
+		<title>{{if not $.Data.Is404}}{{$.Data.MetaTitle}}{{else}}Error 404{{end}}</title>
 		<meta name="keywords" content="{{$.Data.MetaKeywords}}" />
 		<meta name="description" content="{{$.Data.MetaDescription}}" />
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
