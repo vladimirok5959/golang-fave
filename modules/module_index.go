@@ -25,9 +25,9 @@ func (this *Modules) RegisterModule_Index() *Module {
 		Order:  0,
 		Icon:   assets.SysSvgIconPage,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "List of Pages", Show: true, Icon: assets.SysSvgIconList},
-			{Mount: "add", Name: "Add New Page", Show: true, Icon: assets.SysSvgIconPlus},
-			{Mount: "modify", Name: "Modify Page", Show: false},
+			{Mount: "default", Name: "List of pages", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "add", Name: "Add new page", Show: true, Icon: assets.SysSvgIconPlus},
+			{Mount: "modify", Name: "Modify page", Show: false},
 		},
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
@@ -92,7 +92,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		sidebar := ""
 		if wrap.CurrSubModule == "" || wrap.CurrSubModule == "default" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-				{Name: "List of Pages"},
+				{Name: "List of pages"},
 			})
 			content += builder.DataTable(wrap, "pages", "id", "DESC", &[]builder.DataTableRow{
 				{
@@ -151,11 +151,11 @@ func (this *Modules) RegisterModule_Index() *Module {
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-					{Name: "Add New Page"},
+					{Name: "Add new page"},
 				})
 			} else {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-					{Name: "Modify Page"},
+					{Name: "Modify page"},
 				})
 			}
 
@@ -225,38 +225,38 @@ func (this *Modules) RegisterModule_Index() *Module {
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "Page Name",
+					Caption: "Page name",
 					Name:    "name",
 					Value:   data.A_name,
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "Page Alias",
+					Caption: "Page alias",
 					Name:    "alias",
 					Value:   data.A_alias,
 					Hint:    "Example: /about-us/ or /about-us.html or /about/team.html",
 				},
 				{
 					Kind:    builder.DFKTextArea,
-					Caption: "Page Content",
+					Caption: "Page content",
 					Name:    "content",
 					Value:   data.A_content,
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "Meta Title",
+					Caption: "Meta title",
 					Name:    "meta_title",
 					Value:   data.A_meta_title,
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "Meta Keywords",
+					Caption: "Meta keywords",
 					Name:    "meta_keywords",
 					Value:   data.A_meta_keywords,
 				},
 				{
 					Kind:    builder.DFKTextArea,
-					Caption: "Meta Description",
+					Caption: "Meta description",
 					Name:    "meta_description",
 					Value:   data.A_meta_description,
 				},

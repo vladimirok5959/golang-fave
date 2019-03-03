@@ -19,16 +19,16 @@ func (this *Modules) RegisterModule_Users() *Module {
 		System: true,
 		Icon:   assets.SysSvgIconUser,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "List of Users", Show: true, Icon: assets.SysSvgIconList},
-			{Mount: "add", Name: "Add New User", Show: true, Icon: assets.SysSvgIconPlus},
-			{Mount: "modify", Name: "Modify User", Show: false},
+			{Mount: "default", Name: "List of users", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "add", Name: "Add new user", Show: true, Icon: assets.SysSvgIconPlus},
+			{Mount: "modify", Name: "Modify user", Show: false},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""
 		if wrap.CurrSubModule == "" || wrap.CurrSubModule == "default" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-				{Name: "List of Users"},
+				{Name: "List of users"},
 			})
 			content += builder.DataTable(wrap, "users", "id", "DESC", &[]builder.DataTableRow{
 				{
@@ -87,11 +87,11 @@ func (this *Modules) RegisterModule_Users() *Module {
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-					{Name: "Add New User"},
+					{Name: "Add new user"},
 				})
 			} else {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-					{Name: "Modify User"},
+					{Name: "Modify user"},
 				})
 			}
 
@@ -158,13 +158,13 @@ func (this *Modules) RegisterModule_Users() *Module {
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "First Name",
+					Caption: "First name",
 					Name:    "first_name",
 					Value:   data.A_first_name,
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "Last Name",
+					Caption: "Last name",
 					Name:    "last_name",
 					Value:   data.A_last_name,
 				},
