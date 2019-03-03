@@ -48,7 +48,11 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 	sql := "SELECT"
 	for i, column := range *data {
 		if column.NameInTable != "" {
-			result += `<th scope="col" class="col_` + column.DBField + ` ` + column.Classes + `">` + html.EscapeString(column.NameInTable) + `</th>`
+			classes := column.Classes
+			if classes != "" {
+				classes = " " + classes
+			}
+			result += `<th scope="col" class="col_` + column.DBField + classes + `">` + html.EscapeString(column.NameInTable) + `</th>`
 		}
 		if column.DBExp == "" {
 			sql += " `" + column.DBField + "`"
@@ -80,10 +84,14 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 					result += `<tr>`
 					for i, val := range values {
 						if (*data)[i].NameInTable != "" {
+							classes := (*data)[i].Classes
+							if classes != "" {
+								classes = " " + classes
+							}
 							if (*data)[i].CallBack == nil {
-								result += `<td class="col_` + (*data)[i].DBField + ` ` + (*data)[i].Classes + `">` + html.EscapeString(string(val)) + `</td>`
+								result += `<td class="col_` + (*data)[i].DBField + classes + `">` + html.EscapeString(string(val)) + `</td>`
 							} else {
-								result += `<td class="col_` + (*data)[i].DBField + ` ` + (*data)[i].Classes + `">` + (*data)[i].CallBack(&values) + `</td>`
+								result += `<td class="col_` + (*data)[i].DBField + classes + `">` + (*data)[i].CallBack(&values) + `</td>`
 							}
 						}
 					}
