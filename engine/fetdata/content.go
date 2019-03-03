@@ -2,6 +2,7 @@ package fetdata
 
 import (
 	"html/template"
+	"time"
 
 	"golang-fave/utils"
 )
@@ -32,4 +33,11 @@ func (this *FERData) DateTime() int {
 		return this.DataRow.(*utils.MySql_page).A_datetime
 	}
 	return 0
+}
+
+func (this *FERData) DateTimeFormat(format string) string {
+	if this.Wrap.CurrModule == "index" {
+		return time.Unix(int64(this.DataRow.(*utils.MySql_page).A_datetime), 0).Format(format)
+	}
+	return ""
 }
