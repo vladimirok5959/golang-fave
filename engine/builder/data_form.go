@@ -30,100 +30,94 @@ type DataFormField struct {
 }
 
 func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
-	result := `<form class="data-form prev-data-lost" action="/cp/" method="post" autocomplete="off">`
-	result += `<div class="hidden">`
+	var html_hidden string
+	var html_element string
+	var html_message string
+	var html_button string
+
 	for _, field := range data {
 		if field.Kind == DFKHidden {
 			if field.CallBack != nil {
-				result += field.CallBack(&field)
+				html_hidden += field.CallBack(&field)
 			} else {
-				result += `<input type="hidden" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `">`
+				html_hidden += `<input type="hidden" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `">`
 			}
-		}
-	}
-	result += `</div>`
-	for _, field := range data {
-		if field.Kind != DFKHidden && field.Kind != DFKSubmit && field.Kind != DFKMessage {
+		} else if field.Kind != DFKHidden && field.Kind != DFKSubmit && field.Kind != DFKMessage {
 			if field.CallBack != nil {
-				result += field.CallBack(&field)
+				html_element += field.CallBack(&field)
 			} else {
 				required := ``
 				if field.Required {
 					required = ` required`
 				}
-				result += `<div class="form-group">`
-				result += `<div class="row">`
-				result += `<div class="col-md-3">`
+				html_element += `<div class="form-group">`
+				html_element += `<div class="row">`
+				html_element += `<div class="col-md-3">`
 
 				if field.Kind != DFKCheckBox {
-					result += `<label for="lbl_` + field.Name + `">` + field.Caption + `</label>`
+					html_element += `<label for="lbl_` + field.Name + `">` + field.Caption + `</label>`
 				} else {
-					result += `<label>` + field.Caption + `</label>`
+					html_element += `<label>` + field.Caption + `</label>`
 				}
 
-				result += `</div>`
-				result += `<div class="col-md-9">`
-				result += `<div>`
+				html_element += `</div>`
+				html_element += `<div class="col-md-9">`
+				html_element += `<div>`
 				if field.Kind == DFKText {
-					result += `<input class="form-control" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+					html_element += `<input class="form-control" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKEmail {
-					result += `<input class="form-control" type="email" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+					html_element += `<input class="form-control" type="email" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKPassword {
-					result += `<input class="form-control" type="password" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+					html_element += `<input class="form-control" type="password" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKTextArea {
-					result += `<textarea class="form-control" id="lbl_` + field.Name + `" name="` + field.Name + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.Value) + `</textarea>`
+					html_element += `<textarea class="form-control" id="lbl_` + field.Name + `" name="` + field.Name + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.Value) + `</textarea>`
 				} else if field.Kind == DFKCheckBox {
 					checked := ""
 					if field.Value != "0" {
 						checked = " checked"
 					}
-					result += `<div class="checkbox-ios"><input class="form-control" type="checkbox" id="lbl_` + field.Name + `" name="` + field.Name + `" value="1"` + `" autocomplete="off"` + required + checked + `><label for="lbl_` + field.Name + `"></label></div>`
+					html_element += `<div class="checkbox-ios"><input class="form-control" type="checkbox" id="lbl_` + field.Name + `" name="` + field.Name + `" value="1"` + `" autocomplete="off"` + required + checked + `><label for="lbl_` + field.Name + `"></label></div>`
 				}
-				result += `</div>`
+				html_element += `</div>`
 				if field.Hint != "" {
-					result += `<div><small>` + field.Hint + `</small></div>`
+					html_element += `<div><small>` + field.Hint + `</small></div>`
 				}
-				result += `</div>`
-				result += `</div>`
-				result += `</div>`
+				html_element += `</div>`
+				html_element += `</div>`
+				html_element += `</div>`
 			}
-		}
-	}
-
-	// TODO: optimize this...
-
-	for _, field := range data {
-		if field.Kind == DFKMessage {
+		} else if field.Kind == DFKMessage {
 			if field.CallBack != nil {
-				result += field.CallBack(&field)
+				html_message += field.CallBack(&field)
 			} else {
-				result += `<div class="row">`
-				result += `<div class="col-md-3">`
-				result += `</div>`
-				result += `<div class="col-md-9">`
-				result += `<div class="sys-messages"></div>`
-				result += `</div>`
-				result += `</div>`
+				html_message += `<div class="row">`
+				html_message += `<div class="col-md-3">`
+				html_message += `</div>`
+				html_message += `<div class="col-md-9">`
+				html_message += `<div class="sys-messages"></div>`
+				html_message += `</div>`
+				html_message += `</div>`
+			}
+		} else if field.Kind == DFKSubmit {
+			if field.CallBack != nil {
+				html_button += field.CallBack(&field)
+			} else {
+				html_button += `<div class="row d-lg-none">`
+				html_button += `<div class="col-md-3 d-none d-md-block">`
+				html_button += `&nbsp;`
+				html_button += `</div>`
+				html_button += `<div class="col-md-9">`
+				html_button += `<button type="submit" class="btn btn-primary" data-target="` + field.Target + `">` + html.EscapeString(field.Value) + `</button>`
+				html_button += `</div>`
+				html_button += `</div>`
 			}
 		}
 	}
 
-	for _, field := range data {
-		if field.Kind == DFKSubmit {
-			if field.CallBack != nil {
-				result += field.CallBack(&field)
-			} else {
-				result += `<div class="row d-lg-none">`
-				result += `<div class="col-md-3 d-none d-md-block">`
-				result += `&nbsp;`
-				result += `</div>`
-				result += `<div class="col-md-9">`
-				result += `<button type="submit" class="btn btn-primary" data-target="` + field.Target + `">` + html.EscapeString(field.Value) + `</button>`
-				result += `</div>`
-				result += `</div>`
-			}
-		}
+	if html_hidden != "" {
+		html_hidden = `<div class="hidden">` + html_hidden + `</div>`
 	}
-	result += `</form>`
-	return result
+
+	return `<form class="data-form prev-data-lost" action="/cp/" method="post" autocomplete="off">` +
+		html_hidden + html_element + html_message + html_button + `</form>`
 }
