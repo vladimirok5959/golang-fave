@@ -136,16 +136,8 @@ body.cp .wrap .content {
 	vertical-align: top;
 }
 
-body.cp .wrap .sidebar {
-	display: none;
-}
-
-body.cp.cp-sidebar-left .wrap .sidebar.sidebar-left {
-	display: table-cell;
-}
-
-body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right {
-	display: table-cell;
+body.cp .wrap .sidebar.sidebar-right {
+	display: none!important;
 }
 
 body.cp .wrap .sidebar-right .padd,
@@ -382,6 +374,12 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 }
 
 /* Mobile fixes */
+@media (min-width: 992px) {
+	body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right.d-lg-table-cell {
+		display: table-cell!important;
+	}
+}
+
 @media (max-width: 575px) {
 	/* Less then 576px */
 	body.cp {

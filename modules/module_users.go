@@ -58,6 +58,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 				{
 					DBField:     "active",
 					NameInTable: "Active",
+					Classes:     "d-none d-sm-table-cell",
 					CallBack: func(values *[]string) string {
 						return builder.CheckBox(utils.StrToInt((*values)[4]))
 					},
@@ -65,6 +66,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 				{
 					DBField:     "admin",
 					NameInTable: "Admin",
+					Classes:     "d-none d-sm-table-cell",
 					CallBack: func(values *[]string) string {
 						return builder.CheckBox(utils.StrToInt((*values)[5]))
 					},

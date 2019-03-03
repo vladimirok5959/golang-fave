@@ -115,6 +115,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					DBField:     "datetime",
 					DBExp:       "UNIX_TIMESTAMP(`datetime`)",
 					NameInTable: "Date / Time",
+					Classes:     "d-none d-sm-table-cell",
 					CallBack: func(values *[]string) string {
 						t := int64(utils.StrToInt((*values)[3]))
 						return `<div>` + utils.UnixTimestampToFormat(t, "02.01.2006") + `</div>` +
@@ -124,6 +125,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				{
 					DBField:     "active",
 					NameInTable: "Active",
+					Classes:     "d-none d-sm-table-cell",
 					CallBack: func(values *[]string) string {
 						return builder.CheckBox(utils.StrToInt((*values)[4]))
 					},

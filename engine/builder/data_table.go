@@ -13,6 +13,7 @@ type DataTableRow struct {
 	DBField     string
 	DBExp       string
 	NameInTable string
+	Classes     string
 	CallBack    func(values *[]string) string
 }
 
@@ -47,7 +48,7 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 	sql := "SELECT"
 	for i, column := range *data {
 		if column.NameInTable != "" {
-			result += `<th scope="col" class="col_` + column.DBField + `">` + html.EscapeString(column.NameInTable) + `</th>`
+			result += `<th scope="col" class="col_` + column.DBField + ` ` + column.Classes + `">` + html.EscapeString(column.NameInTable) + `</th>`
 		}
 		if column.DBExp == "" {
 			sql += " `" + column.DBField + "`"
@@ -80,9 +81,9 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 					for i, val := range values {
 						if (*data)[i].NameInTable != "" {
 							if (*data)[i].CallBack == nil {
-								result += `<td class="col_` + (*data)[i].DBField + `">` + html.EscapeString(string(val)) + `</td>`
+								result += `<td class="col_` + (*data)[i].DBField + ` ` + (*data)[i].Classes + `">` + html.EscapeString(string(val)) + `</td>`
 							} else {
-								result += `<td class="col_` + (*data)[i].DBField + `">` + (*data)[i].CallBack(&values) + `</td>`
+								result += `<td class="col_` + (*data)[i].DBField + ` ` + (*data)[i].Classes + `">` + (*data)[i].CallBack(&values) + `</td>`
 							}
 						}
 					}
