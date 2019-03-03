@@ -368,7 +368,6 @@ func (this *Modules) XXXBackEnd(wrap *wrapper.Wrapper) bool {
 				UserFirstName:      utils.JavaScriptVarValue(wrap.User.A_first_name),
 				UserLastName:       utils.JavaScriptVarValue(wrap.User.A_last_name),
 				UserEmail:          utils.JavaScriptVarValue(wrap.User.A_email),
-				UserPassword:       "",
 				UserAvatarLink:     "https://s.gravatar.com/avatar/" + utils.GetMd5(wrap.User.A_email) + "?s=80&r=g",
 				NavBarModules:      template.HTML(this.getNavMenuModules(wrap, false)),
 				NavBarModulesSys:   template.HTML(this.getNavMenuModules(wrap, true)),
