@@ -152,6 +152,24 @@ func SystemErrorPageEngine(w http.ResponseWriter, err error) {
 	w.Write([]byte("<h2>" + err.Error() + "</h2>"))
 }
 
+func SystemErrorPageTemplate(w http.ResponseWriter, err error) {
+	if tmpl, e := template.New("template").Parse(string(assets.TmplPageErrorTmpl)); e == nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		w.Header().Set("Content-Type", "text/html")
+		tmpl.Execute(w, consts.TmplData{
+			System: GetTmplSystemData(),
+			Data:   GetTmplError(err),
+		})
+		return
+	}
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte("<h1>Critical engine error</h1>"))
+	w.Write([]byte("<h2>" + err.Error() + "</h2>"))
+}
+
 func SystemErrorPage404(w http.ResponseWriter) {
 	tmpl, err := template.New("template").Parse(string(assets.TmplPageError404))
 	if err != nil {

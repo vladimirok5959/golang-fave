@@ -172,7 +172,7 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
 		this.DTemplate+string(os.PathSeparator)+"footer.html",
 	)
 	if err != nil {
-		utils.SystemErrorPageEngine(this.W, err)
+		utils.SystemErrorPageTemplate(this.W, err)
 		return
 	}
 	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -183,7 +183,7 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
 		Data:   data,
 	})
 	if err != nil {
-		utils.SystemErrorPageEngine(this.W, err)
+		utils.SystemErrorPageTemplate(this.W, err)
 		return
 	}
 	this.W.Write(tpl.Bytes())
