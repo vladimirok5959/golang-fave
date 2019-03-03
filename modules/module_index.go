@@ -6,6 +6,7 @@ import (
 
 	"fmt"
 	"html"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -64,12 +65,13 @@ func (this *Modules) RegisterModule_Index() *Module {
 			&row.A_active,
 		)
 		if err != nil && err != sql.ErrNoRows {
-			// Error 500
+			// System error 500
 			utils.SystemErrorPageEngine(wrap.W, err)
 			return
 		} else if err == sql.ErrNoRows {
-			// Error 404
-			utils.SystemErrorPage404(wrap.W)
+			// User error 404 page
+			wrap.W.WriteHeader(http.StatusNotFound)
+			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil))
 			return
 		}
 
@@ -85,8 +87,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		}
 
 		// Render template
-		tmpl_data := fetdata.New(wrap, row)
-		wrap.RenderFrontEnd(tmpl_name, tmpl_data)
+		wrap.RenderFrontEnd(tmpl_name, fetdata.New(wrap, row))
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""
