@@ -21,9 +21,11 @@ func New(wrap *wrapper.Wrapper, drow interface{}) *FERData {
 }
 
 func (this *FERData) init() *FERData {
-	if this.Wrap.CurrModule == "index" {
-		if this.DataRow.(*utils.MySql_page).A_meta_title == "" {
-			this.DataRow.(*utils.MySql_page).A_meta_title = this.DataRow.(*utils.MySql_page).A_name
+	if this.DataRow != nil {
+		if this.Wrap.CurrModule == "index" {
+			if this.DataRow.(*utils.MySql_page).A_meta_title == "" {
+				this.DataRow.(*utils.MySql_page).A_meta_title = this.DataRow.(*utils.MySql_page).A_name
+			}
 		}
 	}
 	return this
