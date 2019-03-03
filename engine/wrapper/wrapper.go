@@ -8,7 +8,6 @@ import (
 	"html/template"
 	"net/http"
 	"os"
-	"strings"
 
 	"golang-fave/consts"
 	"golang-fave/logger"
@@ -144,13 +143,13 @@ func (this *Wrapper) Write(data string) {
 func (this *Wrapper) MsgSuccess(msg string) {
 	this.Write(fmt.Sprintf(
 		`fave.ShowMsgSuccess('Success!', '%s', false);`,
-		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
+		utils.JavaScriptVarValue(msg)))
 }
 
 func (this *Wrapper) MsgError(msg string) {
 	this.Write(fmt.Sprintf(
 		`fave.ShowMsgError('Error!', '%s', true);`,
-		strings.Replace(strings.Replace(msg, `'`, `&rsquo;`, -1), `"`, `&rdquo;`, -1)))
+		utils.JavaScriptVarValue(msg)))
 }
 
 func (this *Wrapper) RenderToString(tcont []byte, data interface{}) string {

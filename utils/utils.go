@@ -242,3 +242,12 @@ func ExtractGetParams(str string) string {
 	}
 	return "?" + str[i+1:]
 }
+
+func JavaScriptVarValue(str string) string {
+	return strings.Replace(
+		strings.Replace(str, `'`, `&rsquo;`, -1),
+		`"`,
+		`&rdquo;`,
+		-1,
+	)
+}
