@@ -55,6 +55,13 @@ func (this *Engine) Process() bool {
 
 	// Display MySQL install page on backend
 	if this.Wrap.IsBackend && !this.Wrap.ConfMysqlExists {
+		// Redirect to main url if needs
+		if this.Wrap.R.URL.Path != "/cp/" {
+			http.Redirect(this.Wrap.W, this.Wrap.R, "/cp/"+utils.ExtractGetParams(this.Wrap.R.RequestURI), 302)
+			return true
+		}
+
+		// Show mysql settings form
 		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpMySql, nil)
 		return true
 	}
@@ -91,6 +98,13 @@ func (this *Engine) Process() bool {
 		return true
 	}
 	if count <= 0 {
+		// Redirect to main url if needs
+		if this.Wrap.R.URL.Path != "/cp/" {
+			http.Redirect(this.Wrap.W, this.Wrap.R, "/cp/"+utils.ExtractGetParams(this.Wrap.R.RequestURI), 302)
+			return true
+		}
+
+		// Show first user form
 		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpFirstUser, nil)
 		return true
 	}
