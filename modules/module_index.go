@@ -215,6 +215,11 @@ func (this *Modules) RegisterModule_Index() *Module {
 				}
 			}
 
+			btn_caption := "Add"
+			if wrap.CurrSubModule == "modify" {
+				btn_caption = "Save"
+			}
+
 			content += builder.DataForm(wrap, []builder.DataFormField{
 				{
 					Kind:  builder.DFKHidden,
@@ -274,7 +279,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				},
 				{
 					Kind:   builder.DFKSubmit,
-					Value:  "Add",
+					Value:  btn_caption,
 					Target: "add-edit-button",
 				},
 			})
