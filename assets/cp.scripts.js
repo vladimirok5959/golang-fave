@@ -35,92 +35,77 @@
 			}, 1000);
 		};
 
-		function FormToAjax() {
-			$('form').each(function() {
-				$(this).submit(function(e) {
-					var form = $(this);
-					if(form.hasClass('loading')) {
-						e.preventDefault();
-						return;
-					}
-
-					// Block send button
-					form.addClass('loading').addClass('alert-here');
-					var button = $(this).find('button[type=submit]');
-					button.addClass('progress-bar-striped')
-						.addClass('progress-bar-animated');
-
-					// Another button
-					if(button.attr('data-target') != '') {
-						$('#' + button.attr('data-target')).addClass('progress-bar-striped')
-							.addClass('progress-bar-animated');
-					}
-
-					// Clear form messages
-					form.find('.sys-messages').html('');
-
-					$.ajax({
-						type: "POST",
-						url: form.attr('action'),
-						data: form.serialize()
-					}).done(function(data) {
-						FormDataWasChanged = false;
-						AjaxDone(data)
-					}).fail(function(xhr, status, error) {
-						AjaxFail(xhr.responseText, status, error);
-					}).always(function() {
-						// Add delay for one second
-						setTimeout(function() {
-							form.removeClass('loading').removeClass('alert-here');
-							button.removeClass('progress-bar-striped').removeClass('progress-bar-animated');
-							// Another button
-							if(button.attr('data-target') != '') {
-								$('#' + button.attr('data-target')).removeClass('progress-bar-striped').removeClass('progress-bar-animated');
-							}
-						}, 100);
-					});
-
-					// Prevent submit action
+		function FormToAjax(form) {
+			form.submit(function(e) {
+				if(form.hasClass('loading')) {
 					e.preventDefault();
+					return;
+				}
+
+				// Block send button
+				form.addClass('loading').addClass('alert-here');
+				var button = form.find('button[type=submit]');
+				button.addClass('progress-bar-striped')
+					.addClass('progress-bar-animated');
+
+				// Another button
+				if(button.attr('data-target') != '') {
+					$('#' + button.attr('data-target')).addClass('progress-bar-striped')
+						.addClass('progress-bar-animated');
+				}
+
+				// Clear form messages
+				form.find('.sys-messages').html('');
+
+				$.ajax({
+					type: "POST",
+					url: form.attr('action'),
+					data: form.serialize()
+				}).done(function(data) {
+					FormDataWasChanged = false;
+					AjaxDone(data)
+				}).fail(function(xhr, status, error) {
+					AjaxFail(xhr.responseText, status, error);
+				}).always(function() {
+					// Add delay for one second
+					setTimeout(function() {
+						form.removeClass('loading').removeClass('alert-here');
+						button.removeClass('progress-bar-striped')
+							.removeClass('progress-bar-animated');
+						// Another button
+						if(button.attr('data-target') != '') {
+							$('#' + button.attr('data-target'))
+								.removeClass('progress-bar-striped')
+								.removeClass('progress-bar-animated');
+						}
+					}, 100);
 				});
 
-				// Bind to another button
-				var button = $(this).find('button[type=submit]');
-				if(button.attr('data-target') != '') {
-					$('#' + button.attr('data-target')).click(function() {
-						button.click();
-					});
-				}
-
-				// Mark body if any data in form was changed
-				if($(this).hasClass('prev-data-lost')) {
-					$(this).find('input, textarea, select').on('input', function() {
-						if(!FormDataWasChanged) {
-							FormDataWasChanged = true;
-						}
-					});
-				}
+				// Prevent submit action
+				e.preventDefault();
 			});
+
+			// Bind to another button
+			var button = form.find('button[type=submit]');
+			if(button.attr('data-target') != '') {
+				$('#' + button.attr('data-target')).click(function() {
+					button.click();
+				});
+			}
+
+			// Mark body if any data in form was changed
+			if(form.hasClass('prev-data-lost')) {
+				form.find('input, textarea, select').on('input', function() {
+					if(!FormDataWasChanged) {
+						FormDataWasChanged = true;
+					}
+				});
+			}
 		};
 
-		function FixFormInModal() {
-			// Remove alert from modal on close
-			$('.modal.fade').on('hidden.bs.modal', function() {
-				modal_alert_place = $(this).find('.sys-messages');
-				if(modal_alert_place.length) {
-					modal_alert_place.html('');
-				}
-				// Reset form at modal close
-				form = $(this).find('form');
-				if(form.length) {
-					form[0].reset();
-				}
-			}).on('show.bs.modal', function() {
-				// Reset form at modal open
-				form = $(this).find('form');
-				if(form.length) {
-					form[0].reset();
-				}
+		function AllFormsToAjax() {
+			$('form').each(function() {
+				FormToAjax($(this));
 			});
 		};
 
@@ -136,8 +121,7 @@
 		function Initialize() {
 			// Check if jQuery was loaded
 			if(typeof $ == 'function') {
-				FormToAjax();
-				FixFormInModal();
+				AllFormsToAjax();
 				BindWindowBeforeUnload();
 			} else {
 				console.log('Error: jQuery is not loaded!');
@@ -161,6 +145,59 @@
 
 			ShowMsgError: function(title, message) {
 				ShowSystemMsg(title, message, true);
+			},
+
+			ModalUserProfile: function() {
+				var html = '<div class="modal fade" id="sys-modal-user-settings" tabindex="-1" role="dialog" aria-labelledby="sysModalUserSettingsLabel" aria-hidden="true"> \
+					<div class="modal-dialog modal-dialog-centered" role="document"> \
+						<div class="modal-content"> \
+							<form class="form-user-settings" action="/cp/" method="post" autocomplete="off"> \
+								<input type="hidden" name="action" value="index-user-update-profile"> \
+								<div class="modal-header"> \
+									<h5 class="modal-title" id="sysModalUserSettingsLabel">My profile</h5> \
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
+										<span aria-hidden="true">&times;</span> \
+									</button> \
+								</div> \
+								<div class="modal-body text-left"> \
+									<div class="form-group"> \
+										<label for="first_name">First name</label> \
+										<input type="text" class="form-control" id="first_name" name="first_name" value="' + window.CurrentUserProfileData.first_name + '" placeholder="User first name" autocomplete="off"> \
+									</div> \
+									<div class="form-group"> \
+										<label for="last_name">Last name</label> \
+										<input type="text" class="form-control" id="last_name" name="last_name" value="' + window.CurrentUserProfileData.last_name + '" placeholder="User last name" autocomplete="off"> \
+									</div> \
+									<div class="form-group"> \
+										<label for="email">Email</label> \
+										<input type="email" class="form-control" id="email" name="email" value="' + window.CurrentUserProfileData.email + '" placeholder="User email" autocomplete="off" required> \
+									</div> \
+									<div class="form-group"> \
+										<label for="password">New password</label> \
+										<input type="password" class="form-control" id="password" aria-describedby="passwordHelp" name="password" value="" placeholder="User new password" autocomplete="off"> \
+										<small id="passwordHelp" class="form-text text-muted">Leave this field empty if you don\'t want change your password</small> \
+									</div> \
+									<div class="sys-messages"></div> \
+								</div> \
+								<div class="modal-footer"> \
+									<button type="submit" class="btn btn-primary">Save</button> \
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> \
+								</div> \
+							</form> \
+						</div> \
+					</div> \
+				</div>';
+				$('#sys-modal-user-settings-placeholder').html(html);
+				$("#sys-modal-user-settings").modal({
+					backdrop: 'static',
+					keyboard: false,
+					show: false,
+				});
+				$('#sys-modal-user-settings').on('hidden.bs.modal', function(e) {
+					$('#sys-modal-user-settings-placeholder').html('');
+				});
+				FormToAjax($('#sys-modal-user-settings form'));
+				$("#sys-modal-user-settings").modal('show');
 			},
 
 			ActionLogout: function(message) {
