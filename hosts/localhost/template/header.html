@@ -35,32 +35,3 @@
 			</nav>
 		</header>
 		<main role="main" class="pt-2">
-			<div class="container some-text pt-3">
-				<h2>MetaData</h2>
-				<div><b>MetaTitle:</b> {{$.Data.MetaTitle}}</div>
-				<div><b>MetaKeywords:</b> {{$.Data.MetaKeywords}}</div>
-				<div><b>MetaDescription:</b> {{$.Data.MetaDescription}}</div>
-			</div>
-			<div class="container some-text pt-3">
-				<h2>Http</h2>
-				<div><b>RequestURI:</b> {{$.Data.RequestURI}}</div>
-				<div><b>RequestURL:</b> {{$.Data.RequestURL}}</div>
-				<div><b>RequestGET:</b> {{$.Data.RequestGET}}</div>
-			</div>
-			<div class="container some-text pt-3">
-				<div><b>DateTime:</b> {{$.Data.DateTime}}</div>
-				<div><b>DateTimeFormat:</b> {{$.Data.DateTimeFormat "2006-01-02 15:04:05"}}</div>
-			</div>
-			<div class="container some-text pt-3">
-				<h2>User</h2>
-				<div><b>UserIsLoggedIn:</b> {{$.Data.UserIsLoggedIn}}</div>
-				<div><b>UserID:</b> {{$.Data.UserID}}</div>
-				<div><b>UserFirstName:</b> {{$.Data.UserFirstName}}</div>
-				<div><b>UserLastName:</b> {{$.Data.UserLastName}}</div>
-				<div><b>UserEmail:</b> {{$.Data.UserEmail}}</div>
-				<div><b>UserIsAdmin:</b> {{$.Data.UserIsAdmin}}</div>
-				<div><b>UserIsActive:</b> {{$.Data.UserIsActive}}</div>
-				{{if $.Data.UserIsLoggedIn}}
-					<div><b>Welcome, {{$.Data.UserFirstName}} {{$.Data.UserLastName}}!</b></div>
-				{{end}}
-			</div>

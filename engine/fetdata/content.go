@@ -12,6 +12,9 @@ func (this *FERData) Name() string {
 		if this.Wrap.CurrModule == "index" {
 			return this.DataRow.(*utils.MySql_page).A_name
 		}
+	} else if this.Is404 {
+		// Return it from settings
+		return "404"
 	}
 	return ""
 }
@@ -21,6 +24,9 @@ func (this *FERData) Alias() string {
 		if this.Wrap.CurrModule == "index" {
 			return this.DataRow.(*utils.MySql_page).A_alias
 		}
+	} else if this.Is404 {
+		// Return it from settings
+		return "404"
 	}
 	return ""
 }
@@ -30,6 +36,9 @@ func (this *FERData) Content() template.HTML {
 		if this.Wrap.CurrModule == "index" {
 			return template.HTML(this.DataRow.(*utils.MySql_page).A_content)
 		}
+	} else if this.Is404 {
+		// Return it from settings
+		return template.HTML("The page what you looking for is not found")
 	}
 	return template.HTML("")
 }

@@ -71,7 +71,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		} else if err == sql.ErrNoRows {
 			// User error 404 page
 			wrap.W.WriteHeader(http.StatusNotFound)
-			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil))
+			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true))
 			return
 		}
 
@@ -87,7 +87,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		}
 
 		// Render template
-		wrap.RenderFrontEnd(tmpl_name, fetdata.New(wrap, row))
+		wrap.RenderFrontEnd(tmpl_name, fetdata.New(wrap, row, false))
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""

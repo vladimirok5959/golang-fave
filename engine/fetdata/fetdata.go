@@ -8,14 +8,16 @@ import (
 type FERData struct {
 	Wrap    *wrapper.Wrapper
 	DataRow interface{}
+	Is404   bool
 
 	bufferUser *utils.MySql_user
 }
 
-func New(wrap *wrapper.Wrapper, drow interface{}) *FERData {
+func New(wrap *wrapper.Wrapper, drow interface{}, is404 bool) *FERData {
 	fer := &FERData{
 		Wrap:    wrap,
 		DataRow: drow,
+		Is404:   is404,
 	}
 	return fer.init()
 }
