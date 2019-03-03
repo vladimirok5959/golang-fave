@@ -5,13 +5,13 @@ import (
 )
 
 func (this *FERData) RequestURI() string {
-	return this.Wrap.R.RequestURI
+	return this.wrap.R.RequestURI
 }
 
 func (this *FERData) RequestURL() string {
-	return this.Wrap.R.URL.Path
+	return this.wrap.R.URL.Path
 }
 
 func (this *FERData) RequestGET() string {
-	return utils.ExtractGetParams(this.Wrap.R.RequestURI)
+	return utils.ExtractGetParams(this.wrap.R.RequestURI)
 }

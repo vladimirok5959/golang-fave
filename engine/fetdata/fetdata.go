@@ -6,29 +6,33 @@ import (
 )
 
 type FERData struct {
-	Wrap    *wrapper.Wrapper
-	DataRow interface{}
-	Is404   bool
+	wrap    *wrapper.Wrapper
+	dataRow interface{}
+	is404   bool
 
 	bufferUser *utils.MySql_user
 }
 
 func New(wrap *wrapper.Wrapper, drow interface{}, is404 bool) *FERData {
 	fer := &FERData{
-		Wrap:    wrap,
-		DataRow: drow,
-		Is404:   is404,
+		wrap:    wrap,
+		dataRow: drow,
+		is404:   is404,
 	}
 	return fer.init()
 }
 
 func (this *FERData) init() *FERData {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			if this.DataRow.(*utils.MySql_page).A_meta_title == "" {
-				this.DataRow.(*utils.MySql_page).A_meta_title = this.DataRow.(*utils.MySql_page).A_name
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			if this.dataRow.(*utils.MySql_page).A_meta_title == "" {
+				this.dataRow.(*utils.MySql_page).A_meta_title = this.dataRow.(*utils.MySql_page).A_name
 			}
 		}
 	}
 	return this
+}
+
+func (this *FERData) Is404() bool {
+	return this.is404
 }

@@ -8,11 +8,11 @@ import (
 )
 
 func (this *FERData) Name() string {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return this.DataRow.(*utils.MySql_page).A_name
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return this.dataRow.(*utils.MySql_page).A_name
 		}
-	} else if this.Is404 {
+	} else if this.is404 {
 		// Return it from settings
 		return "404"
 	}
@@ -20,20 +20,20 @@ func (this *FERData) Name() string {
 }
 
 func (this *FERData) Alias() string {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return this.DataRow.(*utils.MySql_page).A_alias
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return this.dataRow.(*utils.MySql_page).A_alias
 		}
 	}
 	return ""
 }
 
 func (this *FERData) Content() template.HTML {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return template.HTML(this.DataRow.(*utils.MySql_page).A_content)
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return template.HTML(this.dataRow.(*utils.MySql_page).A_content)
 		}
-	} else if this.Is404 {
+	} else if this.is404 {
 		// Return it from settings
 		return template.HTML("The page what you looking for is not found")
 	}
@@ -41,18 +41,18 @@ func (this *FERData) Content() template.HTML {
 }
 
 func (this *FERData) DateTime() int {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return this.DataRow.(*utils.MySql_page).A_datetime
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return this.dataRow.(*utils.MySql_page).A_datetime
 		}
 	}
 	return 0
 }
 
 func (this *FERData) DateTimeFormat(format string) string {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return time.Unix(int64(this.DataRow.(*utils.MySql_page).A_datetime), 0).Format(format)
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return time.Unix(int64(this.dataRow.(*utils.MySql_page).A_datetime), 0).Format(format)
 		}
 	}
 	return ""

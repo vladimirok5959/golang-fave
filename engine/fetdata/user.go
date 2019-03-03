@@ -7,8 +7,8 @@ import (
 func (this *FERData) userToBuffer() {
 	if this.bufferUser == nil {
 		user := utils.MySql_user{}
-		if this.Wrap.S.GetInt("UserId", 0) > 0 {
-			err := this.Wrap.DB.QueryRow(`
+		if this.wrap.S.GetInt("UserId", 0) > 0 {
+			err := this.wrap.DB.QueryRow(`
 				SELECT
 					id,
 					first_name,
@@ -21,7 +21,7 @@ func (this *FERData) userToBuffer() {
 				WHERE
 					id = ?
 				LIMIT 1;`,
-				this.Wrap.S.GetInt("UserId", 0),
+				this.wrap.S.GetInt("UserId", 0),
 			).Scan(
 				&user.A_id,
 				&user.A_first_name,
@@ -31,7 +31,7 @@ func (this *FERData) userToBuffer() {
 				&user.A_active,
 			)
 			if err != nil {
-				this.Wrap.LogError(err.Error())
+				this.wrap.LogError(err.Error())
 			}
 		}
 		this.bufferUser = &user

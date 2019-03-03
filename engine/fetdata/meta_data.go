@@ -5,11 +5,11 @@ import (
 )
 
 func (this *FERData) MetaTitle() string {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return this.DataRow.(*utils.MySql_page).A_meta_title
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return this.dataRow.(*utils.MySql_page).A_meta_title
 		}
-	} else if this.Is404 {
+	} else if this.is404 {
 		// Return it from settings
 		return "Page not found"
 	}
@@ -17,11 +17,11 @@ func (this *FERData) MetaTitle() string {
 }
 
 func (this *FERData) MetaKeywords() string {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return this.DataRow.(*utils.MySql_page).A_meta_keywords
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return this.dataRow.(*utils.MySql_page).A_meta_keywords
 		}
-	} else if this.Is404 {
+	} else if this.is404 {
 		// Return it from settings
 		return ""
 	}
@@ -29,11 +29,11 @@ func (this *FERData) MetaKeywords() string {
 }
 
 func (this *FERData) MetaDescription() string {
-	if this.DataRow != nil {
-		if this.Wrap.CurrModule == "index" {
-			return this.DataRow.(*utils.MySql_page).A_meta_description
+	if this.dataRow != nil {
+		if this.wrap.CurrModule == "index" {
+			return this.dataRow.(*utils.MySql_page).A_meta_description
 		}
-	} else if this.Is404 {
+	} else if this.is404 {
 		// Return it from settings
 		return ""
 	}
