@@ -28,3 +28,6 @@
 
 # Default host mysql config file
 /hosts/localhost/config/mysql.json
+
+# All else
+/hosts/localhost/config/.installed

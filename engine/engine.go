@@ -78,33 +78,37 @@ func (this *Engine) Process() bool {
 	}
 	defer this.Wrap.DB.Close()
 
-	// ---
-	// TODO: Very expensive operation, optimize that by file flag
 	// Show add first user form if no any user in database
-	var count int
-	err = this.Wrap.DB.QueryRow(`
-		SELECT
-			COUNT(*)
-		FROM
-			users
-		;`,
-	).Scan(
-		&count,
-	)
-	if err != nil {
-		utils.SystemErrorPageEngine(this.Wrap.W, err)
-		return true
-	}
-	if count <= 0 {
-		// Redirect
-		if this.redirectToCP() {
+	if !utils.IsFileExists(this.Wrap.DConfig + string(os.PathSeparator) + ".installed") {
+		var count int
+		err = this.Wrap.DB.QueryRow(`
+			SELECT
+				COUNT(*)
+			FROM
+				users
+			;`,
+		).Scan(
+			&count,
+		)
+		if err != nil {
+			utils.SystemErrorPageEngine(this.Wrap.W, err)
 			return true
 		}
-		// Show first user form
-		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpFirstUser, nil)
-		return true
+		if count <= 0 {
+			// Redirect
+			if this.redirectToCP() {
+				return true
+			}
+			// Show first user form
+			utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpFirstUser, nil)
+			return true
+		} else {
+			// Mark what one or more users already exists
+			if _, err := os.OpenFile(this.Wrap.DConfig+string(os.PathSeparator)+".installed", os.O_RDONLY|os.O_CREATE, 0666); err != nil {
+				this.Wrap.LogError(err.Error())
+			}
+		}
 	}
-	// ---
 
 	// Show login page if need
 	if this.Wrap.S.GetInt("UserId", 0) <= 0 {
