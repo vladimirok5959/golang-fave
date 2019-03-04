@@ -1,5 +1,5 @@
 # golang-fave
-![](screenshots.gif)
+![](screens.gif)
 
 ## Usage
 ```
