@@ -224,7 +224,11 @@ func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
 func (this *Modules) getBreadCrumbs(wrap *wrapper.Wrapper, data *[]consts.BreadCrumb) string {
 	res := `<nav aria-label="breadcrumb">`
 	res += `<ol class="breadcrumb">`
-	res += `<li class="breadcrumb-item"><a href="/cp/` + this.mods[wrap.CurrModule].Info.Mount + `/">` + html.EscapeString(this.mods[wrap.CurrModule].Info.Name) + `</a></li>`
+	if this.mods[wrap.CurrModule].Info.Mount == "index" {
+		res += `<li class="breadcrumb-item"><a href="/cp/">` + html.EscapeString(this.mods[wrap.CurrModule].Info.Name) + `</a></li>`
+	} else {
+		res += `<li class="breadcrumb-item"><a href="/cp/` + this.mods[wrap.CurrModule].Info.Mount + `/">` + html.EscapeString(this.mods[wrap.CurrModule].Info.Name) + `</a></li>`
+	}
 	for _, item := range *data {
 		if item.Link == "" {
 			res += `<li class="breadcrumb-item active" aria-current="page">` + html.EscapeString(item.Name) + `</li>`
