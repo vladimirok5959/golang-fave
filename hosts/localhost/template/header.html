@@ -13,25 +13,52 @@
 		<meta name="keywords" content="{{$.Data.MetaKeywords}}" />
 		<meta name="description" content="{{$.Data.MetaDescription}}" />
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
+
+		<!-- Template CSS file from public folder -->
+		<link rel="stylesheet" href="/styles.css">
 	</head>
-	<body>
-		<header>
-			<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-				<a class="navbar-brand" href="/">Home</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarCollapse">
-					<ul class="navbar-nav mr-auto">
-						<li class="nav-item">
-							<a class="nav-link" href="/">More</a>
-						</li>
-					</ul>
-					<form class="form-inline mt-2 mt-md-0">
-						<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-					</form>
+	<body class="fixed-top-bar1">
+		<div id="wrap">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container">
+					<a class="navbar-brand" href="/">Fave 1.0.0</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarResponsive">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item{{if eq $.Data.Alias "/"}} active{{end}}">
+								<a class="nav-link" href="/">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link{{if eq $.Data.Alias "/another/"}} active{{end}}" href="/another/">Another</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link{{if eq $.Data.Alias "/about/"}} active{{end}}" href="/about/">About</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link{{if $.Data.Is404}} active{{end}}" href="/not-existent-page/">404</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</nav>
-		</header>
-		<main role="main" class="pt-2">
+			<div id="main">
+				<div class="bg-fave">
+					<div class="container">
+						<h1 class="text-left text-white m-0 p-0 py-5">
+							{{if not $.Data.Is404}}
+								{{if eq $.Data.Alias "/"}}
+									Welcome to home page
+								{{else}}
+									Welcome to some another page
+								{{end}}
+							{{else}}
+								Oops, page is not found...
+							{{end}}
+						</h1>
+					</div>
+				</div>
+				<div class="container clear-top">
+					<div class="row pt-4">
+						<div class="col-md-8">

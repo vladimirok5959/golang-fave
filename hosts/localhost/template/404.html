@@ -1,8 +1,10 @@
 {{template "header.html" .}}
-<div class="container some-text pt-3">
-	<h2>Error 404</h2>
-	<div>
-		The page what you looking for is not found
+<div class="card mb-4">
+	<div class="card-body">
+		<h2 class="card-title">Error 404</h2>
+		<div class="page-content">
+			The page what you looking for "<b>{{$.Data.RequestURL}}</b>" is not found
+		</div>
 	</div>
 </div>
 {{template "footer.html" .}}
