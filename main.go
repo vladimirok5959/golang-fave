@@ -51,17 +51,17 @@ func main() {
 		}
 	}
 
-	// Init logger
-	lg := logger.New()
-	defer lg.Close()
-
 	// Check www dir
 	consts.ParamWwwDir = utils.FixPath(consts.ParamWwwDir)
 	if !utils.IsDirExists(consts.ParamWwwDir) {
-		lg.Log("Virtual hosts directory is not exists", nil, true)
-		lg.Log("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts", nil, true)
+		fmt.Printf("Virtual hosts directory is not exists\n")
+		fmt.Printf("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts\n")
 		return
 	}
+
+	// Init logger
+	lg := logger.New()
+	defer lg.Close()
 
 	// Attach www dir to logger
 	lg.SetWwwDir(consts.ParamWwwDir)

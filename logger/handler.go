@@ -26,7 +26,7 @@ func (this handler) log(w *writer, r *http.Request) {
 		r.Proto + `"`,
 		strconv.Itoa(w.status),
 		strconv.Itoa(w.size),
-		fmt.Sprintf("%.3f ms", time.Now().Sub(w.s).Seconds()/1e6),
+		fmt.Sprintf("%.3f ms", time.Now().Sub(w.s).Seconds()),
 	}, " "))
 
 	// Do not wait
