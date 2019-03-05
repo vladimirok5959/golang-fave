@@ -363,7 +363,7 @@ ul.pagination {
 	height: 1.6rem;
 	width: 1.6rem;
 	top: 0.1rem;
-	left: 0.1rem;
+	left: 0.13rem;
 	border-radius: 1.5rem;
 	background: #fff;
 	-moz-transition: .20s ease-in-out;
@@ -377,7 +377,7 @@ ul.pagination {
 }
 
 .checkbox-ios input[type=checkbox]:checked + label:after {
-	left: 1.75rem;
+	left: 1.77rem;
 }
 
 /* Bootstrap fixes */
