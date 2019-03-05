@@ -5,7 +5,7 @@ import (
 )
 
 const ServerVersion = "1.0.0"
-const AssetsVersion = "10"
+const AssetsVersion = "12"
 const AssetsPath = "assets"
 const DirIndexFile = "index.html"
 
