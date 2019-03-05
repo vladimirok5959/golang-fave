@@ -1,4 +1,6 @@
 # golang-fave
+CMS written in Go with MySQL as database.
+
 ![](screens.gif)
 
 ## Usage
