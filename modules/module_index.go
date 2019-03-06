@@ -242,7 +242,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					Caption: "Page alias",
 					Name:    "alias",
 					Value:   data.A_alias,
-					Hint:    "Example: /about-us/ or /about-us.html or /about/team.html",
+					Hint:    "Example: /about-us/ or /about-us.html",
 				},
 				{
 					Kind:    builder.DFKTextArea,

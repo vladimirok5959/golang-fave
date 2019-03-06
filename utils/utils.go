@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf16"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
@@ -67,7 +68,7 @@ func FixPath(path string) string {
 		return newPath
 	}
 	if newPath[len(newPath)-1] == '/' || newPath[len(newPath)-1] == '\\' {
-		newPath = newPath[0 : len(newPath)-2]
+		newPath = newPath[0 : len(newPath)-1]
 	}
 	return newPath
 }
@@ -187,12 +188,22 @@ func SystemErrorPage404(w http.ResponseWriter) {
 
 func UrlToArray(url string) []string {
 	url_buff := url
+
+	// Remove GET parameters
+	i := strings.Index(url_buff, "?")
+	if i > -1 {
+		url_buff = url_buff[:i]
+	}
+
+	// Cut slashes
 	if len(url_buff) >= 1 && url_buff[:1] == "/" {
 		url_buff = url_buff[1:]
 	}
 	if len(url_buff) >= 1 && url_buff[len(url_buff)-1:] == "/" {
 		url_buff = url_buff[:len(url_buff)-1]
 	}
+
+	// Explode
 	if url_buff == "" {
 		return []string{}
 	} else {
@@ -217,13 +228,15 @@ func GenerateAlias(str string) string {
 		return ""
 	}
 
+	strc := utf16.Encode([]rune(str))
+
 	lat := []string{"EH", "I", "i", "#", "eh", "A", "B", "V", "G", "D", "E", "JO", "ZH", "Z", "I", "JJ", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "F", "KH", "C", "CH", "SH", "SHH", "'", "Y", "", "EH", "YU", "YA", "a", "b", "v", "g", "d", "e", "jo", "zh", "z", "i", "jj", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f", "kh", "c", "ch", "sh", "shh", "", "y", "", "eh", "yu", "ya", "", "", "-", "-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "-", "-", ":", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M"}
 	cyr := []string{"Є", "І", "і", "№", "є", "А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "«", "»", "—", " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "", "", "a", "s", "d", "f", "g", "h", "j", "k", "l", "", "", "z", "x", "c", "v", "b", "n", "m", "", "", "", "(", ")", "", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M"}
 
 	var alias string = ""
-	for i := 0; i < len(str); i++ {
+	for i := 0; i < len(strc); i++ {
 		for j := 0; j < len(cyr); j++ {
-			if string(str[i]) == cyr[j] {
+			if string(strc[i]) == cyr[j] {
 				alias += lat[j]
 			}
 		}

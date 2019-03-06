@@ -1,5 +1,5 @@
 # golang-fave
-CMS written in Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. Thanks Go language it's fastern, all in one binary file, no need to install additional web servers. Go native template with vars allow to do almost all what are need.
+CMS written on Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. Thanks Go language it's fastern, all in one binary file, no need to install additional web servers. Go native template with vars allow to do almost all what are need.
 
 ![](testdata/screenshots.gif)
 
