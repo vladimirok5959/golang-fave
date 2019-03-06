@@ -76,6 +76,7 @@ func Start(h hndl, host string, timeout time.Duration, path string, before callb
 		if err := srv.ListenAndServe(); err != nil {
 			if err != http.ErrServerClosed {
 				fmt.Println(err)
+				stop <- os.Interrupt
 			}
 		}
 	}()
