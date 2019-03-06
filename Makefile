@@ -47,3 +47,8 @@ docker-test:
 
 docker-img:
 	docker build -t fave .
+
+docker-clr:
+	@-docker stop fave-test
+	@-docker rm fave-test
+	@-docker rmi fave
