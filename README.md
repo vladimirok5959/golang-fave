@@ -42,3 +42,5 @@ Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimiro
 * **make build** - build release for Linux, Mac OS X and Windows
 * **make format** - format all code by gofmt utility
 * **make update** - get all dependencies and put to vendor folder
+* **make docker-test** - build image and start on port 8080
+* **make docker-img** - build docker image only

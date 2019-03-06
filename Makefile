@@ -42,8 +42,8 @@ docker-test:
 	@-docker stop fave-test
 	@-docker rm fave-test
 	@-docker rmi fave
-	docker build -t fave .
+	docker build --rm=false --force-rm=true -t fave .
 	docker run --name fave-test -d -p 8080:8080 -t -i fave:latest /app/fave.linux-amd64
 
-docker-build-pure:
+docker-img:
 	docker build -t fave .
