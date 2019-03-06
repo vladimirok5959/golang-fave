@@ -16,19 +16,19 @@ func Expect(t *testing.T, actual, expect interface{}) {
 }
 
 func TestIsFileExists(t *testing.T) {
-	Expect(t, IsFileExists("./../testdata/screenshots.gif"), true)
+	Expect(t, IsFileExists("./../testdata/screenshots-1.gif"), true)
 	Expect(t, IsFileExists("./../testdata/no-existed-file"), false)
 }
 
 func TestIsDir(t *testing.T) {
 	Expect(t, IsDir("./../testdata"), true)
-	Expect(t, IsDir("./../testdata/screenshots.gif"), false)
+	Expect(t, IsDir("./../testdata/screenshots-1.gif"), false)
 	Expect(t, IsDir("./../testdata/no-existed-dir"), false)
 }
 
 func TestIsDirExists(t *testing.T) {
 	Expect(t, IsDirExists("./../testdata"), true)
-	Expect(t, IsDirExists("./../testdata/screenshots.gif"), false)
+	Expect(t, IsDirExists("./../testdata/screenshots-1.gif"), false)
 	Expect(t, IsDirExists("./../testdata/no-existed-dir"), false)
 }
 
