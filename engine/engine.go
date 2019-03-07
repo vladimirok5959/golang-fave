@@ -56,7 +56,7 @@ func (this *Engine) Process() bool {
 	// Display MySQL install page on backend
 	if this.Wrap.IsBackend && !this.Wrap.ConfMysqlExists {
 		// Redirect
-		if this.redirectToCP() {
+		if this.redirectFixCpUrl() {
 			return true
 		}
 		// Show mysql settings form
@@ -96,7 +96,7 @@ func (this *Engine) Process() bool {
 		}
 		if count <= 0 {
 			// Redirect
-			if this.redirectToCP() {
+			if this.redirectFixCpUrl() {
 				return true
 			}
 			// Show first user form
@@ -113,7 +113,7 @@ func (this *Engine) Process() bool {
 	// Show login page if need
 	if this.Wrap.S.GetInt("UserId", 0) <= 0 {
 		// Redirect
-		if this.redirectToCP() {
+		if this.redirectFixCpUrl() {
 			return true
 		}
 		// Show login form
@@ -130,7 +130,7 @@ func (this *Engine) Process() bool {
 	// Only active admins can use backend
 	if !(this.Wrap.User.A_admin == 1 && this.Wrap.User.A_active == 1) {
 		// Redirect
-		if this.redirectToCP() {
+		if this.redirectFixCpUrl() {
 			return true
 		}
 		// Show login form
@@ -138,13 +138,18 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
+	// Redirect
+	if this.redirectFixCpUrl() {
+		return true
+	}
+
 	// Render backend
 	return this.Mods.XXXBackEnd(this.Wrap)
 }
 
-func (this *Engine) redirectToCP() bool {
-	if this.Wrap.R.URL.Path != "/cp/" {
-		http.Redirect(this.Wrap.W, this.Wrap.R, "/cp/"+utils.ExtractGetParams(this.Wrap.R.RequestURI), 302)
+func (this *Engine) redirectFixCpUrl() bool {
+	if len(this.Wrap.R.URL.Path) > 0 && this.Wrap.R.URL.Path[len(this.Wrap.R.URL.Path)-1] != '/' {
+		http.Redirect(this.Wrap.W, this.Wrap.R, this.Wrap.R.URL.Path+"/"+utils.ExtractGetParams(this.Wrap.R.RequestURI), 302)
 		return true
 	}
 	return false
