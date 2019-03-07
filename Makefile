@@ -21,10 +21,12 @@ build: clean
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -mod vendor -a -o ./bin/fave.darwin-amd64 -ldflags='-X main.Version=$(VERSION) -extldflags "-static"'
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -mod vendor -a -o ./bin/fave.windows-amd64.exe -ldflags='-X main.Version=$(VERSION) -extldflags "-static"'
 	cd ./bin && find . -name 'fave*' | xargs -I{} tar czf {}.tar.gz {}
-	@cp -R ./hosts/localhost/template ./bin/template
-	@-rm ./bin/template/.keep
-	cd ./bin && tar -zcf template.tar.gz ./template
-	@-rm -r ./bin/template
+	@cp -R ./hosts/localhost ./bin/localhost
+	@-find ./bin/localhost -type f -name '.*' -exec rm -f {} \;
+	@-find ./bin/localhost -type f -name '*.json' -exec rm -f {} \;
+	@-rm ./bin/localhost/tmp/*
+	cd ./bin && tar -zcf localhost.tar.gz ./localhost
+	@-rm -r ./bin/localhost
 	cd ./bin && shasum -a 256 * > sha256sum.txt
 	cat ./bin/sha256sum.txt
 
