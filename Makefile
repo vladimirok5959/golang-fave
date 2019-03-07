@@ -27,6 +27,7 @@ build: clean
 	@-rm ./bin/localhost/tmp/*
 	cd ./bin && tar -zcf localhost.tar.gz ./localhost
 	@-rm -r ./bin/localhost
+	cp ./Dockerfile ./bin/Dockerfile
 	cd ./bin && shasum -a 256 * > sha256sum.txt
 	cat ./bin/sha256sum.txt
 
