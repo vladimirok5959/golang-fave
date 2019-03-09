@@ -81,7 +81,7 @@ func main() {
 	mods := modules.New()
 
 	// Init and start web server
-	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 30, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
+	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request) {
 		// Schema
