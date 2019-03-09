@@ -29,6 +29,7 @@ var ParamHost string
 var ParamPort int
 var ParamWwwDir string
 var ParamDebug bool
+var ParamKeepAlive bool
 
 // For admin panel
 type BreadCrumb struct {

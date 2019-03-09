@@ -25,6 +25,7 @@ func init() {
 	flag.IntVar(&consts.ParamPort, "port", 8080, "server port")
 	flag.StringVar(&consts.ParamWwwDir, "dir", "", "virtual hosts directory")
 	flag.BoolVar(&consts.ParamDebug, "debug", false, "debug mode with ignoring log files")
+	flag.BoolVar(&consts.ParamKeepAlive, "keepalive", false, "enable/disable server keep alive")
 	flag.Parse()
 }
 
@@ -48,6 +49,11 @@ func main() {
 	if consts.ParamDebug == false {
 		if os.Getenv("FAVE_DEBUG") == "true" {
 			consts.ParamDebug = true
+		}
+	}
+	if consts.ParamKeepAlive == false {
+		if os.Getenv("FAVE_KEEPALIVE") == "true" {
+			consts.ParamKeepAlive = true
 		}
 	}
 
@@ -146,5 +152,7 @@ func main() {
 
 		// Error 404
 		utils.SystemErrorPage404(w)
-	}, nil)
+	}, func(s *http.Server) {
+		s.SetKeepAlivesEnabled(consts.ParamKeepAlive)
+	})
 }
