@@ -46,7 +46,7 @@ docker-test:
 	@-docker rm fave-test
 	@-docker rmi fave
 	docker build --rm=false --force-rm=true -t fave .
-	docker run --name fave-test -d -p 8080:8080 -t -i fave:latest /app/fave.linux-amd64
+	docker run -d --name fave-test --cpus=".2" -m 200m -p 8080:8080 -t -i fave:latest /app/fave.linux-amd64
 
 docker-img:
 	docker build -t fave .
