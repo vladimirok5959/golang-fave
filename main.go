@@ -141,6 +141,14 @@ func main() {
 			return
 		}
 
+		// Robots.txt and styles.css from template dir
+		if ServeTemplateFile(w, r, "robots.txt", vhost_dir_template) {
+			return
+		}
+		if ServeTemplateFile(w, r, "styles.css", vhost_dir_template) {
+			return
+		}
+
 		// Session
 		sess := session.New(w, r, vhost_dir_tmp)
 		defer sess.Close()
@@ -155,4 +163,21 @@ func main() {
 	}, func(s *http.Server) {
 		s.SetKeepAlivesEnabled(consts.ParamKeepAlive)
 	})
+}
+
+func ServeTemplateFile(w http.ResponseWriter, r *http.Request, file string, dir string) bool {
+	if r.URL.Path == "/"+file {
+		f, err := os.Open(dir + string(os.PathSeparator) + file)
+		if err == nil {
+			defer f.Close()
+			st, err := os.Stat(dir + string(os.PathSeparator) + file)
+			if err == nil {
+				if !st.Mode().IsDir() {
+					http.ServeFile(w, r, dir+string(os.PathSeparator)+file)
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
