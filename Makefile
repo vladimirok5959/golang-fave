@@ -11,7 +11,7 @@ test:
 	go test ./...
 
 run:
-	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true
+	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true -keepalive false
 
 build: clean
 	@-mkdir ./bin
