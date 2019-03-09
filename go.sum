@@ -5,6 +5,8 @@ github.com/vladimirok5959/golang-server-bootstrap v1.0.2 h1:UiOKkiNGcEddnx9O0cuL
 github.com/vladimirok5959/golang-server-bootstrap v1.0.2/go.mod h1:R5PGBuqlupYd0evIXoi81plWH/HpNQO2V/jHxZzg2y0=
 github.com/vladimirok5959/golang-server-bootstrap v1.0.3 h1:fNLzc3qZrB1SiX7PtjPU+mel/TJFuy6nI2y/9Pup6Uw=
 github.com/vladimirok5959/golang-server-bootstrap v1.0.3/go.mod h1:R5PGBuqlupYd0evIXoi81plWH/HpNQO2V/jHxZzg2y0=
+github.com/vladimirok5959/golang-server-bootstrap v1.0.4 h1:+Su6EAc5ZXntjEOkYKVZUJ8pRVrh7GIvqrkmeMS48Vo=
+github.com/vladimirok5959/golang-server-bootstrap v1.0.4/go.mod h1:R5PGBuqlupYd0evIXoi81plWH/HpNQO2V/jHxZzg2y0=
 github.com/vladimirok5959/golang-server-resources v1.0.2 h1:XwxFXyaOtfDGRmYp8P9q4P4gx4YK8NiYacpHe9V8Lck=
 github.com/vladimirok5959/golang-server-resources v1.0.2/go.mod h1:tsf2oAEf3E3ukiQSCO7dstl0IXbEXec68UUIiMWysBc=
 github.com/vladimirok5959/golang-server-sessions v1.0.1 h1:cQsLk8hz7pkIV7/XectfejDF2j+61FE+/s4xErxBNJw=

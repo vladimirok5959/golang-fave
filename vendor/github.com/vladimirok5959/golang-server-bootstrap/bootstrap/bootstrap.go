@@ -6,19 +6,21 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 )
 
-type hndl func(h http.Handler) http.Handler
-type callback func(w http.ResponseWriter, r *http.Request)
+type customHandler func(h http.Handler) http.Handler
+type callbackBeforeAfter func(w http.ResponseWriter, r *http.Request)
+type callbackServer func(s *http.Server)
 
 type bootstrap struct {
 	path   string
-	before callback
-	after  callback
+	before callbackBeforeAfter
+	after  callbackBeforeAfter
 }
 
-func new(path string, before callback, after callback) *bootstrap {
+func new(path string, before callbackBeforeAfter, after callbackBeforeAfter) *bootstrap {
 	return &bootstrap{path, before, after}
 }
 
@@ -52,7 +54,7 @@ func (this *bootstrap) handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Start(h hndl, host string, timeout time.Duration, path string, before callback, after callback) {
+func Start(h customHandler, host string, timeout time.Duration, path string, before callbackBeforeAfter, after callbackBeforeAfter, cbserv callbackServer) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", new(path, before, after).handler)
 
@@ -69,22 +71,37 @@ func Start(h hndl, host string, timeout time.Duration, path string, before callb
 		}
 	}
 
+	if cbserv != nil {
+		cbserv(srv)
+	}
+
 	stop := make(chan os.Signal)
-	signal.Notify(stop, os.Interrupt)
+	signal.Notify(stop, syscall.SIGTERM)
+	signal.Notify(stop, syscall.SIGINT)
 	go func() {
 		fmt.Printf("Starting server at http://%s/\n", host)
 		if err := srv.ListenAndServe(); err != nil {
 			if err != http.ErrServerClosed {
 				fmt.Println(err)
 				stop <- os.Interrupt
+				os.Exit(1)
 			}
 		}
 	}()
-	<-stop
-	fmt.Println("Shutting down server...")
+
+	switch val := <-stop; val {
+	case syscall.SIGTERM:
+		fmt.Println("Shutting down server (terminate)...")
+	case syscall.SIGINT:
+		fmt.Println("Shutting down server (interrupt)...")
+	default:
+		fmt.Println("Shutting down server...")
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), timeout*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
 		fmt.Println(err)
+		os.Exit(1)
 	}
 }

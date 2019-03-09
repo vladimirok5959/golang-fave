@@ -146,5 +146,5 @@ func main() {
 
 		// Error 404
 		utils.SystemErrorPage404(w)
-	})
+	}, nil)
 }
