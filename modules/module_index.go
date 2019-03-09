@@ -249,6 +249,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					Caption: "Page content",
 					Name:    "content",
 					Value:   data.A_content,
+					Classes: "autosize",
 				},
 				{
 					Kind:    builder.DFKText,

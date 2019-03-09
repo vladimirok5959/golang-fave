@@ -26,6 +26,7 @@ type DataFormField struct {
 	Hint        string
 	Target      string
 	Required    bool
+	Classes     string
 	CallBack    func(field *DataFormField) string
 }
 
@@ -50,6 +51,12 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				if field.Required {
 					required = ` required`
 				}
+
+				classes := field.Classes
+				if classes != "" {
+					classes = " " + classes
+				}
+
 				html_element += `<div class="form-group">`
 				html_element += `<div class="row">`
 				html_element += `<div class="col-md-3">`
@@ -64,19 +71,19 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				html_element += `<div class="col-md-9">`
 				html_element += `<div>`
 				if field.Kind == DFKText {
-					html_element += `<input class="form-control" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+					html_element += `<input class="form-control` + classes + `" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKEmail {
-					html_element += `<input class="form-control" type="email" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+					html_element += `<input class="form-control` + classes + `" type="email" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKPassword {
-					html_element += `<input class="form-control" type="password" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+					html_element += `<input class="form-control` + classes + `" type="password" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKTextArea {
-					html_element += `<textarea class="form-control" id="lbl_` + field.Name + `" name="` + field.Name + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.Value) + `</textarea>`
+					html_element += `<textarea class="form-control` + classes + `" id="lbl_` + field.Name + `" name="` + field.Name + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.Value) + `</textarea>`
 				} else if field.Kind == DFKCheckBox {
 					checked := ""
 					if field.Value != "0" {
 						checked = " checked"
 					}
-					html_element += `<div class="checkbox-ios"><input class="form-control" type="checkbox" id="lbl_` + field.Name + `" name="` + field.Name + `" value="1"` + `" autocomplete="off"` + required + checked + `><label for="lbl_` + field.Name + `"></label></div>`
+					html_element += `<div class="checkbox-ios"><input class="form-control` + classes + `" type="checkbox" id="lbl_` + field.Name + `" name="` + field.Name + `" value="1"` + `" autocomplete="off"` + required + checked + `><label for="lbl_` + field.Name + `"></label></div>`
 				}
 				html_element += `</div>`
 				if field.Hint != "" {
