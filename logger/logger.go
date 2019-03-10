@@ -22,7 +22,7 @@ type Logger struct {
 	cclose chan bool
 }
 
-func (this *Logger) console(msg logMsg) {
+func (this *Logger) console(msg *logMsg) {
 	if consts.ParamDebug {
 		if !msg.isError {
 			if consts.IS_WIN {
@@ -47,7 +47,7 @@ func (this *Logger) console(msg logMsg) {
 	}
 }
 
-func (this *Logger) write(msg logMsg) {
+func (this *Logger) write(msg *logMsg) {
 	// Ignore file if debug
 	if consts.ParamDebug {
 		this.console(msg)
@@ -109,7 +109,7 @@ func New() *Logger {
 		for {
 			select {
 			case msg := <-cdata:
-				lg.write(msg)
+				lg.write(&msg)
 			case <-cclose:
 				cclose <- true
 				return
