@@ -168,7 +168,8 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
 	tmpl, err := template.ParseFiles(
 		this.DTemplate+string(os.PathSeparator)+tname+".html",
 		this.DTemplate+string(os.PathSeparator)+"header.html",
-		this.DTemplate+string(os.PathSeparator)+"sidebar.html",
+		this.DTemplate+string(os.PathSeparator)+"sidebar-left.html",
+		this.DTemplate+string(os.PathSeparator)+"sidebar-right.html",
 		this.DTemplate+string(os.PathSeparator)+"footer.html",
 	)
 	if err != nil {
