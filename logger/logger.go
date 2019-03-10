@@ -70,6 +70,11 @@ func (this *Logger) write(msg *logMsg) {
 	host, _ := utils.ExtractHostPort(msg.host, false)
 	logs_dir := this.wwwDir + string(os.PathSeparator) + host + string(os.PathSeparator) + "logs"
 
+	// Try use localhost folder for logs
+	if !utils.IsDirExists(logs_dir) {
+		logs_dir = this.wwwDir + string(os.PathSeparator) + "localhost" + string(os.PathSeparator) + "logs"
+	}
+
 	// Ignore file if logs dir is not exists
 	if !utils.IsDirExists(logs_dir) {
 		this.console(msg)
