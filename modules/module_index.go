@@ -147,7 +147,8 @@ func (this *Modules) RegisterModule_Index() *Module {
 						Icon: assets.SysSvgIconRemove,
 						Href: "javascript:fave.ActionDataTableDelete(this,'index-delete','" +
 							(*values)[0] + "','Are you sure want to delete page?');",
-						Hint: "Delete",
+						Hint:    "Delete",
+						Classes: "delete",
 					},
 				})
 			}, "/cp/"+wrap.CurrModule+"/")

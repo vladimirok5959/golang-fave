@@ -251,6 +251,14 @@ ul.pagination {
 	color: #0056b3;
 }
 
+.data-table a.ico.delete svg {
+	color: #d9534f;
+}
+
+.data-table a.ico.delete:hover svg {
+	color: #c9302c;
+}
+
 .data-table td.col_action a.ico {
 	display: inline-block;
 	width: 1rem;
