@@ -32,7 +32,10 @@ hosts
 ├────── header.html  # Header
 ├────── index.html   # Template for index page
 ├────── page.html    # Template for any other pages
+├────── robots.txt   # Host robots.txt file
+├────── scripts.js   # Theme scripts file
 ├────── sidebar.html # Can be included in templates
+├────── styles.css   # Theme styles file
 └──── tmp            # Temporary dir for session files
 ```
 Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).
