@@ -142,10 +142,10 @@ func main() {
 		}
 
 		// Robots.txt and styles.css from template dir
-		if ServeTemplateFile(w, r, "robots.txt", vhost_dir_template) {
+		if ServeTemplateFile(w, r, "robots.txt", "", vhost_dir_template) {
 			return
 		}
-		if ServeTemplateFile(w, r, "styles.css", vhost_dir_template) {
+		if ServeTemplateFile(w, r, "styles.css", "assets/theme/", vhost_dir_template) {
 			return
 		}
 
@@ -165,8 +165,8 @@ func main() {
 	})
 }
 
-func ServeTemplateFile(w http.ResponseWriter, r *http.Request, file string, dir string) bool {
-	if r.URL.Path == "/"+file {
+func ServeTemplateFile(w http.ResponseWriter, r *http.Request, file string, path string, dir string) bool {
+	if r.URL.Path == "/"+path+file {
 		f, err := os.Open(dir + string(os.PathSeparator) + file)
 		if err == nil {
 			defer f.Close()
