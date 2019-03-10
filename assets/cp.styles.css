@@ -214,6 +214,7 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item:last-child ul {
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	fill: currentColor;
 	margin-right: 0.3rem;
+	margin-bottom: 1px;
 }
 
 /* SVG colors */
