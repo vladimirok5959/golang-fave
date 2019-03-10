@@ -148,6 +148,9 @@ func main() {
 		if ServeTemplateFile(w, r, "styles.css", "assets/theme/", vhost_dir_template) {
 			return
 		}
+		if ServeTemplateFile(w, r, "scripts.js", "assets/theme/", vhost_dir_template) {
+			return
+		}
 
 		// Session
 		sess := session.New(w, r, vhost_dir_tmp)
