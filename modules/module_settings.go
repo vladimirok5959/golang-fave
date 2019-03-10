@@ -20,7 +20,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		System: true,
 		Icon:   assets.SysSvgIconGear,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "default", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
