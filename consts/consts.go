@@ -48,6 +48,8 @@ type TmplSystem struct {
 	PathJsPopper     string
 	PathJsBootstrap  string
 	PathJsCpScripts  string
+	PathThemeStyles  string
+	PathThemeScripts string
 }
 
 type TmplError struct {
