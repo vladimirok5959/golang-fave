@@ -4,6 +4,7 @@ import (
 	"html"
 
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 const (
@@ -36,7 +37,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 	var html_message string
 	var html_button string
 
-	for _, field := range data {
+	for i, field := range data {
 		if field.Kind == DFKHidden {
 			if field.CallBack != nil {
 				html_hidden += field.CallBack(&field)
@@ -57,7 +58,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 					classes = " " + classes
 				}
 
-				html_element += `<div class="form-group">`
+				html_element += `<div class="form-group n` + utils.IntToStr(i) + `">`
 				html_element += `<div class="row">`
 				html_element += `<div class="col-md-3">`
 
@@ -125,6 +126,6 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 		html_hidden = `<div class="hidden">` + html_hidden + `</div>`
 	}
 
-	return `<form class="data-form prev-data-lost" action="/cp/" method="post" autocomplete="off">` +
+	return `<form class="data-form ` + wrap.CurrModule + ` prev-data-lost" action="/cp/" method="post" autocomplete="off">` +
 		html_hidden + html_element + html_message + html_button + `</form>`
 }

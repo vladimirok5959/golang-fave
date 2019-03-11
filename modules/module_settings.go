@@ -43,7 +43,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 				{
 					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group"><div class="row"><div class="col-12"><textarea class="form-control autosize" id="lbl_content" name="content" placeholder="" autocomplete="off">` + html.EscapeString(string(fcont)) + `</textarea></div></div></div>`
+						return `<div class="form-group last"><div class="row"><div class="col-12"><textarea class="form-control autosize" id="lbl_content" name="content" placeholder="" autocomplete="off">` + html.EscapeString(string(fcont)) + `</textarea></div></div></div>`
 					},
 				},
 				{

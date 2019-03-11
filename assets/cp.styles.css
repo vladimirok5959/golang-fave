@@ -399,6 +399,27 @@ ul.pagination {
 	body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right.d-lg-table-cell {
 		display: table-cell !important;
 	}
+
+	.data-form .row .sys-messages .alert {
+		margin-top: 1rem;
+		margin-bottom: 0px;
+	}
+
+	.data-form .form-group.last {
+		margin-bottom: 0px;
+	}
+
+	.data-form.index .form-group.n8 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.users .form-group.n7 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.users .form-group.n7 {
+		margin-bottom: 0px;
+	}
 }
 
 @media (max-width: 575px) {
