@@ -461,7 +461,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Security, check if still need to run this action
 		if wrap.ConfMysqlExists {
-			wrap.MsgError(`MySQL is already configured`)
+			wrap.MsgError(`CMS is already configured`)
 			return
 		}
 
@@ -582,7 +582,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 			return
 		}
 		if count > 0 {
-			wrap.MsgError(`MySQL is already configured`)
+			wrap.MsgError(`CMS is already configured`)
 			return
 		}
 
