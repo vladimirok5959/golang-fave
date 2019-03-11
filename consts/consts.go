@@ -50,6 +50,7 @@ type TmplSystem struct {
 	PathJsCpScripts  string
 	PathThemeStyles  string
 	PathThemeScripts string
+	InfoVersion      string
 }
 
 type TmplError struct {

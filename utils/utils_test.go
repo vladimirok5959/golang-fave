@@ -98,6 +98,7 @@ func TestGetTmplSystemData(t *testing.T) {
 		PathJsCpScripts:  "/assets/cp/scripts.js?v=" + consts.AssetsVersion,
 		PathThemeStyles:  "/assets/theme/styles.css",
 		PathThemeScripts: "/assets/theme/scripts.js",
+		InfoVersion:      consts.ServerVersion,
 	})
 }
 
