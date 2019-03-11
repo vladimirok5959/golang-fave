@@ -566,7 +566,27 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 			return
 		}
 
-		_, err := wrap.DB.Query(
+		// Security, check if still need to run this action
+		var count int
+		err := wrap.DB.QueryRow(`
+			SELECT
+				COUNT(*)
+			FROM
+				users
+			;`,
+		).Scan(
+			&count,
+		)
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		if count > 0 {
+			wrap.MsgError(`MySQL is already configured`)
+			return
+		}
+
+		_, err = wrap.DB.Query(
 			`INSERT INTO users SET
 				first_name = ?,
 				last_name = ?,
