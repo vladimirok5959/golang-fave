@@ -82,7 +82,8 @@ func (this *Modules) RegisterModule_Users() *Module {
 						Icon: assets.SysSvgIconRemove,
 						Href: "javascript:fave.ActionDataTableDelete(this,'users-delete','" +
 							(*values)[0] + "','Are you sure want to delete user?');",
-						Hint: "Delete",
+						Hint:    "Delete",
+						Classes: "delete",
 					},
 				})
 			}, "/cp/"+wrap.CurrModule+"/")

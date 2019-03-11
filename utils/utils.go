@@ -102,6 +102,9 @@ func GetTmplSystemData() consts.TmplSystem {
 		PathJsPopper:     GetAssetsUrl(consts.AssetsPopperJs),
 		PathJsBootstrap:  GetAssetsUrl(consts.AssetsBootstrapJs),
 		PathJsCpScripts:  GetAssetsUrl(consts.AssetsCpScriptsJs),
+		PathThemeStyles:  "/assets/theme/styles.css",
+		PathThemeScripts: "/assets/theme/scripts.js",
+		InfoVersion:      consts.ServerVersion,
 	}
 }
 

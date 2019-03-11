@@ -22,7 +22,7 @@ type Logger struct {
 	cclose chan bool
 }
 
-func (this *Logger) console(msg logMsg) {
+func (this *Logger) console(msg *logMsg) {
 	if consts.ParamDebug {
 		if !msg.isError {
 			if consts.IS_WIN {
@@ -47,7 +47,7 @@ func (this *Logger) console(msg logMsg) {
 	}
 }
 
-func (this *Logger) write(msg logMsg) {
+func (this *Logger) write(msg *logMsg) {
 	// Ignore file if debug
 	if consts.ParamDebug {
 		this.console(msg)
@@ -69,6 +69,11 @@ func (this *Logger) write(msg logMsg) {
 	// Extract host
 	host, _ := utils.ExtractHostPort(msg.host, false)
 	logs_dir := this.wwwDir + string(os.PathSeparator) + host + string(os.PathSeparator) + "logs"
+
+	// Try use localhost folder for logs
+	if !utils.IsDirExists(logs_dir) {
+		logs_dir = this.wwwDir + string(os.PathSeparator) + "localhost" + string(os.PathSeparator) + "logs"
+	}
 
 	// Ignore file if logs dir is not exists
 	if !utils.IsDirExists(logs_dir) {
@@ -109,7 +114,7 @@ func New() *Logger {
 		for {
 			select {
 			case msg := <-cdata:
-				lg.write(msg)
+				lg.write(&msg)
 			case <-cclose:
 				cclose <- true
 				return

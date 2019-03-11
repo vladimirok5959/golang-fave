@@ -14,14 +14,17 @@
 		<meta name="description" content="{{$.Data.MetaDescription}}" />
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 
-		<!-- Template CSS file from public folder -->
-		<link rel="stylesheet" href="/styles.css">
+		<!-- Template CSS file from template folder -->
+		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=1">
+
+		<!-- Template JavaScript file from template folder -->
+		<script src="{{$.System.PathThemeScripts}}?v=1"></script>
 	</head>
 	<body class="fixed-top-bar1">
 		<div id="wrap">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<div class="container">
-					<a class="navbar-brand" href="/">Fave 1.0.0</a>
+					<a class="navbar-brand" href="/">Fave {{$.System.InfoVersion}}</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>

@@ -1,10 +1,11 @@
 package builder
 
 type DataTableActionRow struct {
-	Icon   string
-	Href   string
-	Hint   string
-	Target string
+	Icon    string
+	Href    string
+	Hint    string
+	Target  string
+	Classes string
 }
 
 func DataTableAction(data *[]DataTableActionRow) string {
@@ -14,7 +15,13 @@ func DataTableAction(data *[]DataTableActionRow) string {
 		if row.Target != "" {
 			target = ` target="` + row.Target + `"`
 		}
-		result += `<a class="ico" title="` + row.Hint + `" href="` +
+
+		classes := row.Classes
+		if classes != "" {
+			classes = " " + classes
+		}
+
+		result += `<a class="ico` + classes + `" title="` + row.Hint + `" href="` +
 			row.Href + `"` + target + `>` + row.Icon + `</a>`
 	}
 	return result

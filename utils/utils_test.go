@@ -96,6 +96,9 @@ func TestGetTmplSystemData(t *testing.T) {
 		PathJsPopper:     "/assets/popper.js?v=" + consts.AssetsVersion,
 		PathJsBootstrap:  "/assets/bootstrap.js?v=" + consts.AssetsVersion,
 		PathJsCpScripts:  "/assets/cp/scripts.js?v=" + consts.AssetsVersion,
+		PathThemeStyles:  "/assets/theme/styles.css",
+		PathThemeScripts: "/assets/theme/scripts.js",
+		InfoVersion:      consts.ServerVersion,
 	})
 }
 

@@ -12,6 +12,8 @@ Usage of ./fave:
     virtual hosts directory
   -host string
     server host (default "0.0.0.0")
+  -keepalive
+    enable/disable server keep alive
   -port int
     server port (default 8080)
 ```
@@ -19,21 +21,25 @@ Usage of ./fave:
 ## Hosts structure
 ```
 hosts
-├── localhost        # Main host directory
-├──── config         # Config directory
-├────── mysql.json   # MySQL config file
-├──── htdocs         # Public http files
-├──── logs           # Logs dir
-├────── access.log   # Access log file
-├────── error.log    # Error log file
-├──── template       # Engine templates
-├────── 404.html     # Template for 404 page
-├────── footer.html  # Footer
-├────── header.html  # Header
-├────── index.html   # Template for index page
-├────── page.html    # Template for any other pages
-├────── sidebar.html # Can be included in templates
-└──── tmp            # Temporary dir for session files
+├── localhost              # Main host directory
+├──── config               # Config directory
+├────── mysql.json         # MySQL config file
+├──── htdocs               # Public http files
+├──── logs                 # Logs dir
+├────── access.log         # Access log file
+├────── error.log          # Error log file
+├──── template             # Engine templates
+├────── 404.html           # Template for 404 page
+├────── footer.html        # Footer
+├────── header.html        # Header
+├────── index.html         # Template for index page
+├────── page.html          # Template for any other pages
+├────── robots.txt         # Host robots.txt file
+├────── scripts.js         # Theme scripts file
+├────── sidebar-left.html  # Can be included in templates
+├────── sidebar-right.html # Can be included in templates
+├────── styles.css         # Theme styles file
+└──── tmp                  # Temporary dir for session files
 ```
 Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).
 

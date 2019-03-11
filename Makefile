@@ -1,10 +1,11 @@
-VERSION="1.0.1"
+VERSION="1.0.2"
 
 default: debug test run
 
 debug:
 	go vet ./...
 	gofmt -d ./
+	gofmt -w ./
 	go build -mod vendor -o ./fave
 
 test:

@@ -4,8 +4,8 @@ import (
 	"html/template"
 )
 
-const ServerVersion = "1.0.1"
-const AssetsVersion = "15"
+const ServerVersion = "1.0.2"
+const AssetsVersion = "16"
 const AssetsPath = "assets"
 const DirIndexFile = "index.html"
 
@@ -48,6 +48,9 @@ type TmplSystem struct {
 	PathJsPopper     string
 	PathJsBootstrap  string
 	PathJsCpScripts  string
+	PathThemeStyles  string
+	PathThemeScripts string
+	InfoVersion      string
 }
 
 type TmplError struct {

@@ -147,7 +147,8 @@ func (this *Modules) RegisterModule_Index() *Module {
 						Icon: assets.SysSvgIconRemove,
 						Href: "javascript:fave.ActionDataTableDelete(this,'index-delete','" +
 							(*values)[0] + "','Are you sure want to delete page?');",
-						Hint: "Delete",
+						Hint:    "Delete",
+						Classes: "delete",
 					},
 				})
 			}, "/cp/"+wrap.CurrModule+"/")
@@ -458,6 +459,12 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
+		// Security, check if still need to run this action
+		if wrap.ConfMysqlExists {
+			wrap.MsgError(`CMS is already configured`)
+			return
+		}
+
 		// Try connect to mysql
 		db, err := sql.Open("mysql", pf_user+":"+pf_password+"@tcp("+pf_host+":"+pf_port+")/"+pf_name)
 		if err != nil {
@@ -559,7 +566,27 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 			return
 		}
 
-		_, err := wrap.DB.Query(
+		// Security, check if still need to run this action
+		var count int
+		err := wrap.DB.QueryRow(`
+			SELECT
+				COUNT(*)
+			FROM
+				users
+			;`,
+		).Scan(
+			&count,
+		)
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		if count > 0 {
+			wrap.MsgError(`CMS is already configured`)
+			return
+		}
+
+		_, err = wrap.DB.Query(
 			`INSERT INTO users SET
 				first_name = ?,
 				last_name = ?,
