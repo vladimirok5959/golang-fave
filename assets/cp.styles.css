@@ -169,6 +169,10 @@ body.cp .wrap .sidebar.sidebar-left ul.nav {
 	padding: 1rem 0px;
 }
 
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-separator {
+	height: 1rem;
+}
+
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item a {
 	color: #444;
 }

@@ -22,6 +22,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			{Mount: "default", Name: "List of posts", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "add", Name: "Add new post", Show: true, Icon: assets.SysSvgIconPlus},
 			{Mount: "modify", Name: "Modify post", Show: false},
+			{Sep: true, Show: true},
 			{Mount: "cats", Name: "List of categories", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "cats-add", Name: "Add new category", Show: true, Icon: assets.SysSvgIconPlus},
 			{Mount: "cats-modify", Name: "Modify category", Show: false},
