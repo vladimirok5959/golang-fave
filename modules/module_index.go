@@ -459,6 +459,12 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
+		// Security, check if still need to run this action
+		if wrap.ConfMysqlExists {
+			wrap.MsgError(`MySQL is already configured`)
+			return
+		}
+
 		// Try connect to mysql
 		db, err := sql.Open("mysql", pf_user+":"+pf_password+"@tcp("+pf_host+":"+pf_port+")/"+pf_name)
 		if err != nil {
