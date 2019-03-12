@@ -12,6 +12,71 @@ import (
 	"golang-fave/utils"
 )
 
+func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int) string {
+	result := ``
+	rows, err := wrap.DB.Query(
+		`SELECT
+			node.id,
+			node.user,
+			node.name,
+			node.alias,
+			(COUNT(parent.id) - 1) AS depth
+		FROM
+			blog_cats AS node,
+			blog_cats AS parent
+		WHERE
+			node.lft BETWEEN parent.lft AND parent.rgt
+		GROUP BY
+			node.id
+		ORDER BY
+			node.lft ASC
+		;`,
+	)
+	if err == nil {
+		values := make([]string, 5)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		idStr := utils.IntToStr(id)
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				selected := ""
+				if string(values[0]) == idStr {
+					selected = " selected"
+				}
+				sub := strings.Repeat("&mdash; ", utils.StrToInt(string(values[4])))
+				result += `<option value="` + html.EscapeString(string(values[0])) + `"` + selected + `>` + sub + html.EscapeString(string(values[2])) + `</option>`
+			}
+		}
+	}
+	return result
+}
+
+func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int {
+	var result int
+	_ = wrap.DB.QueryRow(`
+		SELECT
+			parent.id
+		FROM
+			blog_cats AS node,
+			blog_cats AS parent
+		WHERE
+			node.lft BETWEEN parent.lft AND parent.rgt AND
+			node.id = ? AND
+			parent.id <> ?
+		ORDER BY
+			parent.lft DESC
+		LIMIT 1;`,
+		id,
+		id,
+	).Scan(
+		&result,
+	)
+	return result
+}
+
 func (this *Modules) RegisterModule_Blog() *Module {
 	return this.newModule(MInfo{
 		WantDB: true,
@@ -145,6 +210,50 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					{Name: "Modify category"},
 				})
 			}
+
+			data := utils.MySql_blog_category{
+				A_id:    0,
+				A_user:  0,
+				A_name:  "",
+				A_alias: "",
+				A_lft:   0,
+				A_rgt:   0,
+			}
+
+			if wrap.CurrSubModule == "categories-modify" {
+				if len(wrap.UrlArgs) != 3 {
+					return "", "", ""
+				}
+				if !utils.IsNumeric(wrap.UrlArgs[2]) {
+					return "", "", ""
+				}
+				err := wrap.DB.QueryRow(`
+					SELECT
+						id,
+						user,
+						name,
+						alias,
+						lft,
+						rgt
+					FROM
+						blog_cats
+					WHERE
+						id = ?
+					LIMIT 1;`,
+					utils.StrToInt(wrap.UrlArgs[2]),
+				).Scan(
+					&data.A_id,
+					&data.A_user,
+					&data.A_name,
+					&data.A_alias,
+					&data.A_lft,
+					&data.A_rgt,
+				)
+				if err != nil {
+					return "", "", ""
+				}
+			}
+
 			// ---
 
 			btn_caption := "Add"
@@ -153,40 +262,12 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			}
 
 			// ---
-			select_parent_options := ""
-			rows, err := wrap.DB.Query(
-				`SELECT
-					node.id,
-					node.user,
-					node.name,
-					node.alias,
-					(COUNT(parent.id) - 1) AS depth
-				FROM
-					blog_cats AS node,
-					blog_cats AS parent
-				WHERE
-					node.lft BETWEEN parent.lft AND parent.rgt
-				GROUP BY
-					node.id
-				ORDER BY
-					node.lft ASC
-				;`,
-			)
-			if err == nil {
-				values := make([]string, 5)
-				scan := make([]interface{}, len(values))
-				for i := range values {
-					scan[i] = &values[i]
-				}
-				for rows.Next() {
-					err = rows.Scan(scan...)
-					if err == nil {
-						sub := strings.Repeat("&mdash; ", utils.StrToInt(string(values[4])))
-						select_parent_options += `<option value="` + html.EscapeString(string(values[0])) + `">` + sub + html.EscapeString(string(values[2])) + `</option>`
-					}
-				}
-			}
+			// select_parent_options := this.blog_GetCategorySelectOptions(wrap, "")
 			// ---
+			parentId := 0
+			if wrap.CurrSubModule == "categories-modify" {
+				parentId = this.blog_GetCategoryParentId(wrap, data.A_id)
+			}
 
 			content += builder.DataForm(wrap, []builder.DataFormField{
 				{
@@ -197,19 +278,19 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				{
 					Kind:  builder.DFKHidden,
 					Name:  "id",
-					Value: "0",
+					Value: utils.IntToStr(data.A_id),
 				},
 				{
 					Kind:    builder.DFKText,
 					Caption: "Name",
 					Name:    "name",
-					Value:   "",
+					Value:   data.A_name,
 				},
 				{
 					Kind:    builder.DFKText,
 					Caption: "Alias",
 					Name:    "alias",
-					Value:   "",
+					Value:   data.A_alias,
 					Hint:    "Example: popular-posts",
 				},
 				{
@@ -227,7 +308,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 									<div>
 										<select class="form-control" id="lbl_parent" name="parent">
 											<option value="0">&mdash;</option>
-											` + select_parent_options + `
+											` + this.blog_GetCategorySelectOptions(wrap, parentId) + `
 										</select>
 									</div>
 								</div>
