@@ -12,7 +12,7 @@ import (
 	"golang-fave/utils"
 )
 
-func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, parentId int) string {
+func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int, parentId int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
 		`SELECT
@@ -38,16 +38,21 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, parent
 		for i := range values {
 			scan[i] = &values[i]
 		}
-		idStr := utils.IntToStr(parentId)
+		idStr := utils.IntToStr(id)
+		parentIdStr := utils.IntToStr(parentId)
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if err == nil {
-				selected := ""
+				disabled := ""
 				if string(values[0]) == idStr {
+					disabled = " disabled"
+				}
+				selected := ""
+				if string(values[0]) == parentIdStr {
 					selected = " selected"
 				}
 				sub := strings.Repeat("&mdash; ", utils.StrToInt(string(values[4])))
-				result += `<option value="` + html.EscapeString(string(values[0])) + `"` + selected + `>` + sub + html.EscapeString(string(values[2])) + `</option>`
+				result += `<option value="` + html.EscapeString(string(values[0])) + `"` + disabled + selected + `>` + sub + html.EscapeString(string(values[2])) + `</option>`
 			}
 		}
 	}
@@ -308,7 +313,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 									<div>
 										<select class="form-control" id="lbl_parent" name="parent">
 											<option value="0">&mdash;</option>
-											` + this.blog_GetCategorySelectOptions(wrap, parentId) + `
+											` + this.blog_GetCategorySelectOptions(wrap, data.A_id, parentId) + `
 										</select>
 									</div>
 								</div>
