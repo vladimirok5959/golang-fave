@@ -538,6 +538,35 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		_, err = db.Query(fmt.Sprintf(
+			`CREATE TABLE %s.blog_cats (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				user int(11) NOT NULL COMMENT 'User id',
+				name varchar(255) NOT NULL COMMENT 'Category name',
+				alias varchar(255) NOT NULL COMMENT 'Category alias',
+				lft int(11) NOT NULL COMMENT 'For nested set model',
+				rgt int(11) NOT NULL COMMENT 'For nested set model'
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+			pf_name))
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		_, err = db.Query(fmt.Sprintf(
+			`ALTER TABLE %s.blog_cats ADD UNIQUE KEY alias (alias);`,
+			pf_name))
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		_, err = db.Query(fmt.Sprintf(
+			`ALTER TABLE %s.blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
+			pf_name))
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
 
 		// Save mysql config file
 		err = utils.MySqlConfigWrite(wrap.DConfig+string(os.PathSeparator)+"mysql.json", pf_host, pf_port, pf_name, pf_user, pf_password)
