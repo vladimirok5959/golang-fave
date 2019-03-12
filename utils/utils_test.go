@@ -54,6 +54,17 @@ func TestIsValidAlias(t *testing.T) {
 	Expect(t, IsValidAlias("/some page/"), false)
 }
 
+func TestIsValidSingleAlias(t *testing.T) {
+	Expect(t, IsValidSingleAlias("some-category"), true)
+	Expect(t, IsValidSingleAlias("some-category-12345"), true)
+	Expect(t, IsValidSingleAlias("some_category_12345"), true)
+	Expect(t, IsValidSingleAlias(""), false)
+	Expect(t, IsValidSingleAlias("/"), false)
+	Expect(t, IsValidSingleAlias("/some-category/"), false)
+	Expect(t, IsValidSingleAlias("some-category.html"), false)
+	Expect(t, IsValidSingleAlias("some category"), false)
+}
+
 func TestFixPath(t *testing.T) {
 	Expect(t, FixPath(""), "")
 	Expect(t, FixPath("/"), "")
@@ -167,8 +178,8 @@ func TestGenerateAlias(t *testing.T) {
 	Expect(t, GenerateAlias(""), "")
 	Expect(t, GenerateAlias("Some page name"), "/some-page-name/")
 	Expect(t, GenerateAlias("Some page name 2"), "/some-page-name-2/")
-	Expect(t, GenerateAlias("Какая то страница"), "/kakaya-to-stranica/")
-	Expect(t, GenerateAlias("Какая то страница 2"), "/kakaya-to-stranica-2/")
+	Expect(t, GenerateAlias("Какая-то страница"), "/kakayato-stranica/")
+	Expect(t, GenerateAlias("Какая-то страница 2"), "/kakayato-stranica-2/")
 }
 
 func TestUnixTimestampToMySqlDateTime(t *testing.T) {

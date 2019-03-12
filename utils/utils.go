@@ -62,6 +62,11 @@ func IsValidAlias(alias string) bool {
 	return (!regexpeSlash.MatchString(alias) && regexpeChars.MatchString(alias)) || alias == "/"
 }
 
+func IsValidSingleAlias(alias string) bool {
+	regexpeChars := regexp.MustCompile(`^([a-zA-Z0-9\-_]{1,})$`)
+	return regexpeChars.MatchString(alias)
+}
+
 func FixPath(path string) string {
 	newPath := strings.TrimSpace(path)
 	if len(newPath) <= 0 {
