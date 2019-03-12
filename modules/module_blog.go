@@ -23,9 +23,9 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			{Mount: "add", Name: "Add new post", Show: true, Icon: assets.SysSvgIconPlus},
 			{Mount: "modify", Name: "Modify post", Show: false},
 			{Sep: true, Show: true},
-			{Mount: "cats", Name: "List of categories", Show: true, Icon: assets.SysSvgIconList},
-			{Mount: "cats-add", Name: "Add new category", Show: true, Icon: assets.SysSvgIconPlus},
-			{Mount: "cats-modify", Name: "Modify category", Show: false},
+			{Mount: "categories", Name: "List of categories", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "categories-add", Name: "Add new category", Show: true, Icon: assets.SysSvgIconPlus},
+			{Mount: "categories-modify", Name: "Modify category", Show: false},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
@@ -35,7 +35,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				{Name: "List of posts"},
 			})
 			//
-		} else if wrap.CurrSubModule == "cats" {
+		} else if wrap.CurrSubModule == "categories" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "List of categories"},
 			})
@@ -74,8 +74,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				})
 			}
 			//
-		} else if wrap.CurrSubModule == "cats-add" || wrap.CurrSubModule == "cats-modify" {
-			if wrap.CurrSubModule == "cats-add" {
+		} else if wrap.CurrSubModule == "categories-add" || wrap.CurrSubModule == "categories-modify" {
+			if wrap.CurrSubModule == "categories-add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 					{Name: "Add new category"},
 				})
