@@ -57,9 +57,9 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					},
 					{
 						DBField:     "name",
-						NameInTable: "Name",
+						NameInTable: "Category",
 						CallBack: func(values *[]string) string {
-							sub := strings.Repeat("— ", utils.StrToInt((*values)[4]))
+							sub := strings.Repeat("&mdash; ", utils.StrToInt((*values)[4]))
 							name := `<a href="/cp/` + wrap.CurrModule + `/categories-modify/` + (*values)[0] + `/">` + sub + html.EscapeString((*values)[2]) + `</a>`
 							// alias := html.EscapeString((*values)[3])
 							// return `<div>` + name + `</div><div><small>` + alias + `</small></div>`
@@ -142,7 +142,112 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					{Name: "Modify category"},
 				})
 			}
-			//
+			// ---
+
+			btn_caption := "Add"
+			if wrap.CurrSubModule == "categories-modify" {
+				btn_caption = "Save"
+			}
+
+			// ---
+			select_parent_options := ""
+			rows, err := wrap.DB.Query(
+				`SELECT
+					node.id,
+					node.user,
+					node.name,
+					node.alias,
+					(COUNT(parent.id) - 1) AS depth
+				FROM
+					blog_cats AS node,
+					blog_cats AS parent
+				WHERE
+					node.lft BETWEEN parent.lft AND parent.rgt
+				GROUP BY
+					node.id
+				ORDER BY
+					node.lft ASC
+				;`,
+			)
+			if err == nil {
+				values := make([]string, 5)
+				scan := make([]interface{}, len(values))
+				for i := range values {
+					scan[i] = &values[i]
+				}
+				for rows.Next() {
+					err = rows.Scan(scan...)
+					if err == nil {
+						sub := strings.Repeat("&mdash; ", utils.StrToInt(string(values[4])))
+						select_parent_options += `<option value="` + html.EscapeString(string(values[0])) + `">` + sub + html.EscapeString(string(values[2])) + `</option>`
+					}
+				}
+			}
+			// ---
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "blog-categories-modify",
+				},
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "id",
+					Value: "0",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Name",
+					Name:    "name",
+					Value:   "",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Alias",
+					Name:    "alias",
+					Value:   "",
+					Hint:    "Example: popular-posts",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Parent",
+					Name:    "parent",
+					Value:   "0",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group n3">
+							<div class="row">
+								<div class="col-md-3">
+									<label for="lbl_parent">Parent</label>
+								</div>
+								<div class="col-md-9">
+									<div>
+										<select class="form-control" id="lbl_parent" name="parent">
+											<option value="0">&mdash;</option>
+											` + select_parent_options + `
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>`
+					},
+				},
+				{
+					Kind: builder.DFKMessage,
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  btn_caption,
+					Target: "add-edit-button",
+				},
+			})
+
+			if wrap.CurrSubModule == "categories-add" {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Add</button>`
+			} else {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+			}
+			// ---
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})
