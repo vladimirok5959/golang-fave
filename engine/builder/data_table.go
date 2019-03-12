@@ -26,14 +26,15 @@ func DataTable(
 	data *[]DataTableRow,
 	action func(values *[]string) string,
 	pagination_url string,
-	custom_sql_count func() int,
+	custom_sql_count func() (int, error),
 	custom_sql_data func(limit_offset int, pear_page int) (*sql.Rows, error),
 ) string {
 	var num int
+	var err error
 	if custom_sql_count != nil {
-		num = custom_sql_count()
+		num, err = custom_sql_count()
 	} else {
-		err := wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
+		err = wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
 		if err != nil {
 			return ""
 		}

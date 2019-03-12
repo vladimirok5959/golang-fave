@@ -298,6 +298,12 @@ ul.pagination {
 	text-align: right;
 }
 
+/* Admin table: table_blog_cats */
+.data-table.table_blog_cats .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
 /* Admin table: table_users */
 .data-table.table_users .col_active,
 .data-table.table_users .col_admin {
