@@ -12,7 +12,7 @@ import (
 	"golang-fave/utils"
 )
 
-func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int) string {
+func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, parentId int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
 		`SELECT
@@ -38,7 +38,7 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 		for i := range values {
 			scan[i] = &values[i]
 		}
-		idStr := utils.IntToStr(id)
+		idStr := utils.IntToStr(parentId)
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if err == nil {
@@ -55,7 +55,7 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 }
 
 func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int {
-	var result int
+	var parentId int
 	_ = wrap.DB.QueryRow(`
 		SELECT
 			parent.id
@@ -72,9 +72,9 @@ func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int
 		id,
 		id,
 	).Scan(
-		&result,
+		&parentId,
 	)
-	return result
+	return parentId
 }
 
 func (this *Modules) RegisterModule_Blog() *Module {
