@@ -1,6 +1,7 @@
 package builder
 
 import (
+	"database/sql"
 	"fmt"
 	"html"
 	"math"
@@ -17,11 +18,25 @@ type DataTableRow struct {
 	CallBack    func(values *[]string) string
 }
 
-func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way string, data *[]DataTableRow, action func(values *[]string) string, pagination_url string) string {
+func DataTable(
+	wrap *wrapper.Wrapper,
+	table string,
+	order_by string,
+	order_way string,
+	data *[]DataTableRow,
+	action func(values *[]string) string,
+	pagination_url string,
+	custom_sql_count func() int,
+	custom_sql_data func(limit_offset int, pear_page int) (*sql.Rows, error),
+) string {
 	var num int
-	err := wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
-	if err != nil {
-		return ""
+	if custom_sql_count != nil {
+		num = custom_sql_count()
+	} else {
+		err := wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
+		if err != nil {
+			return ""
+		}
 	}
 	pear_page := 10
 	max_pages := int(math.Ceil(float64(num) / float64(pear_page)))
@@ -45,7 +60,10 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 	result := `<table id="cp-table-` + table + `" class="table data-table table-striped table-bordered table-hover table_` + table + `">`
 	result += `<thead>`
 	result += `<tr>`
-	sql := "SELECT"
+	qsql := ""
+	if custom_sql_data == nil {
+		qsql = "SELECT"
+	}
 	for i, column := range *data {
 		if column.NameInTable != "" {
 			classes := column.Classes
@@ -54,16 +72,20 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 			}
 			result += `<th scope="col" class="col_` + column.DBField + classes + `">` + html.EscapeString(column.NameInTable) + `</th>`
 		}
-		if column.DBExp == "" {
-			sql += " `" + column.DBField + "`"
-		} else {
-			sql += " " + column.DBExp + " as `" + column.DBField + "`"
-		}
-		if i+1 < len(*data) {
-			sql += ","
+		if custom_sql_data == nil {
+			if column.DBExp == "" {
+				qsql += " `" + column.DBField + "`"
+			} else {
+				qsql += " " + column.DBExp + " as `" + column.DBField + "`"
+			}
+			if i+1 < len(*data) {
+				qsql += ","
+			}
 		}
 	}
-	sql += " FROM `" + table + "` ORDER BY `" + order_by + "` " + order_way + " LIMIT ?, ?;"
+	if custom_sql_data == nil {
+		qsql += " FROM `" + table + "` ORDER BY `" + order_by + "` " + order_way + " LIMIT ?, ?;"
+	}
 	if action != nil {
 		result += `<th scope="col" class="col_action">&nbsp;</th>`
 	}
@@ -71,7 +93,13 @@ func DataTable(wrap *wrapper.Wrapper, table string, order_by string, order_way s
 	result += `</thead>`
 	result += `<tbody>`
 	if num > 0 {
-		rows, err := wrap.DB.Query(sql, limit_offset, pear_page)
+		var rows *sql.Rows
+		var err error
+		if custom_sql_data == nil {
+			rows, err = wrap.DB.Query(qsql, limit_offset, pear_page)
+		} else {
+			rows, err = custom_sql_data(limit_offset, pear_page)
+		}
 		if err == nil {
 			values := make([]string, len(*data))
 			scan := make([]interface{}, len(values))

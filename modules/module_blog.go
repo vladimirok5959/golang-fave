@@ -5,7 +5,7 @@ import (
 
 	"golang-fave/assets"
 	"golang-fave/consts"
-	//"golang-fave/engine/builder"
+	"golang-fave/engine/builder"
 	"golang-fave/engine/wrapper"
 	//"golang-fave/utils"
 )
@@ -39,7 +39,30 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "List of categories"},
 			})
-			//
+			content += builder.DataTable(
+				wrap,
+				"blog_cats",
+				"id",
+				"DESC",
+				&[]builder.DataTableRow{
+					{
+						DBField:     "id",
+						NameInTable: "Id",
+					},
+					{
+						DBField:     "name",
+						NameInTable: "Name",
+					},
+					{
+						DBField:     "alias",
+						NameInTable: "Alias",
+					},
+				},
+				nil,
+				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
+				nil,
+				nil,
+			)
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{

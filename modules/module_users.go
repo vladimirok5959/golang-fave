@@ -30,63 +30,73 @@ func (this *Modules) RegisterModule_Users() *Module {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "List of users"},
 			})
-			content += builder.DataTable(wrap, "users", "id", "DESC", &[]builder.DataTableRow{
-				{
-					DBField: "id",
-				},
-				{
-					DBField:     "email",
-					NameInTable: "Email / Name",
-					CallBack: func(values *[]string) string {
-						email := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
-						name := html.EscapeString((*values)[2])
-						if name != "" && (*values)[3] != "" {
-							name += ` ` + (*values)[3]
-						}
-						if name != "" {
-							name = `<div><small>` + name + `</small></div>`
-						}
-						return `<div>` + email + `</div>` + name
-					},
-				},
-				{
-					DBField: "first_name",
-				},
-				{
-					DBField: "last_name",
-				},
-				{
-					DBField:     "active",
-					NameInTable: "Active",
-					Classes:     "d-none d-sm-table-cell",
-					CallBack: func(values *[]string) string {
-						return builder.CheckBox(utils.StrToInt((*values)[4]))
-					},
-				},
-				{
-					DBField:     "admin",
-					NameInTable: "Admin",
-					Classes:     "d-none d-md-table-cell",
-					CallBack: func(values *[]string) string {
-						return builder.CheckBox(utils.StrToInt((*values)[5]))
-					},
-				},
-			}, func(values *[]string) string {
-				return builder.DataTableAction(&[]builder.DataTableActionRow{
+			content += builder.DataTable(
+				wrap,
+				"users",
+				"id",
+				"DESC",
+				&[]builder.DataTableRow{
 					{
-						Icon: assets.SysSvgIconEdit,
-						Href: "/cp/" + wrap.CurrModule + "/modify/" + (*values)[0] + "/",
-						Hint: "Edit",
+						DBField: "id",
 					},
 					{
-						Icon: assets.SysSvgIconRemove,
-						Href: "javascript:fave.ActionDataTableDelete(this,'users-delete','" +
-							(*values)[0] + "','Are you sure want to delete user?');",
-						Hint:    "Delete",
-						Classes: "delete",
+						DBField:     "email",
+						NameInTable: "Email / Name",
+						CallBack: func(values *[]string) string {
+							email := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
+							name := html.EscapeString((*values)[2])
+							if name != "" && (*values)[3] != "" {
+								name += ` ` + (*values)[3]
+							}
+							if name != "" {
+								name = `<div><small>` + name + `</small></div>`
+							}
+							return `<div>` + email + `</div>` + name
+						},
 					},
-				})
-			}, "/cp/"+wrap.CurrModule+"/")
+					{
+						DBField: "first_name",
+					},
+					{
+						DBField: "last_name",
+					},
+					{
+						DBField:     "active",
+						NameInTable: "Active",
+						Classes:     "d-none d-sm-table-cell",
+						CallBack: func(values *[]string) string {
+							return builder.CheckBox(utils.StrToInt((*values)[4]))
+						},
+					},
+					{
+						DBField:     "admin",
+						NameInTable: "Admin",
+						Classes:     "d-none d-md-table-cell",
+						CallBack: func(values *[]string) string {
+							return builder.CheckBox(utils.StrToInt((*values)[5]))
+						},
+					},
+				},
+				func(values *[]string) string {
+					return builder.DataTableAction(&[]builder.DataTableActionRow{
+						{
+							Icon: assets.SysSvgIconEdit,
+							Href: "/cp/" + wrap.CurrModule + "/modify/" + (*values)[0] + "/",
+							Hint: "Edit",
+						},
+						{
+							Icon: assets.SysSvgIconRemove,
+							Href: "javascript:fave.ActionDataTableDelete(this,'users-delete','" +
+								(*values)[0] + "','Are you sure want to delete user?');",
+							Hint:    "Delete",
+							Classes: "delete",
+						},
+					})
+				},
+				"/cp/"+wrap.CurrModule+"/",
+				nil,
+				nil,
+			)
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
