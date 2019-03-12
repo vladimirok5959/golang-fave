@@ -77,3 +77,59 @@ func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int
 	)
 	return parentId
 }
+
+func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
+	//
+	return nil
+}
+
+func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
+	//
+	return nil
+}
+
+func (this *Modules) RegisterAction_BlogCategoriesModify() *Action {
+	return this.newAction(AInfo{
+		WantDB:    true,
+		Mount:     "blog-categories-modify",
+		WantAdmin: true,
+	}, func(wrap *wrapper.Wrapper) {
+		pf_id := wrap.R.FormValue("id")
+		pf_name := wrap.R.FormValue("name")
+		pf_alias := wrap.R.FormValue("alias")
+		pf_parent := wrap.R.FormValue("parent")
+
+		if !utils.IsNumeric(pf_id) || !utils.IsNumeric(pf_parent) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		if pf_name == "" {
+			wrap.MsgError(`Please specify category name`)
+			return
+		}
+
+		if pf_alias == "" {
+			pf_alias = utils.GenerateSingleAlias(pf_name)
+		}
+
+		if !utils.IsValidSingleAlias(pf_alias) {
+			wrap.MsgError(`Please specify correct category alias`)
+			return
+		}
+
+		if pf_id == "0" {
+			if err := this.blog_ActionCategoryAdd(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
+				wrap.MsgError(err.Error())
+				return
+			}
+			wrap.Write(`window.location='/cp/blog/categories/';`)
+		} else {
+			if err := this.blog_ActionCategoryUpdate(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
+				wrap.MsgError(err.Error())
+				return
+			}
+			wrap.Write(`window.location='/cp/blog/categories-modify/` + pf_id + `/';`)
+		}
+	})
+}
