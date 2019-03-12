@@ -106,7 +106,6 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "List of posts"},
 			})
-			//
 		} else if wrap.CurrSubModule == "categories" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Categories", Link: "/cp/" + wrap.CurrModule + "/" + wrap.CurrSubModule + "/"},
@@ -120,11 +119,9 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				&[]builder.DataTableRow{
 					{
 						DBField: "id",
-						// NameInTable: "id",
 					},
 					{
 						DBField: "user",
-						// NameInTable: "user",
 					},
 					{
 						DBField:     "name",
@@ -132,18 +129,14 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						CallBack: func(values *[]string) string {
 							sub := strings.Repeat("&mdash; ", utils.StrToInt((*values)[4]))
 							name := `<a href="/cp/` + wrap.CurrModule + `/categories-modify/` + (*values)[0] + `/">` + sub + html.EscapeString((*values)[2]) + `</a>`
-							// alias := html.EscapeString((*values)[3])
-							// return `<div>` + name + `</div><div><small>` + alias + `</small></div>`
 							return `<div>` + name + `</div>`
 						},
 					},
 					{
 						DBField: "alias",
-						// NameInTable: "Alias",
 					},
 					{
 						DBField: "depth",
-						// NameInTable: "depth",
 					},
 				},
 				func(values *[]string) string {
@@ -202,7 +195,6 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					{Name: "Modify post"},
 				})
 			}
-			//
 		} else if wrap.CurrSubModule == "categories-add" || wrap.CurrSubModule == "categories-modify" {
 			if wrap.CurrSubModule == "categories-add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
@@ -259,16 +251,11 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				}
 			}
 
-			// ---
-
 			btn_caption := "Add"
 			if wrap.CurrSubModule == "categories-modify" {
 				btn_caption = "Save"
 			}
 
-			// ---
-			// select_parent_options := this.blog_GetCategorySelectOptions(wrap, "")
-			// ---
 			parentId := 0
 			if wrap.CurrSubModule == "categories-modify" {
 				parentId = this.blog_GetCategoryParentId(wrap, data.A_id)
@@ -336,7 +323,6 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			} else {
 				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
 			}
-			// ---
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})
