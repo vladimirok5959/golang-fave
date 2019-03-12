@@ -218,7 +218,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Name:    "parent",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n3">
+						return `<div class="form-group last">
 							<div class="row">
 								<div class="col-md-3">
 									<label for="lbl_parent">Parent</label>
