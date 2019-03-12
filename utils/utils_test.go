@@ -182,6 +182,14 @@ func TestGenerateAlias(t *testing.T) {
 	Expect(t, GenerateAlias("Какая-то страница 2"), "/kakayato-stranica-2/")
 }
 
+func TestGenerateSingleAlias(t *testing.T) {
+	Expect(t, GenerateSingleAlias(""), "")
+	Expect(t, GenerateSingleAlias("Some category name"), "some-category-name")
+	Expect(t, GenerateSingleAlias("Some category name 2"), "some-category-name-2")
+	Expect(t, GenerateSingleAlias("Какая-то категория"), "kakayato-kategoriya")
+	Expect(t, GenerateSingleAlias("Какая-то категория 2"), "kakayato-kategoriya-2")
+}
+
 func TestUnixTimestampToMySqlDateTime(t *testing.T) {
 	Expect(t, UnixTimestampToMySqlDateTime(1551741275), "2019-03-05 01:14:35")
 }

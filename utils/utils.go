@@ -266,6 +266,17 @@ func GenerateAlias(str string) string {
 	return alias
 }
 
+func GenerateSingleAlias(str string) string {
+	alias := GenerateAlias(str)
+	if len(alias) > 1 && alias[0] == '/' {
+		alias = alias[1:]
+	}
+	if len(alias) > 1 && alias[len(alias)-1] == '/' {
+		alias = alias[:len(alias)-1]
+	}
+	return alias
+}
+
 func UnixTimestampToMySqlDateTime(sec int64) string {
 	return time.Unix(sec, 0).Format("2006-01-02 15:04:05")
 }
