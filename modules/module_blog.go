@@ -39,6 +39,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			//
 		} else if wrap.CurrSubModule == "categories" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Categories", Link: "/cp/" + wrap.CurrModule + "/" + wrap.CurrSubModule + "/"},
 				{Name: "List of categories"},
 			})
 			content += builder.DataTable(
@@ -135,10 +136,12 @@ func (this *Modules) RegisterModule_Blog() *Module {
 		} else if wrap.CurrSubModule == "categories-add" || wrap.CurrSubModule == "categories-modify" {
 			if wrap.CurrSubModule == "categories-add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+					{Name: "Categories", Link: "/cp/" + wrap.CurrModule + "/categories/"},
 					{Name: "Add new category"},
 				})
 			} else {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+					{Name: "Categories", Link: "/cp/" + wrap.CurrModule + "/categories/"},
 					{Name: "Modify category"},
 				})
 			}
