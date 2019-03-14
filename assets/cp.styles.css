@@ -419,15 +419,18 @@ ul.pagination {
 		margin-bottom: 0px;
 	}
 
-	.data-form.index .form-group.n8 {
+	.data-form.index-add .form-group.n8,
+	.data-form.index-modify .form-group.n8 {
 		margin-bottom: 0px;
 	}
 
-	.data-form.users .form-group.n7 {
+	.data-form.users-add .form-group.n7,
+	.data-form.users-modify .form-group.n7 {
 		margin-bottom: 0px;
 	}
 
-	.data-form.blog .form-group.n4 {
+	.data-form.blog-categories-add .form-group.n4,
+	.data-form.blog-categories-modify .form-group.n4 {
 		margin-bottom: 0px;
 	}
 }

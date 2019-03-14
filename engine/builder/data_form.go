@@ -126,6 +126,6 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 		html_hidden = `<div class="hidden">` + html_hidden + `</div>`
 	}
 
-	return `<form class="data-form ` + wrap.CurrModule + ` prev-data-lost" action="/cp/" method="post" autocomplete="off">` +
+	return `<form class="data-form ` + wrap.CurrModule + `-` + wrap.CurrSubModule + ` prev-data-lost" action="/cp/" method="post" autocomplete="off">` +
 		html_hidden + html_element + html_message + html_button + `</form>`
 }
