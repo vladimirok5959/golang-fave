@@ -94,26 +94,6 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 		return err
 	}
 
-	/*
-		// Update and insert new category
-		if _, err = tx.Exec("SELECT @ml := lft FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
-			tx.Rollback()
-			return err
-		}
-		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @ml;"); err != nil {
-			tx.Rollback()
-			return err
-		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @ml;"); err != nil {
-			tx.Rollback()
-			return err
-		}
-		if _, err = tx.Exec("INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @ml + 1, @ml + 2);", wrap.User.A_id, pf_name, pf_alias); err != nil {
-			tx.Rollback()
-			return err
-		}
-	*/
-
 	// Update and insert new category
 	if _, err = tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
 		tx.Rollback()
@@ -127,7 +107,6 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 		tx.Rollback()
 		return err
 	}
-
 	if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2  WHERE id = ?;", pf_parent); err != nil {
 		tx.Rollback()
 		return err

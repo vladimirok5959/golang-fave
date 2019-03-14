@@ -70,8 +70,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						DBField: "alias",
 					},
 					{
-						DBField:     "depth",
-						NameInTable: "depth",
+						DBField: "depth",
 					},
 				},
 				func(values *[]string) string {
