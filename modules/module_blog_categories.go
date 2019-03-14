@@ -221,7 +221,7 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 	}, func(wrap *wrapper.Wrapper) {
 		pf_id := wrap.R.FormValue("id")
 
-		if !utils.IsNumeric(pf_id) {
+		if !utils.IsNumeric(pf_id) || utils.StrToInt(pf_id) <= 1 {
 			wrap.MsgError(`Inner system error`)
 			return
 		}
