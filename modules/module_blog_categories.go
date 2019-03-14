@@ -131,8 +131,8 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 
 func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
 	// TODO: add parent change updates if parent was changed
-	_, err := wrap.DB.Query(
-		`UPDATE blog_cats SET
+	_, err := wrap.DB.Query(`
+		UPDATE blog_cats SET
 			name = ?,
 			alias = ?
 		WHERE
