@@ -239,29 +239,6 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 		}
 
 		// Update and insert new category
-		/*
-			if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt, @mw := rgt - lft + 1 FROM blog_cats WHERE id = ?;", pf_id); err != nil {
-				tx.Rollback()
-				wrap.MsgError(err.Error())
-				return
-			}
-			if _, err = tx.Exec("DELETE FROM blog_cats WHERE lft BETWEEN @ml AND @mr AND id > 1;"); err != nil {
-				tx.Rollback()
-				wrap.MsgError(err.Error())
-				return
-			}
-			if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt - @mw WHERE rgt > @mr;"); err != nil {
-				tx.Rollback()
-				wrap.MsgError(err.Error())
-				return
-			}
-			if _, err = tx.Exec("UPDATE blog_cats SET lft = lft - @mw WHERE lft > @mr;"); err != nil {
-				tx.Rollback()
-				wrap.MsgError(err.Error())
-				return
-			}
-		*/
-
 		if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
