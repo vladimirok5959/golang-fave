@@ -57,7 +57,11 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						DBField:     "name",
 						NameInTable: "Category",
 						CallBack: func(values *[]string) string {
-							sub := strings.Repeat("&mdash; ", utils.StrToInt((*values)[4]))
+							depth := utils.StrToInt((*values)[4]) - 1
+							if depth < 0 {
+								depth = 0
+							}
+							sub := strings.Repeat("&mdash; ", depth)
 							name := `<a href="/cp/` + wrap.CurrModule + `/categories-modify/` + (*values)[0] + `/">` + sub + html.EscapeString((*values)[2]) + `</a>`
 							return `<div>` + name + `</div>`
 						},
@@ -66,7 +70,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						DBField: "alias",
 					},
 					{
-						DBField: "depth",
+						DBField:     "depth",
+						NameInTable: "depth",
 					},
 				},
 				func(values *[]string) string {
@@ -89,7 +94,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				func() (int, error) {
 					var num int
 					var err error
-					err = wrap.DB.QueryRow("SELECT COUNT(*) FROM `blog_cats`;").Scan(&num)
+					err = wrap.DB.QueryRow("SELECT COUNT(*) FROM blog_cats WHERE id > 1;").Scan(&num)
 					return num, err
 				},
 				func(limit_offset int, pear_page int) (*sql.Rows, error) {
@@ -104,7 +109,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 							blog_cats AS node,
 							blog_cats AS parent
 						WHERE
-							node.lft BETWEEN parent.lft AND parent.rgt
+							node.lft BETWEEN parent.lft AND parent.rgt AND
+							node.id > 1
 						GROUP BY
 							node.id
 						ORDER BY
@@ -204,24 +210,11 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "Name",
-					Name:    "name",
-					Value:   data.A_name,
-				},
-				{
-					Kind:    builder.DFKText,
-					Caption: "Alias",
-					Name:    "alias",
-					Value:   data.A_alias,
-					Hint:    "Example: popular-posts",
-				},
-				{
-					Kind:    builder.DFKText,
 					Caption: "Parent",
 					Name:    "parent",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group last">
+						return `<div class="form-group n2">
 							<div class="row">
 								<div class="col-md-3">
 									<label for="lbl_parent">Parent</label>
@@ -237,6 +230,19 @@ func (this *Modules) RegisterModule_Blog() *Module {
 							</div>
 						</div>`
 					},
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Name",
+					Name:    "name",
+					Value:   data.A_name,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Alias",
+					Name:    "alias",
+					Value:   data.A_alias,
+					Hint:    "Example: popular-posts",
 				},
 				{
 					Kind: builder.DFKMessage,
