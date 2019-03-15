@@ -430,20 +430,6 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 	})
 }
 
-func (this *Modules) RegisterAction_IndexUserLogout() *Action {
-	return this.newAction(AInfo{
-		WantDB:   true,
-		Mount:    "index-user-logout",
-		WantUser: true,
-	}, func(wrap *wrapper.Wrapper) {
-		// Reset session var
-		wrap.S.SetInt("UserId", 0)
-
-		// Reload current page
-		wrap.Write(`window.location.reload(false);`)
-	})
-}
-
 func (this *Modules) RegisterAction_IndexUserUpdateProfile() *Action {
 	return this.newAction(AInfo{
 		WantDB:   true,
