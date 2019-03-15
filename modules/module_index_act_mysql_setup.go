@@ -75,7 +75,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: blog_cats
 		if _, err = tx.Exec(
-			`CREATE TABLE ` + pf_name + `.blog_cats (
+			`CREATE TABLE blog_cats (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Category name',
@@ -89,17 +89,17 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`INSERT INTO ` + pf_name + `.blog_cats (id, user, name, alias, lft, rgt) VALUES (1, 0, 'ROOT', 'ROOT', 1, 2);`); err != nil {
+		if _, err = tx.Exec(`INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (1, 0, 'ROOT', 'ROOT', 1, 2);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE ` + pf_name + `.blog_cats ADD UNIQUE KEY alias (alias);`); err != nil {
+		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD UNIQUE KEY alias (alias);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE ` + pf_name + `.blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
+		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
@@ -107,7 +107,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: blog_cat_post_rel
 		if _, err = tx.Exec(
-			`CREATE TABLE ` + pf_name + `.blog_cat_post_rel (
+			`CREATE TABLE blog_cat_post_rel (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				post_id int(11) NOT NULL COMMENT 'Post id',
 				category_id int(11) NOT NULL COMMENT 'Category id',
@@ -126,7 +126,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: blog_posts
 		if _, err = tx.Exec(
-			`CREATE TABLE ` + pf_name + `.blog_posts (
+			`CREATE TABLE blog_posts (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Post name',
@@ -149,7 +149,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: pages
 		if _, err = tx.Exec(
-			`CREATE TABLE ` + pf_name + `.pages (
+			`CREATE TABLE pages (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Page name',
@@ -168,7 +168,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO `+pf_name+`.pages SET
+			`INSERT INTO pages SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -190,7 +190,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO `+pf_name+`.pages SET
+			`INSERT INTO pages SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -212,7 +212,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO `+pf_name+`.pages SET
+			`INSERT INTO pages SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -241,7 +241,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: users
 		if _, err = tx.Exec(
-			`CREATE TABLE ` + pf_name + `.users (
+			`CREATE TABLE users (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				first_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User first name',
 				last_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User last name',
