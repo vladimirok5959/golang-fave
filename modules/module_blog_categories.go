@@ -300,7 +300,7 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 		}
 
 		// Start transaction with table lock
-		_, err := wrap.DB.Exec("LOCK TABLE blog_cats WRITE;")
+		_, err := wrap.DB.Exec("LOCK TABLES blog_cats WRITE, blog_cat_post_rel WRITE;")
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return
@@ -333,6 +333,11 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 			return
 		}
 		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", pf_id); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
