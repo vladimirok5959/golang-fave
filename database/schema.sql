@@ -8,7 +8,6 @@ CREATE TABLE `users` (
 	`active` int(1) NOT NULL COMMENT 'Is active user or not',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 ALTER TABLE `users` ADD UNIQUE KEY `email` (`email`);
 
 CREATE TABLE `pages` (
@@ -24,7 +23,6 @@ CREATE TABLE `pages` (
 	`active` int(1) NOT NULL COMMENT 'Is active page or not',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 ALTER TABLE `pages` ADD UNIQUE KEY `alias` (`alias`);
 
 CREATE TABLE `blog_posts` (
@@ -37,7 +35,6 @@ CREATE TABLE `blog_posts` (
 	`active` int(1) NOT NULL COMMENT 'Is active post or not',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 ALTER TABLE `blog_posts` ADD UNIQUE KEY `alias` (`alias`);
 
 CREATE TABLE `blog_cats` (
@@ -49,7 +46,6 @@ CREATE TABLE `blog_cats` (
 	`rgt` int(11) NOT NULL COMMENT 'For nested set model',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 ALTER TABLE `blog_cats` ADD UNIQUE KEY `alias` (`alias`);
 ALTER TABLE `blog_cats` ADD KEY `lft` (`lft`), ADD KEY `rgt` (`rgt`);
 
@@ -59,5 +55,4 @@ CREATE TABLE `blog_cat_post_rel` (
 	`category_id` int(11) NOT NULL COMMENT 'Category id',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 ALTER TABLE `blog_cat_post_rel` ADD KEY `post_id` (`post_id`), ADD KEY `category_id` (`category_id`);
