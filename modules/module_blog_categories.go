@@ -99,15 +99,15 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 		tx.Rollback()
 		return err
 	}
-	if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2  WHERE rgt > @mr;"); err != nil {
+	if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
 		tx.Rollback()
 		return err
 	}
-	if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2  WHERE lft > @mr;"); err != nil {
+	if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
 		tx.Rollback()
 		return err
 	}
-	if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2  WHERE id = ?;", pf_parent); err != nil {
+	if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -186,15 +186,15 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			tx.Rollback()
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2  WHERE rgt > @mr;"); err != nil {
+		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2  WHERE lft > @mr;"); err != nil {
+		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2  WHERE id = ?;", pf_parent); err != nil {
+		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
 			tx.Rollback()
 			return err
 		}
