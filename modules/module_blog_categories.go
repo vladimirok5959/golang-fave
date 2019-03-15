@@ -149,33 +149,8 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		return err
 	} else {
 		// Parent is changed, move category to new parent
-		// Load target category data
-		data := utils.MySql_blog_category{
-			A_id:   0,
-			A_user: 0,
-		}
-		err := wrap.DB.QueryRow(`
-			SELECT
-				id,
-				user
-			FROM
-				blog_cats
-			WHERE
-				id > 1 AND
-				id = ?
-			LIMIT 1;`,
-			utils.StrToInt(pf_id),
-		).Scan(
-			&data.A_id,
-			&data.A_user,
-		)
-		if err != nil {
-			return err
-		}
-
-		///////////////////////////////////////////////////////////////////////
 		// Start transaction with table lock
-		_, err = wrap.DB.Exec("LOCK TABLE blog_cats WRITE;")
+		_, err := wrap.DB.Exec("LOCK TABLE blog_cats WRITE;")
 		if err != nil {
 			return err
 		}
@@ -184,12 +159,12 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			return err
 		}
 
-		// Delete
+		// Shift
 		if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if _, err = tx.Exec("DELETE FROM blog_cats WHERE id = ?;", pf_id); err != nil {
+		if _, err = tx.Exec("UPDATE blog_cats SET lft = 0, rgt = 0 WHERE id = ?;", pf_id); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -206,7 +181,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			return err
 		}
 
-		// Insert
+		// Update
 		if _, err = tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
 			tx.Rollback()
 			return err
@@ -223,7 +198,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			tx.Rollback()
 			return err
 		}
-		if _, err = tx.Exec("INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (?, ?, ?, ?, @mr, @mr + 1);", data.A_id, data.A_user, pf_name, pf_alias); err != nil {
+		if _, err = tx.Exec("UPDATE blog_cats SET name = ?, alias = ?, lft = @mr, rgt = @mr + 1 WHERE id = ?;", pf_name, pf_alias, pf_id); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -237,7 +212,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		if err != nil {
 			return err
 		}
-		///////////////////////////////////////////////////////////////////////
 	}
 
 	return nil
