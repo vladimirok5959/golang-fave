@@ -653,14 +653,14 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		_, err = db.Query(fmt.Sprintf(
-			`ALTER TABLE %s.blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
+			`INSERT INTO %s.blog_cats (id, user, name, alias, lft, rgt) VALUES (1, 0, 'ROOT', 'ROOT', 1, 2);`,
 			pf_name))
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return
 		}
 		_, err = db.Query(fmt.Sprintf(
-			`INSERT INTO %s.blog_cats (id, user, name, alias, lft, rgt) VALUES (1, 0, 'ROOT', 'ROOT', 1, 2);`,
+			`ALTER TABLE %s.blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
 			pf_name))
 		if err != nil {
 			wrap.MsgError(err.Error())
