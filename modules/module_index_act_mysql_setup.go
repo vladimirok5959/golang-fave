@@ -123,6 +123,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 
 		// Table: blog_posts
 		if _, err = tx.Exec(

@@ -17,6 +17,7 @@ CREATE TABLE `blog_cat_post_rel` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `blog_cat_post_rel` ADD KEY `post_id` (`post_id`), ADD KEY `category_id` (`category_id`);
+ALTER TABLE `blog_cat_post_rel` ADD UNIQUE KEY `post_category` (`post_id`,`category_id`) USING BTREE;
 
 CREATE TABLE `blog_posts` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
