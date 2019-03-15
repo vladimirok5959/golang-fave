@@ -27,6 +27,19 @@ CREATE TABLE `pages` (
 
 ALTER TABLE `pages` ADD UNIQUE KEY `alias` (`alias`);
 
+CREATE TABLE `blog_posts` (
+	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+	`user` int(11) NOT NULL COMMENT 'User id',
+	`name` varchar(255) NOT NULL COMMENT 'Post name',
+	`alias` varchar(255) NOT NULL COMMENT 'Post alias',
+	`content` text NOT NULL COMMENT 'Post content',
+	`datetime` datetime NOT NULL COMMENT 'Creation date/time',
+	`active` int(1) NOT NULL COMMENT 'Is active post or not',
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `blog_posts` ADD UNIQUE KEY `alias` (`alias`);
+
 CREATE TABLE `blog_cats` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	`user` int(11) NOT NULL COMMENT 'User id',
