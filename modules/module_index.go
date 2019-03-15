@@ -568,7 +568,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				name varchar(255) NOT NULL COMMENT 'Category name',
 				alias varchar(255) NOT NULL COMMENT 'Category alias',
 				lft int(11) NOT NULL COMMENT 'For nested set model',
-				rgt int(11) NOT NULL COMMENT 'For nested set model'
+				rgt int(11) NOT NULL COMMENT 'For nested set model',
 				PRIMARY KEY (id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 			pf_name))
