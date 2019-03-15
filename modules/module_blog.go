@@ -90,12 +90,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					})
 				},
 				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
-				func() (int, error) {
-					var num int
-					var err error
-					err = wrap.DB.QueryRow("SELECT COUNT(*) FROM blog_cats WHERE id > 1;").Scan(&num)
-					return num, err
-				},
+				nil,
 				func(limit_offset int, pear_page int) (*sql.Rows, error) {
 					return wrap.DB.Query(
 						`SELECT
@@ -117,7 +112,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						;`,
 					)
 				},
-				true,
+				false,
 			)
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {
