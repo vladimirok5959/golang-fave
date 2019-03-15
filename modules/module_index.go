@@ -657,6 +657,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 
 		_, err = wrap.DB.Query(
 			`INSERT INTO users SET
+				id = 1,
 				first_name = ?,
 				last_name = ?,
 				email = ?,
