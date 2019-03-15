@@ -101,6 +101,7 @@ func DataTable(
 	result += `</thead>`
 	result += `<tbody>`
 	if num > 0 || !pagination_enabled {
+		have_records := false
 		var rows *sql.Rows
 		var err error
 		if custom_sql_data == nil {
@@ -117,6 +118,9 @@ func DataTable(
 			for rows.Next() {
 				err = rows.Scan(scan...)
 				if err == nil {
+					if !have_records {
+						have_records = true
+					}
 					result += `<tr>`
 					for i, val := range values {
 						if (*data)[i].NameInTable != "" {
@@ -137,6 +141,9 @@ func DataTable(
 					result += `</tr>`
 				}
 			}
+		}
+		if !have_records {
+			result += `<tr><td colspan="50">No any data found</td></tr>`
 		}
 	} else {
 		result += `<tr><td colspan="50">No any data found</td></tr>`
