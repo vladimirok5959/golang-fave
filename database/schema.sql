@@ -46,9 +46,18 @@ CREATE TABLE `blog_cats` (
 	`name` varchar(255) NOT NULL COMMENT 'Category name',
 	`alias` varchar(255) NOT NULL COMMENT 'Category alias',
 	`lft` int(11) NOT NULL COMMENT 'For nested set model',
-	`rgt` int(11) NOT NULL COMMENT 'For nested set model'
+	`rgt` int(11) NOT NULL COMMENT 'For nested set model',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `blog_cats` ADD UNIQUE KEY `alias` (`alias`);
 ALTER TABLE `blog_cats` ADD KEY `lft` (`lft`), ADD KEY `rgt` (`rgt`);
+
+CREATE TABLE `blog_cat_post_rel` (
+	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+	`post_id` int(11) NOT NULL COMMENT 'Post id',
+	`category_id` int(11) NOT NULL COMMENT 'Category id',
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `blog_cat_post_rel` ADD KEY `post_id` (`post_id`), ADD KEY `category_id` (`category_id`);
