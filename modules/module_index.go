@@ -567,6 +567,13 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		_, err = db.Query(fmt.Sprintf(
+			`INSERT INTO %s.blog_cats (id, user, name, alias, lft, rgt) VALUES (1, 0, 'ROOT', 'ROOT', 1, 2);`,
+			pf_name))
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
 
 		// Save mysql config file
 		err = utils.MySqlConfigWrite(wrap.DConfig+string(os.PathSeparator)+"mysql.json", pf_host, pf_port, pf_name, pf_user, pf_password)
