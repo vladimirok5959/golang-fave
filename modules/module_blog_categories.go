@@ -130,19 +130,117 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 }
 
 func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
-	// TODO: add parent change updates if parent was changed
-	_, err := wrap.DB.Query(`
-		UPDATE blog_cats SET
-			name = ?,
-			alias = ?
-		WHERE
-			id = ?
-		;`,
-		pf_name,
-		pf_alias,
-		pf_id,
-	)
-	return err
+	parentId := this.blog_GetCategoryParentId(wrap, utils.StrToInt(pf_id))
+
+	if utils.StrToInt(pf_parent) == parentId {
+		// If parent not changed, just update category data
+		_, err := wrap.DB.Query(`
+			UPDATE blog_cats SET
+				name = ?,
+				alias = ?
+			WHERE
+				id > 1 AND
+				id = ?
+			;`,
+			pf_name,
+			pf_alias,
+			pf_id,
+		)
+		return err
+	} else {
+		// Parent is changed, move category to new parent
+		// Load target category data
+		data := utils.MySql_blog_category{
+			A_id:   0,
+			A_user: 0,
+		}
+		err := wrap.DB.QueryRow(`
+			SELECT
+				id,
+				user
+			FROM
+				blog_cats
+			WHERE
+				id > 1 AND
+				id = ?
+			LIMIT 1;`,
+			utils.StrToInt(pf_id),
+		).Scan(
+			&data.A_id,
+			&data.A_user,
+		)
+		if err != nil {
+			return err
+		}
+
+		///////////////////////////////////////////////////////////////////////
+		// Start transaction with table lock
+		_, err = wrap.DB.Exec("LOCK TABLE blog_cats WRITE;")
+		if err != nil {
+			return err
+		}
+		tx, err := wrap.DB.Begin()
+		if err != nil {
+			return err
+		}
+
+		// Delete
+		if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("DELETE FROM blog_cats WHERE id = ?;", pf_id); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft - 2 WHERE lft > @mr;"); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// Insert
+		if _, err = tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2  WHERE rgt > @mr;"); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2  WHERE lft > @mr;"); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2  WHERE id = ?;", pf_parent); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if _, err = tx.Exec("INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (?, ?, ?, ?, @mr, @mr + 1);", data.A_id, data.A_user, pf_name, pf_alias); err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// Commit all changes and unlock table
+		err = tx.Commit()
+		if err != nil {
+			return err
+		}
+		_, err = wrap.DB.Exec("UNLOCK TABLES;")
+		if err != nil {
+			return err
+		}
+		///////////////////////////////////////////////////////////////////////
+	}
+
+	return nil
 }
 
 func (this *Modules) RegisterAction_BlogCategoriesModify() *Action {
@@ -239,7 +337,7 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 			return
 		}
 
-		// Update and insert new category
+		// Update and delete target category
 		if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
