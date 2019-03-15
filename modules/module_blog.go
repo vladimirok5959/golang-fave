@@ -114,11 +114,10 @@ func (this *Modules) RegisterModule_Blog() *Module {
 							node.id
 						ORDER BY
 							node.lft ASC
-						LIMIT ?, ?;`,
-						limit_offset,
-						pear_page,
+						;`,
 					)
 				},
+				true,
 			)
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {

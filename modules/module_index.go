@@ -158,6 +158,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				"/cp/"+wrap.CurrModule+"/",
 				nil,
 				nil,
+				true,
 			)
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
 			if wrap.CurrSubModule == "add" {

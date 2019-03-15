@@ -28,17 +28,24 @@ func DataTable(
 	pagination_url string,
 	custom_sql_count func() (int, error),
 	custom_sql_data func(limit_offset int, pear_page int) (*sql.Rows, error),
+	pagination_enabled bool,
 ) string {
 	var num int
 	var err error
-	if custom_sql_count != nil {
-		num, err = custom_sql_count()
-	} else {
-		err = wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
-		if err != nil {
-			return ""
+
+	if pagination_enabled {
+		if custom_sql_count != nil {
+			num, err = custom_sql_count()
+		} else {
+			err = wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
+			if err != nil {
+				return ""
+			}
 		}
+	} else {
+		num = 0
 	}
+
 	pear_page := 10
 	max_pages := int(math.Ceil(float64(num) / float64(pear_page)))
 	curr_page := 1
@@ -93,7 +100,7 @@ func DataTable(
 	result += `</tr>`
 	result += `</thead>`
 	result += `<tbody>`
-	if num > 0 {
+	if num > 0 || !pagination_enabled {
 		var rows *sql.Rows
 		var err error
 		if custom_sql_data == nil {
@@ -137,40 +144,42 @@ func DataTable(
 	result += `</tbody></table>`
 
 	// Show page navigation only if pages more then one
-	if max_pages > 1 {
-		result += `<nav>`
-		result += `<ul class="pagination" style="margin-bottom:0px;">`
-		class := ""
-		if curr_page <= 1 {
-			class = " disabled"
-		}
-		result += `<li class="page-item` + class + `">`
-		result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page-1) + `" aria-label="Previous">`
-		result += `<span aria-hidden="true">&laquo;</span>`
-		result += `<span class="sr-only">Previous</span>`
-		result += `</a>`
-		result += `</li>`
-		for i := 1; i <= max_pages; i++ {
-			class = ""
-			if i == curr_page {
-				class = " active"
+	if pagination_enabled {
+		if max_pages > 1 {
+			result += `<nav>`
+			result += `<ul class="pagination" style="margin-bottom:0px;">`
+			class := ""
+			if curr_page <= 1 {
+				class = " disabled"
 			}
 			result += `<li class="page-item` + class + `">`
-			result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", i) + `">` + fmt.Sprintf("%d", i) + `</a>`
+			result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page-1) + `" aria-label="Previous">`
+			result += `<span aria-hidden="true">&laquo;</span>`
+			result += `<span class="sr-only">Previous</span>`
+			result += `</a>`
 			result += `</li>`
+			for i := 1; i <= max_pages; i++ {
+				class = ""
+				if i == curr_page {
+					class = " active"
+				}
+				result += `<li class="page-item` + class + `">`
+				result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", i) + `">` + fmt.Sprintf("%d", i) + `</a>`
+				result += `</li>`
+			}
+			class = ""
+			if curr_page >= max_pages {
+				class = " disabled"
+			}
+			result += `<li class="page-item` + class + `">`
+			result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page+1) + `" aria-label="Next">`
+			result += `<span aria-hidden="true">&raquo;</span>`
+			result += `<span class="sr-only">Next</span>`
+			result += `</a>`
+			result += `</li>`
+			result += `</ul>`
+			result += `</nav>`
 		}
-		class = ""
-		if curr_page >= max_pages {
-			class = " disabled"
-		}
-		result += `<li class="page-item` + class + `">`
-		result += `<a class="page-link" href="` + pagination_url + `?p=` + fmt.Sprintf("%d", curr_page+1) + `" aria-label="Next">`
-		result += `<span aria-hidden="true">&raquo;</span>`
-		result += `<span class="sr-only">Next</span>`
-		result += `</a>`
-		result += `</li>`
-		result += `</ul>`
-		result += `</nav>`
 	}
 
 	return result
