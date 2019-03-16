@@ -344,7 +344,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 
 		if pf_id == "0" {
 			// Add new page
-			_, err := wrap.DB.Query(
+			_, err := wrap.DB.Exec(
 				`INSERT INTO pages SET
 					user = ?,
 					name = ?,
@@ -373,7 +373,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 			wrap.Write(`window.location='/cp/';`)
 		} else {
 			// Update page
-			_, err := wrap.DB.Query(
+			_, err := wrap.DB.Exec(
 				`UPDATE pages SET
 					name = ?,
 					alias = ?,
@@ -417,7 +417,7 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 		}
 
 		// Delete page
-		_, err := wrap.DB.Query(
+		_, err := wrap.DB.Exec(
 			`DELETE FROM pages WHERE id = ?;`,
 			utils.StrToInt(pf_id),
 		)

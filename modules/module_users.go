@@ -283,7 +283,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 				wrap.MsgError(`Please specify user password`)
 				return
 			}
-			_, err := wrap.DB.Query(
+			_, err := wrap.DB.Exec(
 				`INSERT INTO users SET
 					first_name = ?,
 					last_name = ?,
@@ -307,7 +307,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 		} else {
 			// Update user
 			if pf_password == "" {
-				_, err := wrap.DB.Query(
+				_, err := wrap.DB.Exec(
 					`UPDATE users SET
 						first_name = ?,
 						last_name = ?,
@@ -329,7 +329,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 					return
 				}
 			} else {
-				_, err := wrap.DB.Query(
+				_, err := wrap.DB.Exec(
 					`UPDATE users SET
 						first_name = ?,
 						last_name = ?,
@@ -368,7 +368,7 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 		}
 
 		// Delete user
-		_, err := wrap.DB.Query(
+		_, err := wrap.DB.Exec(
 			`DELETE FROM users WHERE id = ? and id <> 1;`,
 			utils.StrToInt(pf_id),
 		)

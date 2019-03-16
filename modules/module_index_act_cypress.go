@@ -35,7 +35,7 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 		os.Remove(wrap.DConfig + string(os.PathSeparator) + ".installed")
 		os.Remove(wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 
-		db.Query(
+		_, _ = db.Exec(
 			`DROP TABLE
 				blog_cats,
 				blog_cat_post_rel,

@@ -50,7 +50,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 			return
 		}
 
-		_, err = wrap.DB.Query(
+		_, err = wrap.DB.Exec(
 			`INSERT INTO users SET
 				id = 1,
 				first_name = ?,

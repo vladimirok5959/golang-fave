@@ -28,7 +28,7 @@ func (this *Modules) RegisterAction_IndexUserUpdateProfile() *Action {
 
 		if pf_password != "" {
 			// Update with password if set
-			_, err := wrap.DB.Query(
+			_, err := wrap.DB.Exec(
 				`UPDATE users SET
 					first_name = ?,
 					last_name = ?,
@@ -49,7 +49,7 @@ func (this *Modules) RegisterAction_IndexUserUpdateProfile() *Action {
 			}
 		} else {
 			// Update without password if not set
-			_, err := wrap.DB.Query(
+			_, err := wrap.DB.Exec(
 				`UPDATE users SET
 					first_name = ?,
 					last_name = ?,

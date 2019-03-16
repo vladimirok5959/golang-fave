@@ -2,6 +2,8 @@ package builder
 
 import (
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+
 	"fmt"
 	"html"
 	"math"
@@ -141,6 +143,7 @@ func DataTable(
 					result += `</tr>`
 				}
 			}
+			rows.Close()
 		}
 		if !have_records {
 			result += `<tr><td colspan="50">No any data found</td></tr>`

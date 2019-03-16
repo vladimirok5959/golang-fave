@@ -30,6 +30,7 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 		;`,
 	)
 	if err == nil {
+		defer rows.Close()
 		values := make([]string, 5)
 		scan := make([]interface{}, len(values))
 		for i := range values {
@@ -62,7 +63,7 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 
 func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int {
 	var parentId int
-	_ = wrap.DB.QueryRow(`
+	err := wrap.DB.QueryRow(`
 		SELECT
 			parent.id
 		FROM
@@ -80,6 +81,9 @@ func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int
 	).Scan(
 		&parentId,
 	)
+	if err != nil {
+		return 0
+	}
 	return parentId
 }
 
@@ -134,7 +138,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 	if utils.StrToInt(pf_parent) == parentId {
 		// If parent not changed, just update category data
-		_, err := wrap.DB.Query(`
+		_, err := wrap.DB.Exec(`
 			UPDATE blog_cats SET
 				name = ?,
 				alias = ?

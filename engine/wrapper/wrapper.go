@@ -1,8 +1,10 @@
 package wrapper
 
 import (
-	"bytes"
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+
+	"bytes"
 	"errors"
 	"fmt"
 	"html/template"
