@@ -13,6 +13,9 @@ func (this *Modules) RegisterAction_IndexUserLogout() *Action {
 		// Reset session var
 		wrap.S.SetInt("UserId", 0)
 
+		// Delete session file
+		_ = wrap.S.Destroy()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})
