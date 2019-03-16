@@ -60,8 +60,8 @@ docker-clr:
 cy-init:
 	yarn add cypress --dev
 
-cy:
-	yarn cypress run
-
 cy-dev:
 	yarn cypress open
+
+cy:
+	yarn cypress run
