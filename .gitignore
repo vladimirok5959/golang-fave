@@ -31,3 +31,9 @@
 
 # All else
 /hosts/localhost/config/.installed
+
+# Skip cypress libs folder
+/cypress/screenshots
+/cypress/videos
+/node_modules
+/yarn.lock

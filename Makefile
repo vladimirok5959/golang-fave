@@ -56,3 +56,12 @@ docker-clr:
 	@-docker stop fave-test
 	@-docker rm fave-test
 	@-docker rmi fave
+
+cy-init:
+	yarn add cypress --dev
+
+cy:
+	yarn cypress run
+
+cy-dev:
+	yarn cypress open
