@@ -57,9 +57,6 @@ docker-clr:
 	@-docker rm fave-test
 	@-docker rmi fave
 
-cy-init:
-	yarn add cypress --dev
-
 cy-dev:
 	yarn cypress open
 
