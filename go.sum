@@ -11,6 +11,8 @@ github.com/vladimirok5959/golang-server-resources v1.0.2 h1:XwxFXyaOtfDGRmYp8P9q
 github.com/vladimirok5959/golang-server-resources v1.0.2/go.mod h1:tsf2oAEf3E3ukiQSCO7dstl0IXbEXec68UUIiMWysBc=
 github.com/vladimirok5959/golang-server-sessions v1.0.1 h1:cQsLk8hz7pkIV7/XectfejDF2j+61FE+/s4xErxBNJw=
 github.com/vladimirok5959/golang-server-sessions v1.0.1/go.mod h1:W6eCEIltyTs5IUvN1DfzLk59z+M1031kr8bMFUiq8vU=
+github.com/vladimirok5959/golang-server-sessions v1.0.2 h1:VG14aTnH8+vb81quhekkrJ1vTi57EU4USDX1UzDYIzw=
+github.com/vladimirok5959/golang-server-sessions v1.0.2/go.mod h1:W6eCEIltyTs5IUvN1DfzLk59z+M1031kr8bMFUiq8vU=
 github.com/vladimirok5959/golang-server-static v1.0.0 h1:jmVNUCVF44+Am0euUMYFN4L3gdJYwm7aS8LFUmUAHJk=
 github.com/vladimirok5959/golang-server-static v1.0.0/go.mod h1:dxZsjCCpT65Z9dLP6p7RmR2rbgtYj6E4FSSSUqkNrsw=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
