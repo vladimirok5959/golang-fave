@@ -29,11 +29,6 @@ func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *ht
 }
 
 func (this *Engine) Process() bool {
-	// Check and set session user
-	if !this.Wrap.S.IsSetInt("UserId") {
-		this.Wrap.S.SetInt("UserId", 0)
-	}
-
 	this.Wrap.IsBackend = this.Wrap.R.URL.Path == "/cp" || strings.HasPrefix(this.Wrap.R.URL.Path, "/cp/")
 	this.Wrap.ConfMysqlExists = utils.IsMySqlConfigExists(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 	this.Wrap.UrlArgs = append(this.Wrap.UrlArgs, utils.UrlToArray(this.Wrap.R.URL.Path)...)
