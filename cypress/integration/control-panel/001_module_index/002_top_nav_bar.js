@@ -8,6 +8,7 @@ context('Top navigation bar', () => {
   it('should render top nav bar', () => {
     cy.loginCMS();
     cy.get('#navbarCollapse ul.navbar-nav').should('have.length', 2);
+    cy.logoutCMS();
   });
 
   it('should render modules menu', () => {
@@ -15,12 +16,14 @@ context('Top navigation bar', () => {
     cy.get('#navbarCollapse ul.navbar-nav:nth-child(1) li.nav-item').should('have.length', 2);
     cy.get('#navbarCollapse ul.navbar-nav:nth-child(1) li.nav-item:nth-child(1) a.nav-link').should('exist');
     cy.get('#navbarCollapse ul.navbar-nav:nth-child(1) li.nav-item:nth-child(2) a.nav-link').should('exist');
+    cy.logoutCMS();
   });
 
   it('should render user menu', () => {
     cy.loginCMS();
     cy.get('#navbarCollapse ul.navbar-nav:nth-child(2) li.nav-item').should('have.length', 1);
     cy.get('#navbarCollapse ul.navbar-nav:nth-child(2) li.nav-item:nth-child(1) a.nav-link').should('contain', 'example@example.com');
+    cy.logoutCMS();
   });
 
   it('should render user profile modal dialog', () => {
@@ -51,5 +54,6 @@ context('Top navigation bar', () => {
 
     cy.get('#sys-modal-user-settings form button[type=submit].btn').click();
     cy.actionWait();
+    cy.logoutCMS();
   });
 });

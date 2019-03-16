@@ -12,6 +12,7 @@ context('Module pages', () => {
     cy.get('table#cp-table-pages thead tr th').should('have.length', 4);
     cy.get('table#cp-table-pages tbody tr').should('have.length', 3);
     cy.get('table#cp-table-pages tbody tr:nth-child(1) td').should('have.length', 4);
+    cy.logoutCMS();
   });
 
   it('should render data form', () => {
@@ -21,6 +22,7 @@ context('Module pages', () => {
     cy.get('.data-form.index-add input[type=text]').should('have.length', 4);
     cy.get('.data-form.index-add textarea').should('have.length', 2);
     cy.get('.data-form.index-add input[type=checkbox]').should('have.length', 1);
+    cy.logoutCMS();
   });
 
   it('should not add new page', () => {
@@ -30,6 +32,7 @@ context('Module pages', () => {
     cy.actionWait();
 
     cy.get('.data-form.index-add div.sys-messages').should('exist');
+    cy.logoutCMS();
   });
 
   it('should add new page', () => {
@@ -44,6 +47,7 @@ context('Module pages', () => {
     cy.get('.data-form.index-add label[for=lbl_active]').click();
     cy.get('#add-edit-button').click();
     cy.actionWait();
+    cy.logoutCMS();
   });
 
   it('should render added page', () => {
@@ -52,6 +56,7 @@ context('Module pages', () => {
     cy.get('table#cp-table-pages tbody tr').should('have.length', 4);
     cy.get('table#cp-table-pages tbody tr:nth-child(1) td:nth-child(1)').should('contain', 'Some test page');
     cy.get('table#cp-table-pages tbody tr:nth-child(1) td:nth-child(3) .svg-green').should('exist');
+    cy.logoutCMS();
   });
 
   it('should delete added page', () => {
@@ -60,5 +65,6 @@ context('Module pages', () => {
     cy.get('table#cp-table-pages tbody tr:nth-child(1) td:nth-child(4) a.ico.delete').click();
     cy.actionWait();
     cy.get('table#cp-table-pages tbody tr').should('have.length', 3);
+    cy.logoutCMS();
   });
 });

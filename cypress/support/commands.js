@@ -77,3 +77,11 @@ Cypress.Commands.add('loginCMS', () => {
   cy.get('.form-signin button').click();
   cy.actionWait();
 });
+
+Cypress.Commands.add('logoutCMS', () => {
+  cy.actionStart();
+  cy.visit('http://localhost:8080/cp/');
+  cy.get('#navbarCollapse ul.navbar-nav:nth-child(2) li.nav-item:nth-child(1) a.nav-link').click();
+  cy.contains('#navbarCollapse ul.navbar-nav:nth-child(2) li.nav-item:nth-child(1) div.dropdown-menu a', 'Logout').click();
+  cy.actionWait();
+});

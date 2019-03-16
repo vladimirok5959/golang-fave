@@ -48,5 +48,7 @@ context('Install MySQL, create first user and login', () => {
     cy.get('.form-signin input[name=password]').type('example@example.com');
     cy.get('.form-signin button').click();
     cy.actionWait();
+
+    cy.logoutCMS();
   });
 });
