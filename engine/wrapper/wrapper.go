@@ -88,6 +88,12 @@ func (this *Wrapper) UseDatabase() error {
 	if err != nil {
 		return err
 	}
+
+	// TODO: Make one connection to database
+	// this.DB.SetConnMaxLifetime(time.Second * 5)
+	// this.DB.SetMaxIdleConns(0)
+	// this.DB.SetMaxOpenConns(5)
+
 	err = this.DB.Ping()
 	if err != nil {
 		this.DB.Close()
