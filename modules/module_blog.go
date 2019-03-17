@@ -282,7 +282,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 								<div class="col-md-9">
 									<div>
 										<select class="form-control" id="lbl_cats" name="cats[]" multiple>
-											` + this.blog_GetCategorySelectOptions(wrap, 0, 0) + `
+											<!--<option value=""></option>-->
+											` + this.blog_GetCategorySelectOptions(wrap, 0, 0, []int{}) + `
 										</select>
 									</div>
 								</div>
@@ -410,7 +411,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 									<div>
 										<select class="form-control" id="lbl_parent" name="parent">
 											<option value="0">&mdash;</option>
-											` + this.blog_GetCategorySelectOptions(wrap, data.A_id, parentId) + `
+											` + this.blog_GetCategorySelectOptions(wrap, data.A_id, parentId, []int{}) + `
 										</select>
 									</div>
 								</div>

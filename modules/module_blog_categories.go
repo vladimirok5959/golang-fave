@@ -8,7 +8,7 @@ import (
 	"golang-fave/utils"
 )
 
-func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int, parentId int) string {
+func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int, parentId int, selids []int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
 		`SELECT
@@ -47,6 +47,9 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 				}
 				selected := ""
 				if string(values[0]) == parentIdStr {
+					selected = " selected"
+				}
+				if len(selids) > 0 && utils.InArrayInt(selids, utils.StrToInt(string(values[0]))) {
 					selected = " selected"
 				}
 				depth := utils.StrToInt(string(values[4])) - 1

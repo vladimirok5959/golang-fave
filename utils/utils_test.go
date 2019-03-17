@@ -209,3 +209,11 @@ func TestJavaScriptVarValue(t *testing.T) {
 	Expect(t, JavaScriptVarValue(`It's "string"`), "It&rsquo;s &rdquo;string&rdquo;")
 	Expect(t, JavaScriptVarValue(`It is string`), "It is string")
 }
+
+func TestInArrayInt(t *testing.T) {
+	slice := []int{1, 3, 5, 9, 0}
+	Expect(t, InArrayInt(slice, 1), true)
+	Expect(t, InArrayInt(slice, 9), true)
+	Expect(t, InArrayInt(slice, 2), false)
+	Expect(t, InArrayInt(slice, 8), false)
+}

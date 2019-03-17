@@ -301,3 +301,12 @@ func JavaScriptVarValue(str string) string {
 		-1,
 	)
 }
+
+func InArrayInt(slice []int, value int) bool {
+	for _, item := range slice {
+		if item == value {
+			return true
+		}
+	}
+	return false
+}
