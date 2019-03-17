@@ -438,13 +438,18 @@ ul.pagination {
 		margin-bottom: 0px;
 	}
 
-	.data-form.users-add .form-group.n7,
-	.data-form.users-modify .form-group.n7 {
+	.data-form.blog-add .form-group.n5,
+	.data-form.blog-modify .form-group.n5 {
 		margin-bottom: 0px;
 	}
 
 	.data-form.blog-categories-add .form-group.n4,
 	.data-form.blog-categories-modify .form-group.n4 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.users-add .form-group.n7,
+	.data-form.users-modify .form-group.n7 {
 		margin-bottom: 0px;
 	}
 }
