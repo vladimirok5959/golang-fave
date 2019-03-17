@@ -102,7 +102,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					},
 					{
 						DBField:     "name",
-						NameInTable: "Page / Alias",
+						NameInTable: "Page / URL",
 						CallBack: func(values *[]string) string {
 							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
 							alias := html.EscapeString((*values)[2])

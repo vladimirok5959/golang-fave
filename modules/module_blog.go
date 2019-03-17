@@ -49,11 +49,11 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					},
 					{
 						DBField:     "name",
-						NameInTable: "Post / Alias",
+						NameInTable: "Post / URL",
 						CallBack: func(values *[]string) string {
 							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
 							alias := html.EscapeString((*values)[2])
-							return `<div>` + name + `</div><div><small>` + alias + `</small></div>`
+							return `<div>` + name + `</div><div><small>/blog/` + alias + `/</small></div>`
 						},
 					},
 					{
