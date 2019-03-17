@@ -269,6 +269,28 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Hint:    "Example: our-news",
 				},
 				{
+					Kind:    builder.DFKText,
+					Caption: "Categories",
+					Name:    "cats",
+					Value:   "0",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group n4">
+							<div class="row">
+								<div class="col-md-3">
+									<label for="lbl_parent">Categories</label>
+								</div>
+								<div class="col-md-9">
+									<div>
+										<select class="form-control" id="lbl_cats" name="cats[]" multiple>
+											` + this.blog_GetCategorySelectOptions(wrap, 0, 0) + `
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>`
+					},
+				},
+				{
 					Kind:    builder.DFKTextArea,
 					Caption: "Post content",
 					Name:    "content",
