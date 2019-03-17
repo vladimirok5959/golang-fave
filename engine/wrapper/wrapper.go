@@ -189,7 +189,7 @@ func (this *Wrapper) RenderToString(tcont []byte, data interface{}) string {
 	return tpl.String()
 }
 
-func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
+func (this *Wrapper) RenderFrontEnd(tname string, data interface{}, status int) {
 	tmpl, err := template.ParseFiles(
 		this.DTemplate+string(os.PathSeparator)+tname+".html",
 		this.DTemplate+string(os.PathSeparator)+"header.html",
@@ -201,6 +201,7 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}) {
 		utils.SystemErrorPageTemplate(this.W, err)
 		return
 	}
+	this.W.WriteHeader(status)
 	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
 	var tpl bytes.Buffer
