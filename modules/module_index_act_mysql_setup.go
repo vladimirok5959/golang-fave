@@ -94,6 +94,26 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(
+			`INSERT INTO blog_cats (id, user, name, alias, lft, rgt)
+				VALUES
+			(1, 0, 'ROOT', 'ROOT', 1, 24),
+			(2, 1, 'Health and food', 'health-and-food', 2, 15),
+			(3, 1, 'News', 'news', 16, 21),
+			(4, 1, 'Hobby', 'hobby', 22, 23),
+			(5, 1, 'Juices', 'juices', 3, 8),
+			(6, 1, 'Nutrition', 'nutrition', 9, 14),
+			(7, 1, 'Natural', 'natural', 4, 5),
+			(8, 1, 'For kids', 'for-kids', 6, 7),
+			(9, 1, 'For all', 'for-all', 10, 11),
+			(10, 1, 'For athletes', 'for-athletes', 12, 13),
+			(11, 1, 'Computers and technology', 'computers-and-technology', 17, 18),
+			(13, 1, 'Film industry', 'film-industry', 19, 20);`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD UNIQUE KEY alias (alias);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
