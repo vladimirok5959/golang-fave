@@ -62,3 +62,6 @@ cy-dev:
 
 cy:
 	yarn cypress run
+
+ab:
+	ab -kc 10 -t 120 http://localhost:8080/
