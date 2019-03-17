@@ -270,7 +270,6 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 							wrap.MsgError(err.Error())
 							return true
 						}
-						defer wrap.DB.Close()
 					}
 					if act.Info.WantUser || act.Info.WantAdmin {
 						if !wrap.LoadSessionUser() {
@@ -313,7 +312,6 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 					utils.SystemErrorPageEngine(wrap.W, err)
 					return true
 				}
-				defer wrap.DB.Close()
 			}
 			mod.Front(wrap)
 			return true

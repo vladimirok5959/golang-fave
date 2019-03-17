@@ -10,6 +10,7 @@ import (
 	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine"
+	"golang-fave/engine/mysqlpool"
 	"golang-fave/logger"
 	"golang-fave/modules"
 	"golang-fave/utils"
@@ -86,6 +87,9 @@ func main() {
 	// Init modules
 	mods := modules.New()
 
+	// MySQL connections pool
+	mpool := mysqlpool.New()
+
 	// Init and start web server
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
@@ -156,16 +160,27 @@ func main() {
 		sess := session.New(w, r, vhost_dir_tmp)
 		defer sess.Close()
 
+		// Convert
+		var mp *mysqlpool.MySqlPool
+		if mpool, ok := o.(*mysqlpool.MySqlPool); ok {
+			mp = mpool
+		}
+
 		// Logic
-		if engine.Response(lg, mods, w, r, sess, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
-			return
+		if mp != nil {
+			if engine.Response(mp, lg, mods, w, r, sess, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
+				return
+			}
 		}
 
 		// Error 404
 		utils.SystemErrorPage404(w)
 	}, func(s *http.Server) {
 		s.SetKeepAlivesEnabled(consts.ParamKeepAlive)
-	}, nil)
+	}, mpool)
+
+	// Close MySQL
+	mpool.CloseAll()
 }
 
 func ServeTemplateFile(w http.ResponseWriter, r *http.Request, file string, path string, dir string) bool {

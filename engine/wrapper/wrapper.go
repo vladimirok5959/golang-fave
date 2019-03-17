@@ -10,12 +10,13 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"time"
 
 	"golang-fave/consts"
+	"golang-fave/engine/mysqlpool"
 	"golang-fave/logger"
 	"golang-fave/utils"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/vladimirok5959/golang-server-sessions/session"
 )
 
@@ -40,12 +41,13 @@ type Wrapper struct {
 	UrlArgs         []string
 	CurrModule      string
 	CurrSubModule   string
+	MSPool          *mysqlpool.MySqlPool
 
 	DB   *sql.DB
 	User *utils.MySql_user
 }
 
-func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) *Wrapper {
+func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool) *Wrapper {
 	return &Wrapper{
 		l:             l,
 		W:             w,
@@ -62,6 +64,7 @@ func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Se
 		UrlArgs:       []string{},
 		CurrModule:    "",
 		CurrSubModule: "",
+		MSPool:        mp,
 	}
 }
 
@@ -73,10 +76,7 @@ func (this *Wrapper) LogError(msg string) {
 	this.l.Log(msg, this.R, true)
 }
 
-func (this *Wrapper) UseDatabase() error {
-	if this.DB != nil {
-		return errors.New("already connected to database")
-	}
+func (this *Wrapper) dbReconnect() error {
 	if !utils.IsMySqlConfigExists(this.DConfig + string(os.PathSeparator) + "mysql.json") {
 		return errors.New("can't read database configuration file")
 	}
@@ -88,17 +88,34 @@ func (this *Wrapper) UseDatabase() error {
 	if err != nil {
 		return err
 	}
+	this.MSPool.Set(this.CurrHost, this.DB)
+	return nil
+}
 
-	// TODO: Make one connection to database
-	// this.DB.SetConnMaxLifetime(time.Second * 5)
-	// this.DB.SetMaxIdleConns(0)
-	// this.DB.SetMaxOpenConns(5)
-
-	err = this.DB.Ping()
-	if err != nil {
-		this.DB.Close()
-		return err
+func (this *Wrapper) UseDatabase() error {
+	this.DB = this.MSPool.Get(this.CurrHost)
+	if this.DB == nil {
+		if err := this.dbReconnect(); err != nil {
+			return err
+		}
 	}
+
+	if err := this.DB.Ping(); err != nil {
+		this.DB.Close()
+		if err := this.dbReconnect(); err != nil {
+			return err
+		}
+		if err := this.DB.Ping(); err != nil {
+			this.DB.Close()
+			return err
+		}
+	}
+
+	// Here we are connected
+	this.DB.SetConnMaxLifetime(time.Minute * 30)
+	this.DB.SetMaxIdleConns(2)
+	this.DB.SetMaxOpenConns(2)
+
 	return nil
 }
 
