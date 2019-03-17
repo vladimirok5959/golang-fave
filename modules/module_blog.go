@@ -526,11 +526,37 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 			return
 		}
 
-		// Delete post
-		_, err := wrap.DB.Exec(
-			`DELETE FROM blog_posts WHERE id = ?;`,
-			utils.StrToInt(pf_id),
-		)
+		// Start transaction with table lock
+		_, err := wrap.DB.Exec("LOCK TABLES blog_posts WRITE, blog_cat_post_rel WRITE;")
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		tx, err := wrap.DB.Begin()
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Delete target post with category connection data
+		if _, err = tx.Exec("DELETE FROM blog_cat_post_rel WHERE post_id = ?;", pf_id); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec("DELETE FROM blog_posts WHERE id = ?;", pf_id); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Commit all changes and unlock table
+		err = tx.Commit()
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		_, err = wrap.DB.Exec("UNLOCK TABLES;")
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return
