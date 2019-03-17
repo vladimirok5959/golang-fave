@@ -415,11 +415,32 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 			return
 		}
 
+		// Start transaction with table lock
+		_, err := wrap.DB.Exec("LOCK TABLES pages WRITE;")
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		tx, err := wrap.DB.Begin()
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+
 		// Delete page
-		_, err := wrap.DB.Exec(
-			`DELETE FROM pages WHERE id = ?;`,
-			utils.StrToInt(pf_id),
-		)
+		if _, err = tx.Exec("DELETE FROM pages WHERE id = ?;", pf_id); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Commit all changes and unlock table
+		err = tx.Commit()
+		if err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+		_, err = wrap.DB.Exec("UNLOCK TABLES;")
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return
