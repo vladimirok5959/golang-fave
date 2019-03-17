@@ -239,6 +239,26 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				}
 			}
 
+			// All post current categories
+			var selids []int
+			if data.A_id > 0 {
+				rows, err := wrap.DB.Query("SELECT category_id FROM blog_cat_post_rel WHERE post_id = ?;", data.A_id)
+				if err == nil {
+					defer rows.Close()
+					values := make([]int, 1)
+					scan := make([]interface{}, len(values))
+					for i := range values {
+						scan[i] = &values[i]
+					}
+					for rows.Next() {
+						err = rows.Scan(scan...)
+						if err == nil {
+							selids = append(selids, int(values[0]))
+						}
+					}
+				}
+			}
+
 			btn_caption := "Add"
 			if wrap.CurrSubModule == "modify" {
 				btn_caption = "Save"
@@ -283,7 +303,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 									<div>
 										<select class="form-control" id="lbl_cats" name="cats[]" multiple>
 											<!--<option value=""></option>-->
-											` + this.blog_GetCategorySelectOptions(wrap, 0, 0, []int{}) + `
+											` + this.blog_GetCategorySelectOptions(wrap, 0, 0, selids) + `
 										</select>
 									</div>
 								</div>
