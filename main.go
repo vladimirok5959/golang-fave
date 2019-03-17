@@ -87,9 +87,9 @@ func main() {
 	mods := modules.New()
 
 	// Init and start web server
-	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request) {
+	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
-	}, func(w http.ResponseWriter, r *http.Request) {
+	}, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		// Schema
 		r.URL.Scheme = "http"
 
@@ -165,7 +165,7 @@ func main() {
 		utils.SystemErrorPage404(w)
 	}, func(s *http.Server) {
 		s.SetKeepAlivesEnabled(consts.ParamKeepAlive)
-	})
+	}, nil)
 }
 
 func ServeTemplateFile(w http.ResponseWriter, r *http.Request, file string, path string, dir string) bool {

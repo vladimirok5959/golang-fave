@@ -11,22 +11,23 @@ import (
 )
 
 type customHandler func(h http.Handler) http.Handler
-type callbackBeforeAfter func(w http.ResponseWriter, r *http.Request)
+type callbackBeforeAfter func(w http.ResponseWriter, r *http.Request, o interface{})
 type callbackServer func(s *http.Server)
 
 type bootstrap struct {
 	path   string
 	before callbackBeforeAfter
 	after  callbackBeforeAfter
+	object interface{}
 }
 
-func new(path string, before callbackBeforeAfter, after callbackBeforeAfter) *bootstrap {
-	return &bootstrap{path, before, after}
+func new(path string, before callbackBeforeAfter, after callbackBeforeAfter, object interface{}) *bootstrap {
+	return &bootstrap{path, before, after, object}
 }
 
 func (this *bootstrap) handler(w http.ResponseWriter, r *http.Request) {
 	if this.before != nil {
-		this.before(w, r)
+		this.before(w, r, this.object)
 	}
 	if r.URL.Path == "/"+this.path+"/bootstrap.css" {
 		w.Header().Set("Cache-Control", "public, max-age=31536000")
@@ -50,13 +51,13 @@ func (this *bootstrap) handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if this.after != nil {
-		this.after(w, r)
+		this.after(w, r, this.object)
 	}
 }
 
-func Start(h customHandler, host string, timeout time.Duration, path string, before callbackBeforeAfter, after callbackBeforeAfter, cbserv callbackServer) {
+func Start(h customHandler, host string, timeout time.Duration, path string, before callbackBeforeAfter, after callbackBeforeAfter, cbserv callbackServer, object interface{}) {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", new(path, before, after).handler)
+	mux.HandleFunc("/", new(path, before, after, object).handler)
 
 	var srv *http.Server
 	if h == nil {
