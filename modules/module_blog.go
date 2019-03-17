@@ -38,6 +38,74 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "List of posts"},
 			})
+			content += builder.DataTable(
+				wrap,
+				"blog_posts",
+				"id",
+				"DESC",
+				&[]builder.DataTableRow{
+					{
+						DBField: "id",
+					},
+					{
+						DBField:     "name",
+						NameInTable: "Post / Alias",
+						CallBack: func(values *[]string) string {
+							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
+							alias := html.EscapeString((*values)[2])
+							return `<div>` + name + `</div><div><small>` + alias + `</small></div>`
+						},
+					},
+					{
+						DBField: "alias",
+					},
+					{
+						DBField:     "datetime",
+						DBExp:       "UNIX_TIMESTAMP(`datetime`)",
+						NameInTable: "Date / Time",
+						Classes:     "d-none d-md-table-cell",
+						CallBack: func(values *[]string) string {
+							t := int64(utils.StrToInt((*values)[3]))
+							return `<div>` + utils.UnixTimestampToFormat(t, "02.01.2006") + `</div>` +
+								`<div><small>` + utils.UnixTimestampToFormat(t, "15:04:05") + `</small></div>`
+						},
+					},
+					{
+						DBField:     "active",
+						NameInTable: "Active",
+						Classes:     "d-none d-sm-table-cell",
+						CallBack: func(values *[]string) string {
+							return builder.CheckBox(utils.StrToInt((*values)[4]))
+						},
+					},
+				},
+				func(values *[]string) string {
+					return builder.DataTableAction(&[]builder.DataTableActionRow{
+						{
+							Icon:   assets.SysSvgIconView,
+							Href:   (*values)[2],
+							Hint:   "View",
+							Target: "_blank",
+						},
+						{
+							Icon: assets.SysSvgIconEdit,
+							Href: "/cp/" + wrap.CurrModule + "/modify/" + (*values)[0] + "/",
+							Hint: "Edit",
+						},
+						{
+							Icon: assets.SysSvgIconRemove,
+							Href: "javascript:fave.ActionDataTableDelete(this,'blog-delete','" +
+								(*values)[0] + "','Are you sure want to delete post?');",
+							Hint:    "Delete",
+							Classes: "delete",
+						},
+					})
+				},
+				"/cp/"+wrap.CurrModule+"/",
+				nil,
+				nil,
+				true,
+			)
 		} else if wrap.CurrSubModule == "categories" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Categories", Link: "/cp/" + wrap.CurrModule + "/" + wrap.CurrSubModule + "/"},

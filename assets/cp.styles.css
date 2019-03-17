@@ -298,6 +298,20 @@ ul.pagination {
 	text-align: right;
 }
 
+/* Admin table: blog_posts */
+.data-table.table_blog_posts .col_datetime {
+	width: 8rem;
+}
+
+.data-table.table_blog_posts .col_active {
+	width: 5rem;
+}
+
+.data-table.table_blog_posts .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
 /* Admin table: table_blog_cats */
 .data-table.table_blog_cats .col_action {
 	width: 6rem;
