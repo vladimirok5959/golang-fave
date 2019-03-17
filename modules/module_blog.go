@@ -194,6 +194,108 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					{Name: "Modify post"},
 				})
 			}
+
+			data := utils.MySql_blog_posts{
+				A_id:       0,
+				A_user:     0,
+				A_name:     "",
+				A_alias:    "",
+				A_content:  "",
+				A_datetime: 0,
+				A_active:   0,
+			}
+
+			if wrap.CurrSubModule == "modify" {
+				if len(wrap.UrlArgs) != 3 {
+					return "", "", ""
+				}
+				if !utils.IsNumeric(wrap.UrlArgs[2]) {
+					return "", "", ""
+				}
+				err := wrap.DB.QueryRow(`
+					SELECT
+						id,
+						user,
+						name,
+						alias,
+						content,
+						active
+					FROM
+						blog_posts
+					WHERE
+						id = ?
+					LIMIT 1;`,
+					utils.StrToInt(wrap.UrlArgs[2]),
+				).Scan(
+					&data.A_id,
+					&data.A_user,
+					&data.A_name,
+					&data.A_alias,
+					&data.A_content,
+					&data.A_active,
+				)
+				if err != nil {
+					return "", "", ""
+				}
+			}
+
+			btn_caption := "Add"
+			if wrap.CurrSubModule == "modify" {
+				btn_caption = "Save"
+			}
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "blog-modify",
+				},
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "id",
+					Value: utils.IntToStr(data.A_id),
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Post name",
+					Name:    "name",
+					Value:   data.A_name,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Post alias",
+					Name:    "alias",
+					Value:   data.A_alias,
+					Hint:    "Example: our-news",
+				},
+				{
+					Kind:    builder.DFKTextArea,
+					Caption: "Post content",
+					Name:    "content",
+					Value:   data.A_content,
+					Classes: "autosize",
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Active",
+					Name:    "active",
+					Value:   utils.IntToStr(data.A_active),
+				},
+				{
+					Kind: builder.DFKMessage,
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  btn_caption,
+					Target: "add-edit-button",
+				},
+			})
+
+			if wrap.CurrSubModule == "add" {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Add</button>`
+			} else {
+				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+			}
 		} else if wrap.CurrSubModule == "categories-add" || wrap.CurrSubModule == "categories-modify" {
 			if wrap.CurrSubModule == "categories-add" {
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
