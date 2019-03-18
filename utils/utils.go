@@ -223,6 +223,10 @@ func IntToStr(num int) string {
 	return fmt.Sprintf("%d", num)
 }
 
+func Int64ToStr(num int64) string {
+	return fmt.Sprintf("%d", num)
+}
+
 func StrToInt(str string) int {
 	num, err := strconv.Atoi(str)
 	if err == nil {
@@ -309,4 +313,57 @@ func InArrayInt(slice []int, value int) bool {
 		}
 	}
 	return false
+}
+
+func InArrayString(slice []string, value string) bool {
+	for _, item := range slice {
+		if item == value {
+			return true
+		}
+	}
+	return false
+}
+
+func GetPostArrayInt(name string, r *http.Request) []int {
+	var ids []int
+	if arr, ok := r.PostForm[name]; ok {
+		for _, el := range arr {
+			if IsNumeric(el) {
+				if !InArrayInt(ids, StrToInt(el)) {
+					ids = append(ids, StrToInt(el))
+				}
+			}
+		}
+	}
+	return ids
+}
+
+func GetPostArrayString(name string, r *http.Request) []string {
+	var ids []string
+	if arr, ok := r.PostForm[name]; ok {
+		for _, el := range arr {
+			if !InArrayString(ids, el) {
+				ids = append(ids, el)
+			}
+		}
+	}
+	return ids
+}
+
+func ArrayOfIntToArrayOfString(arr []int) []string {
+	var res []string
+	for _, el := range arr {
+		res = append(res, IntToStr(el))
+	}
+	return res
+}
+
+func ArrayOfStringToArrayOfInt(arr []string) []int {
+	var res []int
+	for _, el := range arr {
+		if IsNumeric(el) {
+			res = append(res, StrToInt(el))
+		}
+	}
+	return res
 }
