@@ -296,6 +296,16 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
+		// Reset robots.txt file
+		f, err := os.Create(wrap.DTemplate + string(os.PathSeparator) + "robots.txt")
+		if err == nil {
+			defer f.Close()
+			if _, err = f.WriteString("User-agent: *\nDisallow: /\n\n"); err != nil {
+				wrap.MsgError(err.Error())
+				return
+			}
+		}
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})
