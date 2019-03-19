@@ -11,29 +11,36 @@ import (
 	"github.com/vladimirok5959/golang-server-sessions/session"
 )
 
+func session_clean_do(www_dir string, stop chan bool) {
+	files, err := ioutil.ReadDir(www_dir)
+	if err == nil {
+		for _, file := range files {
+			select {
+			case <-stop:
+				break
+			default:
+				tmpdir := www_dir + string(os.PathSeparator) + file.Name() + string(os.PathSeparator) + "tmp"
+				if utils.IsDirExists(tmpdir) {
+					session.Clean(tmpdir)
+				}
+			}
+		}
+	}
+}
+
 func session_clean_start(www_dir string) (chan bool, chan bool) {
 	ch := make(chan bool)
 	stop := make(chan bool)
+
+	// Cleanup at start
+	session_clean_do(www_dir, stop)
+
 	go func() {
 		for {
-			// Destroy old session files on each host
-			// Every one hour
 			select {
 			case <-time.After(1 * time.Hour):
-				files, err := ioutil.ReadDir(www_dir)
-				if err == nil {
-					for _, file := range files {
-						select {
-						case <-stop:
-							break
-						default:
-							tmpdir := www_dir + string(os.PathSeparator) + file.Name() + string(os.PathSeparator) + "tmp"
-							if utils.IsDirExists(tmpdir) {
-								session.Clean(tmpdir)
-							}
-						}
-					}
-				}
+				// Cleanup every one hour
+				session_clean_do(www_dir, stop)
 			case <-ch:
 				ch <- true
 				return
