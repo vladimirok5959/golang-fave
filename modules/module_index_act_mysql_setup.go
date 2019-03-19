@@ -89,11 +89,6 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (1, 0, 'ROOT', 'ROOT', 1, 2);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
 		if _, err = tx.Exec(
 			`INSERT INTO blog_cats (id, user, name, alias, lft, rgt)
 				VALUES
