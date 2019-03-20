@@ -415,22 +415,13 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 			return
 		}
 
-		// Start transaction
-		tx, err := wrap.DB.Begin()
-		if err != nil {
-			wrap.MsgError(err.Error())
-			return
-		}
+		err := wrap.DBTrans(func(tx *sql.Tx) error {
+			if _, err := tx.Exec("DELETE FROM pages WHERE id = ?;", pf_id); err != nil {
+				return err
+			}
+			return nil
+		})
 
-		// Delete page
-		if _, err = tx.Exec("DELETE FROM pages WHERE id = ?;", pf_id); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Commit all changes
-		err = tx.Commit()
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return

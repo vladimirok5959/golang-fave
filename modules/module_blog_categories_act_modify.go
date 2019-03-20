@@ -1,46 +1,32 @@
 package modules
 
 import (
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
 
 func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
-	// Start transaction
-	tx, err := wrap.DB.Begin()
-	if err != nil {
-		return err
-	}
-
-	// Update and insert new category
-	if _, err = tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
-		tx.Rollback()
-		return err
-	}
-	if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
-		tx.Rollback()
-		return err
-	}
-	if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
-		tx.Rollback()
-		return err
-	}
-	if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
-		tx.Rollback()
-		return err
-	}
-	if _, err = tx.Exec("INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// Commit all changes
-	err = tx.Commit()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return wrap.DBTrans(func(tx *sql.Tx) error {
+		if _, err := tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
+			return err
+		}
+		if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
+			return err
+		}
+		if _, err := tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
+			return err
+		}
+		if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
+			return err
+		}
+		if _, err := tx.Exec("INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias); err != nil {
+			return err
+		}
+		return nil
+	})
 }
 
 func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
@@ -48,79 +34,63 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 	if utils.StrToInt(pf_parent) == parentId {
 		// If parent not changed, just update category data
-		_, err := wrap.DB.Exec(`
-			UPDATE blog_cats SET
-				name = ?,
-				alias = ?
-			WHERE
-				id > 1 AND
-				id = ?
-			;`,
-			pf_name,
-			pf_alias,
-			pf_id,
-		)
-		return err
-	} else {
-		// Parent is changed, move category to new parent
-		// Start transaction
-		tx, err := wrap.DB.Begin()
-		if err != nil {
-			return err
-		}
+		return wrap.DBTrans(func(tx *sql.Tx) error {
+			if _, err := tx.Exec(`
+				UPDATE blog_cats SET
+					name = ?,
+					alias = ?
+				WHERE
+					id > 1 AND
+					id = ?
+				;`,
+				pf_name,
+				pf_alias,
+				pf_id,
+			); err != nil {
+				return err
+			}
+			return nil
+		})
+	}
 
+	// Parent is changed, move category to new parent
+	return wrap.DBTrans(func(tx *sql.Tx) error {
 		// Shift
-		if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = 0, rgt = 0 WHERE id = ?;", pf_id); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET lft = 0, rgt = 0 WHERE id = ?;", pf_id); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft - 2 WHERE lft > @mr;"); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - 2 WHERE lft > @mr;"); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
 			return err
 		}
 
 		// Update
-		if _, err = tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
 			return err
 		}
-		if _, err = tx.Exec("UPDATE blog_cats SET name = ?, alias = ?, lft = @mr, rgt = @mr + 1 WHERE id = ?;", pf_name, pf_alias, pf_id); err != nil {
-			tx.Rollback()
+		if _, err := tx.Exec("UPDATE blog_cats SET name = ?, alias = ?, lft = @mr, rgt = @mr + 1 WHERE id = ?;", pf_name, pf_alias, pf_id); err != nil {
 			return err
 		}
 
-		// Commit all changes
-		err = tx.Commit()
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
+		return nil
+	})
 }
 
 func (this *Modules) RegisterAction_BlogCategoriesModify() *Action {

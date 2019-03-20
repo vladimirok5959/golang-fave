@@ -1,6 +1,9 @@
 package modules
 
 import (
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -18,28 +21,16 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 			return
 		}
 
-		// Start transaction
-		tx, err := wrap.DB.Begin()
-		if err != nil {
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Delete target post with category connection data
-		if _, err = tx.Exec("DELETE FROM blog_posts WHERE id = ?;", pf_id); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec("DELETE FROM blog_cat_post_rel WHERE post_id = ?;", pf_id); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Commit all changes
-		err = tx.Commit()
-		if err != nil {
+		if err := wrap.DBTrans(func(tx *sql.Tx) error {
+			// Delete target post with category connection data
+			if _, err := tx.Exec("DELETE FROM blog_posts WHERE id = ?;", pf_id); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE post_id = ?;", pf_id); err != nil {
+				return err
+			}
+			return nil
+		}); err != nil {
 			wrap.MsgError(err.Error())
 			return
 		}

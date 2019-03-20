@@ -1,6 +1,9 @@
 package modules
 
 import (
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -18,47 +21,28 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 			return
 		}
 
-		// Start transaction
-		tx, err := wrap.DB.Begin()
-		if err != nil {
-			wrap.MsgError(err.Error())
-			return
-		}
+		err := wrap.DBTrans(func(tx *sql.Tx) error {
+			if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("DELETE FROM blog_cats WHERE id = ?;", pf_id); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - 2 WHERE lft > @mr;"); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", pf_id); err != nil {
+				return err
+			}
+			return nil
+		})
 
-		// Update and delete target category
-		if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec("DELETE FROM blog_cats WHERE id = ?;", pf_id); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec("UPDATE blog_cats SET lft = lft - 2 WHERE lft > @mr;"); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", pf_id); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Commit all changes
-		err = tx.Commit()
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return
