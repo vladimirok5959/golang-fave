@@ -25,19 +25,6 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 			return
 		}
 
-		// -------------------------------------------
-		if _, err = tx.Exec("SELECT id FROM blog_cats LOCK IN SHARE MODE;"); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec("SELECT id FROM blog_cat_post_rel WHERE category_id = ? LOCK IN SHARE MODE;", pf_id); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		// -------------------------------------------
-
 		// Update and delete target category
 		if _, err = tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
 			tx.Rollback()
