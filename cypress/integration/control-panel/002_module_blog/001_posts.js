@@ -70,7 +70,9 @@ context('Module blog posts', () => {
   it('should delete added post', () => {
     cy.loginCMS();
     cy.visit('http://localhost:8080/cp/blog/');
-    cy.get('table#cp-table-blog_posts tbody tr:nth-child(1) td:nth-child(4) a.ico.delete').click();
+    cy.contains('table#cp-table-blog_posts tbody tr td a', 'Some test post').parentsUntil('tr').parent().within(() => {
+      cy.get('td a.ico.delete').click();
+    });
     cy.actionWait();
     cy.get('table#cp-table-blog_posts tbody tr').should('have.length', 3);
     cy.logoutCMS();
