@@ -50,8 +50,8 @@ context('Module blog posts', () => {
     cy.loginCMS();
     cy.visit('http://localhost:8080/cp/blog/');
     cy.get('table#cp-table-blog_posts tbody tr').should('have.length', 4);
-    cy.get('table#cp-table-blog_posts tbody tr:nth-child(1) td:nth-child(1)').should('contain', 'Some test post');
-    cy.get('table#cp-table-blog_posts tbody tr:nth-child(1) td:nth-child(3) .svg-green').should('exist');
+    cy.get('table#cp-table-blog_posts tbody tr td').should('contain', 'Some test post');
+    cy.contains('table#cp-table-blog_posts tbody tr td a', 'Some test post').parentsUntil('tr').parent().find('.svg-green').should('exist');
     cy.logoutCMS();
   });
 
