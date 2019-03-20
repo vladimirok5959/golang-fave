@@ -3,8 +3,15 @@
 context('Install MySQL, create first user and login', () => {
   it('should do redirect to cp panel', () => {
     cy.resetCMS();
-    cy.visitCMS('/');
-    cy.url().should('eq', 'http://localhost:8080/cp/');
+    cy.request({
+      url: cy.getBaseUrl() + '/',
+      followRedirect: false
+    }).then((response) => {
+      expect(response.status).to.eq(302);
+      expect(response.redirectedToUrl).to.eq(cy.getBaseUrl() + '/cp/');
+    });
+    cy.visitCMS('/cp/');
+    cy.url().should('eq', cy.getBaseUrl() + '/cp/');
   });
 
   it('should configure mysql config', () => {

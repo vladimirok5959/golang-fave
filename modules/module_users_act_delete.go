@@ -18,12 +18,7 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 			return
 		}
 
-		// Start transaction with table lock
-		_, err := wrap.DB.Exec("LOCK TABLES blog_cats WRITE, blog_posts WRITE, pages WRITE, users WRITE;")
-		if err != nil {
-			wrap.MsgError(err.Error())
-			return
-		}
+		// Start transaction
 		tx, err := wrap.DB.Begin()
 		if err != nil {
 			wrap.MsgError(err.Error())
@@ -52,13 +47,8 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 			return
 		}
 
-		// Commit all changes and unlock table
+		// Commit all changes
 		err = tx.Commit()
-		if err != nil {
-			wrap.MsgError(err.Error())
-			return
-		}
-		_, err = wrap.DB.Exec("UNLOCK TABLES;")
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return

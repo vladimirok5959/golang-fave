@@ -6,11 +6,7 @@ import (
 )
 
 func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
-	// Start transaction with table lock
-	_, err := wrap.DB.Exec("LOCK TABLE blog_cats WRITE;")
-	if err != nil {
-		return err
-	}
+	// Start transaction
 	tx, err := wrap.DB.Begin()
 	if err != nil {
 		return err
@@ -38,12 +34,8 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 		return err
 	}
 
-	// Commit all changes and unlock table
+	// Commit all changes
 	err = tx.Commit()
-	if err != nil {
-		return err
-	}
-	_, err = wrap.DB.Exec("UNLOCK TABLES;")
 	if err != nil {
 		return err
 	}
@@ -71,11 +63,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		return err
 	} else {
 		// Parent is changed, move category to new parent
-		// Start transaction with table lock
-		_, err := wrap.DB.Exec("LOCK TABLE blog_cats WRITE;")
-		if err != nil {
-			return err
-		}
+		// Start transaction
 		tx, err := wrap.DB.Begin()
 		if err != nil {
 			return err
@@ -125,12 +113,8 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			return err
 		}
 
-		// Commit all changes and unlock table
+		// Commit all changes
 		err = tx.Commit()
-		if err != nil {
-			return err
-		}
-		_, err = wrap.DB.Exec("UNLOCK TABLES;")
 		if err != nil {
 			return err
 		}

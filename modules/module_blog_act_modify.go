@@ -43,12 +43,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		}
 
 		if pf_id == "0" {
-			// Start transaction with table lock
-			_, err := wrap.DB.Exec("LOCK TABLE blog_cats WRITE, blog_cat_post_rel WRITE;")
-			if err != nil {
-				wrap.MsgError(err.Error())
-				return
-			}
+			// Start transaction
 			tx, err := wrap.DB.Begin()
 			if err != nil {
 				wrap.MsgError(err.Error())
@@ -123,13 +118,8 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				}
 			}
 
-			// Commit all changes and unlock table
+			// Commit all changes
 			err = tx.Commit()
-			if err != nil {
-				wrap.MsgError(err.Error())
-				return
-			}
-			_, err = wrap.DB.Exec("UNLOCK TABLES;")
 			if err != nil {
 				wrap.MsgError(err.Error())
 				return
@@ -137,12 +127,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 
 			wrap.Write(`window.location='/cp/blog/';`)
 		} else {
-			// Start transaction with table lock
-			_, err := wrap.DB.Exec("LOCK TABLE blog_cats WRITE, blog_cat_post_rel WRITE;")
-			if err != nil {
-				wrap.MsgError(err.Error())
-				return
-			}
+			// Start transaction
 			tx, err := wrap.DB.Begin()
 			if err != nil {
 				wrap.MsgError(err.Error())
@@ -215,13 +200,8 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				}
 			}
 
-			// Commit all changes and unlock table
+			// Commit all changes
 			err = tx.Commit()
-			if err != nil {
-				wrap.MsgError(err.Error())
-				return
-			}
-			_, err = wrap.DB.Exec("UNLOCK TABLES;")
 			if err != nil {
 				wrap.MsgError(err.Error())
 				return

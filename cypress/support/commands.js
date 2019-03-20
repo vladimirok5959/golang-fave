@@ -28,6 +28,10 @@ function getBaseUrl() {
   return 'http://localhost:8080';
 }
 
+cy.getBaseUrl = function() {
+  return getBaseUrl();
+}
+
 Cypress.Commands.add('visitCMS', (url) => {
   cy.visit(getBaseUrl() + url);
 });
