@@ -7,7 +7,7 @@ context('Module blog posts', () => {
 
   it('should render data table', () => {
     cy.loginCMS();
-    cy.visit('http://localhost:8080/cp/blog/');
+    cy.visitCMS('/cp/blog/');
     cy.get('table.data-table thead tr').should('have.length', 1);
     cy.get('table.data-table thead tr th').should('have.length', 4);
     cy.get('table.data-table tbody tr').should('have.length', 3);
@@ -17,7 +17,7 @@ context('Module blog posts', () => {
 
   it('should render data form', () => {
     cy.loginCMS();
-    cy.visit('http://localhost:8080/cp/blog/add/');
+    cy.visitCMS('/cp/blog/add/');
     cy.get('.data-form.blog-add input[type=text]').should('have.length', 2);
     cy.get('.data-form.blog-add select').should('have.length', 1);
     cy.get('.data-form.blog-add textarea').should('have.length', 1);
@@ -27,7 +27,7 @@ context('Module blog posts', () => {
 
   it('should not add new post', () => {
     cy.loginCMS();
-    cy.visit('http://localhost:8080/cp/blog/add/');
+    cy.visitCMS('/cp/blog/add/');
     cy.get('#add-edit-button').click();
     cy.actionWait();
     cy.get('.data-form.blog-add div.sys-messages').should('exist');
@@ -36,7 +36,7 @@ context('Module blog posts', () => {
 
   it('should add new post', () => {
     cy.loginCMS();
-    cy.visit('http://localhost:8080/cp/blog/add/');
+    cy.visitCMS('/cp/blog/add/');
     cy.get('.data-form.blog-add input[name=name]').clear().type('Some test post');
     cy.get('.data-form.blog-add select#lbl_cats').select(['Health and food', '— — Natural']).invoke('val').should('deep.equal', ['2', '7']);
     cy.get('.data-form.blog-add textarea[name=content]').clear().type('Some test content');
@@ -48,7 +48,7 @@ context('Module blog posts', () => {
 
   it('should render added post in list', () => {
     cy.loginCMS();
-    cy.visit('http://localhost:8080/cp/blog/');
+    cy.visitCMS('/cp/blog/');
     cy.get('table.data-table tbody tr').should('have.length', 4);
     cy.get('table.data-table tbody tr td').should('contain', 'Some test post');
     cy.contains('table.data-table tbody tr td a', 'Some test post').parentsUntil('tr').parent().find('.svg-green').should('exist');
@@ -57,7 +57,7 @@ context('Module blog posts', () => {
 
   it('should render added post in edit form', () => {
     cy.loginCMS();
-    cy.visit('http://localhost:8080/cp/blog/');
+    cy.visitCMS('/cp/blog/');
     cy.contains('table.data-table tbody tr td a', 'Some test post').click();
     cy.get('.data-form.blog-modify input[name=name]').should('have.value', 'Some test post');
     cy.get('.data-form.blog-modify input[name=alias]').should('have.value', 'some-test-post');
@@ -69,7 +69,7 @@ context('Module blog posts', () => {
 
   it('should delete added post', () => {
     cy.loginCMS();
-    cy.visit('http://localhost:8080/cp/blog/');
+    cy.visitCMS('/cp/blog/');
     cy.contains('table.data-table tbody tr td a', 'Some test post').parentsUntil('tr').parent().find('td a.ico.delete').click();
     cy.actionWait();
     cy.get('table.data-table tbody tr').should('have.length', 3);

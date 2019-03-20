@@ -3,7 +3,7 @@
 context('Install MySQL, create first user and login', () => {
   it('should do redirect to cp panel', () => {
     cy.resetCMS();
-    cy.visit('http://localhost:8080/');
+    cy.visitCMS('/');
     cy.url().should('eq', 'http://localhost:8080/cp/');
   });
 
