@@ -24,6 +24,14 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+function getBaseUrl() {
+  return 'http://localhost:8080';
+}
+
+Cypress.Commands.add('visitCMS', (url) => {
+  cy.visit(getBaseUrl() + url);
+});
+
 Cypress.Commands.add('actionStart', () => {
   cy.server();
   cy.route({
@@ -39,7 +47,7 @@ Cypress.Commands.add('actionWait', () => {
 Cypress.Commands.add('resetCMS', () => {
   cy.request({
     method: 'POST',
-    url: 'http://localhost:8080/',
+    url: getBaseUrl() + '/',
     form: true,
     body: {
       action: 'index-cypress-reset',
@@ -53,14 +61,14 @@ Cypress.Commands.add('installCMS', () => {
   cy.actionStart();
   cy.resetCMS();
 
-  cy.visit('http://localhost:8080/cp/');
+  cy.visitCMS('/cp/');
   cy.get('.form-signin input[name=name]').type('fave');
   cy.get('.form-signin input[name=user]').type('root');
   cy.get('.form-signin input[name=password]').type('root');
   cy.get('.form-signin button').click();
   cy.actionWait();
 
-  cy.visit('http://localhost:8080/cp/');
+  cy.visitCMS('/cp/');
   cy.get('.form-signin input[name=first_name]').type('First');
   cy.get('.form-signin input[name=last_name]').type('Last');
   cy.get('.form-signin input[name=email]').type('example@example.com');
@@ -71,7 +79,7 @@ Cypress.Commands.add('installCMS', () => {
 
 Cypress.Commands.add('loginCMS', () => {
   cy.actionStart();
-  cy.visit('http://localhost:8080/cp/');
+  cy.visitCMS('/cp/');
   cy.get('.form-signin input[name=email]').type('example@example.com');
   cy.get('.form-signin input[name=password]').type('example@example.com');
   cy.get('.form-signin button').click();
@@ -80,7 +88,7 @@ Cypress.Commands.add('loginCMS', () => {
 
 Cypress.Commands.add('logoutCMS', () => {
   cy.actionStart();
-  cy.visit('http://localhost:8080/cp/');
+  cy.visitCMS('/cp/');
   cy.get('#navbarCollapse ul.navbar-nav:nth-child(2) li.nav-item:nth-child(1) a.nav-link').click();
   cy.contains('#navbarCollapse ul.navbar-nav:nth-child(2) li.nav-item:nth-child(1) div.dropdown-menu a', 'Logout').click();
   cy.actionWait();
