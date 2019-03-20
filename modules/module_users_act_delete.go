@@ -1,9 +1,6 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -21,7 +18,7 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 			return
 		}
 
-		err := wrap.DBTrans(func(tx *sql.Tx) error {
+		err := wrap.DBTrans(func(tx *wrapper.Tx) error {
 			if _, err := tx.Exec("UPDATE blog_cats SET user = 1 WHERE user = ?;", pf_id); err != nil {
 				return err
 			}

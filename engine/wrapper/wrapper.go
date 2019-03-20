@@ -20,6 +20,10 @@ import (
 	"github.com/vladimirok5959/golang-server-sessions/session"
 )
 
+type Tx = sql.Tx
+
+var ErrNoRows = sql.ErrNoRows
+
 type Wrapper struct {
 	l *logger.Logger
 	W http.ResponseWriter
@@ -236,7 +240,7 @@ func (this *Wrapper) RenderBackEnd(tcont []byte, data interface{}) {
 	this.W.Write(tpl.Bytes())
 }
 
-func (this *Wrapper) DBTrans(queries func(tx *sql.Tx) error) error {
+func (this *Wrapper) DBTrans(queries func(tx *Tx) error) error {
 	if queries == nil {
 		return errors.New("queries is not set for transaction")
 	}

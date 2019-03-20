@@ -1,9 +1,6 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"errors"
 	"strings"
 
@@ -47,7 +44,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		}
 
 		if pf_id == "0" {
-			if err := wrap.DBTrans(func(tx *sql.Tx) error {
+			if err := wrap.DBTrans(func(tx *wrapper.Tx) error {
 				// Insert row
 				res, err := tx.Exec(
 					`INSERT INTO blog_posts SET
@@ -114,7 +111,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 
 			wrap.Write(`window.location='/cp/blog/';`)
 		} else {
-			if err := wrap.DBTrans(func(tx *sql.Tx) error {
+			if err := wrap.DBTrans(func(tx *wrapper.Tx) error {
 				// Update row
 				if _, err := tx.Exec(
 					`UPDATE blog_posts SET

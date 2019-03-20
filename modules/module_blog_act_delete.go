@@ -1,9 +1,6 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -21,7 +18,7 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 			return
 		}
 
-		if err := wrap.DBTrans(func(tx *sql.Tx) error {
+		if err := wrap.DBTrans(func(tx *wrapper.Tx) error {
 			// Delete target post with category connection data
 			if _, err := tx.Exec("DELETE FROM blog_posts WHERE id = ?;", pf_id); err != nil {
 				return err

@@ -1,15 +1,12 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
 
 func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
-	return wrap.DBTrans(func(tx *sql.Tx) error {
+	return wrap.DBTrans(func(tx *wrapper.Tx) error {
 		if _, err := tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
 			return err
 		}
@@ -34,7 +31,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 	if utils.StrToInt(pf_parent) == parentId {
 		// If parent not changed, just update category data
-		return wrap.DBTrans(func(tx *sql.Tx) error {
+		return wrap.DBTrans(func(tx *wrapper.Tx) error {
 			if _, err := tx.Exec(`
 				UPDATE blog_cats SET
 					name = ?,
@@ -54,7 +51,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 	}
 
 	// Parent is changed, move category to new parent
-	return wrap.DBTrans(func(tx *sql.Tx) error {
+	return wrap.DBTrans(func(tx *wrapper.Tx) error {
 		// Shift
 		if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
 			return err

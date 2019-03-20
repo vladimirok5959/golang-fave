@@ -1,9 +1,6 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"html"
 	"net/http"
 
@@ -61,11 +58,11 @@ func (this *Modules) RegisterModule_Index() *Module {
 			&row.A_datetime,
 			&row.A_active,
 		)
-		if err != nil && err != sql.ErrNoRows {
+		if err != nil && err != wrapper.ErrNoRows {
 			// System error 500
 			utils.SystemErrorPageEngine(wrap.W, err)
 			return
-		} else if err == sql.ErrNoRows {
+		} else if err == wrapper.ErrNoRows {
 			// User error 404 page
 			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
 			return
@@ -415,7 +412,7 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 			return
 		}
 
-		err := wrap.DBTrans(func(tx *sql.Tx) error {
+		err := wrap.DBTrans(func(tx *wrapper.Tx) error {
 			if _, err := tx.Exec("DELETE FROM pages WHERE id = ?;", pf_id); err != nil {
 				return err
 			}
