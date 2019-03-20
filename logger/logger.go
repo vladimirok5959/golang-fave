@@ -125,10 +125,14 @@ func New() *Logger {
 	return &lg
 }
 
-func (this *Logger) Log(msg string, r *http.Request, isError bool) {
+func (this *Logger) Log(msg string, r *http.Request, isError bool, vars ...interface{}) {
 	var host string = ""
 	if r != nil {
 		host = r.Host
+	}
+
+	if len(vars) > 0 {
+		msg = fmt.Sprintf(msg, vars...)
 	}
 
 	// Do not wait

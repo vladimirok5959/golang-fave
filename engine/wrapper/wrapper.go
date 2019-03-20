@@ -72,12 +72,12 @@ func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Se
 	}
 }
 
-func (this *Wrapper) LogAccess(msg string) {
-	this.l.Log(msg, this.R, false)
+func (this *Wrapper) LogAccess(msg string, vars ...interface{}) {
+	this.l.Log(msg, this.R, false, vars...)
 }
 
-func (this *Wrapper) LogError(msg string) {
-	this.l.Log(msg, this.R, true)
+func (this *Wrapper) LogError(msg string, vars ...interface{}) {
+	this.l.Log(msg, this.R, true, vars...)
 }
 
 func (this *Wrapper) dbReconnect() error {
