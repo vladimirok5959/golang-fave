@@ -73,7 +73,9 @@ context('Module pages', () => {
   it('should delete added page', () => {
     cy.loginCMS();
     cy.visit('http://localhost:8080/cp/');
-    cy.get('table#cp-table-pages tbody tr:nth-child(1) td:nth-child(4) a.ico.delete').click();
+    cy.contains('table#cp-table-pages tbody tr td a', 'Some test page').parentsUntil('tr').parent().within(() => {
+      cy.get('td a.ico.delete').click();
+    });
     cy.actionWait();
     cy.get('table#cp-table-pages tbody tr').should('have.length', 3);
     cy.logoutCMS();
