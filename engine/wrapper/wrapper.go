@@ -115,7 +115,7 @@ func (this *Wrapper) UseDatabase() error {
 		}
 	}
 
-	// Here we are connected
+	// Max 30 minutes and max 2 connection per host
 	this.DB.SetConnMaxLifetime(time.Minute * 30)
 	this.DB.SetMaxIdleConns(2)
 	this.DB.SetMaxOpenConns(2)
