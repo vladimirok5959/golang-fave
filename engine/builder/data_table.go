@@ -1,14 +1,12 @@
 package builder
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"fmt"
 	"html"
 	"math"
 	"strconv"
 
+	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper"
 )
 
@@ -29,7 +27,7 @@ func DataTable(
 	action func(values *[]string) string,
 	pagination_url string,
 	custom_sql_count func() (int, error),
-	custom_sql_data func(limit_offset int, pear_page int) (*sql.Rows, error),
+	custom_sql_data func(limit_offset int, pear_page int) (*sqlw.Rows, error),
 	pagination_enabled bool,
 ) string {
 	var num int
@@ -104,7 +102,7 @@ func DataTable(
 	result += `<tbody>`
 	if num > 0 || !pagination_enabled {
 		have_records := false
-		var rows *sql.Rows
+		var rows *sqlw.Rows
 		var err error
 		if custom_sql_data == nil {
 			rows, err = wrap.DB.Query(qsql, limit_offset, pear_page)

@@ -1,12 +1,10 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"os"
 	"strconv"
 
+	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -54,7 +52,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 
 		// Try connect to mysql
-		db, err := sql.Open("mysql", pf_user+":"+pf_password+"@tcp("+pf_host+":"+pf_port+")/"+pf_name)
+		db, err := sqlw.Open("mysql", pf_user+":"+pf_password+"@tcp("+pf_host+":"+pf_port+")/"+pf_name)
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return

@@ -1,9 +1,6 @@
 package wrapper
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"bytes"
 	"errors"
 	"fmt"
@@ -14,15 +11,16 @@ import (
 
 	"golang-fave/consts"
 	"golang-fave/engine/mysqlpool"
+	"golang-fave/engine/sqlw"
 	"golang-fave/logger"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-sessions/session"
 )
 
-type Tx = sql.Tx
+type Tx = sqlw.Tx
 
-var ErrNoRows = sql.ErrNoRows
+var ErrNoRows = sqlw.ErrNoRows
 
 type Wrapper struct {
 	l *logger.Logger
@@ -47,7 +45,7 @@ type Wrapper struct {
 	CurrSubModule   string
 	MSPool          *mysqlpool.MySqlPool
 
-	DB   *sql.DB
+	DB   *sqlw.DB
 	User *utils.MySql_user
 }
 
@@ -88,7 +86,7 @@ func (this *Wrapper) dbReconnect() error {
 	if err != nil {
 		return err
 	}
-	this.DB, err = sql.Open("mysql", mc.User+":"+mc.Password+"@tcp("+mc.Host+":"+mc.Port+")/"+mc.Name)
+	this.DB, err = sqlw.Open("mysql", mc.User+":"+mc.Password+"@tcp("+mc.Host+":"+mc.Port+")/"+mc.Name)
 	if err != nil {
 		return err
 	}

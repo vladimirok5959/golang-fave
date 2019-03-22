@@ -1,12 +1,10 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"os"
 
 	"golang-fave/consts"
+	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper"
 )
 
@@ -20,7 +18,7 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 			return
 		}
 
-		db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/fave")
+		db, err := sqlw.Open("mysql", "root:root@tcp(localhost:3306)/fave")
 		if err != nil {
 			wrap.Write(err.Error())
 			return

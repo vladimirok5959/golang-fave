@@ -1,15 +1,13 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
 	"html"
 	"strings"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine/builder"
+	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -161,7 +159,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				},
 				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
 				nil,
-				func(limit_offset int, pear_page int) (*sql.Rows, error) {
+				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
 						`SELECT
 							node.id,

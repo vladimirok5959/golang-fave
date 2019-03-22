@@ -1,22 +1,23 @@
 package mysqlpool
 
 import (
-	"database/sql"
 	"sync"
+
+	"golang-fave/engine/sqlw"
 )
 
 type MySqlPool struct {
 	sync.RWMutex
-	connections map[string]*sql.DB
+	connections map[string]*sqlw.DB
 }
 
 func New() *MySqlPool {
 	r := MySqlPool{}
-	r.connections = map[string]*sql.DB{}
+	r.connections = map[string]*sqlw.DB{}
 	return &r
 }
 
-func (this *MySqlPool) Get(key string) *sql.DB {
+func (this *MySqlPool) Get(key string) *sqlw.DB {
 	this.Lock()
 	defer this.Unlock()
 	if value, ok := this.connections[key]; ok == true {
@@ -25,7 +26,7 @@ func (this *MySqlPool) Get(key string) *sql.DB {
 	return nil
 }
 
-func (this *MySqlPool) Set(key string, value *sql.DB) {
+func (this *MySqlPool) Set(key string, value *sqlw.DB) {
 	this.Lock()
 	defer this.Unlock()
 	this.connections[key] = value

@@ -1,9 +1,7 @@
 package modules
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-
+	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -54,12 +52,12 @@ func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 			&user_id,
 		)
 
-		if err != nil && err != sql.ErrNoRows {
+		if err != nil && err != sqlw.ErrNoRows {
 			wrap.MsgError(err.Error())
 			return
 		}
 
-		if err == sql.ErrNoRows {
+		if err == sqlw.ErrNoRows {
 			wrap.MsgError(`Incorrect email or password`)
 			return
 		}
