@@ -413,6 +413,7 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 		}
 
 		err := wrap.DBTrans(func(tx *wrapper.Tx) error {
+			// Process
 			if _, err := tx.Exec("DELETE FROM pages WHERE id = ?;", pf_id); err != nil {
 				return err
 			}

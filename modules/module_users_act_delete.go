@@ -19,6 +19,21 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 		}
 
 		err := wrap.DBTrans(func(tx *wrapper.Tx) error {
+			// Block rows
+			if _, err := tx.Exec("SELECT id FROM blog_cats WHERE user = ? FOR UPDATE;", pf_id); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("SELECT id FROM blog_posts WHERE user = ? FOR UPDATE;", pf_id); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("SELECT id FROM pages WHERE user = ? FOR UPDATE;", pf_id); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("SELECT id FROM users WHERE id = ? and id > 1 FOR UPDATE;", pf_id); err != nil {
+				return err
+			}
+
+			// Process
 			if _, err := tx.Exec("UPDATE blog_cats SET user = 1 WHERE user = ?;", pf_id); err != nil {
 				return err
 			}

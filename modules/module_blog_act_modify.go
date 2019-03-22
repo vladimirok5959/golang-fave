@@ -72,6 +72,11 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					return err
 				}
 
+				// Block rows
+				if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", lastID); err != nil {
+					return err
+				}
+
 				// Insert post and categories relations
 				catids := utils.GetPostArrayInt("cats[]", wrap.R)
 				if len(catids) > 0 {
@@ -83,7 +88,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 							blog_cats
 						WHERE
 							id IN(` + strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",") + `)
-						;`,
+						FOR UPDATE;`,
 					).Scan(
 						&catsCount,
 					)
@@ -112,6 +117,14 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 			wrap.Write(`window.location='/cp/blog/';`)
 		} else {
 			if err := wrap.DBTrans(func(tx *wrapper.Tx) error {
+				// Block rows
+				if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", pf_id); err != nil {
+					return err
+				}
+				if _, err := tx.Exec("SELECT id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", pf_id); err != nil {
+					return err
+				}
+
 				// Update row
 				if _, err := tx.Exec(
 					`UPDATE blog_posts SET
@@ -147,7 +160,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 							blog_cats
 						WHERE
 							id IN(` + strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",") + `)
-						;`,
+						FOR UPDATE;`,
 					).Scan(
 						&catsCount,
 					)

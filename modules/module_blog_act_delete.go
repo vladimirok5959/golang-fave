@@ -19,6 +19,14 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 		}
 
 		if err := wrap.DBTrans(func(tx *wrapper.Tx) error {
+			// Block rows
+			if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", pf_id); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("SELECT id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", pf_id); err != nil {
+				return err
+			}
+
 			// Delete target post with category connection data
 			if _, err := tx.Exec("DELETE FROM blog_posts WHERE id = ?;", pf_id); err != nil {
 				return err
