@@ -57,6 +57,8 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		})
 	}
 
+	// TODO: Fix parent change
+
 	// Parent is changed, move category to new parent
 	return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 		// Block rows
