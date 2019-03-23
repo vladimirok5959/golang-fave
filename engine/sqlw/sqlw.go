@@ -5,16 +5,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"errors"
-	"fmt"
-	"os"
-	"regexp"
-	"strings"
 	"time"
-
-	"golang-fave/consts"
 )
 
-type Tx = sql.Tx
 type Rows = sql.Rows
 
 type DB struct {
@@ -23,27 +16,12 @@ type DB struct {
 
 var ErrNoRows = sql.ErrNoRows
 
-func (this *DB) logQuery(query string, s time.Time) {
-	msg := query
-	if reg, err := regexp.Compile("[\\s\\t]+"); err == nil {
-		msg = strings.Trim(reg.ReplaceAllString(msg, " "), " ")
-	}
-	if consts.ParamDebug {
-		t := time.Now().Sub(s).Seconds()
-		if consts.IS_WIN {
-			fmt.Fprintln(os.Stdout, "[SQL] "+msg+fmt.Sprintf(" %.3f ms", t))
-		} else {
-			fmt.Fprintln(os.Stdout, "\033[1;33m[SQL] "+msg+fmt.Sprintf(" %.3f ms", t)+"\033[0m")
-		}
-	}
-}
-
 func Open(driverName, dataSourceName string) (*DB, error) {
 	db, err := sql.Open(driverName, dataSourceName)
 	if err != nil {
 		return nil, err
 	}
-	return &DB{db: db}, nil
+	return &DB{db: db}, err
 }
 
 func (this *DB) Close() error {
@@ -69,25 +47,31 @@ func (this *DB) SetMaxOpenConns(n int) {
 func (this *DB) QueryRow(query string, args ...interface{}) *sql.Row {
 	s := time.Now()
 	r := this.db.QueryRow(query, args...)
-	this.logQuery(query, s)
+	log(query, s, false)
 	return r
 }
 
-func (this *DB) Begin() (*sql.Tx, error) {
-	return this.db.Begin()
+func (this *DB) Begin() (*Tx, error) {
+	tx, err := this.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	s := time.Now()
+	log("[TX] TRANSACTION START", s, true)
+	return &Tx{tx, s}, err
 }
 
 func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	s := time.Now()
 	r, e := this.db.Query(query, args...)
-	this.logQuery(query, s)
+	log(query, s, false)
 	return r, e
 }
 
 func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	s := time.Now()
 	r, e := this.db.Exec(query, args...)
-	this.logQuery(query, s)
+	log(query, s, false)
 	return r, e
 }
 
@@ -95,17 +79,14 @@ func (this *DB) Transaction(queries func(tx *Tx) error) error {
 	if queries == nil {
 		return errors.New("queries is not set for transaction")
 	}
-
-	tx, err := this.db.Begin()
+	tx, err := this.Begin()
 	if err != nil {
 		return err
 	}
-
 	err = queries(tx)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
-
 	return tx.Commit()
 }
