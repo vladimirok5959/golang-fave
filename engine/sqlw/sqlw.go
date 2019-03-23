@@ -21,16 +21,32 @@ var ErrNoRows = sql.ErrNoRows
 func Open(driverName, dataSourceName string) (*DB, error) {
 	db, err := sql.Open(driverName, dataSourceName)
 	if err != nil {
+		if consts.ParamDebug {
+			log("[CM] OPEN", time.Now(), err, true)
+		}
 		return nil, err
+	}
+	if consts.ParamDebug {
+		log("[CM] OPEN", time.Now(), err, true)
 	}
 	return &DB{db: db}, err
 }
 
 func (this *DB) Close() error {
+	if consts.ParamDebug {
+		err := this.db.Close()
+		log("[CM] CLOSE", time.Now(), err, true)
+		return err
+	}
 	return this.db.Close()
 }
 
 func (this *DB) Ping() error {
+	if consts.ParamDebug {
+		err := this.db.Ping()
+		log("[CM] PING", time.Now(), err, true)
+		return err
+	}
 	return this.db.Ping()
 }
 
