@@ -59,6 +59,9 @@ func (this *DB) QueryRow(query string, args ...interface{}) *sql.Row {
 func (this *DB) Begin() (*Tx, error) {
 	tx, err := this.db.Begin()
 	if err != nil {
+		if consts.ParamDebug {
+			log("[TX] TRANSACTION START", time.Now(), err, true)
+		}
 		return nil, err
 	}
 	if consts.ParamDebug {
