@@ -4,7 +4,13 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 
+	"fmt"
+	"os"
+	"regexp"
+	"strings"
 	"time"
+
+	"golang-fave/consts"
 )
 
 type Tx = sql.Tx
@@ -15,6 +21,21 @@ type DB struct {
 }
 
 var ErrNoRows = sql.ErrNoRows
+
+func (this *DB) logQuery(query string, s time.Time) {
+	msg := query
+	if reg, err := regexp.Compile("[\\s\\t]+"); err == nil {
+		msg = strings.Trim(reg.ReplaceAllString(msg, " "), " ")
+	}
+	if consts.ParamDebug {
+		t := time.Now().Sub(s).Seconds()
+		if consts.IS_WIN {
+			fmt.Fprintln(os.Stdout, "[SQL] "+msg+fmt.Sprintf(" %.3f ms", t))
+		} else {
+			fmt.Fprintln(os.Stdout, "\033[1;33m[SQL] "+msg+fmt.Sprintf(" %.3f ms", t)+"\033[0m")
+		}
+	}
+}
 
 func Open(driverName, dataSourceName string) (*DB, error) {
 	db, err := sql.Open(driverName, dataSourceName)
@@ -45,7 +66,10 @@ func (this *DB) SetMaxOpenConns(n int) {
 }
 
 func (this *DB) QueryRow(query string, args ...interface{}) *sql.Row {
-	return this.db.QueryRow(query, args...)
+	s := time.Now()
+	r := this.db.QueryRow(query, args...)
+	this.logQuery(query, s)
+	return r
 }
 
 func (this *DB) Begin() (*sql.Tx, error) {
@@ -53,9 +77,15 @@ func (this *DB) Begin() (*sql.Tx, error) {
 }
 
 func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
-	return this.db.Query(query, args...)
+	s := time.Now()
+	r, e := this.db.Query(query, args...)
+	this.logQuery(query, s)
+	return r, e
 }
 
 func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
-	return this.db.Exec(query, args...)
+	s := time.Now()
+	r, e := this.db.Exec(query, args...)
+	this.logQuery(query, s)
+	return r, e
 }
