@@ -22,12 +22,9 @@ func log(query string, s time.Time, transaction bool) {
 	if reg, err := regexp.Compile("[\\s\\t]+;$"); err == nil {
 		msg = reg.ReplaceAllString(msg, ";")
 	}
-	if consts.ParamDebug {
-		t := time.Now().Sub(s).Seconds()
-		if consts.IS_WIN {
-			fmt.Fprintln(os.Stdout, "[SQL] "+msg+fmt.Sprintf(" %.3f ms", t))
-		} else {
-			fmt.Fprintln(os.Stdout, "\033["+color+"m[SQL] "+msg+fmt.Sprintf(" %.3f ms", t)+"\033[0m")
-		}
+	if consts.IS_WIN {
+		fmt.Fprintln(os.Stdout, "[SQL] "+msg+fmt.Sprintf(" %.3f ms", time.Now().Sub(s).Seconds()))
+	} else {
+		fmt.Fprintln(os.Stdout, "\033["+color+"m[SQL] "+msg+fmt.Sprintf(" %.3f ms", time.Now().Sub(s).Seconds())+"\033[0m")
 	}
 }

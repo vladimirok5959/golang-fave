@@ -6,6 +6,8 @@ import (
 
 	"errors"
 	"time"
+
+	"golang-fave/consts"
 )
 
 type Rows = sql.Rows
@@ -45,10 +47,13 @@ func (this *DB) SetMaxOpenConns(n int) {
 }
 
 func (this *DB) QueryRow(query string, args ...interface{}) *sql.Row {
-	s := time.Now()
-	r := this.db.QueryRow(query, args...)
-	log(query, s, false)
-	return r
+	if consts.ParamDebug {
+		s := time.Now()
+		r := this.db.QueryRow(query, args...)
+		log(query, s, false)
+		return r
+	}
+	return this.db.QueryRow(query, args...)
 }
 
 func (this *DB) Begin() (*Tx, error) {
@@ -56,23 +61,32 @@ func (this *DB) Begin() (*Tx, error) {
 	if err != nil {
 		return nil, err
 	}
-	s := time.Now()
-	log("[TX] TRANSACTION START", s, true)
-	return &Tx{tx, s}, err
+	if consts.ParamDebug {
+		s := time.Now()
+		log("[TX] TRANSACTION START", s, true)
+		return &Tx{tx, s}, err
+	}
+	return &Tx{tx, time.Now()}, err
 }
 
 func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
-	s := time.Now()
-	r, e := this.db.Query(query, args...)
-	log(query, s, false)
-	return r, e
+	if consts.ParamDebug {
+		s := time.Now()
+		r, e := this.db.Query(query, args...)
+		log(query, s, false)
+		return r, e
+	}
+	return this.db.Query(query, args...)
 }
 
 func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
-	s := time.Now()
-	r, e := this.db.Exec(query, args...)
-	log(query, s, false)
-	return r, e
+	if consts.ParamDebug {
+		s := time.Now()
+		r, e := this.db.Exec(query, args...)
+		log(query, s, false)
+		return r, e
+	}
+	return this.db.Exec(query, args...)
 }
 
 func (this *DB) Transaction(queries func(tx *Tx) error) error {

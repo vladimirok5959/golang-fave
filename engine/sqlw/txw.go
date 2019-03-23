@@ -5,6 +5,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"time"
+
+	"golang-fave/consts"
 )
 
 type Tx struct {
@@ -13,27 +15,39 @@ type Tx struct {
 }
 
 func (this *Tx) Rollback() error {
-	err := this.tx.Rollback()
-	log("[TX] TRANSACTION END (Rollback)", this.s, true)
-	return err
+	if consts.ParamDebug {
+		err := this.tx.Rollback()
+		log("[TX] TRANSACTION END (Rollback)", this.s, true)
+		return err
+	}
+	return this.tx.Rollback()
 }
 
 func (this *Tx) Commit() error {
-	err := this.tx.Commit()
-	log("[TX] TRANSACTION END (Commit)", this.s, true)
-	return err
+	if consts.ParamDebug {
+		err := this.tx.Commit()
+		log("[TX] TRANSACTION END (Commit)", this.s, true)
+		return err
+	}
+	return this.tx.Commit()
 }
 
 func (this *Tx) Exec(query string, args ...interface{}) (sql.Result, error) {
-	s := time.Now()
-	r, e := this.tx.Exec(query, args...)
-	log("[TX] "+query, s, true)
-	return r, e
+	if consts.ParamDebug {
+		s := time.Now()
+		r, e := this.tx.Exec(query, args...)
+		log("[TX] "+query, s, true)
+		return r, e
+	}
+	return this.tx.Exec(query, args...)
 }
 
 func (this *Tx) QueryRow(query string, args ...interface{}) *sql.Row {
-	s := time.Now()
-	r := this.tx.QueryRow(query, args...)
-	log("[TX] "+query, s, true)
-	return r
+	if consts.ParamDebug {
+		s := time.Now()
+		r := this.tx.QueryRow(query, args...)
+		log("[TX] "+query, s, true)
+		return r
+	}
+	return this.tx.QueryRow(query, args...)
 }
