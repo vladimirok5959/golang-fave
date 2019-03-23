@@ -50,7 +50,7 @@ func (this *DB) QueryRow(query string, args ...interface{}) *sql.Row {
 	if consts.ParamDebug {
 		s := time.Now()
 		r := this.db.QueryRow(query, args...)
-		log(query, s, false)
+		log(query, s, nil, false)
 		return r
 	}
 	return this.db.QueryRow(query, args...)
@@ -63,7 +63,7 @@ func (this *DB) Begin() (*Tx, error) {
 	}
 	if consts.ParamDebug {
 		s := time.Now()
-		log("[TX] TRANSACTION START", s, true)
+		log("[TX] TRANSACTION START", s, err, true)
 		return &Tx{tx, s}, err
 	}
 	return &Tx{tx, time.Now()}, err
@@ -73,7 +73,7 @@ func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	if consts.ParamDebug {
 		s := time.Now()
 		r, e := this.db.Query(query, args...)
-		log(query, s, false)
+		log(query, s, e, false)
 		return r, e
 	}
 	return this.db.Query(query, args...)
@@ -83,7 +83,7 @@ func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	if consts.ParamDebug {
 		s := time.Now()
 		r, e := this.db.Exec(query, args...)
-		log(query, s, false)
+		log(query, s, e, false)
 		return r, e
 	}
 	return this.db.Exec(query, args...)
