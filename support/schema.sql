@@ -45,6 +45,7 @@ CREATE TABLE `pages` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `pages` ADD UNIQUE KEY `alias` (`alias`);
+ALTER TABLE `pages` ADD KEY `alias_active` (`alias`,`active`) USING BTREE;
 
 CREATE TABLE `users` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',

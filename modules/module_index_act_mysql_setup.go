@@ -329,6 +329,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE pages ADD KEY alias_active (alias,active) USING BTREE;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 
 		// Table: users
 		if _, err = tx.Exec(
