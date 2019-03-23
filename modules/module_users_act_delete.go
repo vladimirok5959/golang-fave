@@ -18,7 +18,7 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 			return
 		}
 
-		err := wrap.DBTrans(func(tx *wrapper.Tx) error {
+		err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 			// Block rows
 			if _, err := tx.Exec("SELECT id FROM blog_cats WHERE user = ? FOR UPDATE;", pf_id); err != nil {
 				return err

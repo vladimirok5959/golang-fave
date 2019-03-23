@@ -6,7 +6,7 @@ import (
 )
 
 func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
-	return wrap.DBTrans(func(tx *wrapper.Tx) error {
+	return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 		// Block rows
 		if _, err := tx.Exec("SELECT id FROM blog_cats FOR UPDATE;"); err != nil {
 			return err
@@ -37,7 +37,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 	if utils.StrToInt(pf_parent) == parentId {
 		// If parent not changed, just update category data
-		return wrap.DBTrans(func(tx *wrapper.Tx) error {
+		return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 			// Process
 			if _, err := tx.Exec(`
 				UPDATE blog_cats SET
@@ -58,7 +58,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 	}
 
 	// Parent is changed, move category to new parent
-	return wrap.DBTrans(func(tx *wrapper.Tx) error {
+	return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 		// Block rows
 		if _, err := tx.Exec("SELECT id FROM blog_cats FOR UPDATE;"); err != nil {
 			return err

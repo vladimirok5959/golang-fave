@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 
+	"errors"
 	"fmt"
 	"os"
 	"regexp"
@@ -88,4 +89,23 @@ func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	r, e := this.db.Exec(query, args...)
 	this.logQuery(query, s)
 	return r, e
+}
+
+func (this *DB) Transaction(queries func(tx *Tx) error) error {
+	if queries == nil {
+		return errors.New("queries is not set for transaction")
+	}
+
+	tx, err := this.db.Begin()
+	if err != nil {
+		return err
+	}
+
+	err = queries(tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit()
 }

@@ -44,7 +44,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		}
 
 		if pf_id == "0" {
-			if err := wrap.DBTrans(func(tx *wrapper.Tx) error {
+			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 				// Insert row
 				res, err := tx.Exec(
 					`INSERT INTO blog_posts SET
@@ -116,7 +116,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 
 			wrap.Write(`window.location='/cp/blog/';`)
 		} else {
-			if err := wrap.DBTrans(func(tx *wrapper.Tx) error {
+			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 				// Block rows
 				if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", pf_id); err != nil {
 					return err

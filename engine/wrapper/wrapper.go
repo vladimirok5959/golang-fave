@@ -237,22 +237,3 @@ func (this *Wrapper) RenderBackEnd(tcont []byte, data interface{}) {
 	}
 	this.W.Write(tpl.Bytes())
 }
-
-func (this *Wrapper) DBTrans(queries func(tx *Tx) error) error {
-	if queries == nil {
-		return errors.New("queries is not set for transaction")
-	}
-
-	tx, err := this.DB.Begin()
-	if err != nil {
-		return err
-	}
-
-	err = queries(tx)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	return tx.Commit()
-}
