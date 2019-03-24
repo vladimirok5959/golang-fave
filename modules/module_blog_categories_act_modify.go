@@ -85,31 +85,32 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		wrap.LogError("parentL = %d, parentR = %d", parentL, parentR)
 		wrap.LogError("targetL = %d, targetR = %d", targetL, targetR)
 
-		// From right to left
-		if targetL > parentR {
-			// Select data
-			rows, err := tx.Query("SELECT id, lft, rgt FROM blog_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
-			if err != nil {
-				return err
+		// Select data
+		rows, err := tx.Query("SELECT id, lft, rgt FROM blog_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
+		if err != nil {
+			return err
+		}
+		defer rows.Close()
+		var rows_id []int
+		var rows_lft []int
+		var rows_rgt []int
+		for rows.Next() {
+			var row_id int
+			var row_lft int
+			var row_rgt int
+			if err := rows.Scan(&row_id, &row_lft, &row_rgt); err == nil {
+				rows_id = append(rows_id, row_id)
+				rows_lft = append(rows_lft, row_lft)
+				rows_rgt = append(rows_rgt, row_rgt)
 			}
-			defer rows.Close()
-			var rows_id []int
-			var rows_lft []int
-			var rows_rgt []int
-			for rows.Next() {
-				var row_id int
-				var row_lft int
-				var row_rgt int
-				if err := rows.Scan(&row_id, &row_lft, &row_rgt); err == nil {
-					rows_id = append(rows_id, row_id)
-					rows_lft = append(rows_lft, row_lft)
-					rows_rgt = append(rows_rgt, row_rgt)
-				}
-			}
+		}
 
-			wrap.LogError("rows_id = %v", rows_id)
-			wrap.LogError("rows_lft = %v", rows_lft)
-			wrap.LogError("rows_rgt = %v", rows_rgt)
+		wrap.LogError("rows_id = %v", rows_id)
+		wrap.LogError("rows_lft = %v", rows_lft)
+		wrap.LogError("rows_rgt = %v", rows_rgt)
+
+		if targetL > parentR {
+			// From right to left
 
 			// Shift
 			step := targetR - targetL + 1
@@ -131,6 +132,27 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 					return err
 				}
 			}
+		} else {
+			// From left to right
+
+			// Shift
+			step := targetR - targetL + 1
+			// 8 - 3 + 1 = 6
+			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
+				return err
+			}
+			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt - ? WHERE rgt > ? and rgt < ?;", step, targetR, parentR); err != nil {
+				return err
+			}
+
+			// Update target rows
+			for i, _ := range rows_id {
+				new_lft := rows_lft[i] + (parentR - targetL - step)
+				new_rgt := rows_rgt[i] + (parentR - targetL - step)
+				if _, err := tx.Exec("UPDATE blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+					return err
+				}
+			}
 		}
 
 		// Update target cat data
@@ -139,42 +161,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		}
 
 		wrap.LogError("--------------------------------")
-
-		/*
-			// Shift
-			if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET lft = 0, rgt = 0 WHERE id = ?;", pf_id); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - 2 WHERE lft > @mr;"); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
-				return err
-			}
-
-			// Update
-			if _, err := tx.Exec("SELECT @mr := rgt FROM blog_cats WHERE id = ?;", pf_parent); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET name = ?, alias = ?, lft = @mr, rgt = @mr + 1 WHERE id = ?;", pf_name, pf_alias, pf_id); err != nil {
-				return err
-			}
-		*/
 
 		return nil
 	})
