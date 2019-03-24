@@ -1,7 +1,8 @@
 package modules
 
 import (
-	// "golang-fave/engine/sqlw"
+	"errors"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -85,71 +86,76 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		wrap.LogError("parentL = %d, parentR = %d", parentL, parentR)
 		wrap.LogError("targetL = %d, targetR = %d", targetL, targetR)
 
-		// Select data
-		rows, err := tx.Query("SELECT id, lft, rgt FROM blog_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
-		if err != nil {
-			return err
-		}
-		defer rows.Close()
-		var rows_id []int
-		var rows_lft []int
-		var rows_rgt []int
-		for rows.Next() {
-			var row_id int
-			var row_lft int
-			var row_rgt int
-			if err := rows.Scan(&row_id, &row_lft, &row_rgt); err == nil {
-				rows_id = append(rows_id, row_id)
-				rows_lft = append(rows_lft, row_lft)
-				rows_rgt = append(rows_rgt, row_rgt)
-			}
-		}
-
-		wrap.LogError("rows_id = %v", rows_id)
-		wrap.LogError("rows_lft = %v", rows_lft)
-		wrap.LogError("rows_rgt = %v", rows_rgt)
-
-		if targetL > parentR {
-			// From right to left
-			// Shift
-			step := targetR - targetL + 1
-			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft + ? WHERE lft > ? and lft < ?;", step, parentR, targetL); err != nil {
+		if !(targetL < parentL && targetR > parentR) {
+			// Select data
+			rows, err := tx.Query("SELECT id, lft, rgt FROM blog_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
+			if err != nil {
 				return err
 			}
-			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + ? WHERE rgt > ? and rgt < ?;", step, parentR, targetL); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + ? WHERE id = ?;", step, pf_parent); err != nil {
-				return err
+			defer rows.Close()
+			var rows_id []int
+			var rows_lft []int
+			var rows_rgt []int
+			for rows.Next() {
+				var row_id int
+				var row_lft int
+				var row_rgt int
+				if err := rows.Scan(&row_id, &row_lft, &row_rgt); err == nil {
+					rows_id = append(rows_id, row_id)
+					rows_lft = append(rows_lft, row_lft)
+					rows_rgt = append(rows_rgt, row_rgt)
+				}
 			}
 
-			// Update target rows
-			for i, _ := range rows_id {
-				new_lft := rows_lft[i] - (targetL - parentR)
-				new_rgt := rows_rgt[i] - (targetL - parentR)
-				if _, err := tx.Exec("UPDATE blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+			wrap.LogError("rows_id = %v", rows_id)
+			wrap.LogError("rows_lft = %v", rows_lft)
+			wrap.LogError("rows_rgt = %v", rows_rgt)
+
+			if targetL > parentR {
+				// From right to left
+				// Shift
+				step := targetR - targetL + 1
+				if _, err := tx.Exec("UPDATE blog_cats SET lft = lft + ? WHERE lft > ? and lft < ?;", step, parentR, targetL); err != nil {
 					return err
+				}
+				if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + ? WHERE rgt > ? and rgt < ?;", step, parentR, targetL); err != nil {
+					return err
+				}
+				if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + ? WHERE id = ?;", step, pf_parent); err != nil {
+					return err
+				}
+
+				// Update target rows
+				for i, _ := range rows_id {
+					new_lft := rows_lft[i] - (targetL - parentR)
+					new_rgt := rows_rgt[i] - (targetL - parentR)
+					if _, err := tx.Exec("UPDATE blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+						return err
+					}
+				}
+			} else {
+				// From left to right
+				// Shift
+				step := targetR - targetL + 1
+				if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
+					return err
+				}
+				if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt - ? WHERE rgt > ? and rgt < ?;", step, targetR, parentR); err != nil {
+					return err
+				}
+
+				// Update target rows
+				for i, _ := range rows_id {
+					new_lft := rows_lft[i] + (parentR - targetL - step)
+					new_rgt := rows_rgt[i] + (parentR - targetL - step)
+					if _, err := tx.Exec("UPDATE blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+						return err
+					}
 				}
 			}
 		} else {
-			// From left to right
-			// Shift
-			step := targetR - targetL + 1
-			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt - ? WHERE rgt > ? and rgt < ?;", step, targetR, parentR); err != nil {
-				return err
-			}
-
-			// Update target rows
-			for i, _ := range rows_id {
-				new_lft := rows_lft[i] + (parentR - targetL - step)
-				new_rgt := rows_rgt[i] + (parentR - targetL - step)
-				if _, err := tx.Exec("UPDATE blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
-					return err
-				}
-			}
+			// Trying to move category to they child as parent
+			return errors.New("You can't do this")
 		}
 
 		// Update target cat data
