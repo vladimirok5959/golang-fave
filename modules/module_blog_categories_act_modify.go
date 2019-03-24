@@ -68,9 +68,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			return err
 		}
 
-		wrap.LogError("Start update!")
-		wrap.LogError("--------------------------------")
-
 		var parentL int
 		var parentR int
 		if err := tx.QueryRow(`SELECT lft, rgt FROM blog_cats WHERE id = ?;`, pf_parent).Scan(&parentL, &parentR); err != nil {
@@ -82,9 +79,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		if err := tx.QueryRow(`SELECT lft, rgt FROM blog_cats WHERE id = ?;`, pf_id).Scan(&targetL, &targetR); err != nil {
 			return err
 		}
-
-		wrap.LogError("parentL = %d, parentR = %d", parentL, parentR)
-		wrap.LogError("targetL = %d, targetR = %d", targetL, targetR)
 
 		if !(targetL < parentL && targetR > parentR) {
 			// Select data
@@ -106,10 +100,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 					rows_rgt = append(rows_rgt, row_rgt)
 				}
 			}
-
-			wrap.LogError("rows_id = %v", rows_id)
-			wrap.LogError("rows_lft = %v", rows_lft)
-			wrap.LogError("rows_rgt = %v", rows_rgt)
 
 			if targetL > parentR {
 				// From right to left
@@ -162,8 +152,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		if _, err := tx.Exec("UPDATE blog_cats SET name = ?, alias = ? WHERE id = ?;", pf_name, pf_alias, pf_id); err != nil {
 			return err
 		}
-
-		wrap.LogError("--------------------------------")
 
 		return nil
 	})
