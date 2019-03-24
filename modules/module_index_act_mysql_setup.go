@@ -376,7 +376,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		f, err := os.Create(wrap.DTemplate + string(os.PathSeparator) + "robots.txt")
 		if err == nil {
 			defer f.Close()
-			if _, err = f.WriteString("User-agent: *\nDisallow: /\n"); err != nil {
+			if _, err = f.WriteString("User-agent: *\r\nDisallow: /\r\n"); err != nil {
 				wrap.MsgError(err.Error())
 				return
 			}

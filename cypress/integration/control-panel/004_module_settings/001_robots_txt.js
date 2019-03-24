@@ -19,7 +19,7 @@ context('Module robots.txt', () => {
       followRedirect: false
     }).then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.eq('User-agent: *\nDisallow: /\n');
+      expect(response.body).to.eq('User-agent: *\r\nDisallow: /\r\n');
     });
   });
 
