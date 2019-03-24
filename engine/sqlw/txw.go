@@ -51,3 +51,13 @@ func (this *Tx) QueryRow(query string, args ...interface{}) *sql.Row {
 	}
 	return this.tx.QueryRow(query, args...)
 }
+
+func (this *Tx) Query(query string, args ...interface{}) (*sql.Rows, error) {
+	if consts.ParamDebug {
+		s := time.Now()
+		r, e := this.tx.Query(query, args...)
+		log("[TX] "+query, s, e, true)
+		return r, e
+	}
+	return this.tx.Query(query, args...)
+}

@@ -22,7 +22,7 @@ func log(query string, s time.Time, e error, transaction bool) {
 	if reg, err := regexp.Compile("[\\s\\t]+;$"); err == nil {
 		msg = reg.ReplaceAllString(msg, ";")
 	}
-	eStr := " (nil) "
+	eStr := " (nil)"
 	if e != nil {
 		eStr = " (" + e.Error() + ") "
 	}
