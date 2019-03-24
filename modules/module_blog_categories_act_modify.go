@@ -133,6 +133,11 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			}
 		}
 
+		// Update target cat data
+		if _, err := tx.Exec("UPDATE blog_cats SET name = ?, alias = ? WHERE id = ?;", pf_name, pf_alias, pf_id); err != nil {
+			return err
+		}
+
 		wrap.LogError("--------------------------------")
 
 		/*
