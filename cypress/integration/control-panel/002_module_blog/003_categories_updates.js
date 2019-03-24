@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Module blog categories', () => {
+context('Module blog categories updates', () => {
   it('should reset', () => {
     cy.installCMS();
   });
