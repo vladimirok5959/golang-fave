@@ -155,7 +155,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			}
 		} else {
 			// Trying to move category to they child as parent
-			return errors.New("You can't do this")
+			return errors.New("Category can't be moved inside here child")
 		}
 
 		// Update target cat data
