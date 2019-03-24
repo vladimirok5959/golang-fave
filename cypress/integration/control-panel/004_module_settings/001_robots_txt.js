@@ -9,7 +9,7 @@ context('Module robots.txt', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/settings/');
     cy.get('.data-form.settings- textarea[name=content]').should('exist');
-    cy.get('.data-form.settings- textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n\n');
+    cy.get('.data-form.settings- textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n');
     cy.logoutCMS();
   });
 
@@ -19,7 +19,7 @@ context('Module robots.txt', () => {
       followRedirect: false
     }).then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.eq('User-agent: *\nDisallow: /\n\n');
+      expect(response.body).to.eq('User-agent: *\nDisallow: /\n');
     });
   });
 
