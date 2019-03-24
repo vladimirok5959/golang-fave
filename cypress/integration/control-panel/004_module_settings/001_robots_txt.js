@@ -43,19 +43,19 @@ context('Module robots.txt', () => {
     });
 
     cy.visitCMS('/cp/settings/');
-    cy.get('.data-form.settings- textarea[name=content]').clear().type('User-agent: *\nDisallow: /\n\n');
+    cy.get('.data-form.settings- textarea[name=content]').clear().type('User-agent: *\nDisallow: /\n');
     cy.get('#add-edit-button').click();
     cy.actionWait();
 
     cy.visitCMS('/cp/settings/');
-    cy.get('.data-form.settings- textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n\n');
+    cy.get('.data-form.settings- textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n');
 
     cy.request({
       url: cy.getBaseUrl() + '/robots.txt',
       followRedirect: false
     }).then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.eq('User-agent: *\r\nDisallow: /\r\n\r\n');
+      expect(response.body).to.eq('User-agent: *\r\nDisallow: /\r\n');
     });
 
     cy.logoutCMS();
