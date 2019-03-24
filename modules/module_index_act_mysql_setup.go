@@ -101,7 +101,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			(9, 1, 'For all', 'for-all', 10, 11),
 			(10, 1, 'For athletes', 'for-athletes', 12, 13),
 			(11, 1, 'Computers and technology', 'computers-and-technology', 17, 18),
-			(13, 1, 'Film industry', 'film-industry', 19, 20);`,
+			(12, 1, 'Film industry', 'film-industry', 19, 20);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -132,7 +132,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO blog_cat_post_rel (id, post_id, category_id) VALUES (1, 1, 9), (2, 2, 13), (3, 3, 8);`,
+			`INSERT INTO blog_cat_post_rel (id, post_id, category_id) VALUES (1, 1, 9), (2, 2, 12), (3, 3, 8);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
