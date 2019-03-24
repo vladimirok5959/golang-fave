@@ -111,7 +111,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 		if targetL > parentR {
 			// From right to left
-
 			// Shift
 			step := targetR - targetL + 1
 			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft + ? WHERE lft > ? and lft < ?;", step, parentR, targetL); err != nil {
@@ -134,10 +133,8 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			}
 		} else {
 			// From left to right
-
 			// Shift
 			step := targetR - targetL + 1
-			// 8 - 3 + 1 = 6
 			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
 				return err
 			}
