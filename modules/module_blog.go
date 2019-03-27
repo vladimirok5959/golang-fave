@@ -2,11 +2,13 @@ package modules
 
 import (
 	"html"
+	"net/http"
 	"strings"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
 	"golang-fave/engine/builder"
+	"golang-fave/engine/fetdata"
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -29,7 +31,118 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			{Mount: "categories-add", Name: "Add new category", Show: true, Icon: assets.SysSvgIconPlus},
 			{Mount: "categories-modify", Name: "Modify category", Show: false},
 		},
-	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
+	}, func(wrap *wrapper.Wrapper) {
+		if len(wrap.UrlArgs) == 3 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] == "category" && wrap.UrlArgs[2] != "" {
+			// Blog category
+			row := &utils.MySql_blog_category{}
+			err := wrap.DB.QueryRow(`
+				SELECT
+					id,
+					user,
+					name,
+					alias,
+					lft,
+					rgt
+				FROM
+					blog_cats
+				WHERE
+					alias = ? AND
+					id > 1
+				LIMIT 1;`,
+				wrap.UrlArgs[2],
+			).Scan(
+				&row.A_id,
+				&row.A_user,
+				&row.A_name,
+				&row.A_alias,
+				&row.A_lft,
+				&row.A_rgt,
+			)
+
+			if err != nil && err != wrapper.ErrNoRows {
+				// System error 500
+				utils.SystemErrorPageEngine(wrap.W, err)
+				return
+			} else if err == wrapper.ErrNoRows {
+				// User error 404 page
+				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				return
+			}
+
+			// Fix url
+			if wrap.R.URL.Path[len(wrap.R.URL.Path)-1] != '/' {
+				http.Redirect(wrap.W, wrap.R, wrap.R.URL.Path+"/"+utils.ExtractGetParams(wrap.R.RequestURI), 301)
+				return
+			}
+
+			// Render template
+			wrap.RenderFrontEnd("blog-category", fetdata.New(wrap, row, false), http.StatusOK)
+			return
+		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] != "" {
+			// Blog post
+			row := &utils.MySql_blog_posts{}
+			err := wrap.DB.QueryRow(`
+				SELECT
+					id,
+					user,
+					name,
+					alias,
+					content,
+					UNIX_TIMESTAMP(datetime) as datetime,
+					active
+				FROM
+					blog_posts
+				WHERE
+					active = 1 and
+					alias = ?
+				LIMIT 1;`,
+				wrap.UrlArgs[1],
+			).Scan(
+				&row.A_id,
+				&row.A_user,
+				&row.A_name,
+				&row.A_alias,
+				&row.A_content,
+				&row.A_datetime,
+				&row.A_active,
+			)
+
+			if err != nil && err != wrapper.ErrNoRows {
+				// System error 500
+				utils.SystemErrorPageEngine(wrap.W, err)
+				return
+			} else if err == wrapper.ErrNoRows {
+				// User error 404 page
+				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				return
+			}
+
+			// Fix url
+			if wrap.R.URL.Path[len(wrap.R.URL.Path)-1] != '/' {
+				http.Redirect(wrap.W, wrap.R, wrap.R.URL.Path+"/"+utils.ExtractGetParams(wrap.R.RequestURI), 301)
+				return
+			}
+
+			// Render template
+			wrap.RenderFrontEnd("blog-post", fetdata.New(wrap, row, false), http.StatusOK)
+			return
+		} else if len(wrap.UrlArgs) == 1 && wrap.UrlArgs[0] == "blog" {
+			// Blog
+
+			// Fix url
+			if wrap.R.URL.Path[len(wrap.R.URL.Path)-1] != '/' {
+				http.Redirect(wrap.W, wrap.R, wrap.R.URL.Path+"/"+utils.ExtractGetParams(wrap.R.RequestURI), 301)
+				return
+			}
+
+			// Render template
+			wrap.RenderFrontEnd("blog", fetdata.New(wrap, nil, false), http.StatusOK)
+			return
+		}
+
+		// User error 404 page
+		wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""
 		if wrap.CurrSubModule == "" || wrap.CurrSubModule == "default" {
@@ -143,6 +256,12 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				},
 				func(values *[]string) string {
 					return builder.DataTableAction(&[]builder.DataTableActionRow{
+						{
+							Icon:   assets.SysSvgIconView,
+							Href:   `/blog/category/` + (*values)[3] + `/`,
+							Hint:   "View",
+							Target: "_blank",
+						},
 						{
 							Icon: assets.SysSvgIconEdit,
 							Href: "/cp/" + wrap.CurrModule + "/categories-modify/" + (*values)[0] + "/",

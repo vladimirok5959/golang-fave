@@ -9,7 +9,23 @@
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
 
-		<title>{{if not $.Data.Is404}}{{$.Data.MetaTitle}}{{else}}Error 404{{end}}</title>
+		<title>
+			{{if not (eq $.Data.Module "404")}}
+				{{if eq $.Data.Module "index"}}
+					{{$.Data.MetaTitle}}
+				{{else if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}}
+					{{if eq $.Data.Module "blog-category"}}
+						Posts of category "{{$.Data.Name}}" | Blog
+					{{else if eq $.Data.Module "blog-post"}}
+						{{$.Data.Name}} | Blog
+					{{else}}
+						Latest posts | Blog
+					{{end}}
+				{{end}}
+			{{else}}
+				Error 404
+			{{end}}
+		</title>
 		<meta name="keywords" content="{{$.Data.MetaKeywords}}" />
 		<meta name="description" content="{{$.Data.MetaDescription}}" />
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
@@ -40,7 +56,10 @@
 								<a class="nav-link{{if eq $.Data.Alias "/about/"}} active{{end}}" href="/about/">About</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link{{if $.Data.Is404}} active{{end}}" href="/not-existent-page/">404</a>
+								<a class="nav-link{{if eq $.Data.Module "404"}} active{{end}}" href="/not-existent-page/">404</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link{{if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}} active{{end}}" href="/blog/">Blog</a>
 							</li>
 						</ul>
 					</div>
@@ -50,11 +69,21 @@
 				<div class="bg-fave">
 					<div class="container">
 						<h1 class="text-left text-white m-0 p-0 py-5">
-							{{if not $.Data.Is404}}
-								{{if eq $.Data.Alias "/"}}
-									Welcome to home page
-								{{else}}
-									Welcome to some another page
+							{{if not (eq $.Data.Module "404")}}
+								{{if eq $.Data.Module "index"}}
+									{{if eq $.Data.Alias "/"}}
+										Welcome to home page
+									{{else}}
+										Welcome to some another page
+									{{end}}
+								{{else if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}}
+									{{if eq $.Data.Module "blog-category"}}
+										Blog category
+									{{else if eq $.Data.Module "blog-post"}}
+										Blog post
+									{{else}}
+										Blog
+									{{end}}
 								{{end}}
 							{{else}}
 								Oops, page is not found...

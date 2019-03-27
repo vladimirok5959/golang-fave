@@ -8,7 +8,13 @@
 		</div>
 		<footer class="bg-light py-4">
 			<div class="container">
-				<p class="m-0 text-center text-black">Copyright © Your Website 2019</p>
+				<p class="m-0 text-center text-black">
+					Copyright © Your Website {{if eq ($.Data.CurrentDateTimeFormat "2006") "2019"}}
+						{{$.Data.CurrentDateTimeFormat "2006"}}
+					{{else}}
+						2019-{{$.Data.CurrentDateTimeFormat "2006"}}
+					{{end}}
+				</p>
 			</div>
 		</footer>
 		<!-- Optional JavaScript -->
