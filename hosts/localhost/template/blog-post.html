@@ -1,13 +1,13 @@
 {{template "header.html" .}}
 <div class="card mb-4">
 	<div class="card-body">
-		<h2 class="card-title">{{$.Data.Name}}</h2>
+		<h2 class="card-title">{{$.Data.Blog.Post.Name}}</h2>
 		<div class="page-content">
-			{{$.Data.Content}}
+			{{$.Data.Blog.Post.Content}}
 		</div>
 	</div>
 	<div class="card-footer text-muted">
-		Published on {{$.Data.DateTimeFormat "02/01/2006, 15:04:05"}}
+		Published on {{$.Data.Blog.Post.DateTimeFormat "02/01/2006, 15:04:05"}}
 	</div>
 </div>
 {{template "footer.html" .}}

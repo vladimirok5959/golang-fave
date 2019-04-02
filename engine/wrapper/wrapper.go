@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"golang-fave/consts"
@@ -203,9 +204,6 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}, status int) 
 		utils.SystemErrorPageTemplate(this.W, err)
 		return
 	}
-	this.W.WriteHeader(status)
-	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
 	var tpl bytes.Buffer
 	err = tmpl.Execute(&tpl, consts.TmplData{
 		System: utils.GetTmplSystemData(),
@@ -215,6 +213,9 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}, status int) 
 		utils.SystemErrorPageTemplate(this.W, err)
 		return
 	}
+	this.W.WriteHeader(status)
+	this.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
 	this.W.Write(tpl.Bytes())
 }
 
@@ -236,4 +237,21 @@ func (this *Wrapper) RenderBackEnd(tcont []byte, data interface{}) {
 		return
 	}
 	this.W.Write(tpl.Bytes())
+}
+
+func (this *Wrapper) GetCurrentPage(max int) int {
+	curr := 1
+	page := this.R.URL.Query().Get("p")
+	if page != "" {
+		if i, err := strconv.Atoi(page); err == nil {
+			if i < 1 {
+				curr = 1
+			} else if i > max {
+				curr = max
+			} else {
+				curr = i
+			}
+		}
+	}
+	return curr
 }

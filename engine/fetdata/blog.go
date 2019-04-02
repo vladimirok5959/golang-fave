@@ -1,193 +1,309 @@
 package fetdata
 
-// import (
-// 	"math"
-// 	"strconv"
-// 	"strings"
+import (
+	"math"
+	"strings"
 
-// 	"golang-fave/engine/sqlw"
-// 	"golang-fave/utils"
-// )
+	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
+)
 
-// func (this *FERData) postsGetCount(buf string, cat int) (int, int) {
-// 	if cat == 0 {
-// 		var num int
-// 		if err := this.wrap.DB.QueryRow(`
-// 			SELECT
-// 				COUNT(*)
-// 			FROM
-// 				blog_posts
-// 			WHERE
-// 				active = 1
-// 			;
-// 		`).Scan(&num); err == nil {
-// 			pear_page := 2
-// 			max_pages := int(math.Ceil(float64(num) / float64(pear_page)))
-// 			curr_page := 1
-// 			p := this.wrap.R.URL.Query().Get("p")
-// 			if p != "" {
-// 				pi, err := strconv.Atoi(p)
-// 				if err != nil {
-// 					curr_page = 1
-// 				} else {
-// 					if pi < 1 {
-// 						curr_page = 1
-// 					} else if pi > max_pages {
-// 						curr_page = max_pages
-// 					} else {
-// 						curr_page = pi
-// 					}
-// 				}
-// 			}
-// 			limit_offset := curr_page*pear_page - pear_page
-// 			return limit_offset, pear_page
-// 		}
-// 	} else {
-// 		var num int
-// 		if err := this.wrap.DB.QueryRow(`
-// 			SELECT
-// 				COUNT(blog_posts.id)
-// 			FROM
-// 				blog_posts
-// 				LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
-// 			WHERE
-// 				blog_posts.active = 1 AND
-// 				blog_cat_post_rel.category_id = ?
-// 			;
-// 		`, cat).Scan(&num); err == nil {
-// 			pear_page := 2
-// 			max_pages := int(math.Ceil(float64(num) / float64(pear_page)))
-// 			curr_page := 1
-// 			p := this.wrap.R.URL.Query().Get("p")
-// 			if p != "" {
-// 				pi, err := strconv.Atoi(p)
-// 				if err != nil {
-// 					curr_page = 1
-// 				} else {
-// 					if pi < 1 {
-// 						curr_page = 1
-// 					} else if pi > max_pages {
-// 						curr_page = max_pages
-// 					} else {
-// 						curr_page = pi
-// 					}
-// 				}
-// 			}
-// 			limit_offset := curr_page*pear_page - pear_page
-// 			return limit_offset, pear_page
-// 		}
-// 	}
-// 	return 0, 0
-// }
+type BlogPagination struct {
+	Num     string
+	Link    string
+	Current bool
+}
 
-// func (this *FERData) postsToBuffer(buf string, cat int, order string) {
-// 	if this.bufferPosts == nil {
-// 		this.bufferPosts = map[string][]*BlogPost{}
-// 	}
-// 	if _, ok := this.bufferPosts[buf]; !ok {
-// 		var posts []*BlogPost
+type Blog struct {
+	wrap     *wrapper.Wrapper
+	category *BlogCategory
+	post     *BlogPost
 
-// 		limit_offset, pear_page := this.postsGetCount(buf, cat)
+	posts          []*BlogPost
+	postsCount     int
+	postsPerPage   int
+	postsMaxPage   int
+	postsCurrPage  int
+	pagination     []*BlogPagination
+	paginationPrev *BlogPagination
+	paginationNext *BlogPagination
 
-// 		var rows *sqlw.Rows
-// 		var err error
+	bufferCats map[string][]*BlogCategory
+}
 
-// 		if cat == 0 {
-// 			rows, err = this.wrap.DB.Query(`
-// 				SELECT
-// 					blog_posts.id,
-// 					blog_posts.user,
-// 					blog_posts.name,
-// 					blog_posts.alias,
-// 					blog_posts.content,
-// 					UNIX_TIMESTAMP(blog_posts.datetime) AS datetime,
-// 					blog_posts.active
-// 				FROM
-// 					blog_posts
-// 				WHERE
-// 					blog_posts.active = 1
-// 				ORDER BY
-// 					blog_posts.id `+order+`
-// 				LIMIT ?, ?;
-// 			`, limit_offset, pear_page)
-// 		} else {
-// 			rows, err = this.wrap.DB.Query(`
-// 				SELECT
-// 					blog_posts.id,
-// 					blog_posts.user,
-// 					blog_posts.name,
-// 					blog_posts.alias,
-// 					blog_posts.content,
-// 					UNIX_TIMESTAMP(blog_posts.datetime) AS datetime,
-// 					blog_posts.active
-// 				FROM
-// 					blog_posts
-// 					LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
-// 				WHERE
-// 					blog_posts.active = 1 AND
-// 					blog_cat_post_rel.category_id = ?
-// 				ORDER BY
-// 					blog_posts.id `+order+`
-// 				LIMIT ?, ?;
-// 			`, cat, limit_offset, pear_page)
-// 		}
+func (this *Blog) init() {
+	if this == nil {
+		return
+	}
+	sql_nums := `
+		SELECT
+			COUNT(*)
+		FROM
+			blog_posts
+		WHERE
+			active = 1
+		;
+	`
+	sql_rows := `
+		SELECT
+			id,
+			user,
+			name,
+			alias,
+			content,
+			UNIX_TIMESTAMP(datetime) as datetime,
+			active
+		FROM
+			blog_posts
+		WHERE
+			active = 1
+		ORDER BY
+			id DESC
+		LIMIT ?, ?;
+	`
 
-// 		if err == nil {
-// 			var f_id int
-// 			var f_user int
-// 			var f_name string
-// 			var f_alias string
-// 			var f_content string
-// 			var f_datetime int
-// 			var f_active int
-// 			for rows.Next() {
-// 				err = rows.Scan(&f_id, &f_user, &f_name, &f_alias, &f_content, &f_datetime, &f_active)
-// 				if err == nil {
-// 					posts = append(posts, &BlogPost{
-// 						id:       f_id,
-// 						user:     f_user,
-// 						name:     f_name,
-// 						alias:    f_alias,
-// 						content:  f_content,
-// 						datetime: f_datetime,
-// 						active:   f_active,
-// 					})
-// 				}
-// 			}
-// 			rows.Close()
-// 		}
-// 		this.bufferPosts[buf] = posts
-// 	}
-// }
+	// Category selected
+	if this.category != nil {
+		var cat_ids []string
+		if rows, err := this.wrap.DB.Query(
+			`SELECT
+				node.id
+			FROM
+				blog_cats AS node,
+				blog_cats AS parent
+			WHERE
+				node.lft BETWEEN parent.lft AND parent.rgt AND
+				node.id > 1 AND
+				parent.id = ?
+			GROUP BY
+				node.id
+			ORDER BY
+				node.lft ASC
+			;`,
+			this.category.Id(),
+		); err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				var cat_id string
+				if err := rows.Scan(&cat_id); err == nil {
+					cat_ids = append(cat_ids, cat_id)
+				}
+			}
+		}
+		sql_nums = `
+			SELECT
+				COUNT(*)
+			FROM
+				(
+					SELECT
+						COUNT(*)
+					FROM
+						blog_posts
+						LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
+					WHERE
+						blog_posts.active = 1 AND
+						blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
+					GROUP BY
+						blog_posts.id
+				) AS tbl
+			;
+		`
+		sql_rows = `
+			SELECT
+				blog_posts.id,
+				blog_posts.user,
+				blog_posts.name,
+				blog_posts.alias,
+				blog_posts.content,
+				UNIX_TIMESTAMP(blog_posts.datetime) AS datetime,
+				blog_posts.active
+			FROM
+				blog_posts
+				LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
+			WHERE
+				blog_posts.active = 1 AND
+				blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
+			GROUP BY
+				blog_posts.id
+			ORDER BY
+				blog_posts.id DESC
+			LIMIT ?, ?;
+		`
+	}
 
-// func (this *FERData) BlogPosts() []*BlogPost {
-// 	return this.BlogPostsOrder("DESC")
-// }
+	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.postsCount); err == nil {
+		// TODO: to control panel settings
+		this.postsPerPage = 5
+		this.postsMaxPage = int(math.Ceil(float64(this.postsCount) / float64(this.postsPerPage)))
+		this.postsCurrPage = this.wrap.GetCurrentPage(this.postsMaxPage)
+		offset := this.postsCurrPage*this.postsPerPage - this.postsPerPage
+		if rows, err := this.wrap.DB.Query(sql_rows, offset, this.postsPerPage); err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				row := utils.MySql_blog_posts{}
+				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_content, &row.A_datetime, &row.A_active); err == nil {
+					this.posts = append(this.posts, &BlogPost{object: &row})
+				}
+			}
+		}
+	}
 
-// func (this *FERData) BlogPostsOrder(order string) []*BlogPost {
-// 	posts_order := "DESC"
+	// Build pagination
+	for i := 1; i <= this.postsMaxPage; i++ {
+		link := this.wrap.R.URL.Path
+		if i > 1 {
+			link = link + "?p=" + utils.IntToStr(i)
+		}
+		this.pagination = append(this.pagination, &BlogPagination{
+			Num:     utils.IntToStr(i),
+			Link:    link,
+			Current: i == this.postsCurrPage,
+		})
+	}
 
-// 	if strings.ToLower(order) == "asc" {
-// 		posts_order = "ASC"
-// 	}
+	// Pagination prev/next
+	if this.postsMaxPage > 1 {
+		link := this.wrap.R.URL.Path
+		if this.postsCurrPage-1 > 1 {
+			link = this.wrap.R.URL.Path + "?p=" + utils.IntToStr(this.postsCurrPage-1)
+		}
+		this.paginationPrev = &BlogPagination{
+			Num:     utils.IntToStr(this.postsCurrPage - 1),
+			Link:    link,
+			Current: this.postsCurrPage <= 1,
+		}
+		if this.postsCurrPage >= 1 && this.postsCurrPage < this.postsMaxPage {
+			link = this.wrap.R.URL.Path + "?p=" + utils.IntToStr(this.postsCurrPage+1)
+		} else {
+			link = this.wrap.R.URL.Path + "?p=" + utils.IntToStr(this.postsMaxPage)
+		}
+		this.paginationNext = &BlogPagination{
+			Num:     utils.IntToStr(this.postsCurrPage + 1),
+			Link:    link,
+			Current: this.postsCurrPage >= this.postsMaxPage,
+		}
+	}
+}
 
-// 	buf := "posts_" + posts_order
-// 	this.postsToBuffer(buf, 0, posts_order)
-// 	return this.bufferPosts[buf]
-// }
+func (this *Blog) Category() *BlogCategory {
+	if this == nil {
+		return nil
+	}
+	return this.category
+}
 
-// func (this *FERData) BlogPostsOfCat(cat int) []*BlogPost {
-// 	return this.BlogPostsOfCatOrder(cat, "DESC")
-// }
+func (this *Blog) Post() *BlogPost {
+	if this == nil {
+		return nil
+	}
+	return this.post
+}
 
-// func (this *FERData) BlogPostsOfCatOrder(cat int, order string) []*BlogPost {
-// 	posts_order := "DESC"
+func (this *Blog) HavePosts() bool {
+	if this == nil {
+		return false
+	}
+	if len(this.posts) <= 0 {
+		return false
+	}
+	return true
+}
 
-// 	if strings.ToLower(order) == "asc" {
-// 		posts_order = "ASC"
-// 	}
+func (this *Blog) Posts() []*BlogPost {
+	if this == nil {
+		return []*BlogPost{}
+	}
+	return this.posts
+}
 
-// 	buf := "posts_" + posts_order + "_" + utils.IntToStr(cat)
-// 	this.postsToBuffer(buf, cat, posts_order)
-// 	return this.bufferPosts[buf]
-// }
+func (this *Blog) PostsCount() int {
+	if this == nil {
+		return 0
+	}
+	return this.postsCount
+}
+
+func (this *Blog) PostsPerPage() int {
+	if this == nil {
+		return 0
+	}
+	return this.postsPerPage
+}
+
+func (this *Blog) PostsMaxPage() int {
+	if this == nil {
+		return 0
+	}
+	return this.postsMaxPage
+}
+
+func (this *Blog) PostsCurrPage() int {
+	if this == nil {
+		return 0
+	}
+	return this.postsCurrPage
+}
+
+func (this *Blog) Pagination() []*BlogPagination {
+	if this == nil {
+		return []*BlogPagination{}
+	}
+	return this.pagination
+}
+
+func (this *Blog) PaginationPrev() *BlogPagination {
+	if this == nil {
+		return nil
+	}
+	return this.paginationPrev
+}
+
+func (this *Blog) PaginationNext() *BlogPagination {
+	if this == nil {
+		return nil
+	}
+	return this.paginationNext
+}
+
+func (this *Blog) Categories() []*BlogCategory {
+	if this == nil {
+		return []*BlogCategory{}
+	}
+	if this.bufferCats == nil {
+		this.bufferCats = map[string][]*BlogCategory{}
+	}
+	key := ""
+	if _, ok := this.bufferCats[key]; !ok {
+		var cats []*BlogCategory
+		if rows, err := this.wrap.DB.Query(
+			`SELECT
+				node.id,
+				node.user,
+				node.name,
+				node.alias,
+				node.lft,
+				node.rgt
+			FROM
+				blog_cats AS node,
+				blog_cats AS parent
+			WHERE
+				node.lft BETWEEN parent.lft AND parent.rgt AND
+				node.id > 1
+			GROUP BY
+				node.id
+			ORDER BY
+				node.lft ASC
+			;`,
+		); err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				row := utils.MySql_blog_category{}
+				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_lft, &row.A_rgt); err == nil {
+					cats = append(cats, &BlogCategory{object: &row})
+				}
+			}
+		}
+		this.bufferCats[key] = cats
+	}
+	return this.bufferCats[key]
+}

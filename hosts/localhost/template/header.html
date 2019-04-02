@@ -12,12 +12,12 @@
 		<title>
 			{{if not (eq $.Data.Module "404")}}
 				{{if eq $.Data.Module "index"}}
-					{{$.Data.MetaTitle}}
+					{{$.Data.Page.Name}}
 				{{else if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}}
 					{{if eq $.Data.Module "blog-category"}}
-						Posts of category "{{$.Data.Name}}" | Blog
+						Posts of category "{{$.Data.Blog.Category.Name}}" | Blog
 					{{else if eq $.Data.Module "blog-post"}}
-						{{$.Data.Name}} | Blog
+						{{$.Data.Blog.Post.Name}} | Blog
 					{{else}}
 						Latest posts | Blog
 					{{end}}
@@ -26,8 +26,8 @@
 				Error 404
 			{{end}}
 		</title>
-		<meta name="keywords" content="{{$.Data.MetaKeywords}}" />
-		<meta name="description" content="{{$.Data.MetaDescription}}" />
+		<meta name="keywords" content="{{$.Data.Page.MetaKeywords}}" />
+		<meta name="description" content="{{$.Data.Page.MetaDescription}}" />
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 
 		<!-- Template CSS file from template folder -->
@@ -46,14 +46,14 @@
 					</button>
 					<div class="collapse navbar-collapse" id="navbarResponsive">
 						<ul class="navbar-nav ml-auto">
-							<li class="nav-item{{if eq $.Data.Alias "/"}} active{{end}}">
+							<li class="nav-item{{if eq $.Data.Page.Alias "/"}} active{{end}}">
 								<a class="nav-link" href="/">Home</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link{{if eq $.Data.Alias "/another/"}} active{{end}}" href="/another/">Another</a>
+								<a class="nav-link{{if eq $.Data.Page.Alias "/another/"}} active{{end}}" href="/another/">Another</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link{{if eq $.Data.Alias "/about/"}} active{{end}}" href="/about/">About</a>
+								<a class="nav-link{{if eq $.Data.Page.Alias "/about/"}} active{{end}}" href="/about/">About</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link{{if eq $.Data.Module "404"}} active{{end}}" href="/not-existent-page/">404</a>
@@ -71,7 +71,7 @@
 						<h1 class="text-left text-white m-0 p-0 py-5">
 							{{if not (eq $.Data.Module "404")}}
 								{{if eq $.Data.Module "index"}}
-									{{if eq $.Data.Alias "/"}}
+									{{if eq $.Data.Page.Alias "/"}}
 										Welcome to home page
 									{{else}}
 										Welcome to some another page

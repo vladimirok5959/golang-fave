@@ -68,19 +68,14 @@ func (this *Modules) RegisterModule_Index() *Module {
 			return
 		}
 
-		// Replace title with page name
-		if row.A_meta_title == "" {
-			row.A_meta_title = row.A_name
-		}
-
 		// Which template
-		tmpl_name := "index"
+		tname := "index"
 		if wrap.R.URL.Path != "/" {
-			tmpl_name = "page"
+			tname = "page"
 		}
 
 		// Render template
-		wrap.RenderFrontEnd(tmpl_name, fetdata.New(wrap, row, false), http.StatusOK)
+		wrap.RenderFrontEnd(tname, fetdata.New(wrap, row, false), http.StatusOK)
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""

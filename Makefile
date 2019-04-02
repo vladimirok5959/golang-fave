@@ -65,3 +65,6 @@ cy:
 
 ab:
 	ab -kc 10 -t 120 http://localhost:8080/
+	ab -kc 10 -t 120 http://localhost:8080/another/
+	ab -kc 10 -t 120 http://localhost:8080/not-existent-page/
+	ab -kc 10 -t 120 http://localhost:8080/blog/
