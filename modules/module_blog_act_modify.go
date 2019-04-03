@@ -17,6 +17,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		pf_id := wrap.R.FormValue("id")
 		pf_name := wrap.R.FormValue("name")
 		pf_alias := wrap.R.FormValue("alias")
+		pf_briefly := wrap.R.FormValue("briefly")
 		pf_content := wrap.R.FormValue("content")
 		pf_active := wrap.R.FormValue("active")
 
@@ -51,6 +52,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 						user = ?,
 						name = ?,
 						alias = ?,
+						briefly = ?,
 						content = ?,
 						datetime = ?,
 						active = ?
@@ -58,6 +60,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					wrap.User.A_id,
 					pf_name,
 					pf_alias,
+					pf_briefly,
 					pf_content,
 					utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
 					pf_active,
@@ -130,6 +133,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					`UPDATE blog_posts SET
 						name = ?,
 						alias = ?,
+						briefly = ?,
 						content = ?,
 						active = ?
 					WHERE
@@ -137,6 +141,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					;`,
 					pf_name,
 					pf_alias,
+					pf_briefly,
 					pf_content,
 					pf_active,
 					utils.StrToInt(pf_id),

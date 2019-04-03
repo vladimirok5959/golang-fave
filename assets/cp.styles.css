@@ -348,6 +348,10 @@ ul.pagination {
 	min-height: 5.4rem;
 }
 
+.data-form textarea.briefly {
+	min-height: 3.9rem;
+}
+
 /* Checkbox style iOS */
 .checkbox-ios {
 	display: inline-block;
@@ -438,8 +442,8 @@ ul.pagination {
 		margin-bottom: 0px;
 	}
 
-	.data-form.blog-add .form-group.n6,
-	.data-form.blog-modify .form-group.n6 {
+	.data-form.blog-add .form-group.n7,
+	.data-form.blog-modify .form-group.n7 {
 		margin-bottom: 0px;
 	}
 

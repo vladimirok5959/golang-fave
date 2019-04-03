@@ -50,6 +50,7 @@ func (this *Blog) init() {
 			user,
 			name,
 			alias,
+			briefly,
 			content,
 			UNIX_TIMESTAMP(datetime) as datetime,
 			active
@@ -114,6 +115,7 @@ func (this *Blog) init() {
 				blog_posts.user,
 				blog_posts.name,
 				blog_posts.alias,
+				blog_posts.briefly,
 				blog_posts.content,
 				UNIX_TIMESTAMP(blog_posts.datetime) AS datetime,
 				blog_posts.active
@@ -140,8 +142,8 @@ func (this *Blog) init() {
 		if rows, err := this.wrap.DB.Query(sql_rows, offset, this.postsPerPage); err == nil {
 			defer rows.Close()
 			for rows.Next() {
-				row := utils.MySql_blog_posts{}
-				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_content, &row.A_datetime, &row.A_active); err == nil {
+				row := utils.MySql_blog_post{}
+				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_briefly, &row.A_content, &row.A_datetime, &row.A_active); err == nil {
 					this.posts = append(this.posts, &BlogPost{object: &row})
 				}
 			}
@@ -265,7 +267,7 @@ func (this *Blog) PaginationNext() *BlogPagination {
 	return this.paginationNext
 }
 
-func (this *Blog) Categories() []*BlogCategory {
+func (this *Blog) Categories(mlvl int) []*BlogCategory {
 	if this == nil {
 		return []*BlogCategory{}
 	}
@@ -273,33 +275,46 @@ func (this *Blog) Categories() []*BlogCategory {
 		this.bufferCats = map[string][]*BlogCategory{}
 	}
 	key := ""
+	where := ``
+	if mlvl > 0 {
+		where += `AND tbl.depth <= ` + utils.IntToStr(mlvl)
+	}
 	if _, ok := this.bufferCats[key]; !ok {
 		var cats []*BlogCategory
-		if rows, err := this.wrap.DB.Query(
-			`SELECT
-				node.id,
-				node.user,
-				node.name,
-				node.alias,
-				node.lft,
-				node.rgt
+		if rows, err := this.wrap.DB.Query(`
+			SELECT
+				tbl.*
 			FROM
-				blog_cats AS node,
-				blog_cats AS parent
+				(
+					SELECT
+						node.id,
+						node.user,
+						node.name,
+						node.alias,
+						node.lft,
+						node.rgt,
+						(COUNT(parent.id) - 1) AS depth
+					FROM
+						blog_cats AS node,
+						blog_cats AS parent
+					WHERE
+						node.lft BETWEEN parent.lft AND parent.rgt
+					GROUP BY
+						node.id
+					ORDER BY
+						node.lft ASC
+				) AS tbl
 			WHERE
-				node.lft BETWEEN parent.lft AND parent.rgt AND
-				node.id > 1
-			GROUP BY
-				node.id
-			ORDER BY
-				node.lft ASC
-			;`,
-		); err == nil {
+				tbl.id > 1
+				` + where + `
+			;
+		`); err == nil {
 			defer rows.Close()
 			for rows.Next() {
 				row := utils.MySql_blog_category{}
-				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_lft, &row.A_rgt); err == nil {
-					cats = append(cats, &BlogCategory{object: &row})
+				var Depth int
+				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_lft, &row.A_rgt, &Depth); err == nil {
+					cats = append(cats, &BlogCategory{object: &row, depth: Depth})
 				}
 			}
 		}

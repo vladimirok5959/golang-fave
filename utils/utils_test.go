@@ -56,6 +56,18 @@ func TestIsValidAlias(t *testing.T) {
 	Expect(t, IsValidAlias(""), false)
 	Expect(t, IsValidAlias("some-page"), false)
 	Expect(t, IsValidAlias("/some page/"), false)
+
+	Expect(t, IsValidAlias("/cp"), false)
+	Expect(t, IsValidAlias("/cp/"), false)
+	Expect(t, IsValidAlias("/cp/some"), false)
+	Expect(t, IsValidAlias("/cp-1"), true)
+	Expect(t, IsValidAlias("/cp-some"), true)
+
+	Expect(t, IsValidAlias("/blog"), false)
+	Expect(t, IsValidAlias("/blog/"), false)
+	Expect(t, IsValidAlias("/blog/some"), false)
+	Expect(t, IsValidAlias("/blog-1"), true)
+	Expect(t, IsValidAlias("/blog-some"), true)
 }
 
 func TestIsValidSingleAlias(t *testing.T) {

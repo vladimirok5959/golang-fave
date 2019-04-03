@@ -57,6 +57,18 @@ func IsValidEmail(email string) bool {
 }
 
 func IsValidAlias(alias string) bool {
+	// Control panel
+	regexpeCP := regexp.MustCompile(`^\/cp\/`)
+	if alias == "/cp" || regexpeCP.MatchString(alias) {
+		return false
+	}
+
+	// Blog module
+	regexpeBlog := regexp.MustCompile(`^\/blog\/`)
+	if alias == "/blog" || regexpeBlog.MatchString(alias) {
+		return false
+	}
+
 	regexpeSlash := regexp.MustCompile(`[\/]{2,}`)
 	regexpeChars := regexp.MustCompile(`^\/([a-zA-Z0-9\/\-_\.]+)\/?$`)
 	return (!regexpeSlash.MatchString(alias) && regexpeChars.MatchString(alias)) || alias == "/"

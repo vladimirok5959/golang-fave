@@ -80,7 +80,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			return
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] != "" {
 			// Blog post
-			row := &utils.MySql_blog_posts{}
+			row := &utils.MySql_blog_post{}
 			err := wrap.DB.QueryRow(`
 				SELECT
 					id,
@@ -312,7 +312,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				})
 			}
 
-			data := utils.MySql_blog_posts{
+			data := utils.MySql_blog_post{
 				A_id:       0,
 				A_user:     0,
 				A_name:     "",
@@ -335,6 +335,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						user,
 						name,
 						alias,
+						briefly,
 						content,
 						active
 					FROM
@@ -348,6 +349,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					&data.A_user,
 					&data.A_name,
 					&data.A_alias,
+					&data.A_briefly,
 					&data.A_content,
 					&data.A_active,
 				)
@@ -427,6 +429,13 @@ func (this *Modules) RegisterModule_Blog() *Module {
 							</div>
 						</div>`
 					},
+				},
+				{
+					Kind:    builder.DFKTextArea,
+					Caption: "Briefly",
+					Name:    "briefly",
+					Value:   data.A_briefly,
+					Classes: "briefly autosize",
 				},
 				{
 					Kind:    builder.DFKTextArea,

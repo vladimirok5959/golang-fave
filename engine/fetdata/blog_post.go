@@ -8,7 +8,7 @@ import (
 )
 
 type BlogPost struct {
-	object *utils.MySql_blog_posts
+	object *utils.MySql_blog_post
 }
 
 func (this *BlogPost) Id() int {
@@ -37,6 +37,13 @@ func (this *BlogPost) Alias() string {
 		return ""
 	}
 	return this.object.A_alias
+}
+
+func (this *BlogPost) Briefly() template.HTML {
+	if this == nil {
+		return template.HTML("")
+	}
+	return template.HTML(this.object.A_briefly)
 }
 
 func (this *BlogPost) Content() template.HTML {

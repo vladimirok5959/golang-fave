@@ -6,6 +6,7 @@ import (
 
 type BlogCategory struct {
 	object *utils.MySql_blog_category
+	depth  int
 }
 
 func (this *BlogCategory) Id() int {
@@ -55,4 +56,11 @@ func (this *BlogCategory) Permalink() string {
 		return ""
 	}
 	return "/blog/category/" + this.object.A_alias + "/"
+}
+
+func (this *BlogCategory) Level() int {
+	if this == nil {
+		return 0
+	}
+	return this.depth
 }

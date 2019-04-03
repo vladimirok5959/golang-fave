@@ -24,6 +24,7 @@ CREATE TABLE `blog_posts` (
 	`user` int(11) NOT NULL COMMENT 'User id',
 	`name` varchar(255) NOT NULL COMMENT 'Post name',
 	`alias` varchar(255) NOT NULL COMMENT 'Post alias',
+	`briefly` text NOT NULL COMMENT 'Post brief content',
 	`content` text NOT NULL COMMENT 'Post content',
 	`datetime` datetime NOT NULL COMMENT 'Creation date/time',
 	`active` int(1) NOT NULL COMMENT 'Is active post or not',

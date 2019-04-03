@@ -30,7 +30,7 @@ func New(wrap *wrapper.Wrapper, drow interface{}, is404 bool) *FERData {
 				d_Blog.init()
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] != "" {
-			if o, ok := drow.(*utils.MySql_blog_posts); ok {
+			if o, ok := drow.(*utils.MySql_blog_post); ok {
 				d_Blog = &Blog{wrap: wrap, post: &BlogPost{object: o}}
 				d_Blog.init()
 			}
