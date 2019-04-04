@@ -54,7 +54,9 @@ type Wrapper struct {
 func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool) *Wrapper {
 
 	conf := configNew()
-	_ = conf.configRead(dirConfig + string(os.PathSeparator) + "config.json")
+	if err := conf.configRead(dirConfig + string(os.PathSeparator) + "config.json"); err != nil {
+		l.Log("Host config file: %s", r, true, err.Error())
+	}
 
 	return &Wrapper{
 		l:             l,
