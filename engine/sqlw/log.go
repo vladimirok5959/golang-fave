@@ -11,10 +11,6 @@ import (
 )
 
 func log(query string, s time.Time, e error, transaction bool) {
-	color := "0;33"
-	if transaction {
-		color = "1;33"
-	}
 	msg := query
 	if reg, err := regexp.Compile("[\\s\\t]+"); err == nil {
 		msg = strings.Trim(reg.ReplaceAllString(msg, " "), " ")
@@ -29,6 +25,10 @@ func log(query string, s time.Time, e error, transaction bool) {
 	if consts.IS_WIN {
 		fmt.Fprintln(os.Stdout, "[SQL] "+msg+eStr+fmt.Sprintf(" %.3f ms", time.Now().Sub(s).Seconds()))
 	} else {
+		color := "0;33"
+		if transaction {
+			color = "1;33"
+		}
 		fmt.Fprintln(os.Stdout, "\033["+color+"m[SQL] "+msg+eStr+fmt.Sprintf(" %.3f ms", time.Now().Sub(s).Seconds())+"\033[0m")
 	}
 }
