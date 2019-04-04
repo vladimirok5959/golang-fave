@@ -12,6 +12,7 @@ type BlogPagination struct {
 	Num     string
 	Link    string
 	Current bool
+	Dots    bool
 }
 
 type Blog struct {
@@ -134,8 +135,11 @@ func (this *Blog) init() {
 	}
 
 	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.postsCount); err == nil {
-		// TODO: to control panel settings
-		this.postsPerPage = 5
+		if this.category == nil {
+			this.postsPerPage = (*this.wrap.Config).Blog.Pagination.Index
+		} else {
+			this.postsPerPage = (*this.wrap.Config).Blog.Pagination.Category
+		}
 		this.postsMaxPage = int(math.Ceil(float64(this.postsCount) / float64(this.postsPerPage)))
 		this.postsCurrPage = this.wrap.GetCurrentPage(this.postsMaxPage)
 		offset := this.postsCurrPage*this.postsPerPage - this.postsPerPage
@@ -151,16 +155,69 @@ func (this *Blog) init() {
 	}
 
 	// Build pagination
-	for i := 1; i <= this.postsMaxPage; i++ {
+	if true {
+		for i := 1; i < this.postsCurrPage; i++ {
+			if this.postsCurrPage >= 5 && i > 1 && i < this.postsCurrPage-1 {
+				continue
+			}
+			if this.postsCurrPage >= 5 && i > 1 && i < this.postsCurrPage {
+				this.pagination = append(this.pagination, &BlogPagination{
+					Dots: true,
+				})
+			}
+			link := this.wrap.R.URL.Path
+			if i > 1 {
+				link = link + "?p=" + utils.IntToStr(i)
+			}
+			this.pagination = append(this.pagination, &BlogPagination{
+				Num:     utils.IntToStr(i),
+				Link:    link,
+				Current: false,
+			})
+		}
+
+		// Current page
 		link := this.wrap.R.URL.Path
-		if i > 1 {
-			link = link + "?p=" + utils.IntToStr(i)
+		if this.postsCurrPage > 1 {
+			link = link + "?p=" + utils.IntToStr(this.postsCurrPage)
 		}
 		this.pagination = append(this.pagination, &BlogPagination{
-			Num:     utils.IntToStr(i),
+			Num:     utils.IntToStr(this.postsCurrPage),
 			Link:    link,
-			Current: i == this.postsCurrPage,
+			Current: true,
 		})
+
+		for i := this.postsCurrPage + 1; i <= this.postsMaxPage; i++ {
+			if this.postsCurrPage < this.postsMaxPage-3 && i == this.postsCurrPage+3 {
+				this.pagination = append(this.pagination, &BlogPagination{
+					Dots: true,
+				})
+			}
+			if this.postsCurrPage < this.postsMaxPage-3 && i > this.postsCurrPage+1 && i <= this.postsMaxPage-1 {
+				continue
+			}
+			link := this.wrap.R.URL.Path
+			if i > 1 {
+				link = link + "?p=" + utils.IntToStr(i)
+			}
+			this.pagination = append(this.pagination, &BlogPagination{
+				Num:     utils.IntToStr(i),
+				Link:    link,
+				Current: false,
+			})
+		}
+	} else {
+		for i := 1; i <= this.postsMaxPage; i++ {
+			link := this.wrap.R.URL.Path
+			if i > 1 {
+				link = link + "?p=" + utils.IntToStr(i)
+			}
+			this.pagination = append(this.pagination, &BlogPagination{
+				Num:     utils.IntToStr(i),
+				Link:    link,
+				Current: i == this.postsCurrPage,
+			})
+		}
 	}
 
 	// Pagination prev/next

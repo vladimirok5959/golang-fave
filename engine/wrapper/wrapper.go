@@ -45,12 +45,17 @@ type Wrapper struct {
 	CurrModule      string
 	CurrSubModule   string
 	MSPool          *mysqlpool.MySqlPool
+	Config          *Config
 
 	DB   *sqlw.DB
 	User *utils.MySql_user
 }
 
 func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool) *Wrapper {
+
+	conf := configNew()
+	_ = conf.configRead(dirConfig + string(os.PathSeparator) + "config.json")
+
 	return &Wrapper{
 		l:             l,
 		W:             w,
@@ -68,6 +73,7 @@ func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Se
 		CurrModule:    "",
 		CurrSubModule: "",
 		MSPool:        mp,
+		Config:        conf,
 	}
 }
 
@@ -275,4 +281,8 @@ func (this *Wrapper) GetCurrentPage(max int) int {
 		}
 	}
 	return curr
+}
+
+func (this *Wrapper) ConfigSave() error {
+	return this.Config.configWrite(this.DConfig + string(os.PathSeparator) + "config.json")
 }

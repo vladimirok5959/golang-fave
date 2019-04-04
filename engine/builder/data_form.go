@@ -10,6 +10,7 @@ import (
 const (
 	DFKHidden = iota
 	DFKText
+	DFKNumber
 	DFKEmail
 	DFKPassword
 	DFKTextArea
@@ -28,6 +29,8 @@ type DataFormField struct {
 	Target      string
 	Required    bool
 	Classes     string
+	Min         string
+	Max         string
 	CallBack    func(field *DataFormField) string
 }
 
@@ -73,6 +76,15 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				html_element += `<div>`
 				if field.Kind == DFKText {
 					html_element += `<input class="form-control` + classes + `" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+				} else if field.Kind == DFKNumber {
+					html_element += `<input class="form-control` + classes + `" type="number" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" `
+					if field.Min != "" {
+						html_element += `min="` + field.Min + `" `
+					}
+					if field.Max != "" {
+						html_element += `max="` + field.Max + `" `
+					}
+					html_element += `placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKEmail {
 					html_element += `<input class="form-control` + classes + `" type="email" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKPassword {

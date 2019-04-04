@@ -34,9 +34,13 @@
 					</li>
 				{{end}}
 				{{range $.Data.Blog.Pagination}}
-					<li class="page-item{{if .Current}} active{{end}}">
-						<a class="page-link" href="{{.Link}}">{{.Num}}</a>
-					</li>
+					{{if .Dots}}
+						<li class="page-item disabled"><a class="page-link" href="">...</a></li>
+					{{else}}
+						<li class="page-item{{if .Current}} active{{end}}">
+							<a class="page-link" href="{{.Link}}">{{.Num}}</a>
+						</li>
+					{{end}}
 				{{end}}
 				{{if $.Data.Blog.PaginationNext}}
 					<li class="page-item{{if $.Data.Blog.PaginationNext.Current}} disabled{{end}}">

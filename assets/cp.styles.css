@@ -456,6 +456,10 @@ ul.pagination {
 	.data-form.users-modify .form-group.n7 {
 		margin-bottom: 0px;
 	}
+
+	.data-form.settings-pagination .form-group.n2 {
+		margin-bottom: 0px;
+	}
 }
 
 @media (max-width: 575px) {
