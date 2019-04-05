@@ -389,6 +389,12 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			}
 		}
 
+		// Create first config file
+		if err := wrap.ConfigSave(); err != nil {
+			wrap.MsgError(err.Error())
+			return
+		}
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})
