@@ -413,21 +413,20 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Name:    "cats",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n4">
-							<div class="row">
-								<div class="col-md-3">
-									<label for="lbl_parent">Categories</label>
-								</div>
-								<div class="col-md-9">
-									<div>
-										<select class="form-control" id="lbl_cats" name="cats[]" multiple>
-											<!--<option value=""></option>-->
-											` + this.blog_GetCategorySelectOptions(wrap, 0, 0, selids) + `
-										</select>
-									</div>
-								</div>
-							</div>
-						</div>`
+						return `<div class="form-group n4">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_parent">Categories</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<select class="form-control" id="lbl_cats" name="cats[]" multiple>` +
+							this.blog_GetCategorySelectOptions(wrap, 0, 0, selids) +
+							`</select>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
 					},
 				},
 				{
@@ -548,21 +547,21 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Name:    "parent",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n2">
-							<div class="row">
-								<div class="col-md-3">
-									<label for="lbl_parent">Parent</label>
-								</div>
-								<div class="col-md-9">
-									<div>
-										<select class="form-control" id="lbl_parent" name="parent">
-											<option value="0">&mdash;</option>
-											` + this.blog_GetCategorySelectOptions(wrap, data.A_id, parentId, []int{}) + `
-										</select>
-									</div>
-								</div>
-							</div>
-						</div>`
+						return `<div class="form-group n2">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_parent">Parent</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<select class="form-control" id="lbl_parent" name="parent">` +
+							`<option value="0">&mdash;</option>` +
+							this.blog_GetCategorySelectOptions(wrap, data.A_id, parentId, []int{}) +
+							`</select>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
 					},
 				},
 				{
