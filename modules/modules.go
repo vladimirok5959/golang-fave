@@ -19,6 +19,7 @@ type MISub struct {
 	Name  string
 	Icon  string
 	Show  bool
+	Sep   bool
 }
 
 type MInfo struct {
@@ -143,21 +144,25 @@ func (this *Modules) getSidebarModuleSubMenu(wrap *wrapper.Wrapper, mod *MInfo) 
 	if mod.Sub != nil {
 		for _, item := range *mod.Sub {
 			if item.Show {
-				class := ""
-				if (item.Mount == "default" && len(wrap.UrlArgs) <= 1) || (len(wrap.UrlArgs) >= 2 && item.Mount == wrap.UrlArgs[1]) {
-					class = " active"
+				if !item.Sep {
+					class := ""
+					if (item.Mount == "default" && len(wrap.UrlArgs) <= 1) || (len(wrap.UrlArgs) >= 2 && item.Mount == wrap.UrlArgs[1]) {
+						class = " active"
+					}
+					icon := item.Icon
+					if icon == "" {
+						icon = assets.SysSvgIconGear
+					}
+					href := "/cp/" + mod.Mount + "/" + item.Mount + "/"
+					if mod.Mount == "index" && item.Mount == "default" {
+						href = "/cp/"
+					} else if item.Mount == "default" {
+						href = "/cp/" + mod.Mount + "/"
+					}
+					html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + item.Name + `</a></li>`
+				} else {
+					html += `<li class="nav-separator"></li>`
 				}
-				icon := item.Icon
-				if icon == "" {
-					icon = assets.SysSvgIconGear
-				}
-				href := "/cp/" + mod.Mount + "/" + item.Mount + "/"
-				if mod.Mount == "index" && item.Mount == "default" {
-					href = "/cp/"
-				} else if item.Mount == "default" {
-					href = "/cp/" + mod.Mount + "/"
-				}
-				html += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + item.Name + `</a></li>`
 			}
 		}
 		if html != "" {
@@ -265,7 +270,6 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 							wrap.MsgError(err.Error())
 							return true
 						}
-						defer wrap.DB.Close()
 					}
 					if act.Info.WantUser || act.Info.WantAdmin {
 						if !wrap.LoadSessionUser() {
@@ -308,7 +312,6 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 					utils.SystemErrorPageEngine(wrap.W, err)
 					return true
 				}
-				defer wrap.DB.Close()
 			}
 			mod.Front(wrap)
 			return true

@@ -15,12 +15,10 @@ func DataTableAction(data *[]DataTableActionRow) string {
 		if row.Target != "" {
 			target = ` target="` + row.Target + `"`
 		}
-
 		classes := row.Classes
 		if classes != "" {
 			classes = " " + classes
 		}
-
 		result += `<a class="ico` + classes + `" title="` + row.Hint + `" href="` +
 			row.Href + `"` + target + `>` + row.Icon + `</a>`
 	}

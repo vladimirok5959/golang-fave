@@ -4,11 +4,13 @@ import (
 	"html"
 
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 const (
 	DFKHidden = iota
 	DFKText
+	DFKNumber
 	DFKEmail
 	DFKPassword
 	DFKTextArea
@@ -27,6 +29,8 @@ type DataFormField struct {
 	Target      string
 	Required    bool
 	Classes     string
+	Min         string
+	Max         string
 	CallBack    func(field *DataFormField) string
 }
 
@@ -36,7 +40,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 	var html_message string
 	var html_button string
 
-	for _, field := range data {
+	for i, field := range data {
 		if field.Kind == DFKHidden {
 			if field.CallBack != nil {
 				html_hidden += field.CallBack(&field)
@@ -57,7 +61,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 					classes = " " + classes
 				}
 
-				html_element += `<div class="form-group">`
+				html_element += `<div class="form-group n` + utils.IntToStr(i) + `">`
 				html_element += `<div class="row">`
 				html_element += `<div class="col-md-3">`
 
@@ -72,6 +76,15 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				html_element += `<div>`
 				if field.Kind == DFKText {
 					html_element += `<input class="form-control` + classes + `" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+				} else if field.Kind == DFKNumber {
+					html_element += `<input class="form-control` + classes + `" type="number" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" `
+					if field.Min != "" {
+						html_element += `min="` + field.Min + `" `
+					}
+					if field.Max != "" {
+						html_element += `max="` + field.Max + `" `
+					}
+					html_element += `placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKEmail {
 					html_element += `<input class="form-control` + classes + `" type="email" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKPassword {
@@ -125,6 +138,6 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 		html_hidden = `<div class="hidden">` + html_hidden + `</div>`
 	}
 
-	return `<form class="data-form prev-data-lost" action="/cp/" method="post" autocomplete="off">` +
+	return `<form class="data-form ` + wrap.CurrModule + `-` + wrap.CurrSubModule + ` prev-data-lost" action="/cp/" method="post" autocomplete="off">` +
 		html_hidden + html_element + html_message + html_button + `</form>`
 }

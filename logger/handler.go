@@ -29,16 +29,13 @@ func (this handler) log(w *writer, r *http.Request) {
 		fmt.Sprintf("%.3f ms", time.Now().Sub(w.s).Seconds()),
 	}, " "))
 
-	// Do not wait
-	go func() {
-		select {
-		case this.c <- logMsg{r.Host, msg, w.status >= 400}:
-			return
-		case <-time.After(1 * time.Second):
-			fmt.Println("Logger error, log channel is overflowed (2)")
-			return
-		}
-	}()
+	select {
+	case this.c <- logMsg{r.Host, msg, w.status >= 400}:
+		return
+	case <-time.After(1 * time.Second):
+		fmt.Println("Logger error, log channel is overflowed (2)")
+		return
+	}
 }
 
 func (this handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

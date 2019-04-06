@@ -1,4 +1,4 @@
-VERSION="1.0.2"
+VERSION="1.0.3"
 
 default: debug test run
 
@@ -56,3 +56,15 @@ docker-clr:
 	@-docker stop fave-test
 	@-docker rm fave-test
 	@-docker rmi fave
+
+cy-dev:
+	yarn cypress open
+
+cy:
+	yarn cypress run
+
+ab:
+	ab -kc 10 -t 120 http://localhost:8080/
+	ab -kc 10 -t 120 http://localhost:8080/another/
+	ab -kc 10 -t 120 http://localhost:8080/not-existent-page/
+	ab -kc 10 -t 120 http://localhost:8080/blog/

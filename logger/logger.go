@@ -125,22 +125,23 @@ func New() *Logger {
 	return &lg
 }
 
-func (this *Logger) Log(msg string, r *http.Request, isError bool) {
+func (this *Logger) Log(msg string, r *http.Request, isError bool, vars ...interface{}) {
 	var host string = ""
 	if r != nil {
 		host = r.Host
 	}
 
-	// Do not wait
-	go func() {
-		select {
-		case this.cdata <- logMsg{host, msg, isError}:
-			return
-		case <-time.After(1 * time.Second):
-			fmt.Println("Logger error, log channel is overflowed (1)")
-			return
-		}
-	}()
+	if len(vars) > 0 {
+		msg = fmt.Sprintf(msg, vars...)
+	}
+
+	select {
+	case this.cdata <- logMsg{host, msg, isError}:
+		return
+	case <-time.After(1 * time.Second):
+		fmt.Println("Logger error, log channel is overflowed (1)")
+		return
+	}
 }
 
 func (this *Logger) SetWwwDir(dir string) {

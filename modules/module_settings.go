@@ -9,6 +9,7 @@ import (
 	"golang-fave/consts"
 	"golang-fave/engine/builder"
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterModule_Settings() *Module {
@@ -21,6 +22,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		Icon:   assets.SysSvgIconGear,
 		Sub: &[]MISub{
 			{Mount: "default", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
+			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconList},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
@@ -43,7 +45,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 				{
 					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group"><div class="row"><div class="col-12"><textarea class="form-control autosize" id="lbl_content" name="content" placeholder="" autocomplete="off">` + html.EscapeString(string(fcont)) + `</textarea></div></div></div>`
+						return `<div class="form-group last"><div class="row"><div class="col-12"><textarea class="form-control autosize" id="lbl_content" name="content" placeholder="" autocomplete="off">` + html.EscapeString(string(fcont)) + `</textarea></div></div></div>`
 					},
 				},
 				{
@@ -61,27 +63,47 @@ func (this *Modules) RegisterModule_Settings() *Module {
 			})
 
 			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+		} else if wrap.CurrSubModule == "pagination" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Pagination"},
+			})
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "settings-pagination",
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Blog main page",
+					Name:     "blog-index",
+					Min:      "1",
+					Max:      "100",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Blog.Pagination.Index),
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Blog category page",
+					Name:     "blog-category",
+					Min:      "1",
+					Max:      "100",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Blog.Pagination.Category),
+				},
+				{
+					Kind: builder.DFKMessage,
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Save",
+					Target: "add-edit-button",
+				},
+			})
+
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
 		}
 		return this.getSidebarModules(wrap), content, sidebar
-	})
-}
-
-func (this *Modules) RegisterAction_SettingsRobotsTxt() *Action {
-	return this.newAction(AInfo{
-		WantDB:    true,
-		Mount:     "settings-robots-txt",
-		WantAdmin: true,
-	}, func(wrap *wrapper.Wrapper) {
-		pf_content := wrap.R.FormValue("content")
-
-		// Save robots.txt content
-		err := ioutil.WriteFile(wrap.DTemplate+string(os.PathSeparator)+"robots.txt", []byte(pf_content), 0664)
-		if err != nil {
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Reload current page
-		wrap.Write(`window.location.reload(false);`)
 	})
 }

@@ -17,6 +17,9 @@ func (this *Session) GetString(name string, def string) string {
 }
 
 func (this *Session) SetString(name string, value string) {
+	isset := this.IsSetString(name)
 	this.v.String[name] = value
-	this.c = true
+	if isset || value != "" {
+		this.c = true
+	}
 }

@@ -17,6 +17,9 @@ func (this *Session) GetBool(name string, def bool) bool {
 }
 
 func (this *Session) SetBool(name string, value bool) {
+	isset := this.IsSetBool(name)
 	this.v.Bool[name] = value
-	this.c = true
+	if isset || value != false {
+		this.c = true
+	}
 }

@@ -17,6 +17,9 @@ func (this *Session) GetInt(name string, def int) int {
 }
 
 func (this *Session) SetInt(name string, value int) {
+	isset := this.IsSetInt(name)
 	this.v.Int[name] = value
-	this.c = true
+	if isset || value != 0 {
+		this.c = true
+	}
 }

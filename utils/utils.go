@@ -57,9 +57,26 @@ func IsValidEmail(email string) bool {
 }
 
 func IsValidAlias(alias string) bool {
+	// Control panel
+	regexpeCP := regexp.MustCompile(`^\/cp\/`)
+	if alias == "/cp" || regexpeCP.MatchString(alias) {
+		return false
+	}
+
+	// Blog module
+	regexpeBlog := regexp.MustCompile(`^\/blog\/`)
+	if alias == "/blog" || regexpeBlog.MatchString(alias) {
+		return false
+	}
+
 	regexpeSlash := regexp.MustCompile(`[\/]{2,}`)
 	regexpeChars := regexp.MustCompile(`^\/([a-zA-Z0-9\/\-_\.]+)\/?$`)
 	return (!regexpeSlash.MatchString(alias) && regexpeChars.MatchString(alias)) || alias == "/"
+}
+
+func IsValidSingleAlias(alias string) bool {
+	regexpeChars := regexp.MustCompile(`^([a-zA-Z0-9\-_]{1,})$`)
+	return regexpeChars.MatchString(alias)
 }
 
 func FixPath(path string) string {
@@ -218,6 +235,10 @@ func IntToStr(num int) string {
 	return fmt.Sprintf("%d", num)
 }
 
+func Int64ToStr(num int64) string {
+	return fmt.Sprintf("%d", num)
+}
+
 func StrToInt(str string) int {
 	num, err := strconv.Atoi(str)
 	if err == nil {
@@ -261,6 +282,17 @@ func GenerateAlias(str string) string {
 	return alias
 }
 
+func GenerateSingleAlias(str string) string {
+	alias := GenerateAlias(str)
+	if len(alias) > 1 && alias[0] == '/' {
+		alias = alias[1:]
+	}
+	if len(alias) > 1 && alias[len(alias)-1] == '/' {
+		alias = alias[:len(alias)-1]
+	}
+	return alias
+}
+
 func UnixTimestampToMySqlDateTime(sec int64) string {
 	return time.Unix(sec, 0).Format("2006-01-02 15:04:05")
 }
@@ -284,4 +316,66 @@ func JavaScriptVarValue(str string) string {
 		`&rdquo;`,
 		-1,
 	)
+}
+
+func InArrayInt(slice []int, value int) bool {
+	for _, item := range slice {
+		if item == value {
+			return true
+		}
+	}
+	return false
+}
+
+func InArrayString(slice []string, value string) bool {
+	for _, item := range slice {
+		if item == value {
+			return true
+		}
+	}
+	return false
+}
+
+func GetPostArrayInt(name string, r *http.Request) []int {
+	var ids []int
+	if arr, ok := r.PostForm[name]; ok {
+		for _, el := range arr {
+			if IsNumeric(el) {
+				if !InArrayInt(ids, StrToInt(el)) {
+					ids = append(ids, StrToInt(el))
+				}
+			}
+		}
+	}
+	return ids
+}
+
+func GetPostArrayString(name string, r *http.Request) []string {
+	var ids []string
+	if arr, ok := r.PostForm[name]; ok {
+		for _, el := range arr {
+			if !InArrayString(ids, el) {
+				ids = append(ids, el)
+			}
+		}
+	}
+	return ids
+}
+
+func ArrayOfIntToArrayOfString(arr []int) []string {
+	var res []string
+	for _, el := range arr {
+		res = append(res, IntToStr(el))
+	}
+	return res
+}
+
+func ArrayOfStringToArrayOfInt(arr []string) []int {
+	var res []int
+	for _, el := range arr {
+		if IsNumeric(el) {
+			res = append(res, StrToInt(el))
+		}
+	}
+	return res
 }

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"golang-fave/assets"
+	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/wrapper"
 	"golang-fave/logger"
 	"golang-fave/modules"
@@ -19,8 +20,8 @@ type Engine struct {
 	Mods *modules.Modules
 }
 
-func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
-	wrap := wrapper.New(l, w, r, s, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp)
+func Response(mp *mysqlpool.MySqlPool, l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
+	wrap := wrapper.New(l, w, r, s, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp, mp)
 	eng := &Engine{
 		Wrap: wrap,
 		Mods: m,
@@ -29,11 +30,6 @@ func Response(l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *ht
 }
 
 func (this *Engine) Process() bool {
-	// Check and set session user
-	if !this.Wrap.S.IsSetInt("UserId") {
-		this.Wrap.S.SetInt("UserId", 0)
-	}
-
 	this.Wrap.IsBackend = this.Wrap.R.URL.Path == "/cp" || strings.HasPrefix(this.Wrap.R.URL.Path, "/cp/")
 	this.Wrap.ConfMysqlExists = utils.IsMySqlConfigExists(this.Wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 	this.Wrap.UrlArgs = append(this.Wrap.UrlArgs, utils.UrlToArray(this.Wrap.R.URL.Path)...)
@@ -76,7 +72,6 @@ func (this *Engine) Process() bool {
 		utils.SystemErrorPageEngine(this.Wrap.W, err)
 		return true
 	}
-	defer this.Wrap.DB.Close()
 
 	// Show add first user form if no any user in database
 	if !utils.IsFileExists(this.Wrap.DConfig + string(os.PathSeparator) + ".installed") {

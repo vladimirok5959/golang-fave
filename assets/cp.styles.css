@@ -113,17 +113,6 @@ body.cp nav.main a.navbar-brand {
 	font-weight: bold;
 }
 
-/*
-body.cp nav.main .navbar-nav .nav-item a img {
-	width: 35px;
-	height: 35px;
-	margin-right: 10px;
-	margin-top: -30px;
-	margin-bottom: -30px;
-	background-color: gray;
-}
-*/
-
 body.cp .wrap {
 	width: 100%;
 	height: 100%;
@@ -167,6 +156,10 @@ body.cp .wrap .sidebar .dropdown-divider {
 
 body.cp .wrap .sidebar.sidebar-left ul.nav {
 	padding: 1rem 0px;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-separator {
+	height: 1rem;
 }
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item a {
@@ -294,6 +287,26 @@ ul.pagination {
 	text-align: right;
 }
 
+/* Admin table: blog_posts */
+.data-table.table_blog_posts .col_datetime {
+	width: 8rem;
+}
+
+.data-table.table_blog_posts .col_active {
+	width: 5rem;
+}
+
+.data-table.table_blog_posts .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
+/* Admin table: table_blog_cats */
+.data-table.table_blog_cats .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
 /* Admin table: table_users */
 .data-table.table_users .col_active,
 .data-table.table_users .col_admin {
@@ -322,6 +335,10 @@ ul.pagination {
 
 .data-form textarea {
 	min-height: 5.4rem;
+}
+
+.data-form textarea.briefly {
+	min-height: 3.9rem;
 }
 
 /* Checkbox style iOS */
@@ -398,6 +415,39 @@ ul.pagination {
 @media (min-width: 992px) {
 	body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right.d-lg-table-cell {
 		display: table-cell !important;
+	}
+
+	.data-form .row .sys-messages .alert {
+		margin-top: 1rem;
+		margin-bottom: 0px;
+	}
+
+	.data-form .form-group.last {
+		margin-bottom: 0px;
+	}
+
+	.data-form.index-add .form-group.n8,
+	.data-form.index-modify .form-group.n8 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.blog-add .form-group.n7,
+	.data-form.blog-modify .form-group.n7 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.blog-categories-add .form-group.n4,
+	.data-form.blog-categories-modify .form-group.n4 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.users-add .form-group.n7,
+	.data-form.users-modify .form-group.n7 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.settings-pagination .form-group.n2 {
+		margin-bottom: 0px;
 	}
 }
 

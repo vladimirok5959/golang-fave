@@ -32,13 +32,21 @@ func New(w http.ResponseWriter, r *http.Request, tmpdir string) *Session {
 	if err == nil && len(cookie.Value) == 40 {
 		// Load from file
 		sess.i = cookie.Value
-		f, err := os.Open(sess.d + string(os.PathSeparator) + sess.i)
+		fname := sess.d + string(os.PathSeparator) + sess.i
+		f, err := os.Open(fname)
 		if err == nil {
 			defer f.Close()
 			dec := json.NewDecoder(f)
 			err = dec.Decode(&sess.v)
 			if err == nil {
 				return &sess
+			}
+
+			// Update file last modify time if needs
+			if info, err := os.Stat(fname); err == nil {
+				if time.Now().Sub(info.ModTime()) > 30*time.Minute {
+					_ = os.Chtimes(fname, time.Now(), time.Now())
+				}
 			}
 		}
 	} else {
@@ -63,7 +71,6 @@ func New(w http.ResponseWriter, r *http.Request, tmpdir string) *Session {
 		Int:    map[string]int{},
 		String: map[string]string{},
 	}
-	sess.c = true
 
 	return &sess
 }
@@ -87,4 +94,15 @@ func (this *Session) Close() bool {
 	}
 
 	return false
+}
+
+func (this *Session) Destroy() error {
+	if this.d == "" || this.i == "" {
+		return nil
+	}
+	err := os.Remove(this.d + string(os.PathSeparator) + this.i)
+	if err == nil {
+		this.c = false
+	}
+	return err
 }

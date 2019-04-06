@@ -2,6 +2,10 @@ package utils
 
 import (
 	"errors"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -10,26 +14,26 @@ import (
 
 func Expect(t *testing.T, actual, expect interface{}) {
 	if actual != expect {
-		t.Fatalf("\033[0;33mExpected \033[0;32m`%v`\033[0;33m but got \033[0;31m`%v`\033[0m",
-			expect, actual)
+		t.Fatalf("\033[0;33mExpected \033[0;32m`(%T) %v`\033[0;33m but got \033[0;31m`(%T) %v`\033[0m",
+			expect, expect, actual, actual)
 	}
 }
 
 func TestIsFileExists(t *testing.T) {
-	Expect(t, IsFileExists("./../testdata/some-file.txt"), true)
-	Expect(t, IsFileExists("./../testdata/no-existed-file"), false)
+	Expect(t, IsFileExists("./../support/some-file.txt"), true)
+	Expect(t, IsFileExists("./../support/no-existed-file"), false)
 }
 
 func TestIsDir(t *testing.T) {
-	Expect(t, IsDir("./../testdata"), true)
-	Expect(t, IsDir("./../testdata/some-file.txt"), false)
-	Expect(t, IsDir("./../testdata/no-existed-dir"), false)
+	Expect(t, IsDir("./../support"), true)
+	Expect(t, IsDir("./../support/some-file.txt"), false)
+	Expect(t, IsDir("./../support/no-existed-dir"), false)
 }
 
 func TestIsDirExists(t *testing.T) {
-	Expect(t, IsDirExists("./../testdata"), true)
-	Expect(t, IsDirExists("./../testdata/some-file.txt"), false)
-	Expect(t, IsDirExists("./../testdata/no-existed-dir"), false)
+	Expect(t, IsDirExists("./../support"), true)
+	Expect(t, IsDirExists("./../support/some-file.txt"), false)
+	Expect(t, IsDirExists("./../support/no-existed-dir"), false)
 }
 
 func TestIsNumeric(t *testing.T) {
@@ -52,6 +56,29 @@ func TestIsValidAlias(t *testing.T) {
 	Expect(t, IsValidAlias(""), false)
 	Expect(t, IsValidAlias("some-page"), false)
 	Expect(t, IsValidAlias("/some page/"), false)
+
+	Expect(t, IsValidAlias("/cp"), false)
+	Expect(t, IsValidAlias("/cp/"), false)
+	Expect(t, IsValidAlias("/cp/some"), false)
+	Expect(t, IsValidAlias("/cp-1"), true)
+	Expect(t, IsValidAlias("/cp-some"), true)
+
+	Expect(t, IsValidAlias("/blog"), false)
+	Expect(t, IsValidAlias("/blog/"), false)
+	Expect(t, IsValidAlias("/blog/some"), false)
+	Expect(t, IsValidAlias("/blog-1"), true)
+	Expect(t, IsValidAlias("/blog-some"), true)
+}
+
+func TestIsValidSingleAlias(t *testing.T) {
+	Expect(t, IsValidSingleAlias("some-category"), true)
+	Expect(t, IsValidSingleAlias("some-category-12345"), true)
+	Expect(t, IsValidSingleAlias("some_category_12345"), true)
+	Expect(t, IsValidSingleAlias(""), false)
+	Expect(t, IsValidSingleAlias("/"), false)
+	Expect(t, IsValidSingleAlias("/some-category/"), false)
+	Expect(t, IsValidSingleAlias("some-category.html"), false)
+	Expect(t, IsValidSingleAlias("some category"), false)
 }
 
 func TestFixPath(t *testing.T) {
@@ -117,19 +144,57 @@ func TestGetCurrentUnixTimestamp(t *testing.T) {
 }
 
 func TestSystemRenderTemplate(t *testing.T) {
-	//
+	request, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		SystemRenderTemplate(w, []byte(`ok`), nil)
+	}).ServeHTTP(recorder, request)
+	Expect(t, recorder.Code, 200)
+	Expect(t, recorder.Body.String(), `ok`)
 }
 
 func TestSystemErrorPageEngine(t *testing.T) {
-	//
+	request, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		SystemErrorPageEngine(w, errors.New("Test error"))
+	}).ServeHTTP(recorder, request)
+	Expect(t, recorder.Code, http.StatusInternalServerError)
+	Expect(t, strings.Contains(recorder.Body.String(), "Engine Error"), true)
+	Expect(t, strings.Contains(recorder.Body.String(), "Test error"), true)
 }
 
 func TestSystemErrorPageTemplate(t *testing.T) {
-	//
+	request, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		SystemErrorPageTemplate(w, errors.New("Test error"))
+	}).ServeHTTP(recorder, request)
+	Expect(t, recorder.Code, http.StatusInternalServerError)
+	Expect(t, strings.Contains(recorder.Body.String(), "Template Error"), true)
+	Expect(t, strings.Contains(recorder.Body.String(), "Test error"), true)
 }
 
 func TestSystemErrorPage404(t *testing.T) {
-	//
+	request, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		SystemErrorPage404(w)
+	}).ServeHTTP(recorder, request)
+	Expect(t, recorder.Code, http.StatusNotFound)
+	Expect(t, strings.Contains(recorder.Body.String(), "404 Not Found"), true)
 }
 
 func TestUrlToArray(t *testing.T) {
@@ -158,6 +223,10 @@ func TestIntToStr(t *testing.T) {
 	Expect(t, IntToStr(2000), "2000")
 }
 
+func TestInt64ToStr(t *testing.T) {
+	Expect(t, Int64ToStr(2000), "2000")
+}
+
 func TestStrToInt(t *testing.T) {
 	Expect(t, StrToInt("2000"), 2000)
 	Expect(t, StrToInt("string"), 0)
@@ -167,8 +236,16 @@ func TestGenerateAlias(t *testing.T) {
 	Expect(t, GenerateAlias(""), "")
 	Expect(t, GenerateAlias("Some page name"), "/some-page-name/")
 	Expect(t, GenerateAlias("Some page name 2"), "/some-page-name-2/")
-	Expect(t, GenerateAlias("Какая то страница"), "/kakaya-to-stranica/")
-	Expect(t, GenerateAlias("Какая то страница 2"), "/kakaya-to-stranica-2/")
+	Expect(t, GenerateAlias("Какая-то страница"), "/kakayato-stranica/")
+	Expect(t, GenerateAlias("Какая-то страница 2"), "/kakayato-stranica-2/")
+}
+
+func TestGenerateSingleAlias(t *testing.T) {
+	Expect(t, GenerateSingleAlias(""), "")
+	Expect(t, GenerateSingleAlias("Some category name"), "some-category-name")
+	Expect(t, GenerateSingleAlias("Some category name 2"), "some-category-name-2")
+	Expect(t, GenerateSingleAlias("Какая-то категория"), "kakayato-kategoriya")
+	Expect(t, GenerateSingleAlias("Какая-то категория 2"), "kakayato-kategoriya-2")
 }
 
 func TestUnixTimestampToMySqlDateTime(t *testing.T) {
@@ -189,4 +266,58 @@ func TestExtractGetParams(t *testing.T) {
 func TestJavaScriptVarValue(t *testing.T) {
 	Expect(t, JavaScriptVarValue(`It's "string"`), "It&rsquo;s &rdquo;string&rdquo;")
 	Expect(t, JavaScriptVarValue(`It is string`), "It is string")
+}
+
+func TestInArrayInt(t *testing.T) {
+	slice := []int{1, 3, 5, 9, 0}
+	Expect(t, InArrayInt(slice, 1), true)
+	Expect(t, InArrayInt(slice, 9), true)
+	Expect(t, InArrayInt(slice, 2), false)
+	Expect(t, InArrayInt(slice, 8), false)
+}
+
+func TestInArrayString(t *testing.T) {
+	slice := []string{"1", "3", "5", "9", "0"}
+	Expect(t, InArrayString(slice, "1"), true)
+	Expect(t, InArrayString(slice, "9"), true)
+	Expect(t, InArrayString(slice, "2"), false)
+	Expect(t, InArrayString(slice, "8"), false)
+}
+
+func TestGetPostArrayInt(t *testing.T) {
+	request, err := http.NewRequest("POST", "/", strings.NewReader("cats[]=1&cats[]=3&cats[]=5"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
+	request.ParseForm()
+	arr := GetPostArrayInt("cats[]", request)
+	Expect(t, fmt.Sprintf("%T%v", arr, arr), "[]int[1 3 5]")
+}
+
+func TestGetPostArrayString(t *testing.T) {
+	request, err := http.NewRequest("POST", "/", strings.NewReader("cats[]=1&cats[]=3&cats[]=5"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
+	request.ParseForm()
+	arr := GetPostArrayString("cats[]", request)
+	Expect(t, fmt.Sprintf("%T%v", arr, arr), "[]string[1 3 5]")
+}
+
+func TestArrayOfIntToArrayOfString(t *testing.T) {
+	res := ArrayOfIntToArrayOfString([]int{1, 3, 5})
+	Expect(t, len(res), 3)
+	Expect(t, res[0], "1")
+	Expect(t, res[1], "3")
+	Expect(t, res[2], "5")
+}
+
+func TestArrayOfStringToArrayOfInt(t *testing.T) {
+	res := ArrayOfStringToArrayOfInt([]string{"1", "3", "5", "abc"})
+	Expect(t, len(res), 3)
+	Expect(t, res[0], 1)
+	Expect(t, res[1], 3)
+	Expect(t, res[2], 5)
 }

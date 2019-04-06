@@ -1,7 +1,5 @@
 # golang-fave
-CMS written on Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. Thanks Go language it's fastern, all in one binary file, no need to install additional web servers. Go native template with vars allow to do almost all what are need.
-
-![](testdata/screenshots-1.gif)
+CMS written on Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. All in one binary file, no need to install additional web servers. Go native templates with vars allow to do almost all what are need.
 
 ## Usage
 ```
@@ -30,9 +28,12 @@ hosts
 ├────── error.log          # Error log file
 ├──── template             # Engine templates
 ├────── 404.html           # Template for 404 page
+├────── blog-category.html # Template for blog category
+├────── blog-post.html     # Template for blog post
+├────── blog.html          # Template for blog home page
 ├────── footer.html        # Footer
 ├────── header.html        # Header
-├────── index.html         # Template for index page
+├────── index.html         # Template for home page
 ├────── page.html          # Template for any other pages
 ├────── robots.txt         # Host robots.txt file
 ├────── scripts.js         # Theme scripts file
@@ -50,3 +51,6 @@ Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimiro
 * **make update** - get all dependencies and put to vendor folder
 * **make docker-test** - build image and start on port 8080
 * **make docker-img** - build docker image only
+* **make cy-dev** - cypress tests in browser
+* **make cy** - cypress tests in console
+* **make ab** - http stress test
