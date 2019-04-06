@@ -24,7 +24,8 @@
 !/hosts/*/tmp/.*
 
 # Test virtual host dir
-/hosts/example.com
+/hosts/*
+!/hosts/localhost
 
 # Default host mysql config file
 /hosts/localhost/config/mysql.json

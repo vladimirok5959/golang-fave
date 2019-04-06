@@ -9,6 +9,7 @@ import (
 
 	"golang-fave/assets"
 	"golang-fave/consts"
+	"golang-fave/domains"
 	"golang-fave/engine"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/logger"
@@ -90,6 +91,9 @@ func main() {
 	// MySQL connections pool
 	mpool := mysqlpool.New()
 
+	// Domain bindings
+	doms := domains.New(consts.ParamWwwDir)
+
 	// Init and start web server
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
@@ -109,8 +113,17 @@ func main() {
 		curr_host := host
 		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + host
 		if !utils.IsDirExists(vhost_dir) {
-			curr_host = "localhost"
-			vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
+			if hst := doms.GetHost(host); hst != "" {
+				curr_host = hst
+				vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + hst
+				if !utils.IsDirExists(vhost_dir) {
+					curr_host = "localhost"
+					vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
+				}
+			} else {
+				curr_host = "localhost"
+				vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
+			}
 		}
 
 		// Check for minimal dir structure
