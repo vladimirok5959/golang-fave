@@ -35,7 +35,7 @@ func New(www_dir string) *Domains {
 							break
 						}
 						if strings.TrimSpace(domain) != "" {
-							r.AddDmain(file.Name(), strings.TrimSpace(domain))
+							r.addDmain(file.Name(), strings.TrimSpace(domain))
 						}
 					}
 				}
@@ -46,7 +46,7 @@ func New(www_dir string) *Domains {
 	return &r
 }
 
-func (this *Domains) AddDmain(host string, domain string) {
+func (this *Domains) addDmain(host string, domain string) {
 	this.Lock()
 	defer this.Unlock()
 	if _, ok := this.hosts[domain]; ok == false {
