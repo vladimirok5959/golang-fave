@@ -111,19 +111,13 @@ func main() {
 		// Host and port
 		host, port := utils.ExtractHostPort(r.Host, false)
 		curr_host := host
-		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + host
+		if mhost := doms.GetHost(host); mhost != "" {
+			curr_host = mhost
+		}
+		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + curr_host
 		if !utils.IsDirExists(vhost_dir) {
-			if hst := doms.GetHost(host); hst != "" {
-				curr_host = hst
-				vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + hst
-				if !utils.IsDirExists(vhost_dir) {
-					curr_host = "localhost"
-					vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
-				}
-			} else {
-				curr_host = "localhost"
-				vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
-			}
+			curr_host = "localhost"
+			vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
 		}
 
 		// Check for minimal dir structure
