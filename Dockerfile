@@ -2,8 +2,8 @@ FROM debian:latest
 
 ENV FAVE_HOST=0.0.0.0 FAVE_PORT=8080 FAVE_DIR=/app/hosts FAVE_DEBUG=false FAVE_KEEPALIVE=false
 
-ADD https://github.com/vladimirok5959/golang-fave/releases/download/v1.0.3/fave.linux-amd64.tar.gz /app/fave.linux-amd64.tar.gz
-ADD https://github.com/vladimirok5959/golang-fave/releases/download/v1.0.3/localhost.tar.gz /app/hosts/localhost.tar.gz
+ADD https://github.com/vladimirok5959/golang-fave/releases/download/v1.0.4/fave.linux-amd64.tar.gz /app/fave.linux-amd64.tar.gz
+ADD https://github.com/vladimirok5959/golang-fave/releases/download/v1.0.4/localhost.tar.gz /app/hosts/localhost.tar.gz
 
 RUN tar -zxf /app/fave.linux-amd64.tar.gz -C /app && \
  tar -zxf /app/hosts/localhost.tar.gz -C /app/hosts && \
