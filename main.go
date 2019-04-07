@@ -91,9 +91,6 @@ func main() {
 	// MySQL connections pool
 	mpool := mysqlpool.New()
 
-	// Domain bindings
-	doms := domains.New(consts.ParamWwwDir)
-
 	// Init and start web server
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
@@ -111,9 +108,13 @@ func main() {
 		// Host and port
 		host, port := utils.ExtractHostPort(r.Host, false)
 		curr_host := host
+
+		// Domain bindings
+		doms := domains.New(consts.ParamWwwDir)
 		if mhost := doms.GetHost(host); mhost != "" {
 			curr_host = mhost
 		}
+
 		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + curr_host
 		if !utils.IsDirExists(vhost_dir) {
 			curr_host = "localhost"
