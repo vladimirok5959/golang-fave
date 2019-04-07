@@ -9,6 +9,7 @@ import (
 
 	"golang-fave/assets"
 	"golang-fave/consts"
+	"golang-fave/domains"
 	"golang-fave/engine"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/logger"
@@ -107,7 +108,14 @@ func main() {
 		// Host and port
 		host, port := utils.ExtractHostPort(r.Host, false)
 		curr_host := host
-		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + host
+
+		// Domain bindings
+		doms := domains.New(consts.ParamWwwDir)
+		if mhost := doms.GetHost(host); mhost != "" {
+			curr_host = mhost
+		}
+
+		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + curr_host
 		if !utils.IsDirExists(vhost_dir) {
 			curr_host = "localhost"
 			vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
