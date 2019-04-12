@@ -1,5 +1,12 @@
 {{template "header.html" .}}
 <div class="card mb-4">
+	<div class="post">
+		<div class="card-body">
+			<b>Category author:</b> {{$.Data.Blog.Category.User.FirstName}} {{$.Data.Blog.Category.User.LastName}}
+		</div>
+	</div>
+</div>
+<div class="card mb-4">
 	{{if $.Data.Blog.HavePosts}}
 		{{range $.Data.Blog.Posts}}
 			<div class="post">
@@ -13,7 +20,8 @@
 						{{.Briefly}}
 					</div>
 					<div class="post-date">
-						<small>Published on {{.DateTimeFormat "02/01/2006, 15:04:05"}}</small>
+						<div><small>Published on {{.DateTimeFormat "02/01/2006, 15:04:05"}}</small></div>
+						<div>Author: {{.User.FirstName}} {{.User.LastName}}</div>
 					</div>
 				</div>
 			</div>

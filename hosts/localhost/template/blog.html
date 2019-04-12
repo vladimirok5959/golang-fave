@@ -13,7 +13,8 @@
 						{{.Briefly}}
 					</div>
 					<div class="post-date">
-						<small>Published on {{.DateTimeFormat "02/01/2006, 15:04:05"}}</small>
+						<div><small>Published on {{.DateTimeFormat "02/01/2006, 15:04:05"}}</small></div>
+						<div>Author: {{.User.FirstName}} {{.User.LastName}}</div>
 					</div>
 				</div>
 			</div>

@@ -32,7 +32,7 @@ type Blog struct {
 	bufferCats map[string][]*BlogCategory
 }
 
-func (this *Blog) init() {
+func (this *Blog) load() {
 	if this == nil {
 		return
 	}
@@ -47,20 +47,27 @@ func (this *Blog) init() {
 	`
 	sql_rows := `
 		SELECT
-			id,
-			user,
-			name,
-			alias,
-			briefly,
-			content,
-			UNIX_TIMESTAMP(datetime) as datetime,
-			active
+			blog_posts.id,
+			blog_posts.user,
+			blog_posts.name,
+			blog_posts.alias,
+			blog_posts.briefly,
+			blog_posts.content,
+			UNIX_TIMESTAMP(blog_posts.datetime) as datetime,
+			blog_posts.active,
+			users.id,
+			users.first_name,
+			users.last_name,
+			users.email,
+			users.admin,
+			users.active
 		FROM
 			blog_posts
+			LEFT JOIN users ON users.id = blog_posts.user
 		WHERE
-			active = 1
+			blog_posts.active = 1
 		ORDER BY
-			id DESC
+			blog_posts.id DESC
 		LIMIT ?, ?;
 	`
 
@@ -119,10 +126,17 @@ func (this *Blog) init() {
 				blog_posts.briefly,
 				blog_posts.content,
 				UNIX_TIMESTAMP(blog_posts.datetime) AS datetime,
-				blog_posts.active
+				blog_posts.active,
+				users.id,
+				users.first_name,
+				users.last_name,
+				users.email,
+				users.admin,
+				users.active
 			FROM
 				blog_posts
 				LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
+				LEFT JOIN users ON users.id = blog_posts.user
 			WHERE
 				blog_posts.active = 1 AND
 				blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
@@ -146,9 +160,29 @@ func (this *Blog) init() {
 		if rows, err := this.wrap.DB.Query(sql_rows, offset, this.postsPerPage); err == nil {
 			defer rows.Close()
 			for rows.Next() {
-				row := utils.MySql_blog_post{}
-				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_briefly, &row.A_content, &row.A_datetime, &row.A_active); err == nil {
-					this.posts = append(this.posts, &BlogPost{object: &row})
+				rp := utils.MySql_blog_post{}
+				ru := utils.MySql_user{}
+				if err := rows.Scan(
+					&rp.A_id,
+					&rp.A_user,
+					&rp.A_name,
+					&rp.A_alias,
+					&rp.A_briefly,
+					&rp.A_content,
+					&rp.A_datetime,
+					&rp.A_active,
+					&ru.A_id,
+					&ru.A_first_name,
+					&ru.A_last_name,
+					&ru.A_email,
+					&ru.A_admin,
+					&ru.A_active,
+				); err == nil {
+					this.posts = append(this.posts, &BlogPost{
+						wrap:   this.wrap,
+						object: &rp,
+						user:   &User{wrap: this.wrap, object: &ru},
+					})
 				}
 			}
 		}

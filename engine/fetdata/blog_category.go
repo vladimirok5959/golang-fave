@@ -1,12 +1,16 @@
 package fetdata
 
 import (
+	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
 
 type BlogCategory struct {
+	wrap   *wrapper.Wrapper
 	object *utils.MySql_blog_category
 	depth  int
+
+	user *User
 }
 
 func (this *BlogCategory) Id() int {
@@ -16,11 +20,16 @@ func (this *BlogCategory) Id() int {
 	return this.object.A_id
 }
 
-func (this *BlogCategory) User() int {
+func (this *BlogCategory) User() *User {
 	if this == nil {
-		return 0
+		return nil
 	}
-	return this.object.A_user
+	if this.user != nil {
+		return this.user
+	}
+	this.user = &User{wrap: this.wrap}
+	this.user.load(this.object.A_user)
+	return this.user
 }
 
 func (this *BlogCategory) Name() string {

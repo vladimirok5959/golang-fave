@@ -7,7 +7,8 @@
 		</div>
 	</div>
 	<div class="card-footer text-muted">
-		Published on {{$.Data.Blog.Post.DateTimeFormat "02/01/2006, 15:04:05"}}
+		<div>Published on {{$.Data.Blog.Post.DateTimeFormat "02/01/2006, 15:04:05"}}</div>
+		<div>Author: {{$.Data.Blog.Post.User.FirstName}} {{$.Data.Blog.Post.User.LastName}}</div>
 	</div>
 </div>
 {{template "footer.html" .}}

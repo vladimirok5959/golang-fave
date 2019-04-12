@@ -4,11 +4,15 @@ import (
 	"html/template"
 	"time"
 
+	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
 
 type Page struct {
+	wrap   *wrapper.Wrapper
 	object *utils.MySql_page
+
+	user *User
 }
 
 func (this *Page) Id() int {
@@ -18,11 +22,16 @@ func (this *Page) Id() int {
 	return this.object.A_id
 }
 
-func (this *Page) User() int {
+func (this *Page) User() *User {
 	if this == nil {
-		return 0
+		return nil
 	}
-	return this.object.A_user
+	if this.user != nil {
+		return this.user
+	}
+	this.user = &User{wrap: this.wrap}
+	this.user.load(this.object.A_user)
+	return this.user
 }
 
 func (this *Page) Name() string {
