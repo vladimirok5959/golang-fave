@@ -53,10 +53,10 @@ type TmplSystem struct {
 	PathJsPopper         string
 	PathJsBootstrap      string
 	PathJsCpScripts      string
+	PathJsCpWysiwygPell  string
 	PathThemeStyles      string
 	PathThemeScripts     string
 	InfoVersion          string
-	PathJsCpWysiwygPell  string
 }
 
 type TmplError struct {
