@@ -110,18 +110,20 @@ func GetAssetsUrl(filename string) string {
 
 func GetTmplSystemData() consts.TmplSystem {
 	return consts.TmplSystem{
-		PathIcoFav:       GetAssetsUrl(consts.AssetsSysFaveIco),
-		PathSvgLogo:      GetAssetsUrl(consts.AssetsSysLogoSvg),
-		PathCssStyles:    GetAssetsUrl(consts.AssetsSysStylesCss),
-		PathCssCpStyles:  GetAssetsUrl(consts.AssetsCpStylesCss),
-		PathCssBootstrap: GetAssetsUrl(consts.AssetsBootstrapCss),
-		PathJsJquery:     GetAssetsUrl(consts.AssetsJqueryJs),
-		PathJsPopper:     GetAssetsUrl(consts.AssetsPopperJs),
-		PathJsBootstrap:  GetAssetsUrl(consts.AssetsBootstrapJs),
-		PathJsCpScripts:  GetAssetsUrl(consts.AssetsCpScriptsJs),
-		PathThemeStyles:  "/assets/theme/styles.css",
-		PathThemeScripts: "/assets/theme/scripts.js",
-		InfoVersion:      consts.ServerVersion,
+		PathIcoFav:           GetAssetsUrl(consts.AssetsSysFaveIco),
+		PathSvgLogo:          GetAssetsUrl(consts.AssetsSysLogoSvg),
+		PathCssStyles:        GetAssetsUrl(consts.AssetsSysStylesCss),
+		PathCssCpStyles:      GetAssetsUrl(consts.AssetsCpStylesCss),
+		PathCssBootstrap:     GetAssetsUrl(consts.AssetsBootstrapCss),
+		PathCssCpWysiwygPell: GetAssetsUrl(consts.AssetsCpWysiwygPellCss),
+		PathJsJquery:         GetAssetsUrl(consts.AssetsJqueryJs),
+		PathJsPopper:         GetAssetsUrl(consts.AssetsPopperJs),
+		PathJsBootstrap:      GetAssetsUrl(consts.AssetsBootstrapJs),
+		PathJsCpScripts:      GetAssetsUrl(consts.AssetsCpScriptsJs),
+		PathJsCpWysiwygPell:  GetAssetsUrl(consts.AssetsCpWysiwygPellJs),
+		PathThemeStyles:      "/assets/theme/styles.css",
+		PathThemeScripts:     "/assets/theme/scripts.js",
+		InfoVersion:          consts.ServerVersion,
 	}
 }
 

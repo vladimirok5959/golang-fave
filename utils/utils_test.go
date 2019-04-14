@@ -114,18 +114,20 @@ func TestGetAssetsUrl(t *testing.T) {
 
 func TestGetTmplSystemData(t *testing.T) {
 	Expect(t, GetTmplSystemData(), consts.TmplSystem{
-		PathIcoFav:       "/assets/sys/fave.ico?v=" + consts.AssetsVersion,
-		PathSvgLogo:      "/assets/sys/logo.svg?v=" + consts.AssetsVersion,
-		PathCssStyles:    "/assets/sys/styles.css?v=" + consts.AssetsVersion,
-		PathCssCpStyles:  "/assets/cp/styles.css?v=" + consts.AssetsVersion,
-		PathCssBootstrap: "/assets/bootstrap.css?v=" + consts.AssetsVersion,
-		PathJsJquery:     "/assets/jquery.js?v=" + consts.AssetsVersion,
-		PathJsPopper:     "/assets/popper.js?v=" + consts.AssetsVersion,
-		PathJsBootstrap:  "/assets/bootstrap.js?v=" + consts.AssetsVersion,
-		PathJsCpScripts:  "/assets/cp/scripts.js?v=" + consts.AssetsVersion,
-		PathThemeStyles:  "/assets/theme/styles.css",
-		PathThemeScripts: "/assets/theme/scripts.js",
-		InfoVersion:      consts.ServerVersion,
+		PathIcoFav:           "/assets/sys/fave.ico?v=" + consts.AssetsVersion,
+		PathSvgLogo:          "/assets/sys/logo.svg?v=" + consts.AssetsVersion,
+		PathCssStyles:        "/assets/sys/styles.css?v=" + consts.AssetsVersion,
+		PathCssCpStyles:      "/assets/cp/styles.css?v=" + consts.AssetsVersion,
+		PathCssBootstrap:     "/assets/bootstrap.css?v=" + consts.AssetsVersion,
+		PathCssCpWysiwygPell: "/assets/cp/wysiwyg/pell.css?v=" + consts.AssetsVersion,
+		PathJsJquery:         "/assets/jquery.js?v=" + consts.AssetsVersion,
+		PathJsPopper:         "/assets/popper.js?v=" + consts.AssetsVersion,
+		PathJsBootstrap:      "/assets/bootstrap.js?v=" + consts.AssetsVersion,
+		PathJsCpScripts:      "/assets/cp/scripts.js?v=" + consts.AssetsVersion,
+		PathJsCpWysiwygPell:  "/assets/cp/wysiwyg/pell.js?v=" + consts.AssetsVersion,
+		PathThemeStyles:      "/assets/theme/styles.css",
+		PathThemeScripts:     "/assets/theme/scripts.js",
+		InfoVersion:          consts.ServerVersion,
 	})
 }
 

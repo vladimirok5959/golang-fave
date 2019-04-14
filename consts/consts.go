@@ -43,18 +43,20 @@ type BreadCrumb struct {
 
 // Template data
 type TmplSystem struct {
-	PathIcoFav       string
-	PathSvgLogo      string
-	PathCssStyles    string
-	PathCssCpStyles  string
-	PathCssBootstrap string
-	PathJsJquery     string
-	PathJsPopper     string
-	PathJsBootstrap  string
-	PathJsCpScripts  string
-	PathThemeStyles  string
-	PathThemeScripts string
-	InfoVersion      string
+	PathIcoFav           string
+	PathSvgLogo          string
+	PathCssStyles        string
+	PathCssCpStyles      string
+	PathCssBootstrap     string
+	PathCssCpWysiwygPell string
+	PathJsJquery         string
+	PathJsPopper         string
+	PathJsBootstrap      string
+	PathJsCpScripts      string
+	PathThemeStyles      string
+	PathThemeScripts     string
+	InfoVersion          string
+	PathJsCpWysiwygPell  string
 }
 
 type TmplError struct {
