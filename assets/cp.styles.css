@@ -377,24 +377,24 @@ ul.pagination {
 	left: 0px;
 	border-radius: 1.5rem;
 	background: rgba(19, 191, 17, 0);
-	-moz-transition: .20s ease-in-out;
-	-webkit-transition: .20s ease-in-out;
-	transition: .20s ease-in-out;
+	-moz-transition: .10s ease-in-out;
+	-webkit-transition: .10s ease-in-out;
+	transition: .10s ease-in-out;
 }
 
 .checkbox-ios input[type=checkbox] + label:after {
 	content: "";
 	position: absolute;
 	display: block;
-	height: 28px;
-	width: 28px;
-	top: 1px;
-	left: 1px;
+	height: 26px;
+	width: 26px;
+	top: 2px;
+	left: 2px;
 	border-radius: 1.5rem;
 	background: #fff;
-	-moz-transition: .20s ease-in-out;
-	-webkit-transition: .20s ease-in-out;
-	transition: .20s ease-in-out;
+	-moz-transition: .10s ease-in-out;
+	-webkit-transition: .10s ease-in-out;
+	transition: .10s ease-in-out;
 }
 
 .checkbox-ios input[type=checkbox]:checked + label:before {
@@ -403,7 +403,7 @@ ul.pagination {
 }
 
 .checkbox-ios input[type=checkbox]:checked + label:after {
-	left: 31px;
+	left: 32px;
 }
 
 /* Bootstrap fixes */
