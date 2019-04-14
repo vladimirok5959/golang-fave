@@ -399,7 +399,7 @@ ul.pagination {
 
 .checkbox-ios input[type=checkbox]:checked + label:before {
 	width: 60px;
-	background: #007bff;
+	background: #417cb9;
 }
 
 .checkbox-ios input[type=checkbox]:checked + label:after {
