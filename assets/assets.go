@@ -42,4 +42,14 @@ func PopulateResources(res *resource.Resource) {
 		"text/css",
 		SysStylesCss,
 	)
+	res.Add(
+		consts.AssetsCpWysiwygPellJs,
+		"application/javascript; charset=utf-8",
+		CpWysiwygPellJs,
+	)
+	res.Add(
+		consts.AssetsCpWysiwygPellCss,
+		"text/css",
+		CpWysiwygPellCss,
+	)
 }

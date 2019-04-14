@@ -5,7 +5,7 @@ import (
 )
 
 const ServerVersion = "1.0.5"
-const AssetsVersion = "21"
+const AssetsVersion = "22"
 const AssetsPath = "assets"
 const DirIndexFile = "index.html"
 
@@ -23,6 +23,10 @@ const AssetsSysFaveIco = AssetsPath + "/sys/fave.ico"
 const AssetsSysLogoPng = AssetsPath + "/sys/logo.png"
 const AssetsSysLogoSvg = AssetsPath + "/sys/logo.svg"
 const AssetsSysStylesCss = AssetsPath + "/sys/styles.css"
+
+// Wysiwyg editor
+const AssetsCpWysiwygPellJs = AssetsPath + "/cp/wysiwyg/pell.js"
+const AssetsCpWysiwygPellCss = AssetsPath + "/cp/wysiwyg/pell.css"
 
 // Make global for other packages
 var ParamHost string
