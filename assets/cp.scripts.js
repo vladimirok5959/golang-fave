@@ -47,7 +47,7 @@
 	try {
 		new Event('test');
 	} catch (e) {
-		// IE does not support `new Event()`
+		// IE does not support 'new Event()'
 		createEvent = function createEvent(name) {
 			var evt = document.createEvent('Event');
 			evt.initEvent(name, true, false);
@@ -390,6 +390,11 @@
 			}
 		};
 
+		function HtmlDecode(value) {
+			var doc = new DOMParser().parseFromString(value, "text/html");
+			return doc.documentElement.textContent;
+		};
+
 		function AllFormsToAjax() {
 			$('form').each(function() {
 				FormToAjax($(this));
@@ -407,7 +412,56 @@
 
 		function MakeTextAreasAutoSized() {
 			autosize($('textarea.autosize'));
-		}
+		};
+
+		function MakeTextAreasWysiwyg() {
+			$('textarea.wysiwyg').each(function() {
+				var area = $(this)[0];
+				var area_id = area.id;
+				var area_name = area.name;
+				var area_html = area.innerHTML;
+
+				$(area).wrap('<div id="' + area_id + '_wysiwyg" class="form-control wysiwyg" style="height:auto;padding:0px"></div>').remove();
+				var wysiwyg = document.getElementById(area_id + '_wysiwyg');
+
+				wysiwyg.id = area_id;
+				$(wysiwyg).append('<textarea id="' + area_id + '_wysiwyg' + '" name="' + area_name + '" style="display:none!important"></textarea>');
+
+				area = document.getElementById(area_id + '_wysiwyg');
+				area.innerHTML = area_html;
+
+				var editor = window.pell.init({
+					element: wysiwyg,
+					onChange: function(html) {
+						area.innerHTML = html;
+						if(!FormDataWasChanged) {
+							FormDataWasChanged = true;
+						}
+					},
+					defaultParagraphSeparator: 'p',
+					styleWithCSS: false,
+					actions: [
+						'bold',
+						'italic',
+						'underline'
+					],
+					classes: {
+						actionbar: 'pell-actionbar',
+						button: 'pell-button',
+						content: 'pell-content',
+						selected: 'pell-button-selected'
+					}
+				});
+				editor.onfocusin = function() {
+					$(wysiwyg).addClass('focused');
+				};
+				editor.onfocusout = function() {
+					$(wysiwyg).find('.pell-actionbar button.pell-button-selected').removeClass('pell-button-selected');
+					$(wysiwyg).removeClass('focused');
+				};
+				editor.content.innerHTML = HtmlDecode(area_html);
+			});
+		};
 
 		function Initialize() {
 			// Check if jQuery was loaded
@@ -415,6 +469,7 @@
 				AllFormsToAjax();
 				BindWindowBeforeUnload();
 				MakeTextAreasAutoSized();
+				MakeTextAreasWysiwyg();
 			} else {
 				console.log('Error: jQuery is not loaded!');
 			}
