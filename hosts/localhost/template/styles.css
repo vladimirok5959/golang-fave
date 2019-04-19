@@ -15,10 +15,19 @@
 	}
 }
 
+@media (min-width: 992px) {
+	.navbar-expand-lg .navbar-nav {
+		margin-right: -.5rem;
+	}
+}
+
 /* Set base bootstrap width */
 @media (min-width: 1200px) {
 	.container {
-		max-width: 960px;
+		max-width: 1000px;
+	}
+	.navbar-expand-lg .navbar-nav {
+		margin-right: -.5rem;
 	}
 }
 

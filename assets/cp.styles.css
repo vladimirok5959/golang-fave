@@ -337,10 +337,6 @@ ul.pagination {
 	min-height: 5.4rem;
 }
 
-.data-form textarea.briefly {
-	min-height: 3.9rem;
-}
-
 /* Checkbox style iOS */
 .checkbox-ios {
 	display: inline-block;
@@ -399,7 +395,7 @@ ul.pagination {
 
 .checkbox-ios input[type=checkbox]:checked + label:before {
 	width: 60px;
-	background: #417cb9;
+	background: #1a73e8;
 }
 
 .checkbox-ios input[type=checkbox]:checked + label:after {
@@ -413,24 +409,7 @@ ul.pagination {
 
 /* Wysiwyg */
 textarea.form-control.wysiwyg {
-	display: none;
-}
-
-.wysiwyg .pell-actionbar {
-	padding: .2rem;
-	border-radius: .25rem .25rem 0px 0px;
-	border-bottom: 1px solid #ced4da;
-}
-
-.wysiwyg .pell-actionbar .pell-button {
-	margin-right: .2rem;
-	border-radius: .25rem;
-	background-color: #e7e7e7;
-}
-
-.wysiwyg .pell-actionbar .pell-button.pell-button-selected {
-	color: #fff;
-	background-color: #007bff;
+	min-height: 340px;
 }
 
 div.wysiwyg.focused {
@@ -438,6 +417,30 @@ div.wysiwyg.focused {
 	border-color: #80bdff;
 	outline: 0;
 	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+/* Bootstrap buttons */
+.btn-primary {
+	background-color: #1a73e8;
+	border-color: #1a73e8;
+	color: #fff;
+}
+
+.btn-primary:hover {
+	background: rgba(26, 115, 232, 0.761);
+}
+
+.btn-secondary {
+	background: transparent;
+	border-color: #dadce0;
+	color: #1a73e8;
+	font-weight: 500;
+}
+
+.btn-secondary:hover {
+	background: rgba(66, 133, 244, 0.04);
+	border-color: #d2e3fc;
+	color: #1a73e8;
 }
 
 /* Mobile fixes */

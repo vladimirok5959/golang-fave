@@ -87,6 +87,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					user,
 					name,
 					alias,
+					briefly,
 					content,
 					UNIX_TIMESTAMP(datetime) as datetime,
 					active
@@ -102,6 +103,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				&row.A_user,
 				&row.A_name,
 				&row.A_alias,
+				&row.A_briefly,
 				&row.A_content,
 				&row.A_datetime,
 				&row.A_active,
@@ -434,14 +436,14 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Caption: "Briefly",
 					Name:    "briefly",
 					Value:   data.A_briefly,
-					Classes: "briefly autosize",
+					Classes: "briefly wysiwyg",
 				},
 				{
 					Kind:    builder.DFKTextArea,
 					Caption: "Post content",
 					Name:    "content",
 					Value:   data.A_content,
-					Classes: "autosize",
+					Classes: "wysiwyg",
 				},
 				{
 					Kind:    builder.DFKCheckBox,

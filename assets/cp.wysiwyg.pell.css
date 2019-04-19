@@ -8,24 +8,47 @@
 	height: 300px;
 	outline: 0;
 	overflow-y: auto;
-	padding: 10px;
+	padding: .375rem .75rem;
+}
+
+.pell-content p:last-child {
+	margin-bottom: 0px;
 }
 
 .pell-actionbar {
-	background-color: #FFF;
-	border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+	padding: .2rem;
+	padding-top: 0;
+	background-color: #fff;
+	border-radius: .25rem .25rem 0px 0px;
+	border-bottom: 1px solid #ced4da;
 }
 
 .pell-button {
-	background-color: transparent;
+	margin-top: .2rem;
+	background-color: #e9ecef;
 	border: none;
 	cursor: pointer;
 	height: 30px;
 	outline: 0;
-	width: 30px;
+	min-width: 30px;
 	vertical-align: bottom;
+	margin-right: .2rem;
+	border-radius: .25rem;
 }
 
-.pell-button-selected {
-	background-color: #F0F0F0;
+.pell-button-selected,
+.pell-button-html-pressed {
+	background-color: #007bff;
+	color: #fff;
+}
+
+.pell-html-mode .pell-content {
+	display: none;
+}
+
+.pell-html-mode textarea {
+	height: 300px;
+	display: block !important;
+	box-shadow: none !important;
+	border: none !important;
 }

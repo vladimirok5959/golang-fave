@@ -395,6 +395,12 @@
 			return doc.documentElement.textContent;
 		};
 
+		function HtmlFixEditorHtml(value) {
+			newValue = value;
+			newValue = newValue.replace(/&nbsp;/gi, '');
+			return newValue;
+		};
+
 		function AllFormsToAjax() {
 			$('form').each(function() {
 				FormToAjax($(this));
@@ -421,19 +427,18 @@
 				var area_name = area.name;
 				var area_html = area.innerHTML;
 
+				// Wrap editro by additional DIV and remove target textarea
 				$(area).wrap('<div id="' + area_id + '_wysiwyg" class="form-control wysiwyg" style="height:auto;padding:0px"></div>').remove();
+
 				var wysiwyg = document.getElementById(area_id + '_wysiwyg');
-
 				wysiwyg.id = area_id;
-				$(wysiwyg).append('<textarea id="' + area_id + '_wysiwyg' + '" name="' + area_name + '" style="display:none!important"></textarea>');
 
-				area = document.getElementById(area_id + '_wysiwyg');
-				area.innerHTML = area_html;
-
+				// Create and init editor
 				var editor = window.pell.init({
 					element: wysiwyg,
 					onChange: function(html) {
-						area.innerHTML = html;
+						area.innerHTML = HtmlFixEditorHtml(html);
+						$(area).val(HtmlFixEditorHtml(html));
 						if(!FormDataWasChanged) {
 							FormDataWasChanged = true;
 						}
@@ -441,9 +446,49 @@
 					defaultParagraphSeparator: 'p',
 					styleWithCSS: false,
 					actions: [
+						'paragraph',
+						'heading1',
+						'heading2',
 						'bold',
 						'italic',
-						'underline'
+						'underline',
+						'strikethrough',
+						'ulist',
+						'olist',
+						'link',
+						{
+							name: 'htmlcode',
+							icon: 'HTML',
+							title: 'HTML Source',
+							result: function(edt, ctn, btn) {
+								var jedt = $(edt);
+								var jctn = $(ctn);
+								var jbtn = $(btn);
+								if(!jbtn.hasClass('pell-button-html-pressed')) {
+									jbtn.addClass('pell-button-html-pressed');
+									jedt.addClass('pell-html-mode');
+
+									jedt.find('.pell-actionbar .pell-button').prop('disabled', true);
+									jbtn.prop('disabled', false);
+
+									setTimeout(function() {
+										jedt.find('textarea.form-control').focus();
+									}, 0);
+								} else {
+									jbtn.removeClass('pell-button-html-pressed');
+									jedt.removeClass('pell-html-mode');
+									jedt.find('.pell-actionbar .pell-button').prop('disabled', false);
+
+									var srcValue = jedt.find('textarea.form-control').val();
+									ctn.innerHTML = HtmlFixEditorHtml(srcValue);
+									$(ctn).val(HtmlFixEditorHtml(srcValue));
+
+									setTimeout(function() {
+										jctn.focus();
+									}, 0);
+								}
+							},
+						},
 					],
 					classes: {
 						actionbar: 'pell-actionbar',
@@ -452,14 +497,31 @@
 						selected: 'pell-button-selected'
 					}
 				});
+
 				editor.onfocusin = function() {
 					$(wysiwyg).addClass('focused');
 				};
+
 				editor.onfocusout = function() {
 					$(wysiwyg).find('.pell-actionbar button.pell-button-selected').removeClass('pell-button-selected');
 					$(wysiwyg).removeClass('focused');
 				};
-				editor.content.innerHTML = HtmlDecode(area_html);
+
+				// Re-add textarea
+				$(wysiwyg).append('<textarea class="form-control" id="' + area_id + '_wysiwyg' + '" name="' + area_name + '" style="display:none"></textarea>');
+				area = document.getElementById(area_id + '_wysiwyg');
+
+				// Prevent data lost if HTML was changed
+				$(area).on('input', function() {
+					if(!FormDataWasChanged) {
+						FormDataWasChanged = true;
+					}
+				});
+
+				// Copy HTML to textarea and editor
+				area.innerHTML = HtmlFixEditorHtml(HtmlDecode(area_html));
+				$(area).val(HtmlFixEditorHtml(HtmlDecode(area_html)));
+				editor.content.innerHTML = HtmlFixEditorHtml(HtmlDecode(area_html));
 			});
 		};
 

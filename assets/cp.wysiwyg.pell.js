@@ -192,7 +192,7 @@ var init = function init(settings) {
 		button.title = action.title;
 		button.setAttribute('type', 'button');
 		button.onclick = function () {
-			return action.result() && content.focus();
+			return action.result(settings.element, content, this) && content.focus();
 		};
 
 		if (action.state) {
