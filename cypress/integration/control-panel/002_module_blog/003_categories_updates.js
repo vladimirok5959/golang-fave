@@ -33,7 +33,8 @@ context('Module blog categories updates', () => {
     cy.visitCMS('/cp/blog/categories/');
     
     cy.contains('table.data-table tbody tr td a', '— Juices').click();
-    cy.get('.data-form.blog-categories-modify select[name=parent]').select('News');
+    cy.get('.data-form.blog-categories-modify select[name=parent]').parent().find('button').click();
+    cy.get('.data-form.blog-categories-modify select[name=parent]').parent().find('ul.dropdown-menu').contains('News').parent().click();
     cy.get('#add-edit-button').click();
     cy.actionWait();
 
@@ -59,7 +60,8 @@ context('Module blog categories updates', () => {
     cy.visitCMS('/cp/blog/categories/');
     
     cy.contains('table.data-table tbody tr td a', '— Juices').click();
-    cy.get('.data-form.blog-categories-modify select[name=parent]').select('— Nutrition');
+    cy.get('.data-form.blog-categories-modify select[name=parent]').parent().find('button').click();
+    cy.get('.data-form.blog-categories-modify select[name=parent]').parent().find('ul.dropdown-menu').contains('— Nutrition').parent().click();
     cy.get('#add-edit-button').click();
     cy.actionWait();
 
@@ -85,7 +87,8 @@ context('Module blog categories updates', () => {
     cy.visitCMS('/cp/blog/categories/');
 
     cy.contains('table.data-table tbody tr td a', '— Juices').click();
-    cy.get('.data-form.blog-categories-modify select[name=parent]').select('— — — Natural');
+    cy.get('.data-form.blog-categories-modify select[name=parent]').parent().find('button').click();
+    cy.get('.data-form.blog-categories-modify select[name=parent]').parent().find('ul.dropdown-menu').contains('— — — Natural').parent().click();
     cy.get('#add-edit-button').click();
     cy.actionWait();
 

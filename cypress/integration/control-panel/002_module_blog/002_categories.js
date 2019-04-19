@@ -19,7 +19,7 @@ context('Module blog categories', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/categories-add/');
     cy.get('.data-form.blog-categories-add select').should('have.length', 1);
-    cy.get('.data-form.blog-categories-add input[type=text]').should('have.length', 2);
+    cy.get('.data-form.blog-categories-add input[type=text]').should('have.length', 3);
     cy.logoutCMS();
   });
 
@@ -62,7 +62,8 @@ context('Module blog categories', () => {
   it('should add new child category', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/categories-add/');
-    cy.get('.data-form.blog-categories-add select[name=parent]').select('Some test category');
+    cy.get('.data-form.blog-categories-add select[name=parent]').parent().find('button').click();
+    cy.get('.data-form.blog-categories-add select[name=parent]').parent().find('ul.dropdown-menu').contains('Some test category').parent().click();
     cy.get('.data-form.blog-categories-add input[name=name]').clear().type('Some test child category');
     cy.get('#add-edit-button').click();
     cy.actionWait();

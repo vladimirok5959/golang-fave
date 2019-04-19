@@ -18,7 +18,7 @@ context('Module blog posts', () => {
   it('should render data form', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/add/');
-    cy.get('.data-form.blog-add input[type=text]').should('have.length', 2);
+    cy.get('.data-form.blog-add input[type=text]').should('have.length', 3);
     cy.get('.data-form.blog-add select').should('have.length', 1);
     cy.get('.data-form.blog-add textarea').should('have.length', 2);
     cy.get('.data-form.blog-add input[type=checkbox]').should('have.length', 1);
@@ -38,7 +38,10 @@ context('Module blog posts', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/add/');
     cy.get('.data-form.blog-add input[name=name]').clear().type('Some test post');
-    cy.get('.data-form.blog-add select#lbl_cats').select(['Health and food', '— — Natural']).invoke('val').should('deep.equal', ['2', '7']);
+    cy.get('.data-form.blog-add select#lbl_cats').parent().find('button').click();
+    cy.get('.data-form.blog-add select#lbl_cats').parent().find('ul.dropdown-menu').contains('Health and food').parent().click();
+    cy.get('.data-form.blog-add select#lbl_cats').parent().find('ul.dropdown-menu').contains('— — Natural').parent().click();
+    cy.get('.data-form.blog-add select#lbl_cats').parent().find('button').click();
     cy.get('.data-form.blog-add textarea[name=briefly]').parent().find('.pell-content').clear().type('Some brief content');
     cy.get('.data-form.blog-add textarea[name=content]').parent().find('.pell-content').clear().type('Some test content');
     cy.get('.data-form.blog-add label[for=lbl_active]').click();
