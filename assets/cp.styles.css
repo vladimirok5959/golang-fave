@@ -983,6 +983,10 @@ div.wysiwyg.focused {
 	color: #fff;
 }
 
+.bootstrap-select .dropdown-menu.show {
+	padding-bottom: 0px !important;
+}
+
 /* Mobile fixes */
 @media (min-width: 992px) {
 	body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right.d-lg-table-cell {
