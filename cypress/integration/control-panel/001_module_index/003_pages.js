@@ -37,7 +37,7 @@ context('Module pages', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/index/add/');
     cy.get('.data-form.index-add input[name=name]').clear().type('Some test page');
-    cy.get('.data-form.index-add textarea[name=content]').clear().type('Some test content');
+    cy.get('.data-form.index-add textarea[name=content]').parent().find('.pell-content').clear().type('Some test content');
     cy.get('.data-form.index-add input[name=meta_title]').clear().type('Page meta title');
     cy.get('.data-form.index-add input[name=meta_keywords]').clear().type('Page meta keywords');
     cy.get('.data-form.index-add textarea[name=meta_description]').clear().type('Page meta description');
@@ -62,7 +62,9 @@ context('Module pages', () => {
     cy.contains('table.data-table tbody tr td a', 'Some test page').click();
     cy.get('.data-form.index-modify input[name=name]').should('have.value', 'Some test page');
     cy.get('.data-form.index-modify input[name=alias]').should('have.value', '/some-test-page/');
-    cy.get('.data-form.index-modify textarea[name=content]').should('have.value', 'Some test content');
+    cy.get('.data-form.index-modify textarea[name=content]').parent().find('.pell-content').should(($editor) => {
+      expect($editor).to.have.text('Some test content');
+    });
     cy.get('.data-form.index-modify input[name=meta_title]').should('have.value', 'Page meta title');
     cy.get('.data-form.index-modify input[name=meta_keywords]').should('have.value', 'Page meta keywords');
     cy.get('.data-form.index-modify textarea[name=meta_description]').should('have.value', 'Page meta description');

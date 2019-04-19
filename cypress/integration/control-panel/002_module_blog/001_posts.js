@@ -39,8 +39,8 @@ context('Module blog posts', () => {
     cy.visitCMS('/cp/blog/add/');
     cy.get('.data-form.blog-add input[name=name]').clear().type('Some test post');
     cy.get('.data-form.blog-add select#lbl_cats').select(['Health and food', '— — Natural']).invoke('val').should('deep.equal', ['2', '7']);
-    cy.get('.data-form.blog-add textarea[name=briefly]').clear().type('Some brief content');
-    cy.get('.data-form.blog-add textarea[name=content]').clear().type('Some test content');
+    cy.get('.data-form.blog-add textarea[name=briefly]').parent().find('.pell-content').clear().type('Some brief content');
+    cy.get('.data-form.blog-add textarea[name=content]').parent().find('.pell-content').clear().type('Some test content');
     cy.get('.data-form.blog-add label[for=lbl_active]').click();
     cy.get('#add-edit-button').click();
     cy.actionWait();
@@ -63,8 +63,12 @@ context('Module blog posts', () => {
     cy.get('.data-form.blog-modify input[name=name]').should('have.value', 'Some test post');
     cy.get('.data-form.blog-modify input[name=alias]').should('have.value', 'some-test-post');
     cy.get('.data-form.blog-modify select#lbl_cats').invoke('val').should('deep.equal', ['2', '7']);
-    cy.get('.data-form.blog-modify textarea[name=briefly]').should('have.value', 'Some brief content');
-    cy.get('.data-form.blog-modify textarea[name=content]').should('have.value', 'Some test content');
+    cy.get('.data-form.blog-modify textarea[name=briefly]').parent().find('.pell-content').should(($editor) => {
+      expect($editor).to.have.text('Some brief content');
+    });
+    cy.get('.data-form.blog-modify textarea[name=content]').parent().find('.pell-content').should(($editor) => {
+      expect($editor).to.have.text('Some test content');
+    });
     cy.get('.data-form.blog-modify input[name=active]').should('be.checked');
     cy.logoutCMS();
   });
