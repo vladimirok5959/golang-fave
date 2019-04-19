@@ -947,6 +947,42 @@ div.wysiwyg.focused {
 	color: #1a73e8;
 }
 
+/* Bootstrap select */
+.bs-searchbox,
+.bs-actionsbox,
+.bs-donebutton {
+	padding: 0px 8px 8px 8px;
+}
+
+.bootstrap-select button.btn {
+	outline: 0;
+	border-color: #ced4da;
+}
+
+.bootstrap-select button.btn:active,
+.bootstrap-select button.btn:hover,
+.bootstrap-select button.btn:focus {
+	outline: 0 !important;
+}
+
+.bootstrap-select ul.dropdown-menu li {
+	background-color: transparent;
+}
+
+.bootstrap-select.form-control.show {
+	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+.bootstrap-select.form-control.show button.btn {
+	border-color: #80bdff;
+	background-color: #fff;
+}
+
+.bootstrap-select .dropdown-menu li a.selected {
+	background-color: #007bff;
+	color: #fff;
+}
+
 /* Mobile fixes */
 @media (min-width: 992px) {
 	body.cp.cp-sidebar-right .wrap .sidebar.sidebar-right.d-lg-table-cell {

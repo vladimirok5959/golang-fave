@@ -57,7 +57,7 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 					depth = 0
 				}
 				sub := strings.Repeat("&mdash; ", depth)
-				result += `<option value="` + html.EscapeString(string(values[0])) + `"` + disabled + selected + `>` + sub + html.EscapeString(string(values[2])) + `</option>`
+				result += `<option title="` + html.EscapeString(string(values[2])) + `" value="` + html.EscapeString(string(values[0])) + `"` + disabled + selected + `>` + sub + html.EscapeString(string(values[2])) + `</option>`
 			}
 		}
 	}
