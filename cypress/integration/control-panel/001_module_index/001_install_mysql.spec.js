@@ -26,7 +26,7 @@ context('Install MySQL, create first user and login', () => {
     cy.actionWait();
   });
 
-  it('should create first user', () => {
+  xit('should create first user', () => {
     cy.actionStart();
     cy.get('.form-signin input[type=text]').should('have.length', 2);
     cy.get('.form-signin input[type=email]').should('have.length', 1);

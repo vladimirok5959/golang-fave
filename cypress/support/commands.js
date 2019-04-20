@@ -72,13 +72,13 @@ Cypress.Commands.add('installCMS', () => {
   cy.get('.form-signin button').click();
   cy.actionWait();
 
-  cy.visitCMS('/cp/');
-  cy.get('.form-signin input[name=first_name]').type('First');
-  cy.get('.form-signin input[name=last_name]').type('Last');
-  cy.get('.form-signin input[name=email]').type('example@example.com');
-  cy.get('.form-signin input[name=password]').type('example@example.com');
-  cy.get('.form-signin button').click();
-  cy.actionWait();
+  // cy.visitCMS('/cp/');
+  // cy.get('.form-signin input[name=first_name]').type('First');
+  // cy.get('.form-signin input[name=last_name]').type('Last');
+  // cy.get('.form-signin input[name=email]').type('example@example.com');
+  // cy.get('.form-signin input[name=password]').type('example@example.com');
+  // cy.get('.form-signin button').click();
+  // cy.actionWait();
 });
 
 Cypress.Commands.add('loginCMS', () => {

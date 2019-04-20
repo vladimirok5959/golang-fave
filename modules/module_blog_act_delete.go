@@ -28,10 +28,10 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 			}
 
 			// Delete target post with category connection data
-			if _, err := tx.Exec("DELETE FROM blog_posts WHERE id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE post_id = ?;", pf_id); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE post_id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM blog_posts WHERE id = ?;", pf_id); err != nil {
 				return err
 			}
 			return nil

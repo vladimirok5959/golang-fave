@@ -1,3 +1,4 @@
+# Tables with keys
 CREATE TABLE `blog_cats` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	`user` int(11) NOT NULL COMMENT 'User id',
@@ -9,6 +10,7 @@ CREATE TABLE `blog_cats` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `blog_cats` ADD UNIQUE KEY `alias` (`alias`);
 ALTER TABLE `blog_cats` ADD KEY `lft` (`lft`), ADD KEY `rgt` (`rgt`);
+ALTER TABLE `blog_cats` ADD KEY `FK_blog_cats_user` (`user`);
 
 CREATE TABLE `blog_cat_post_rel` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
@@ -18,6 +20,8 @@ CREATE TABLE `blog_cat_post_rel` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `blog_cat_post_rel` ADD KEY `post_id` (`post_id`), ADD KEY `category_id` (`category_id`);
 ALTER TABLE `blog_cat_post_rel` ADD UNIQUE KEY `post_category` (`post_id`,`category_id`) USING BTREE;
+ALTER TABLE `blog_cat_post_rel` ADD KEY `FK_blog_cat_post_rel_post_id` (`post_id`);
+ALTER TABLE `blog_cat_post_rel` ADD KEY `FK_blog_cat_post_rel_category_id` (`category_id`);
 
 CREATE TABLE `blog_posts` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
@@ -31,6 +35,7 @@ CREATE TABLE `blog_posts` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `blog_posts` ADD UNIQUE KEY `alias` (`alias`);
+ALTER TABLE `blog_posts` ADD KEY `FK_blog_posts_user` (`user`);
 
 CREATE TABLE `pages` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
@@ -47,6 +52,7 @@ CREATE TABLE `pages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `pages` ADD UNIQUE KEY `alias` (`alias`);
 ALTER TABLE `pages` ADD KEY `alias_active` (`alias`,`active`) USING BTREE;
+ALTER TABLE `pages` ADD KEY `FK_pages_user` (`user`);
 
 CREATE TABLE `users` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
@@ -59,3 +65,10 @@ CREATE TABLE `users` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `users` ADD UNIQUE KEY `email` (`email`);
+
+# References
+ALTER TABLE `blog_cats` ADD CONSTRAINT `FK_blog_cats_user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE RESTRICT;
+ALTER TABLE `blog_cat_post_rel` ADD CONSTRAINT `FK_blog_cat_post_rel_category_id` FOREIGN KEY (`category_id`) REFERENCES `blog_cats` (`id`) ON DELETE RESTRICT;
+ALTER TABLE `blog_cat_post_rel` ADD CONSTRAINT `FK_blog_cat_post_rel_post_id` FOREIGN KEY (`post_id`) REFERENCES `blog_posts` (`id`) ON DELETE RESTRICT;
+ALTER TABLE `blog_posts` ADD CONSTRAINT `FK_blog_posts_user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE RESTRICT;
+ALTER TABLE `pages` ADD CONSTRAINT `FK_pages_user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE RESTRICT;

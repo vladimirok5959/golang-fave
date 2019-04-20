@@ -90,7 +90,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(
 			`INSERT INTO blog_cats (id, user, name, alias, lft, rgt)
 				VALUES
-			(1, 0, 'ROOT', 'ROOT', 1, 24),
+			(1, 1, 'ROOT', 'ROOT', 1, 24),
 			(2, 1, 'Health and food', 'health-and-food', 2, 15),
 			(3, 1, 'News', 'news', 16, 21),
 			(4, 1, 'Hobby', 'hobby', 22, 23),
@@ -113,6 +113,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
@@ -144,6 +149,16 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_post_id (post_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_category_id (category_id);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
@@ -240,6 +255,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
@@ -341,6 +361,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE pages ADD KEY FK_pages_user (user);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 
 		// Table: users
 		if _, err = tx.Exec(
@@ -359,7 +384,41 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(
+			`INSERT INTO users (id, first_name, last_name, email, password, admin, active) VALUES (1, 'First Name', 'Last Name', 'example@example.com', '23463b99b62a72f26ed677cc556c44e8', 1, 1);`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE users ADD UNIQUE KEY email (email);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// References
+		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD CONSTRAINT FK_blog_cats_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id FOREIGN KEY (category_id) REFERENCES blog_cats (id) ON DELETE RESTRICT;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id FOREIGN KEY (post_id) REFERENCES blog_posts (id) ON DELETE RESTRICT;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE pages ADD CONSTRAINT FK_pages_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
