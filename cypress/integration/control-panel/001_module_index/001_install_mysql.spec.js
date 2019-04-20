@@ -26,20 +26,6 @@ context('Install MySQL, create first user and login', () => {
     cy.actionWait();
   });
 
-  xit('should create first user', () => {
-    cy.actionStart();
-    cy.get('.form-signin input[type=text]').should('have.length', 2);
-    cy.get('.form-signin input[type=email]').should('have.length', 1);
-    cy.get('.form-signin input[type=password]').should('have.length', 1);
-    cy.get('.form-signin button').should('have.length', 1);
-    cy.get('.form-signin input[name=first_name]').type('First');
-    cy.get('.form-signin input[name=last_name]').type('Last');
-    cy.get('.form-signin input[name=email]').type('example@example.com');
-    cy.get('.form-signin input[name=password]').type('example@example.com');
-    cy.get('.form-signin button').click();
-    cy.actionWait();
-  });
-
   it('should login to control panel', () => {
     cy.actionStart();
     cy.get('.form-signin input[type=email]').should('have.length', 1);
