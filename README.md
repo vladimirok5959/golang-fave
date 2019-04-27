@@ -55,3 +55,7 @@ Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimiro
 * **make cy-dev** - cypress tests in browser
 * **make cy** - cypress tests in console
 * **make ab** - http stress test
+
+## Used resources
+* jQuery
+* Bootstrap
