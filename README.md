@@ -22,6 +22,8 @@ Usage of ./fave:
 hosts
 ├── localhost              # Main host directory
 ├──── config               # Config directory
+├────── .domains           # Attached domains
+├────── config.json        # CMS config file
 ├────── mysql.json         # MySQL config file
 ├──── htdocs               # Public http files
 ├──── logs                 # Logs dir
