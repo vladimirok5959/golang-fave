@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -53,7 +54,15 @@ func New(w http.ResponseWriter, r *http.Request, tmpdir string) *Session {
 		// Create new
 		rand.Seed(time.Now().Unix())
 
-		sign := r.RemoteAddr + r.Header.Get("User-Agent") + fmt.Sprintf("%d", int64(time.Now().Unix())) + fmt.Sprintf("%d", int64(rand.Intn(9999999-99)+99))
+		// Real remote IP for proxy servers
+		rRemoteAddr := r.RemoteAddr
+		if r.Header.Get("X-Real-IP") != "" && len(r.Header.Get("X-Real-IP")) <= 25 {
+			rRemoteAddr = rRemoteAddr + ", " + strings.TrimSpace(r.Header.Get("X-Real-IP"))
+		} else if r.Header.Get("X-Forwarded-For") != "" && len(r.Header.Get("X-Forwarded-For")) <= 25 {
+			rRemoteAddr = rRemoteAddr + ", " + strings.TrimSpace(r.Header.Get("X-Forwarded-For"))
+		}
+
+		sign := rRemoteAddr + r.Header.Get("User-Agent") + fmt.Sprintf("%d", int64(time.Now().Unix())) + fmt.Sprintf("%d", int64(rand.Intn(9999999-99)+99))
 		sess.i = fmt.Sprintf("%x", sha1.Sum([]byte(sign)))
 
 		http.SetCookie(w, &http.Cookie{

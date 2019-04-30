@@ -16,10 +16,21 @@ type handler struct {
 }
 
 func (this handler) log(w *writer, r *http.Request) {
+	rip := r.RemoteAddr
+	if r.Header.Get("X-Real-IP") != "" && len(r.Header.Get("X-Real-IP")) <= 25 {
+		rip = rip + ", " + strings.TrimSpace(r.Header.Get("X-Real-IP"))
+	} else if r.Header.Get("X-Forwarded-For") != "" && len(r.Header.Get("X-Forwarded-For")) <= 25 {
+		rip = rip + ", " + strings.TrimSpace(r.Header.Get("X-Forwarded-For"))
+	}
+
+	uagent := "-"
+	if r.Header.Get("User-Agent") != "" && len(r.Header.Get("User-Agent")) <= 256 {
+		uagent = strings.TrimSpace(r.Header.Get("User-Agent"))
+	}
+
 	msg := fmt.Sprint(strings.Join([]string{
 		r.Host,
-		r.RemoteAddr,
-		"-",
+		"(" + rip + ")",
 		"[" + w.s.Format(time.RFC3339) + "]",
 		`"` + r.Method,
 		r.RequestURI,
@@ -27,6 +38,7 @@ func (this handler) log(w *writer, r *http.Request) {
 		strconv.Itoa(w.status),
 		strconv.Itoa(w.size),
 		fmt.Sprintf("%.3f ms", time.Now().Sub(w.s).Seconds()),
+		`"` + uagent + `"`,
 	}, " "))
 
 	select {
