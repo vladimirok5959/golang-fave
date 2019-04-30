@@ -4,7 +4,7 @@ import (
 	"html/template"
 )
 
-const ServerVersion = "1.0.7"
+const ServerVersion = "1.0.8"
 const AssetsVersion = "30"
 const AssetsPath = "assets"
 const DirIndexFile = "index.html"
