@@ -57,6 +57,8 @@ Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimiro
 * **make ab** - http stress test
 
 ## Used resources
-* jQuery
-* Bootstrap
-* TODO
+* [jQuery](https://github.com/jquery/jquery)
+* [Autosize](https://github.com/jackmoore/autosize)
+* [Bootstrap](https://github.com/twbs/bootstrap)
+* [Pell WYSIWYG](https://github.com/jaredreich/pell)
+* [Bootstrap select](https://github.com/snapappointments/bootstrap-select/)
