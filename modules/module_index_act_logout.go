@@ -16,7 +16,7 @@ func (this *Modules) RegisterAction_IndexUserLogout() *Action {
 		// Delete session file
 		_ = wrap.S.Destroy()
 
-		// Reload current page
-		wrap.Write(`window.location.reload(false);`)
+		// Navigate to login page
+		wrap.Write(`window.location='/cp/';`)
 	})
 }

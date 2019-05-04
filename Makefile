@@ -2,7 +2,7 @@ VERSION="1.0.8"
 
 default: debug test run
 
-debug:
+debug: version dockerfile
 	go vet ./...
 	gofmt -d ./
 	gofmt -w ./
@@ -14,7 +14,7 @@ test:
 run:
 	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true -keepalive true
 
-build: clean
+build: clean version dockerfile
 	@-mkdir ./bin
 	@cd ./bin
 	@cd ..
@@ -42,14 +42,39 @@ update:
 	go mod vendor
 	go mod download
 
-docker-test:
+version:
+	@echo "package consts" > consts/consts_version.go
+	@echo "" >> consts/consts_version.go
+	@echo "const ServerVersion = \"${VERSION}\"" >> consts/consts_version.go
+
+dockerfile:
+	@echo "FROM debian:latest" > Dockerfile
+	@echo "" >> Dockerfile
+	@echo "ENV FAVE_HOST=0.0.0.0 FAVE_PORT=8080 FAVE_DIR=/app/hosts FAVE_DEBUG=false FAVE_KEEPALIVE=true" >> Dockerfile
+	@echo "" >> Dockerfile
+	@echo "ADD https://github.com/vladimirok5959/golang-fave/releases/download/v${VERSION}/fave.linux-amd64.tar.gz /app/fave.linux-amd64.tar.gz" >> Dockerfile
+	@echo "ADD https://github.com/vladimirok5959/golang-fave/releases/download/v${VERSION}/localhost.tar.gz /app/hosts/localhost.tar.gz" >> Dockerfile
+	@echo "" >> Dockerfile
+	@echo "RUN tar -zxf /app/fave.linux-amd64.tar.gz -C /app && \\" >> Dockerfile
+	@echo " tar -zxf /app/hosts/localhost.tar.gz -C /app/hosts && \\" >> Dockerfile
+	@echo " rm /app/fave.linux-amd64.tar.gz && \\" >> Dockerfile
+	@echo " rm /app/hosts/localhost.tar.gz && \\" >> Dockerfile
+	@echo " mkdir /app/src && cp -R /app/hosts/localhost /app/src && \\" >> Dockerfile
+	@echo " chmod +x /app/fave.linux-amd64" >> Dockerfile
+	@echo "" >> Dockerfile
+	@echo "EXPOSE 8080" >> Dockerfile
+	@echo "VOLUME /app/hosts" >> Dockerfile
+	@echo "" >> Dockerfile
+	@echo "CMD /app/fave.linux-amd64" >> Dockerfile
+
+docker-test: dockerfile
 	@-docker stop fave-test
 	@-docker rm fave-test
 	@-docker rmi fave
 	docker build --rm=false --force-rm=true -t fave .
 	docker run -d --name fave-test --cpus=".2" -m 200m -p 8080:8080 -t -i fave:latest /app/fave.linux-amd64
 
-docker-img:
+docker-img: dockerfile
 	docker build -t fave .
 
 docker-clr:

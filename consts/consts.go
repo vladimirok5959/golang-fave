@@ -4,9 +4,8 @@ import (
 	"html/template"
 )
 
-const ServerVersion = "1.0.8"
-const AssetsVersion = "30"
 const AssetsPath = "assets"
+const AssetsVersion = "30"
 const DirIndexFile = "index.html"
 
 // Bootstrap resources
@@ -25,15 +24,15 @@ const AssetsSysLogoSvg = AssetsPath + "/sys/logo.svg"
 const AssetsSysStylesCss = AssetsPath + "/sys/styles.css"
 
 // Wysiwyg editor
-const AssetsCpWysiwygPellJs = AssetsPath + "/cp/wysiwyg/pell.js"
 const AssetsCpWysiwygPellCss = AssetsPath + "/cp/wysiwyg/pell.css"
+const AssetsCpWysiwygPellJs = AssetsPath + "/cp/wysiwyg/pell.js"
 
 // Make global for other packages
+var ParamDebug bool
 var ParamHost string
+var ParamKeepAlive bool
 var ParamPort int
 var ParamWwwDir string
-var ParamDebug bool
-var ParamKeepAlive bool
 
 // For admin panel
 type BreadCrumb struct {
