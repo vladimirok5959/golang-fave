@@ -3348,6 +3348,10 @@
 		// Private
 		var FormDataWasChanged = false;
 
+		function IsDebugMode() {
+			return window.fave_debug && window.fave_debug === true;
+		};
+
 		function GetModalAlertTmpl(title, message, error) {
 			return '<div class="alert alert-' + (!error?'success':'danger') + ' alert-dismissible fade show" role="alert"><strong>' + title + '</strong> ' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 		};
@@ -3408,8 +3412,10 @@
 					data: form.serialize()
 				}).done(function(data) {
 					FormDataWasChanged = false;
+					if(IsDebugMode()) console.log('done', data);
 					AjaxDone(data)
 				}).fail(function(xhr, status, error) {
+					if(IsDebugMode()) console.log('fail', xhr, status, error);
 					AjaxFail(xhr.responseText, status, error);
 				}).always(function() {
 					// Add delay for one second
@@ -3676,8 +3682,10 @@
 							action: 'index-user-logout',
 						}
 					}).done(function(data) {
-						AjaxDone(data)
+						if(IsDebugMode()) console.log('done', data);
+						AjaxDone(data);
 					}).fail(function(xhr, status, error) {
+						if(IsDebugMode()) console.log('fail', xhr, status, error);
 						AjaxFail(xhr.responseText, status, error);
 					});
 				}
@@ -3693,8 +3701,10 @@
 							id: id,
 						}
 					}).done(function(data) {
-						AjaxDone(data)
+						if(IsDebugMode()) console.log('done', data);
+						AjaxDone(data);
 					}).fail(function(xhr, status, error) {
+						if(IsDebugMode()) console.log('fail', xhr, status, error);
 						AjaxFail(xhr.responseText, status, error);
 					});
 				}
