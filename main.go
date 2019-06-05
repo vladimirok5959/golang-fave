@@ -14,6 +14,7 @@ import (
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/logger"
 	"golang-fave/modules"
+	"golang-fave/support"
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
@@ -64,6 +65,12 @@ func main() {
 	if !utils.IsDirExists(consts.ParamWwwDir) {
 		fmt.Printf("Virtual hosts directory is not exists\n")
 		fmt.Printf("Example: ./fave -host 127.0.0.1 -port 80 -dir ./hosts\n")
+		return
+	}
+
+	// Run database migration
+	if err := support.New().Migration(consts.ParamWwwDir); err != nil {
+		fmt.Println(err)
 		return
 	}
 

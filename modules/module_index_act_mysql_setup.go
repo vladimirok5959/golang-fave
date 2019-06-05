@@ -367,6 +367,30 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
+		// Table: settings
+		if _, err = tx.Exec(
+			`CREATE TABLE settings (
+				name varchar(255) NOT NULL COMMENT 'Setting name',
+				value text NOT NULL COMMENT 'Setting value'
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000000');`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE settings ADD UNIQUE KEY name (name);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
 		// Table: users
 		if _, err = tx.Exec(
 			`CREATE TABLE users (

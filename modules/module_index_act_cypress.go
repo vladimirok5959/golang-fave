@@ -39,6 +39,7 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 				blog_cat_post_rel,
 				blog_posts,
 				pages,
+				settings,
 				users
 			;`,
 		)

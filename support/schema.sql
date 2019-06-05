@@ -54,6 +54,12 @@ ALTER TABLE `pages` ADD UNIQUE KEY `alias` (`alias`);
 ALTER TABLE `pages` ADD KEY `alias_active` (`alias`,`active`) USING BTREE;
 ALTER TABLE `pages` ADD KEY `FK_pages_user` (`user`);
 
+CREATE TABLE `settings` (
+	`name` varchar(255) NOT NULL COMMENT 'Setting name',
+	`value` text NOT NULL COMMENT 'Setting value',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE `settings` ADD UNIQUE KEY `name` (`name`);
+
 CREATE TABLE `users` (
 	`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	`first_name` varchar(64) NOT NULL DEFAULT '' COMMENT 'User first name',
