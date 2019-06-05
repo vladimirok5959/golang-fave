@@ -54,6 +54,7 @@ Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimiro
 * **make update** - get all dependencies and put to vendor folder
 * **make docker-test** - build image and start on port 8080
 * **make docker-img** - build docker image only
+* **make migrate** - create new empty migration file
 * **make cy-dev** - cypress tests in browser
 * **make cy** - cypress tests in console
 * **make ab** - http stress test

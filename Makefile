@@ -82,6 +82,9 @@ docker-clr:
 	@-docker rm fave-test
 	@-docker rmi fave
 
+migrate:
+	./support/migrate.sh
+
 cy-dev:
 	yarn cypress open
 
@@ -93,6 +96,3 @@ ab:
 	ab -kc 10 -t 120 http://localhost:8080/another/
 	ab -kc 10 -t 120 http://localhost:8080/not-existent-page/
 	ab -kc 10 -t 120 http://localhost:8080/blog/
-
-migrate:
-	./support/migrate.sh
