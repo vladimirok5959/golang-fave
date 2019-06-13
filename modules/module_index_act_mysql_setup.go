@@ -379,7 +379,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000000');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000002');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

@@ -70,8 +70,7 @@ func main() {
 
 	// Run database migration
 	if err := support.New().Migration(consts.ParamWwwDir); err != nil {
-		fmt.Println(err)
-		return
+		fmt.Printf("[ERROR] MIGRATION FAILED: %s\n", err)
 	}
 
 	// Init logger
