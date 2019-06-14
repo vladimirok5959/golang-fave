@@ -255,29 +255,35 @@ func New() *Modules {
 	return &m
 }
 
+func (this *Modules) XXXActionHeaders(wrap *wrapper.Wrapper, status int) {
+	wrap.W.WriteHeader(status)
+	wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	wrap.W.Header().Set("Content-Type", "text/html; charset=utf-8")
+}
+
 func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 	if wrap.R.Method == "POST" {
 		if err := wrap.R.ParseForm(); err == nil {
 			name := wrap.R.FormValue("action")
 			if name != "" {
-				wrap.W.WriteHeader(http.StatusOK)
-				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-				wrap.W.Header().Set("Content-Type", "text/html; charset=utf-8")
 				if act, ok := this.acts[name]; ok {
 					if act.Info.WantDB {
 						err := wrap.UseDatabase()
 						if err != nil {
+							this.XXXActionHeaders(wrap, http.StatusNotFound)
 							wrap.MsgError(err.Error())
 							return true
 						}
 					}
 					if act.Info.WantUser || act.Info.WantAdmin {
 						if !wrap.LoadSessionUser() {
+							this.XXXActionHeaders(wrap, http.StatusNotFound)
 							wrap.MsgError(`You must be loginned to run this action`)
 							return true
 						}
 						if wrap.User.A_active <= 0 {
 							if !wrap.LoadSessionUser() {
+								this.XXXActionHeaders(wrap, http.StatusNotFound)
 								wrap.MsgError(`You do not have rights to run this action`)
 								return true
 							}
@@ -285,13 +291,16 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 					}
 					if act.Info.WantAdmin && wrap.User.A_admin <= 0 {
 						if !wrap.LoadSessionUser() {
+							this.XXXActionHeaders(wrap, http.StatusNotFound)
 							wrap.MsgError(`You do not have rights to run this action`)
 							return true
 						}
 					}
+					this.XXXActionHeaders(wrap, http.StatusOK)
 					act.Act(wrap)
 					return true
 				} else {
+					this.XXXActionHeaders(wrap, http.StatusNotFound)
 					wrap.MsgError(`This action is not implemented`)
 					return true
 				}

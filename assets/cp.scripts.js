@@ -3366,7 +3366,7 @@
 			}
 		};
 
-		function AjaxDone(data) {
+		function AjaxEval(data) {
 			try {
 				eval(data);
 			} catch(e) {
@@ -3377,11 +3377,19 @@
 			}
 		};
 
+		function AjaxDone(data) {
+			AjaxEval(data);
+		};
+
 		function AjaxFail(data, status, error) {
-			console.log('Error: data sending error, page will be reloaded', data, status, error);
-			setTimeout(function() {
-				window.location.reload(false);
-			}, 1000);
+			if(status.toLowerCase() === "error" && error.toLowerCase() === "not found") {
+				AjaxEval(data);
+			} else {
+				console.log('Error: data sending error, page will be reloaded', data, status, error);
+				setTimeout(function() {
+					window.location.reload(false);
+				}, 1000);
+			}
 		};
 
 		function FormToAjax(form) {
