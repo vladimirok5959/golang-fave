@@ -45,8 +45,7 @@ hosts
 ├────── styles.css         # Theme styles file
 └──── tmp                  # Temporary dir for session files
 ```
-Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).
-
+Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).<br>
 Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.com/r/vladimirok5959/fave)
 
 ## Development
