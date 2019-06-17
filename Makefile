@@ -78,17 +78,17 @@ docker-test: dockerfile
 docker-img: dockerfile
 	docker build -t fave:latest .
 
-docker-clr:
-	@-docker stop fave-test
-	@-docker rm fave-test
-	@-docker rmi fave
-
 docker-push: docker-img
 	docker tag fave:latest vladimirok5959/fave:latest
 	docker login
 	docker push vladimirok5959/fave:latest
 	docker rmi vladimirok5959/fave:latest
 	docker rmi fave:latest
+
+docker-clr:
+	@-docker stop fave-test
+	@-docker rm fave-test
+	@-docker rmi fave
 
 migrate:
 	./support/migrate.sh

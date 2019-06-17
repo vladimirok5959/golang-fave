@@ -56,6 +56,7 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * **make update** - get all dependencies and put to vendor folder
 * **make docker-test** - build image and start on port 8080
 * **make docker-img** - build docker image only
+* **make docker-push** - build and push image to docker hub
 * **make migrate** - create new empty migration file
 * **make cy-dev** - cypress tests in browser
 * **make cy** - cypress tests in console
