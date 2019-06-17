@@ -1,4 +1,5 @@
 FROM debian:latest
+MAINTAINER Vova Tkach <vladimirok5959@gmail.com>
 
 ENV FAVE_HOST=0.0.0.0 FAVE_PORT=8080 FAVE_DIR=/app/hosts FAVE_DEBUG=false FAVE_KEEPALIVE=true
 
