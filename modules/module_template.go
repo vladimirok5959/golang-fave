@@ -38,16 +38,16 @@ func (this *Modules) RegisterModule_Template() *Module {
 		Name:   "Template",
 		Order:  802,
 		System: true,
-		Icon:   assets.SysSvgIconGear,
+		Icon:   assets.SysSvgIconView,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "Theme", Show: true, Icon: assets.SysSvgIconGear},
+			{Mount: "default", Name: "Editor", Show: true, Icon: assets.SysSvgIconEdit},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""
 		if wrap.CurrSubModule == "" || wrap.CurrSubModule == "default" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
-				{Name: "Theme"},
+				{Name: "Editor"},
 			})
 			files := this.template_GetThemeFiles(wrap)
 			if len(files) > 0 {
