@@ -3456,7 +3456,9 @@
 			if(form.hasClass('prev-data-lost')) {
 				form.find('input, textarea, select').on('input', function() {
 					if(!FormDataWasChanged) {
-						FormDataWasChanged = true;
+						if(!$(this).hasClass('ignore-lost-data')) {
+							FormDataWasChanged = true;
+						}
 					}
 				});
 			}
@@ -3597,6 +3599,25 @@
 			});
 		};
 
+		function MakeTextAreasNotReactOnTab() {
+			$('textarea.use-tab-key').each(function() {
+				$(this).keydown(function(e) {
+					if(e.keyCode === 9) {
+						var start = this.selectionStart;
+						var end = this.selectionEnd;
+						var $this = $(this);
+						var value = $this.val();
+						$this.val(value.substring(0, start) + "\t" + value.substring(end));
+						this.selectionStart = this.selectionEnd = start + 1;
+						e.preventDefault();
+						if(!FormDataWasChanged) {
+							FormDataWasChanged = true;
+						}
+					}
+				});
+			});
+		};
+
 		function Initialize() {
 			// Check if jQuery was loaded
 			if(typeof $ == 'function') {
@@ -3604,6 +3625,7 @@
 				BindWindowBeforeUnload();
 				MakeTextAreasAutoSized();
 				MakeTextAreasWysiwyg();
+				MakeTextAreasNotReactOnTab();
 			} else {
 				console.log('Error: jQuery is not loaded!');
 			}
