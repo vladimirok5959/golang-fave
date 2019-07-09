@@ -3599,6 +3599,19 @@
 			});
 		};
 
+		function MakeTextAreasTmplEditor() {
+			$('textarea.tmpl-editor').each(function() {
+				var targetTextArea = $(this)[0];
+				CodeMirror.fromTextArea(targetTextArea, {
+					lineNumbers: true,
+					lineWrapping: true,
+					viewportMargin: Infinity,
+				}).on('change', function(editor){
+					targetTextArea.value = editor.getValue();
+				});
+			});
+		};
+
 		function MakeTextAreasNotReactOnTab() {
 			$('textarea.use-tab-key').each(function() {
 				$(this).keydown(function(e) {
@@ -3625,6 +3638,7 @@
 				BindWindowBeforeUnload();
 				MakeTextAreasAutoSized();
 				MakeTextAreasWysiwyg();
+				MakeTextAreasTmplEditor();
 				MakeTextAreasNotReactOnTab();
 			} else {
 				console.log('Error: jQuery is not loaded!');

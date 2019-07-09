@@ -6,7 +6,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>{{$.Data.Title}}</title>
 		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
-		<link rel="stylesheet" href="{{$.System.PathCssCpWysiwygPell}}">
+		{{if or (eq $.System.CpModule "index") (eq $.System.CpModule "blog")}}
+			{{if or (eq $.System.CpSubModule "add") (eq $.System.CpSubModule "modify")}}
+				<link rel="stylesheet" href="{{$.System.PathCssCpWysiwygPell}}">
+			{{end}}
+		{{end}}
+		{{if eq $.System.CpModule "template"}}
+			<link rel="stylesheet" href="{{$.System.PathCssCpCodeMirror}}">
+		{{end}}
 		<link rel="stylesheet" href="{{$.System.PathCssStyles}}" />
 		<link rel="stylesheet" href="{{$.System.PathCssCpStyles}}">
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
@@ -18,7 +25,7 @@
 			};
 		</script>
 	</head>
-	<body class="{{$.Data.BodyClasses}}">
+	<body class="{{$.Data.BodyClasses}} cp-mod-{{$.System.CpModule}} cp-sub-mod-{{$.System.CpSubModule}}">
 		<div id="sys-modal-user-settings-placeholder"></div>
 		<nav class="navbar main navbar-expand-md navbar-dark fixed-top bg-dark">
 			<a class="navbar-brand" href="/cp/">{{$.Data.Caption}}</a>
@@ -84,7 +91,14 @@
 		<script src="{{$.System.PathJsJquery}}"></script>
 		<script src="{{$.System.PathJsPopper}}"></script>
 		<script src="{{$.System.PathJsBootstrap}}"></script>
-		<script src="{{$.System.PathJsCpWysiwygPell}}"></script>
+		{{if or (eq $.System.CpModule "index") (eq $.System.CpModule "blog")}}
+			{{if or (eq $.System.CpSubModule "add") (eq $.System.CpSubModule "modify")}}
+				<script src="{{$.System.PathJsCpWysiwygPell}}"></script>
+			{{end}}
+		{{end}}
+		{{if eq $.System.CpModule "template"}}
+			<script src="{{$.System.PathJsCpCodeMirror}}"></script>
+		{{end}}
 		<script src="{{$.System.PathJsCpScripts}}"></script>
 	</body>
 </html>

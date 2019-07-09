@@ -235,7 +235,7 @@ func (this *Wrapper) RenderFrontEnd(tname string, data interface{}, status int) 
 	}
 	var tpl bytes.Buffer
 	err = tmpl.Execute(&tpl, consts.TmplData{
-		System: utils.GetTmplSystemData(),
+		System: utils.GetTmplSystemData("", ""),
 		Data:   data,
 	})
 	if err != nil {
@@ -258,7 +258,7 @@ func (this *Wrapper) RenderBackEnd(tcont []byte, data interface{}) {
 	this.W.Header().Set("Content-Type", "text/html; charset=utf-8")
 	var tpl bytes.Buffer
 	err = tmpl.Execute(this.W, consts.TmplData{
-		System: utils.GetTmplSystemData(),
+		System: utils.GetTmplSystemData(this.CurrModule, this.CurrSubModule),
 		Data:   data,
 	})
 	if err != nil {

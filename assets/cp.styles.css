@@ -923,6 +923,16 @@ div.wysiwyg.focused {
 	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 }
 
+/* CodeMirror */
+.CodeMirror {
+	border: 1px solid #eee;
+	height: auto;
+}
+
+.CodeMirror pre > * {
+	text-indent: 0px;
+}
+
 /* Bootstrap buttons */
 .btn-primary {
 	background-color: #1a73e8;

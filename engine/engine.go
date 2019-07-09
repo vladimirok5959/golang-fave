@@ -56,7 +56,7 @@ func (this *Engine) Process() bool {
 			return true
 		}
 		// Show mysql settings form
-		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpMySql, nil)
+		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpMySql, nil, "", "")
 		return true
 	}
 
@@ -80,7 +80,7 @@ func (this *Engine) Process() bool {
 			return true
 		}
 		// Show login form
-		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpLogin, nil)
+		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpLogin, nil, "", "")
 		return true
 	}
 
@@ -97,7 +97,7 @@ func (this *Engine) Process() bool {
 			return true
 		}
 		// Show login form
-		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpLogin, nil)
+		utils.SystemRenderTemplate(this.Wrap.W, assets.TmplCpLogin, nil, "", "")
 		return true
 	}
 

@@ -52,4 +52,14 @@ func PopulateResources(res *resource.Resource) {
 		"text/css",
 		CpWysiwygPellCss,
 	)
+	res.Add(
+		consts.AssetsCpCodeMirrorJs,
+		"application/javascript; charset=utf-8",
+		CpCodeMirrorJs,
+	)
+	res.Add(
+		consts.AssetsCpCodeMirrorCss,
+		"text/css",
+		CpCodeMirrorCss,
+	)
 }

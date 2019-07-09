@@ -108,22 +108,26 @@ func GetAssetsUrl(filename string) string {
 	return "/" + filename + "?v=" + consts.AssetsVersion
 }
 
-func GetTmplSystemData() consts.TmplSystem {
+func GetTmplSystemData(cpmod, cpsubmod string) consts.TmplSystem {
 	return consts.TmplSystem{
 		PathIcoFav:           GetAssetsUrl(consts.AssetsSysFaveIco),
 		PathSvgLogo:          GetAssetsUrl(consts.AssetsSysLogoSvg),
 		PathCssStyles:        GetAssetsUrl(consts.AssetsSysStylesCss),
 		PathCssCpStyles:      GetAssetsUrl(consts.AssetsCpStylesCss),
 		PathCssBootstrap:     GetAssetsUrl(consts.AssetsBootstrapCss),
+		PathCssCpCodeMirror:  GetAssetsUrl(consts.AssetsCpCodeMirrorCss),
 		PathCssCpWysiwygPell: GetAssetsUrl(consts.AssetsCpWysiwygPellCss),
 		PathJsJquery:         GetAssetsUrl(consts.AssetsJqueryJs),
 		PathJsPopper:         GetAssetsUrl(consts.AssetsPopperJs),
 		PathJsBootstrap:      GetAssetsUrl(consts.AssetsBootstrapJs),
+		PathJsCpCodeMirror:   GetAssetsUrl(consts.AssetsCpCodeMirrorJs),
 		PathJsCpScripts:      GetAssetsUrl(consts.AssetsCpScriptsJs),
 		PathJsCpWysiwygPell:  GetAssetsUrl(consts.AssetsCpWysiwygPellJs),
 		PathThemeStyles:      "/assets/theme/styles.css",
 		PathThemeScripts:     "/assets/theme/scripts.js",
 		InfoVersion:          consts.ServerVersion,
+		CpModule:             cpmod,
+		CpSubModule:          cpsubmod,
 	}
 }
 
@@ -143,7 +147,7 @@ func GetCurrentUnixTimestamp() int64 {
 	return int64(time.Now().Unix())
 }
 
-func SystemRenderTemplate(w http.ResponseWriter, c []byte, d interface{}) {
+func SystemRenderTemplate(w http.ResponseWriter, c []byte, d interface{}, cpmod, cpsubmod string) {
 	tmpl, err := template.New("template").Parse(string(c))
 	if err != nil {
 		SystemErrorPageEngine(w, err)
@@ -152,7 +156,7 @@ func SystemRenderTemplate(w http.ResponseWriter, c []byte, d interface{}) {
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, consts.TmplData{
-		System: GetTmplSystemData(),
+		System: GetTmplSystemData(cpmod, cpsubmod),
 		Data:   d,
 	})
 }
@@ -163,7 +167,7 @@ func SystemErrorPageEngine(w http.ResponseWriter, err error) {
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Content-Type", "text/html")
 		tmpl.Execute(w, consts.TmplData{
-			System: GetTmplSystemData(),
+			System: GetTmplSystemData("error", "engine"),
 			Data:   GetTmplError(err),
 		})
 		return
@@ -181,7 +185,7 @@ func SystemErrorPageTemplate(w http.ResponseWriter, err error) {
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Content-Type", "text/html")
 		tmpl.Execute(w, consts.TmplData{
-			System: GetTmplSystemData(),
+			System: GetTmplSystemData("error", "template"),
 			Data:   GetTmplError(err),
 		})
 		return
@@ -203,7 +207,7 @@ func SystemErrorPage404(w http.ResponseWriter) {
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, consts.TmplData{
-		System: GetTmplSystemData(),
+		System: GetTmplSystemData("error", "404"),
 		Data:   nil,
 	})
 }

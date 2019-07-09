@@ -5,7 +5,7 @@ import (
 )
 
 const AssetsPath = "assets"
-const AssetsVersion = "31"
+const AssetsVersion = "32"
 const DirIndexFile = "index.html"
 
 // Bootstrap resources
@@ -27,6 +27,10 @@ const AssetsSysStylesCss = AssetsPath + "/sys/styles.css"
 const AssetsCpWysiwygPellCss = AssetsPath + "/cp/wysiwyg/pell.css"
 const AssetsCpWysiwygPellJs = AssetsPath + "/cp/wysiwyg/pell.js"
 
+// CodeMirror template editor
+const AssetsCpCodeMirrorCss = AssetsPath + "/cp/tmpl-editor/codemirror.css"
+const AssetsCpCodeMirrorJs = AssetsPath + "/cp/tmpl-editor/codemirror.js"
+
 // Make global for other packages
 var ParamDebug bool
 var ParamHost string
@@ -47,15 +51,19 @@ type TmplSystem struct {
 	PathCssStyles        string
 	PathCssCpStyles      string
 	PathCssBootstrap     string
+	PathCssCpCodeMirror  string
 	PathCssCpWysiwygPell string
 	PathJsJquery         string
 	PathJsPopper         string
 	PathJsBootstrap      string
+	PathJsCpCodeMirror   string
 	PathJsCpScripts      string
 	PathJsCpWysiwygPell  string
 	PathThemeStyles      string
 	PathThemeScripts     string
 	InfoVersion          string
+	CpModule             string
+	CpSubModule          string
 }
 
 type TmplError struct {
