@@ -65,5 +65,6 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * [jQuery](https://github.com/jquery/jquery)
 * [Autosize](https://github.com/jackmoore/autosize)
 * [Bootstrap](https://github.com/twbs/bootstrap)
+* [CodeMirror](https://github.com/codemirror/codemirror)
 * [Pell WYSIWYG](https://github.com/jaredreich/pell)
 * [Bootstrap select](https://github.com/snapappointments/bootstrap-select/)
