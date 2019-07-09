@@ -46,24 +46,24 @@ type BreadCrumb struct {
 
 // Template data
 type TmplSystem struct {
-	PathIcoFav           string
-	PathSvgLogo          string
-	PathCssStyles        string
-	PathCssCpStyles      string
+	CpModule             string
+	CpSubModule          string
+	InfoVersion          string
 	PathCssBootstrap     string
 	PathCssCpCodeMirror  string
+	PathCssCpStyles      string
 	PathCssCpWysiwygPell string
-	PathJsJquery         string
-	PathJsPopper         string
+	PathCssStyles        string
 	PathJsBootstrap      string
 	PathJsCpCodeMirror   string
 	PathJsCpScripts      string
 	PathJsCpWysiwygPell  string
-	PathThemeStyles      string
+	PathJsJquery         string
+	PathJsPopper         string
+	PathSvgLogo          string
 	PathThemeScripts     string
-	InfoVersion          string
-	CpModule             string
-	CpSubModule          string
+	PathThemeStyles      string
+	PathIcoFav           string
 }
 
 type TmplError struct {
@@ -76,19 +76,19 @@ type TmplData struct {
 }
 
 type TmplDataCpBase struct {
-	Title              string
-	Caption            string
 	BodyClasses        string
-	UserId             int
-	UserFirstName      string
-	UserLastName       string
-	UserEmail          string
-	UserPassword       string
-	UserAvatarLink     string
+	Caption            string
+	Content            template.HTML
+	ModuleCurrentAlias string
 	NavBarModules      template.HTML
 	NavBarModulesSys   template.HTML
-	ModuleCurrentAlias string
 	SidebarLeft        template.HTML
-	Content            template.HTML
 	SidebarRight       template.HTML
+	UserAvatarLink     string
+	UserEmail          string
+	UserFirstName      string
+	UserId             int
+	UserLastName       string
+	UserPassword       string
+	Title              string
 }
