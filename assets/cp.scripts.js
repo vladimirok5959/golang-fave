@@ -3602,10 +3602,18 @@
 		function MakeTextAreasTmplEditor() {
 			$('textarea.tmpl-editor').each(function() {
 				var targetTextArea = $(this)[0];
+				var targetFileExt = $(this).data('emode');
+				var targetEditorMode = 'text/html';
+				if(targetFileExt == 'js') {
+					targetEditorMode = 'javascript';
+				} else if(targetFileExt == 'css') {
+					targetEditorMode = 'css';
+				}
 				CodeMirror.fromTextArea(targetTextArea, {
 					lineNumbers: true,
 					lineWrapping: true,
 					viewportMargin: Infinity,
+					mode: targetEditorMode,
 				}).on('change', function(editor){
 					targetTextArea.value = editor.getValue();
 				});

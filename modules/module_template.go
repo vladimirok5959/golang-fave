@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"golang-fave/assets"
@@ -69,6 +70,11 @@ func (this *Modules) RegisterModule_Template() *Module {
 				fcont := []byte(``)
 				fcont, _ = ioutil.ReadFile(wrap.DTemplate + string(os.PathSeparator) + selected_file)
 
+				fext := filepath.Ext(selected_file)
+				if len(fext) > 2 {
+					fext = fext[1:]
+				}
+
 				content += builder.DataForm(wrap, []builder.DataFormField{
 					{
 						Kind:  builder.DFKHidden,
@@ -97,7 +103,7 @@ func (this *Modules) RegisterModule_Template() *Module {
 					{
 						Kind: builder.DFKText,
 						CallBack: func(field *builder.DataFormField) string {
-							return `<div class="form-group last"><div class="row"><div class="col-12"><textarea class="form-control tmpl-editor" id="lbl_content" name="content" placeholder="" autocomplete="off">` + html.EscapeString(string(fcont)) + `</textarea></div></div></div>`
+							return `<div class="form-group last"><div class="row"><div class="col-12"><textarea class="form-control tmpl-editor" id="lbl_content" name="content" data-emode="` + fext + `" placeholder="" autocomplete="off">` + html.EscapeString(string(fcont)) + `</textarea></div></div></div>`
 						},
 					},
 					{
