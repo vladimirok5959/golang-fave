@@ -89,12 +89,15 @@ func (this *Modules) RegisterModule_Template() *Module {
 						CallBack: func(field *builder.DataFormField) string {
 							return `<div class="form-group n1">` +
 								`<div class="row">` +
-								`<div class="col-md-12">` +
+								`<div class="col-9">` +
 								`<div>` +
 								`<select class="form-control ignore-lost-data" id="lbl_file" name="file" onchange="setTimeout(function(){$('#lbl_file').val('` + selected_file + `')},500);document.location='/cp/` + wrap.CurrModule + `/?file='+encodeURI(this.value);">` +
 								list_of_files +
 								`</select>` +
 								`</div>` +
+								`</div>` +
+								`<div class="col-3">` +
+								`<button type="button" class="btn btn-danger" onclick="return fave.ActionRestoreThemeFile('template-restore-file','` + selected_file + `','Are you sure want to restore theme file?');">Restore</button>` +
 								`</div>` +
 								`</div>` +
 								`</div>`
