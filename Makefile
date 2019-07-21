@@ -2,7 +2,7 @@ VERSION="1.1.1"
 
 default: debug test run
 
-debug: version dockerfile
+debug: version template dockerfile
 	go vet ./...
 	gofmt -d ./
 	gofmt -w ./
@@ -14,7 +14,7 @@ test:
 run:
 	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true -keepalive true
 
-build: clean version dockerfile
+build: clean version template dockerfile
 	@-mkdir ./bin
 	@cd ./bin
 	@cd ..
@@ -46,6 +46,10 @@ version:
 	@echo "package consts" > consts/consts_version.go
 	@echo "" >> consts/consts_version.go
 	@echo "const ServerVersion = \"${VERSION}\"" >> consts/consts_version.go
+
+template:
+	./support/template.sh
+	@gofmt -w ./assets/template/
 
 dockerfile:
 	@echo "FROM debian:latest" > Dockerfile
