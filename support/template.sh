@@ -7,7 +7,6 @@ echo "" >> ./assets/template/template.go
 echo "var AllData = map[string][]byte{" >> ./assets/template/template.go
 
 for FILE_FULL in $(find ./hosts/localhost/template/ | grep -v 'hosts/localhost/template/$' | grep -v '.keep'); do
-	# Vars
 	FILE_BASE="$(basename -- $FILE_FULL)"
 	FILE_GO_BASE="${FILE_BASE//[\-\.]/_}_file.go"
 	FILE_GO_FULL="./assets/template/${FILE_GO_BASE}"
@@ -17,6 +16,7 @@ for FILE_FULL in $(find ./hosts/localhost/template/ | grep -v 'hosts/localhost/t
 	GO_VAR_NAME=$(echo "$GO_VAR_NAME" | sed -e 's/\.go$//g')
 	GO_VAR_NAME="Var${GO_VAR_NAME}"
 	FILE_CONTENT=$(cat ${FILE_FULL})
+	FILE_CONTENT=$(echo "$FILE_CONTENT" | sed -E 's/([`]+)/` + "\1" + `/g')
 
 	# Write target file
 	echo "package template" > ${FILE_GO_FULL}
