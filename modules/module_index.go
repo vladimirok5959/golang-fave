@@ -232,10 +232,13 @@ func (this *Modules) RegisterModule_Index() *Module {
 					Value: utils.IntToStr(data.A_id),
 				},
 				{
-					Kind:    builder.DFKText,
-					Caption: "Page name",
-					Name:    "name",
-					Value:   data.A_name,
+					Kind:     builder.DFKText,
+					Caption:  "Page name",
+					Name:     "name",
+					Value:    data.A_name,
+					Required: true,
+					Min:      "1",
+					Max:      "255",
 				},
 				{
 					Kind:    builder.DFKText,
@@ -243,6 +246,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					Name:    "alias",
 					Value:   data.A_alias,
 					Hint:    "Example: /about-us/ or /about-us.html",
+					Max:     "255",
 				},
 				{
 					Kind:    builder.DFKTextArea,
@@ -256,27 +260,27 @@ func (this *Modules) RegisterModule_Index() *Module {
 					Caption: "Meta title",
 					Name:    "meta_title",
 					Value:   data.A_meta_title,
+					Max:     "255",
 				},
 				{
 					Kind:    builder.DFKText,
 					Caption: "Meta keywords",
 					Name:    "meta_keywords",
 					Value:   data.A_meta_keywords,
+					Max:     "255",
 				},
 				{
 					Kind:    builder.DFKTextArea,
 					Caption: "Meta description",
 					Name:    "meta_description",
 					Value:   data.A_meta_description,
+					Max:     "510",
 				},
 				{
 					Kind:    builder.DFKCheckBox,
 					Caption: "Active",
 					Name:    "active",
 					Value:   utils.IntToStr(data.A_active),
-				},
-				{
-					Kind: builder.DFKMessage,
 				},
 				{
 					Kind:   builder.DFKSubmit,

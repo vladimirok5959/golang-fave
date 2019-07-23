@@ -51,6 +51,13 @@ func IsNumeric(str string) bool {
 	return false
 }
 
+func IsFloat(str string) bool {
+	if _, err := strconv.ParseFloat(str, 64); err == nil {
+		return true
+	}
+	return false
+}
+
 func IsValidEmail(email string) bool {
 	regexpe := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 	return regexpe.MatchString(email)
@@ -66,6 +73,12 @@ func IsValidAlias(alias string) bool {
 	// Blog module
 	regexpeBlog := regexp.MustCompile(`^\/blog\/`)
 	if alias == "/blog" || regexpeBlog.MatchString(alias) {
+		return false
+	}
+
+	// Shop module
+	regexpeShop := regexp.MustCompile(`^\/shop\/`)
+	if alias == "/shop" || regexpeShop.MatchString(alias) {
 		return false
 	}
 
@@ -247,6 +260,22 @@ func Int64ToStr(num int64) string {
 
 func StrToInt(str string) int {
 	num, err := strconv.Atoi(str)
+	if err == nil {
+		return num
+	}
+	return 0
+}
+
+func Float64ToStr(num float64) string {
+	return fmt.Sprintf("%.2f", num)
+}
+
+func Float64ToStrF(num float64, format string) string {
+	return fmt.Sprintf(format, num)
+}
+
+func StrToFloat64(str string) float64 {
+	num, err := strconv.ParseFloat(str, 64)
 	if err == nil {
 		return num
 	}

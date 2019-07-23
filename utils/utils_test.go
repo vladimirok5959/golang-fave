@@ -41,6 +41,13 @@ func TestIsNumeric(t *testing.T) {
 	Expect(t, IsNumeric("string"), false)
 }
 
+func TestIsFloat(t *testing.T) {
+	Expect(t, IsFloat("12345"), true)
+	Expect(t, IsFloat("1.23"), true)
+	Expect(t, IsFloat("1,23"), false)
+	Expect(t, IsFloat("string"), false)
+}
+
 func TestIsValidEmail(t *testing.T) {
 	Expect(t, IsValidEmail("test@gmail.com"), true)
 	Expect(t, IsValidEmail("test@yandex.ru"), true)
@@ -68,6 +75,12 @@ func TestIsValidAlias(t *testing.T) {
 	Expect(t, IsValidAlias("/blog/some"), false)
 	Expect(t, IsValidAlias("/blog-1"), true)
 	Expect(t, IsValidAlias("/blog-some"), true)
+
+	Expect(t, IsValidAlias("/shop"), false)
+	Expect(t, IsValidAlias("/shop/"), false)
+	Expect(t, IsValidAlias("/shop/some"), false)
+	Expect(t, IsValidAlias("/shop-1"), true)
+	Expect(t, IsValidAlias("/shop-some"), true)
 }
 
 func TestIsValidSingleAlias(t *testing.T) {
@@ -236,6 +249,26 @@ func TestInt64ToStr(t *testing.T) {
 func TestStrToInt(t *testing.T) {
 	Expect(t, StrToInt("2000"), 2000)
 	Expect(t, StrToInt("string"), 0)
+}
+
+func TestFloat64ToStr(t *testing.T) {
+	Expect(t, Float64ToStr(0), "0.00")
+	Expect(t, Float64ToStr(0.5), "0.50")
+	Expect(t, Float64ToStr(15.8100), "15.81")
+}
+
+func TestFloat64ToStrF(t *testing.T) {
+	Expect(t, Float64ToStrF(0, "%.4f"), "0.0000")
+	Expect(t, Float64ToStrF(0.5, "%.4f"), "0.5000")
+	Expect(t, Float64ToStrF(15.8100, "%.4f"), "15.8100")
+}
+
+func TestStrToFloat64(t *testing.T) {
+	Expect(t, StrToFloat64("0.00"), 0.0)
+	Expect(t, StrToFloat64("0.5"), 0.5)
+	Expect(t, StrToFloat64("0.50"), 0.5)
+	Expect(t, StrToFloat64("15.8100"), 15.81)
+	Expect(t, StrToFloat64("15.8155"), 15.8155)
 }
 
 func TestGenerateAlias(t *testing.T) {

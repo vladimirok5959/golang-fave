@@ -48,7 +48,7 @@ version:
 	@echo "const ServerVersion = \"${VERSION}\"" >> consts/consts_version.go
 
 template:
-	./support/template.sh
+	@./support/template.sh
 	@gofmt -w ./assets/template/
 
 dockerfile:

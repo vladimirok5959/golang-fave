@@ -397,10 +397,13 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Value: utils.IntToStr(data.A_id),
 				},
 				{
-					Kind:    builder.DFKText,
-					Caption: "Post name",
-					Name:    "name",
-					Value:   data.A_name,
+					Kind:     builder.DFKText,
+					Caption:  "Post name",
+					Name:     "name",
+					Value:    data.A_name,
+					Required: true,
+					Min:      "1",
+					Max:      "255",
 				},
 				{
 					Kind:    builder.DFKText,
@@ -408,6 +411,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Name:    "alias",
 					Value:   data.A_alias,
 					Hint:    "Example: our-news",
+					Max:     "255",
 				},
 				{
 					Kind:    builder.DFKText,
@@ -450,9 +454,6 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Caption: "Active",
 					Name:    "active",
 					Value:   utils.IntToStr(data.A_active),
-				},
-				{
-					Kind: builder.DFKMessage,
 				},
 				{
 					Kind:   builder.DFKSubmit,
@@ -567,10 +568,13 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					},
 				},
 				{
-					Kind:    builder.DFKText,
-					Caption: "Name",
-					Name:    "name",
-					Value:   data.A_name,
+					Kind:     builder.DFKText,
+					Caption:  "Name",
+					Name:     "name",
+					Value:    data.A_name,
+					Required: true,
+					Min:      "1",
+					Max:      "255",
 				},
 				{
 					Kind:    builder.DFKText,
@@ -578,9 +582,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					Name:    "alias",
 					Value:   data.A_alias,
 					Hint:    "Example: popular-posts",
-				},
-				{
-					Kind: builder.DFKMessage,
+					Max:     "255",
 				},
 				{
 					Kind:   builder.DFKSubmit,

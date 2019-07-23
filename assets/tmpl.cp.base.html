@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>{{$.Data.Title}}</title>
 		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
-		{{if or (eq $.System.CpModule "index") (eq $.System.CpModule "blog")}}
+		{{if or (eq $.System.CpModule "index") (eq $.System.CpModule "blog") (eq $.System.CpModule "shop")}}
 			{{if or (eq $.System.CpSubModule "add") (eq $.System.CpSubModule "modify")}}
 				<link rel="stylesheet" href="{{$.System.PathCssCpWysiwygPell}}">
 			{{end}}
@@ -26,6 +26,7 @@
 		</script>
 	</head>
 	<body class="{{$.Data.BodyClasses}} cp-mod-{{$.System.CpModule}} cp-sub-mod-{{$.System.CpSubModule}}">
+		<div id="sys-modal-system-message-placeholder"></div>
 		<div id="sys-modal-user-settings-placeholder"></div>
 		<nav class="navbar main navbar-expand-md navbar-dark fixed-top bg-dark">
 			<a class="navbar-brand" href="/cp/">{{$.Data.Caption}}</a>
@@ -91,7 +92,7 @@
 		<script src="{{$.System.PathJsJquery}}"></script>
 		<script src="{{$.System.PathJsPopper}}"></script>
 		<script src="{{$.System.PathJsBootstrap}}"></script>
-		{{if or (eq $.System.CpModule "index") (eq $.System.CpModule "blog")}}
+		{{if or (eq $.System.CpModule "index") (eq $.System.CpModule "blog") (eq $.System.CpModule "shop")}}
 			{{if or (eq $.System.CpSubModule "add") (eq $.System.CpSubModule "modify")}}
 				<script src="{{$.System.PathJsCpWysiwygPell}}"></script>
 			{{end}}

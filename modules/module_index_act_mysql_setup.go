@@ -87,6 +87,202 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+
+		// Table: blog_cat_post_rel
+		if _, err = tx.Exec(
+			`CREATE TABLE blog_cat_post_rel (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				post_id int(11) NOT NULL COMMENT 'Post id',
+				category_id int(11) NOT NULL COMMENT 'Category id',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: blog_posts
+		if _, err = tx.Exec(
+			`CREATE TABLE blog_posts (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				user int(11) NOT NULL COMMENT 'User id',
+				name varchar(255) NOT NULL COMMENT 'Post name',
+				alias varchar(255) NOT NULL COMMENT 'Post alias',
+				briefly text NOT NULL COMMENT 'Post brief content',
+				content text NOT NULL COMMENT 'Post content',
+				datetime datetime NOT NULL COMMENT 'Creation date/time',
+				active int(1) NOT NULL COMMENT 'Is active post or not',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: pages
+		if _, err = tx.Exec(
+			`CREATE TABLE pages (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				user int(11) NOT NULL COMMENT 'User id',
+				name varchar(255) NOT NULL COMMENT 'Page name',
+				alias varchar(255) NOT NULL COMMENT 'Page url part',
+				content text NOT NULL COMMENT 'Page content',
+				meta_title varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta title',
+				meta_keywords varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords',
+				meta_description varchar(510) NOT NULL DEFAULT '' COMMENT 'Page meta description',
+				datetime datetime NOT NULL COMMENT 'Creation date/time',
+				active int(1) NOT NULL COMMENT 'Is active page or not',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: settings
+		if _, err = tx.Exec(
+			`CREATE TABLE settings (
+				name varchar(255) NOT NULL COMMENT 'Setting name',
+				value text NOT NULL COMMENT 'Setting value'
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_cat_product_rel
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_cat_product_rel (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				product_id int(11) NOT NULL COMMENT 'Product id',
+				category_id int(11) NOT NULL COMMENT 'Category id',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_cats
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_cats (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				user int(11) NOT NULL COMMENT 'User id',
+				name varchar(255) NOT NULL COMMENT 'Category name',
+				alias varchar(255) NOT NULL COMMENT 'Category alias',
+				lft int(11) NOT NULL COMMENT 'For nested set model',
+				rgt int(11) NOT NULL COMMENT 'For nested set model',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_currencies
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_currencies (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				name varchar(255) NOT NULL COMMENT 'Currency name',
+				coefficient float(8,4) NOT NULL DEFAULT '1.0000' COMMENT 'Currency coefficient',
+				code varchar(10) NOT NULL COMMENT 'Currency code',
+				symbol varchar(5) NOT NULL COMMENT 'Currency symbol',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_filter_product_values
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_filter_product_values (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				product_id int(11) NOT NULL COMMENT 'Product id',
+				filter_value_id int(11) NOT NULL COMMENT 'Filter value id',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_filters
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_filters (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				name varchar(255) NOT NULL COMMENT 'Filter name in CP',
+				filter varchar(255) NOT NULL COMMENT 'Filter name in site',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_filters_values
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_filters_values (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				filter_id int(11) NOT NULL COMMENT 'Filter id',
+				name varchar(255) NOT NULL COMMENT 'Value name',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_products
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_products (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				user int(11) NOT NULL COMMENT 'User id',
+				currency int(11) NOT NULL COMMENT 'Currency id',
+				price float(8,2) NOT NULL COMMENT 'Product price',
+				name varchar(255) NOT NULL COMMENT 'Product name',
+				alias varchar(255) NOT NULL COMMENT 'Product alias',
+				briefly text NOT NULL COMMENT 'Product brief content',
+				content text NOT NULL COMMENT 'Product content',
+				datetime datetime NOT NULL COMMENT 'Creation date/time',
+				active int(1) NOT NULL COMMENT 'Is active product or not',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: users
+		if _, err = tx.Exec(
+			`CREATE TABLE users (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				first_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User first name',
+				last_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User last name',
+				email varchar(64) NOT NULL COMMENT 'User email',
+				password varchar(32) NOT NULL COMMENT 'User password (MD5)',
+				admin int(1) NOT NULL COMMENT 'Is admin user or not',
+				active int(1) NOT NULL COMMENT 'Is active user or not',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Demo datas
 		if _, err = tx.Exec(
 			`INSERT INTO blog_cats (id, user, name, alias, lft, rgt)
 				VALUES
@@ -107,76 +303,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD UNIQUE KEY alias (alias);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Table: blog_cat_post_rel
-		if _, err = tx.Exec(
-			`CREATE TABLE blog_cat_post_rel (
-				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
-				post_id int(11) NOT NULL COMMENT 'Post id',
-				category_id int(11) NOT NULL COMMENT 'Category id',
-				PRIMARY KEY (id)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
-		); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
 		if _, err = tx.Exec(
 			`INSERT INTO blog_cat_post_rel (id, post_id, category_id) VALUES (1, 1, 9), (2, 2, 12), (3, 3, 8);`,
-		); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY post_id (post_id), ADD KEY category_id (category_id);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_post_id (post_id);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_category_id (category_id);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Table: blog_posts
-		if _, err = tx.Exec(
-			`CREATE TABLE blog_posts (
-				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
-				user int(11) NOT NULL COMMENT 'User id',
-				name varchar(255) NOT NULL COMMENT 'Post name',
-				alias varchar(255) NOT NULL COMMENT 'Post alias',
-				briefly text NOT NULL COMMENT 'Post brief content',
-				content text NOT NULL COMMENT 'Post content',
-				datetime datetime NOT NULL COMMENT 'Creation date/time',
-				active int(1) NOT NULL COMMENT 'Is active post or not',
-				PRIMARY KEY (id)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -254,37 +382,6 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);`); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-
-		// Table: pages
-		if _, err = tx.Exec(
-			`CREATE TABLE pages (
-				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
-				user int(11) NOT NULL COMMENT 'User id',
-				name varchar(255) NOT NULL COMMENT 'Page name',
-				alias varchar(255) NOT NULL COMMENT 'Page url part',
-				content text NOT NULL COMMENT 'Page content',
-				meta_title varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta title',
-				meta_keywords varchar(255) NOT NULL DEFAULT '' COMMENT 'Page meta keywords',
-				meta_description varchar(510) NOT NULL DEFAULT '' COMMENT 'Page meta description',
-				datetime datetime NOT NULL COMMENT 'Creation date/time',
-				active int(1) NOT NULL COMMENT 'Is active page or not',
-				PRIMARY KEY (id)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
-		); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
 		if _, err = tx.Exec(
 			`INSERT INTO pages SET
 				id = ?,
@@ -351,6 +448,162 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000003');`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_cat_product_rel (id, product_id, category_id)
+				VALUES
+			(1, 1, 3);`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_cats (id, user, name, alias, lft, rgt)
+				VALUES
+			(1, 1, 'ROOT', 'ROOT', 1, 6),
+			(2, 1, 'Electronics', 'electronics', 2, 5),
+			(3, 1, 'Mobile phones', 'mobile-phones', 3, 4);`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_currencies (id, name, coefficient, code, symbol)
+				VALUES
+			(1, 'US Dollar', 1.0000, 'USD', '$');`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_filter_product_values (id, product_id, filter_value_id)
+				VALUES
+			(1, 1, 3),
+			(2, 1, 7),
+			(3, 1, 9),
+			(4, 1, 10),
+			(5, 1, 11);`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_filters (id, name, filter)
+				VALUES
+			(1, 'Mobile phones manufacturer', 'Manufacturer'),
+			(2, 'Mobile phones memory', 'Memory'),
+			(3, 'Mobile phones communication standard', 'Communication standard');`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_filters_values (id, filter_id, name)
+				VALUES
+			(1, 1, 'Apple'),
+			(2, 1, 'Asus'),
+			(3, 1, 'Samsung'),
+			(4, 2, '16 Gb'),
+			(5, 2, '32 Gb'),
+			(6, 2, '64 Gb'),
+			(7, 2, '128 Gb'),
+			(8, 2, '256 Gb'),
+			(9, 3, '4G'),
+			(10, 3, '2G'),
+			(11, 3, '3G');`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_products SET
+				id = ?,
+				user = ?,
+				currency = ?,
+				price = ?,
+				name = ?,
+				alias = ?,
+				briefly = ?,
+				content = ?,
+				datetime = ?,
+				active = ?
+			;`,
+			1,
+			1,
+			1,
+			1000.00,
+			"Samsung Galaxy S10",
+			"samsung-galaxy-s10",
+			"<p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent. Interdum velit euismod in pellentesque massa placerat duis. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt. Nisl rhoncus mattis rhoncus urna neque viverra justo. Odio ut enim blandit volutpat. Ac auctor augue mauris augue neque gravida. Ut lectus arcu bibendum at varius vel. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Dolor sit amet consectetur adipiscing elit duis tristique. Semper quis lectus nulla at volutpat diam ut. Sapien eget mi proin sed.</p>",
+			"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Et malesuada fames ac turpis egestas sed tempus urna et. Euismod elementum nisi quis eleifend. Nisi porta lorem mollis aliquam ut porttitor. Ac turpis egestas maecenas pharetra convallis posuere. Nunc non blandit massa enim nec dui. Commodo elit at imperdiet dui accumsan sit amet nulla. Viverra accumsan in nisl nisi scelerisque. Dui nunc mattis enim ut tellus. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Faucibus ornare suspendisse sed nisi lacus. Nulla facilisi morbi tempus iaculis. Ut eu sem integer vitae justo eget magna fermentum iaculis. Ullamcorper sit amet risus nullam eget felis eget nunc. Volutpat sed cras ornare arcu dui vivamus. Eget magna fermentum iaculis eu non diam.</p><p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent. Interdum velit euismod in pellentesque massa placerat duis. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt. Nisl rhoncus mattis rhoncus urna neque viverra justo. Odio ut enim blandit volutpat. Ac auctor augue mauris augue neque gravida. Ut lectus arcu bibendum at varius vel. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Dolor sit amet consectetur adipiscing elit duis tristique. Semper quis lectus nulla at volutpat diam ut. Sapien eget mi proin sed.</p>",
+			utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+			1,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO users (id, first_name, last_name, email, password, admin, active) VALUES (1, 'First Name', 'Last Name', 'example@example.com', '23463b99b62a72f26ed677cc556c44e8', 1, 1);`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Indexes
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_post_id (post_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_category_id (category_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD UNIQUE KEY alias (alias);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE pages ADD UNIQUE KEY alias (alias);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -366,51 +619,72 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
-
-		// Table: settings
-		if _, err = tx.Exec(
-			`CREATE TABLE settings (
-				name varchar(255) NOT NULL COMMENT 'Setting name',
-				value text NOT NULL COMMENT 'Setting value'
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
-		); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
-		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000002');`,
-		); err != nil {
-			tx.Rollback()
-			wrap.MsgError(err.Error())
-			return
-		}
 		if _, err = tx.Exec(`ALTER TABLE settings ADD UNIQUE KEY name (name);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-
-		// Table: users
-		if _, err = tx.Exec(
-			`CREATE TABLE users (
-				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
-				first_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User first name',
-				last_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User last name',
-				email varchar(64) NOT NULL COMMENT 'User email',
-				password varchar(32) NOT NULL COMMENT 'User password (MD5)',
-				admin int(1) NOT NULL COMMENT 'Is admin user or not',
-				active int(1) NOT NULL COMMENT 'Is active user or not',
-				PRIMARY KEY (id)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
-		); err != nil {
+		if _, err = tx.Exec(`ALTER TABLE shop_cat_product_rel ADD UNIQUE KEY product_category (product_id,category_id) USING BTREE;`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(
-			`INSERT INTO users (id, first_name, last_name, email, password, admin, active) VALUES (1, 'First Name', 'Last Name', 'example@example.com', '23463b99b62a72f26ed677cc556c44e8', 1, 1);`,
-		); err != nil {
+		if _, err = tx.Exec(`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_product_id (product_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_category_id (category_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_cats ADD UNIQUE KEY alias (alias);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_cats ADD KEY FK_shop_cats_user (user);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_filter_product_values ADD UNIQUE KEY product_filter_value (product_id,filter_value_id) USING BTREE;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_product_id (product_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
@@ -422,27 +696,106 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 
 		// References
-		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD CONSTRAINT FK_blog_cats_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;`); err != nil {
+		if _, err = tx.Exec(`
+			ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id
+			FOREIGN KEY (post_id) REFERENCES blog_posts (id) ON DELETE RESTRICT;
+		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id FOREIGN KEY (category_id) REFERENCES blog_cats (id) ON DELETE RESTRICT;`); err != nil {
+		if _, err = tx.Exec(`
+			ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id
+			FOREIGN KEY (category_id) REFERENCES blog_cats (id) ON DELETE RESTRICT;
+		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id FOREIGN KEY (post_id) REFERENCES blog_posts (id) ON DELETE RESTRICT;`); err != nil {
+		if _, err = tx.Exec(`
+			ALTER TABLE blog_cats ADD CONSTRAINT FK_blog_cats_user
+			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;`); err != nil {
+		if _, err = tx.Exec(`
+			ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_user
+			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE pages ADD CONSTRAINT FK_pages_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;`); err != nil {
+		if _, err = tx.Exec(`
+			ALTER TABLE pages ADD CONSTRAINT FK_pages_user
+			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id
+			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id
+			FOREIGN KEY (category_id) REFERENCES shop_cats (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_cats ADD CONSTRAINT FK_shop_cats_user
+			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id
+			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id
+			FOREIGN KEY (filter_value_id) REFERENCES shop_filters_values (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
+			FOREIGN KEY (filter_id) REFERENCES shop_filters (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user
+			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency
+			FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
+		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return

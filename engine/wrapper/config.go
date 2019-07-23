@@ -12,6 +12,12 @@ type Config struct {
 			Category int
 		}
 	}
+	Shop struct {
+		Pagination struct {
+			Index    int
+			Category int
+		}
+	}
 }
 
 func configNew() *Config {
@@ -23,6 +29,9 @@ func configNew() *Config {
 func (this *Config) configDefault() {
 	this.Blog.Pagination.Index = 5
 	this.Blog.Pagination.Category = 5
+
+	this.Shop.Pagination.Index = 5
+	this.Shop.Pagination.Category = 5
 }
 
 func (this *Config) configRead(file string) error {

@@ -31,7 +31,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		}
 
 		if pf_name == "" {
-			wrap.MsgError(`Please specify page name`)
+			wrap.MsgError(`Please specify post name`)
 			return
 		}
 

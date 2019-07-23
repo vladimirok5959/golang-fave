@@ -40,6 +40,13 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 				blog_posts,
 				pages,
 				settings,
+				shop_cat_product_rel,
+				shop_cats,
+				shop_currencies,
+				shop_filter_product_values,
+				shop_filters,
+				shop_filters_values,
+				shop_products,
 				users
 			;`,
 		)

@@ -75,7 +75,14 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				html_element += `<div class="col-md-9">`
 				html_element += `<div>`
 				if field.Kind == DFKText {
-					html_element += `<input class="form-control` + classes + `" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
+					html_element += `<input class="form-control` + classes + `" type="text" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" `
+					if field.Min != "" {
+						html_element += `minlength="` + field.Min + `" `
+					}
+					if field.Max != "" {
+						html_element += `maxlength="` + field.Max + `" `
+					}
+					html_element += `placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKNumber {
 					html_element += `<input class="form-control` + classes + `" type="number" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" `
 					if field.Min != "" {
@@ -90,7 +97,14 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				} else if field.Kind == DFKPassword {
 					html_element += `<input class="form-control` + classes + `" type="password" id="lbl_` + field.Name + `" name="` + field.Name + `" value="` + html.EscapeString(field.Value) + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>`
 				} else if field.Kind == DFKTextArea {
-					html_element += `<textarea class="form-control` + classes + `" id="lbl_` + field.Name + `" name="` + field.Name + `" placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.Value) + `</textarea>`
+					html_element += `<textarea class="form-control` + classes + `" id="lbl_` + field.Name + `" name="` + field.Name + `" `
+					if field.Min != "" {
+						html_element += `minlength="` + field.Min + `" `
+					}
+					if field.Max != "" {
+						html_element += `maxlength="` + field.Max + `" `
+					}
+					html_element += `placeholder="` + field.Placeholder + `" autocomplete="off"` + required + `>` + html.EscapeString(field.Value) + `</textarea>`
 				} else if field.Kind == DFKCheckBox {
 					checked := ""
 					if field.Value != "0" {

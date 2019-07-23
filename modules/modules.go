@@ -146,7 +146,7 @@ func (this *Modules) getSidebarModuleSubMenu(wrap *wrapper.Wrapper, mod *MInfo) 
 			if item.Show {
 				if !item.Sep {
 					class := ""
-					if (item.Mount == "default" && len(wrap.UrlArgs) <= 1) || (len(wrap.UrlArgs) >= 2 && item.Mount == wrap.UrlArgs[1]) {
+					if (item.Mount == "default" && len(wrap.UrlArgs) <= 1) || (len(wrap.UrlArgs) >= 2 && item.Mount == wrap.UrlArgs[1]) || (len(wrap.UrlArgs) >= 2 && item.Mount == "default" && wrap.UrlArgs[1] == "modify") || (len(wrap.UrlArgs) >= 2 && len(strings.Split(item.Mount, "-")) <= 1 && len(strings.Split(wrap.UrlArgs[1], "-")) >= 2 && strings.Split(wrap.UrlArgs[1], "-")[1] == "modify" && strings.Split(item.Mount, "-")[0] == strings.Split(wrap.UrlArgs[1], "-")[0]) {
 						class = " active"
 					}
 					icon := item.Icon

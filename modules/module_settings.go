@@ -93,6 +93,33 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Value:    utils.IntToStr((*wrap.Config).Blog.Pagination.Category),
 				},
 				{
+					Kind:    builder.DFKText,
+					Caption: "",
+					Name:    "",
+					Value:   "",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<hr>`
+					},
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop main page",
+					Name:     "shop-index",
+					Min:      "1",
+					Max:      "100",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Pagination.Index),
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop category page",
+					Name:     "shop-category",
+					Min:      "1",
+					Max:      "100",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Pagination.Category),
+				},
+				{
 					Kind: builder.DFKMessage,
 				},
 				{

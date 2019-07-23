@@ -791,7 +791,7 @@ ul.pagination {
 	text-align: right;
 }
 
-/* Admin table: blog_posts */
+/* Admin table: table_blog_posts */
 .data-table.table_blog_posts .col_datetime {
 	width: 8rem;
 }
@@ -807,6 +807,46 @@ ul.pagination {
 
 /* Admin table: table_blog_cats */
 .data-table.table_blog_cats .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
+/* Admin table: table_shop_products */
+.data-table.table_shop_products .col_price {
+	width: 8rem;
+}
+
+.data-table.table_shop_products .col_datetime {
+	width: 8rem;
+}
+
+.data-table.table_shop_products .col_active {
+	width: 5rem;
+}
+
+.data-table.table_shop_products .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
+/* Admin table: table_shop_cats */
+.data-table.table_shop_cats .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
+/* Admin table: table_shop_filters */
+.data-table.table_shop_filters .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
+/* Admin table: table_shop_currencies */
+.data-table.table_shop_currencies .col_coefficient {
+	width: 7rem;
+}
+
+.data-table.table_shop_currencies .col_action {
 	width: 6rem;
 	text-align: right;
 }

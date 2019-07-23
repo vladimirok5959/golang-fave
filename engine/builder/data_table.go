@@ -144,10 +144,10 @@ func DataTable(
 			rows.Close()
 		}
 		if !have_records {
-			result += `<tr><td colspan="50">No any data found</td></tr>`
+			result += `<tr><td colspan="50">No data</td></tr>`
 		}
 	} else {
-		result += `<tr><td colspan="50">No any data found</td></tr>`
+		result += `<tr><td colspan="50">No data</td></tr>`
 	}
 	result += `</tbody></table>`
 

@@ -3363,7 +3363,40 @@
 			}
 			if(modal_alert_place.length) {
 				modal_alert_place.html(GetModalAlertTmpl(title, message, error));
+			} else {
+				ShowSystemMsgModal(title, message, error);
 			}
+		};
+
+		function ShowSystemMsgModal(title, message, error) {
+			$('#sys-modal-system-message-placeholder').html('');
+			var html = '<div class="modal fade" id="sys-modal-system-message" tabindex="-1" role="dialog" aria-labelledby="sysModalSystemMessageLabel" aria-hidden="true"> \
+				<div class="modal-dialog modal-dialog-centered" role="document"> \
+					<div class="modal-content"> \
+							<input type="hidden" name="action" value="index-user-update-profile"> \
+							<div class="modal-header"> \
+								<h5 class="modal-title" id="sysModalSystemMessageLabel">' + title + '</h5> \
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
+									<span aria-hidden="true">&times;</span> \
+								</button> \
+							</div> \
+							<div class="modal-body text-left">' + message + '</div> \
+							<div class="modal-footer"> \
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> \
+							</div> \
+					</div> \
+				</div> \
+			</div>';
+			$('#sys-modal-system-message-placeholder').html(html);
+			$('#sys-modal-system-message').modal({
+				backdrop: 'static',
+				keyboard: true,
+				show: false,
+			});
+			$('#sys-modal-system-message').on('hidden.bs.modal', function(e) {
+				$('#sys-modal-system-message-placeholder').html('');
+			});
+			$('#sys-modal-system-message').modal('show');
 		};
 
 		function AjaxEval(data) {
@@ -3372,7 +3405,7 @@
 			} catch(e) {
 				if(e instanceof SyntaxError) {
 					console.log(data);
-					console.log('Error: JavaScript code eval error', e.message)
+					console.log('Error: JavaScript code eval error', e.message);
 				}
 			}
 		};
@@ -3461,6 +3494,12 @@
 						}
 					}
 				});
+			}
+		};
+
+		function PreventDataLost() {
+			if(!FormDataWasChanged) {
+				FormDataWasChanged = true;
 			}
 		};
 
@@ -3672,6 +3711,10 @@
 				ShowSystemMsg(title, message, true);
 			},
 
+			FormDataWasChanged: function() {
+				PreventDataLost();
+			},
+
 			ModalUserProfile: function() {
 				var html = '<div class="modal fade" id="sys-modal-user-settings" tabindex="-1" role="dialog" aria-labelledby="sysModalUserSettingsLabel" aria-hidden="true"> \
 					<div class="modal-dialog modal-dialog-centered" role="document"> \
@@ -3723,6 +3766,62 @@
 				});
 				FormToAjax($('#sys-modal-user-settings form'));
 				$("#sys-modal-user-settings").modal('show');
+			},
+
+			ShopProductsAdd: function() {
+				var selText = $('#lbl_attributes option:selected').text();
+				var selValue = $('#lbl_attributes').val();
+				if(selValue == '0') { return; }
+				$('#lbl_attributes')[0].selectedIndex = 0;
+				$('#lbl_attributes').selectpicker('refresh');
+				if($('#prod_attr_' + selValue).length > 0) { return; }
+				$('#list').append('<div class="form-group" id="prod_attr_' + selValue + '"><div><b>' + selText + '</b></div><div style="position:relative;"><select class="form-control" name="value.' + selValue + '" autocomplete="off" required disabled><option value="0">Loading values...</option></select><button type="button" class="btn btn-danger" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopProductsRemove(this);" disabled>&times;</button></div></div>');
+				PreventDataLost();
+				$.ajax({
+					type: 'POST',
+					url: '/cp/',
+					data: {
+						action: 'shop-get-attribute-values',
+						id: selValue
+					}
+				}).done(function(data) {
+					try {
+						eval(data);
+					} catch(e) {
+						if(e instanceof SyntaxError) {
+							console.log(data);
+							console.log('Error: JavaScript code eval error', e.message);
+						}
+					}
+				}).fail(function(xhr, status, error) {
+					$('#prod_attr_' + selValue).remove();
+					try {
+						eval(xhr.responseText);
+					} catch(e) {
+						if(e instanceof SyntaxError) {
+							console.log(xhr.responseText);
+							console.log('Error: JavaScript code eval error', e.message);
+						}
+					}
+				});
+			},
+
+			ShopProductsRemove: function(button) {
+				$(button).parent().parent().remove();
+				PreventDataLost();
+			},
+
+			ShopAttributesAdd: function() {
+				$('#list').append('<div class="form-group" style="position:relative;"><input class="form-control" type="text" name="value.0" value="" placeholder="" autocomplete="off" required><button type="button" class="btn btn-danger" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopAttributesRemove(this);">&times;</button></div>');
+				PreventDataLost();
+				setTimeout(function() {
+					$('#list input').last().focus();
+				}, 100);
+			},
+
+			ShopAttributesRemove: function(button) {
+				$(button).parent().remove();
+				PreventDataLost();
 			},
 
 			ActionLogout: function(message) {
