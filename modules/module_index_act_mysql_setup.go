@@ -669,7 +669,17 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE shop_filters ADD KEY name (name);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_filters_values ADD KEY name (name);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return

@@ -226,7 +226,13 @@ func Migrate_000000003(db *sqlw.DB) error {
 	if _, err := db.Exec(`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`); err != nil {
 		return err
 	}
+	if _, err := db.Exec(`ALTER TABLE shop_filters ADD KEY name (name);`); err != nil {
+		return err
+	}
 	if _, err := db.Exec(`ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`); err != nil {
+		return err
+	}
+	if _, err := db.Exec(`ALTER TABLE shop_filters_values ADD KEY name (name);`); err != nil {
 		return err
 	}
 	if _, err := db.Exec(`ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`); err != nil {
