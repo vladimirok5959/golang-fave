@@ -55,68 +55,90 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 				wrap.MsgError(`Please specify user password`)
 				return
 			}
-			_, err := wrap.DB.Exec(
-				`INSERT INTO users SET
-					first_name = ?,
-					last_name = ?,
-					email = ?,
-					password = MD5(?),
-					admin = ?,
-					active = ?
-				;`,
-				pf_first_name,
-				pf_last_name,
-				pf_email,
-				pf_password,
-				pf_admin,
-				pf_active,
-			)
-			if err != nil {
-				wrap.MsgError(err.Error())
-				return
-			}
-			wrap.Write(`window.location='/cp/users/';`)
-		} else {
-			// Update user
-			if pf_password == "" {
-				_, err := wrap.DB.Exec(
-					`UPDATE users SET
+
+			var lastID int64 = 0
+			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+				res, err := tx.Exec(
+					`INSERT INTO users SET
 						first_name = ?,
 						last_name = ?,
 						email = ?,
+						password = MD5(?),
 						admin = ?,
 						active = ?
-					WHERE
-						id = ?
-					;`,
-					pf_first_name,
-					pf_last_name,
-					pf_email,
-					pf_admin,
-					pf_active,
-					utils.StrToInt(pf_id),
-				)
-				if err != nil {
-					wrap.MsgError(err.Error())
-					return
-				}
-			} else {
-				_, err := wrap.DB.Exec(
-					`UPDATE users SET
-						first_name = ?,
-						last_name = ?,
-						email = ?,
-						password = MD5(?)
-					WHERE
-						id = ?
 					;`,
 					pf_first_name,
 					pf_last_name,
 					pf_email,
 					pf_password,
-					utils.StrToInt(pf_id),
+					pf_admin,
+					pf_active,
 				)
 				if err != nil {
+					return err
+				}
+				// Get inserted post id
+				lastID, err = res.LastInsertId()
+				if err != nil {
+					return err
+				}
+				return nil
+			}); err != nil {
+				wrap.MsgError(err.Error())
+				return
+			}
+			wrap.Write(`window.location='/cp/users/modify/` + utils.Int64ToStr(lastID) + `/';`)
+		} else {
+			// Update user
+			if pf_password == "" {
+				if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+					_, err := tx.Exec(
+						`UPDATE users SET
+							first_name = ?,
+							last_name = ?,
+							email = ?,
+							admin = ?,
+							active = ?
+						WHERE
+							id = ?
+						;`,
+						pf_first_name,
+						pf_last_name,
+						pf_email,
+						pf_admin,
+						pf_active,
+						utils.StrToInt(pf_id),
+					)
+					if err != nil {
+						return err
+					}
+					return nil
+				}); err != nil {
+					wrap.MsgError(err.Error())
+					return
+				}
+			} else {
+				if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+					_, err := tx.Exec(
+						`UPDATE users SET
+							first_name = ?,
+							last_name = ?,
+							email = ?,
+							password = MD5(?)
+						WHERE
+							id = ?
+						;`,
+						pf_first_name,
+						pf_last_name,
+						pf_email,
+						pf_password,
+						utils.StrToInt(pf_id),
+					)
+					if err != nil {
+						return err
+					}
+					return nil
+				}); err != nil {
 					wrap.MsgError(err.Error())
 					return
 				}

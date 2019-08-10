@@ -43,9 +43,10 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 		}
 
 		if pf_id == "0" {
+			var lastID int64 = 0
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 				// Insert row
-				_, err := tx.Exec(
+				res, err := tx.Exec(
 					`INSERT INTO shop_currencies SET
 						name = ?,
 						coefficient = ?,
@@ -60,13 +61,19 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 				if err != nil {
 					return err
 				}
+
+				// Get inserted id
+				lastID, err = res.LastInsertId()
+				if err != nil {
+					return err
+				}
+
 				return nil
 			}); err != nil {
 				wrap.MsgError(err.Error())
 				return
 			}
-
-			wrap.Write(`window.location='/cp/shop/currencies/';`)
+			wrap.Write(`window.location='/cp/shop/currencies-modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 				// Block rows
@@ -97,7 +104,6 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
-
 			wrap.Write(`window.location='/cp/shop/currencies-modify/` + pf_id + `/';`)
 		}
 	})

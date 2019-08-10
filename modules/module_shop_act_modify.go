@@ -69,6 +69,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		}
 
 		if pf_id == "0" {
+			var lastID int64 = 0
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 				// Insert row
 				res, err := tx.Exec(
@@ -98,7 +99,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				}
 
 				// Get inserted product id
-				lastID, err := res.LastInsertId()
+				lastID, err = res.LastInsertId()
 				if err != nil {
 					return err
 				}
@@ -158,8 +159,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
-
-			wrap.Write(`window.location='/cp/shop/';`)
+			wrap.Write(`window.location='/cp/shop/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 				// Block rows
@@ -264,7 +264,6 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
-
 			wrap.Write(`window.location='/cp/shop/modify/` + pf_id + `/';`)
 		}
 	})

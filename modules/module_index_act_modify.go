@@ -45,57 +45,73 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 
 		if pf_id == "0" {
 			// Add new page
-			_, err := wrap.DB.Exec(
-				`INSERT INTO pages SET
-					user = ?,
-					name = ?,
-					alias = ?,
-					content = ?,
-					meta_title = ?,
-					meta_keywords = ?,
-					meta_description = ?,
-					datetime = ?,
-					active = ?
-				;`,
-				wrap.User.A_id,
-				pf_name,
-				pf_alias,
-				pf_content,
-				pf_meta_title,
-				pf_meta_keywords,
-				pf_meta_description,
-				utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
-				pf_active,
-			)
-			if err != nil {
+			var lastID int64 = 0
+			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+				res, err := tx.Exec(
+					`INSERT INTO pages SET
+						user = ?,
+						name = ?,
+						alias = ?,
+						content = ?,
+						meta_title = ?,
+						meta_keywords = ?,
+						meta_description = ?,
+						datetime = ?,
+						active = ?
+					;`,
+					wrap.User.A_id,
+					pf_name,
+					pf_alias,
+					pf_content,
+					pf_meta_title,
+					pf_meta_keywords,
+					pf_meta_description,
+					utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+					pf_active,
+				)
+				if err != nil {
+					return err
+				}
+				// Get inserted post id
+				lastID, err = res.LastInsertId()
+				if err != nil {
+					return err
+				}
+				return nil
+			}); err != nil {
 				wrap.MsgError(err.Error())
 				return
 			}
-			wrap.Write(`window.location='/cp/';`)
+			wrap.Write(`window.location='/cp/index/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			// Update page
-			_, err := wrap.DB.Exec(
-				`UPDATE pages SET
-					name = ?,
-					alias = ?,
-					content = ?,
-					meta_title = ?,
-					meta_keywords = ?,
-					meta_description = ?,
-					active = ?
-				WHERE
-					id = ?
-				;`,
-				pf_name,
-				pf_alias,
-				pf_content,
-				pf_meta_title,
-				pf_meta_keywords,
-				pf_meta_description,
-				pf_active,
-				utils.StrToInt(pf_id),
-			)
-			if err != nil {
+			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+				_, err := tx.Exec(
+					`UPDATE pages SET
+						name = ?,
+						alias = ?,
+						content = ?,
+						meta_title = ?,
+						meta_keywords = ?,
+						meta_description = ?,
+						active = ?
+					WHERE
+						id = ?
+					;`,
+					pf_name,
+					pf_alias,
+					pf_content,
+					pf_meta_title,
+					pf_meta_keywords,
+					pf_meta_description,
+					pf_active,
+					utils.StrToInt(pf_id),
+				)
+				if err != nil {
+					return err
+				}
+				return nil
+			}); err != nil {
 				wrap.MsgError(err.Error())
 				return
 			}

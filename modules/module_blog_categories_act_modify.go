@@ -7,7 +7,8 @@ import (
 	"golang-fave/utils"
 )
 
-func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
+func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) (error, int64) {
+	var lastID int64 = 0
 	return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 		// Block rows
 		if _, err := tx.Exec("SELECT id FROM blog_cats FOR UPDATE;"); err != nil {
@@ -27,11 +28,16 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 		if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", pf_parent); err != nil {
 			return err
 		}
-		if _, err := tx.Exec("INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias); err != nil {
+		res, err := tx.Exec("INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias)
+		if err != nil {
+			return err
+		}
+		lastID, err = res.LastInsertId()
+		if err != nil {
 			return err
 		}
 		return nil
-	})
+	}), lastID
 }
 
 func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) error {
@@ -211,11 +217,13 @@ func (this *Modules) RegisterAction_BlogCategoriesModify() *Action {
 		}
 
 		if pf_id == "0" {
-			if err := this.blog_ActionCategoryAdd(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
+			var err error = nil
+			var lastID int64 = 0
+			if err, lastID = this.blog_ActionCategoryAdd(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
 				wrap.MsgError(err.Error())
 				return
 			}
-			wrap.Write(`window.location='/cp/blog/categories/';`)
+			wrap.Write(`window.location='/cp/blog/categories-modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := this.blog_ActionCategoryUpdate(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
 				wrap.MsgError(err.Error())
