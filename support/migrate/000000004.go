@@ -4,7 +4,7 @@ import (
 	"golang-fave/engine/sqlw"
 )
 
-func Migrate_000000004(db *sqlw.DB) error {
+func Migrate_000000004(db *sqlw.DB, host string) error {
 	if _, err := db.Exec(
 		`ALTER TABLE blog_cat_post_rel DROP id;`,
 	); err != nil {

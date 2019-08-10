@@ -5,7 +5,7 @@ import (
 	"golang-fave/utils"
 )
 
-func Migrate_000000003(db *sqlw.DB) error {
+func Migrate_000000003(db *sqlw.DB, host string) error {
 	// Remove blog indexes
 	if _, err := db.Exec(`DROP INDEX post_id ON blog_cat_post_rel`); err != nil {
 		return err

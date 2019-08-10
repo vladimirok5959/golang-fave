@@ -14,7 +14,7 @@ func Run(db *sqlw.DB, version int, host string) error {
 			if version < utils.StrToInt(i) {
 				last = i
 				if fn != nil {
-					fn(db)
+					fn(db, host)
 					fmt.Printf("Migrated %s: %s\n", host, i)
 				}
 			}
