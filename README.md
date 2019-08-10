@@ -40,6 +40,9 @@ hosts
 ├────── page.html          # Template for any other pages
 ├────── robots.txt         # Host robots.txt file
 ├────── scripts.js         # Theme scripts file
+├────── shop-category.html # Template for shop category
+├────── shop-product.html  # Template for shop product
+├────── shop.html          # Template for shop home page
 ├────── sidebar-left.html  # Can be included in templates
 ├────── sidebar-right.html # Can be included in templates
 ├────── styles.css         # Theme styles file
