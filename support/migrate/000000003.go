@@ -6,6 +6,9 @@ import (
 )
 
 func Migrate_000000003(db *sqlw.DB) error {
+	// ALTER TABLE blog_cat_post_rel ADD KEY post_id (post_id);
+	// ALTER TABLE blog_cat_post_rel ADD KEY category_id (category_id);
+
 	// Remove blog indexes
 	if _, err := db.Exec(`DROP INDEX post_id ON blog_cat_post_rel`); err != nil {
 		return err
