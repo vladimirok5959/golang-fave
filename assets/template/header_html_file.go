@@ -23,6 +23,14 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 					{{else}}
 						Latest posts | Blog
 					{{end}}
+				{{else if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-product") (eq $.Data.Module "shop-category")}}
+					{{if eq $.Data.Module "shop-category"}}
+						Products of category "{{$.Data.Shop.Category.Name}}" | Shop
+					{{else if eq $.Data.Module "shop-product"}}
+						{{$.Data.Shop.Product.Name}} | Shop
+					{{else}}
+						Latest products | Shop
+					{{end}}
 				{{end}}
 			{{else}}
 				Error 404
@@ -61,6 +69,9 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 								<a class="nav-link{{if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}} active{{end}}" href="/blog/">Blog</a>
 							</li>
 							<li class="nav-item">
+								<a class="nav-link{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-product") (eq $.Data.Module "shop-category")}} active{{end}}" href="/shop/">Shop</a>
+							</li>
+							<li class="nav-item">
 								<a class="nav-link{{if eq $.Data.Module "404"}} active{{end}}" href="/not-existent-page/">404</a>
 							</li>
 						</ul>
@@ -85,6 +96,14 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 										Blog post
 									{{else}}
 										Blog
+									{{end}}
+								{{else if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-product") (eq $.Data.Module "shop-category")}}
+									{{if eq $.Data.Module "shop-category"}}
+										Shop category
+									{{else if eq $.Data.Module "shop-product"}}
+										Shop product
+									{{else}}
+										Shop
 									{{end}}
 								{{end}}
 							{{else}}
