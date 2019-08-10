@@ -103,10 +103,10 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					}
 					var balkInsertArr []string
 					for _, el := range catids {
-						balkInsertArr = append(balkInsertArr, `(NULL,`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
+						balkInsertArr = append(balkInsertArr, `(`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err = tx.Exec(
-						`INSERT INTO blog_cat_post_rel (id,post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
+						`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
 					); err != nil {
 						return err
 					}
@@ -124,7 +124,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", pf_id); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("SELECT id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", pf_id); err != nil {
+				if _, err := tx.Exec("SELECT post_id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", pf_id); err != nil {
 					return err
 				}
 
@@ -177,10 +177,10 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					}
 					var balkInsertArr []string
 					for _, el := range catids {
-						balkInsertArr = append(balkInsertArr, `(NULL,`+pf_id+`,`+utils.IntToStr(el)+`)`)
+						balkInsertArr = append(balkInsertArr, `(`+pf_id+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err := tx.Exec(
-						`INSERT INTO blog_cat_post_rel (id,post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
+						`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
 					); err != nil {
 						return err
 					}
