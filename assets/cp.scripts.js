@@ -3775,7 +3775,7 @@
 				$('#lbl_attributes')[0].selectedIndex = 0;
 				$('#lbl_attributes').selectpicker('refresh');
 				if($('#prod_attr_' + selValue).length > 0) { return; }
-				$('#list').append('<div class="form-group" id="prod_attr_' + selValue + '"><div><b>' + selText + '</b></div><div style="position:relative;"><select class="form-control" name="value.' + selValue + '" autocomplete="off" required disabled><option value="0">Loading values...</option></select><button type="button" class="btn btn-danger" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopProductsRemove(this);" disabled>&times;</button></div></div>');
+				$('#list').append('<div class="form-group" id="prod_attr_' + selValue + '"><div><b>' + selText + '</b></div><div class="position-relative"><select class="form-control" name="value.' + selValue + '" autocomplete="off" required disabled><option value="0">Loading values...</option></select><button type="button" class="btn btn-danger btn-dynamic-remove" onclick="fave.ShopProductsRemove(this);" disabled>&times;</button></div></div>');
 				PreventDataLost();
 				$.ajax({
 					type: 'POST',
@@ -3812,7 +3812,7 @@
 			},
 
 			ShopAttributesAdd: function() {
-				$('#list').append('<div class="form-group" style="position:relative;"><input class="form-control" type="text" name="value.0" value="" placeholder="" autocomplete="off" required><button type="button" class="btn btn-danger" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopAttributesRemove(this);">&times;</button></div>');
+				$('#list').append('<div class="form-group position-relative"><input class="form-control" type="text" name="value.0" value="" placeholder="" autocomplete="off" required><button type="button" class="btn btn-danger btn-dynamic-remove" onclick="fave.ShopAttributesRemove(this);">&times;</button></div>');
 				PreventDataLost();
 				setTimeout(function() {
 					$('#list input').last().focus();

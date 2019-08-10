@@ -946,6 +946,19 @@ ul.pagination {
 	left: 32px;
 }
 
+/* Admin dynamic fields */
+.list-wrapper {
+	background: #e9ecef;
+	padding: 1rem;
+	border-radius: .25rem;
+}
+
+.btn-dynamic-remove {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
 /* Bootstrap fixes */
 #sys-modal-user-settings {
 	padding-right: 0px !important;

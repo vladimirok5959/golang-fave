@@ -115,11 +115,11 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 	for _, filter_id := range filter_ids {
 		result += `<div class="form-group" id="prod_attr_` + utils.IntToStr(filter_id) + `">` +
 			`<div><b>` + filter_names[filter_id] + `</b></div>` +
-			`<div style="position:relative;">` +
+			`<div class="position-relative">` +
 			`<select class="selectpicker form-control" name="value.` + utils.IntToStr(filter_id) + `" autocomplete="off" required multiple>` +
 			strings.Join(filter_values[filter_id], "") +
 			`</select>` +
-			`<button type="button" class="btn btn-danger" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopProductsRemove(this);">&times;</button>` +
+			`<button type="button" class="btn btn-danger btn-dynamic-remove" onclick="fave.ShopProductsRemove(this);">&times;</button>` +
 			`</div>` +
 			`</div>`
 	}
@@ -151,7 +151,7 @@ func (this *Modules) shop_GetFilterValuesInputs(wrap *wrapper.Wrapper, filter_id
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if err == nil {
-				result += `<div class="form-group" style="position:relative;"><input class="form-control" type="text" name="value.` + html.EscapeString(string(values[0])) + `" value="` + html.EscapeString(string(values[1])) + `" placeholder="" autocomplete="off" required><button type="button" class="btn btn-danger" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopAttributesRemove(this);">&times;</button></div>`
+				result += `<div class="form-group position-relative"><input class="form-control" type="text" name="value.` + html.EscapeString(string(values[0])) + `" value="` + html.EscapeString(string(values[1])) + `" placeholder="" autocomplete="off" required><button type="button" class="btn btn-danger btn-dynamic-remove" onclick="fave.ShopAttributesRemove(this);">&times;</button></div>`
 			}
 		}
 	}
@@ -818,15 +818,15 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<label>Attributes</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
-							`<div class="list-wrapper" style="background:#e9ecef;padding:1rem;border-radius:.25rem;">` +
+							`<div class="list-wrapper">` +
 							`<div id="list">` +
 							this.shop_GetProductValuesInputs(wrap, data.A_id) +
 							`</div>` +
-							`<div class="list-button" style="position:relative;">` +
+							`<div class="list-button position-relative">` +
 							`<select class="selectpicker form-control" id="lbl_attributes" data-live-search="true">` +
 							this.shop_GetAllAttributesSelectOptions(wrap) +
 							`</select>` +
-							`<button type="button" class="btn btn-success" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopProductsAdd();">Add attribute</button>` +
+							`<button type="button" class="btn btn-success btn-dynamic-remove" onclick="fave.ShopProductsAdd();">Add attribute</button>` +
 							`</div>` +
 							`</div>` +
 							`</div>` +
@@ -1088,7 +1088,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<label>Attribute values</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
-							`<div class="list-wrapper" style="background:#e9ecef;padding:1rem;border-radius:.25rem;">` +
+							`<div class="list-wrapper">` +
 							`<div id="list">` +
 							this.shop_GetFilterValuesInputs(wrap, data.A_id) +
 							`</div>` +
