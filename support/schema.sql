@@ -9,10 +9,8 @@ CREATE TABLE blog_cats (
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE blog_cat_post_rel (
-	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	post_id int(11) NOT NULL COMMENT 'Post id',
-	category_id int(11) NOT NULL COMMENT 'Category id',
-	PRIMARY KEY (id)
+	category_id int(11) NOT NULL COMMENT 'Category id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE blog_posts (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
@@ -43,10 +41,8 @@ CREATE TABLE settings (
 	value text NOT NULL COMMENT 'Setting value'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_cat_product_rel (
-	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	product_id int(11) NOT NULL COMMENT 'Product id',
-	category_id int(11) NOT NULL COMMENT 'Category id',
-	PRIMARY KEY (id)
+	category_id int(11) NOT NULL COMMENT 'Category id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_cats (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
@@ -66,10 +62,8 @@ CREATE TABLE shop_currencies (
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_filter_product_values (
-	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	product_id int(11) NOT NULL COMMENT 'Product id',
-	filter_value_id int(11) NOT NULL COMMENT 'Filter value id',
-	PRIMARY KEY (id)
+	filter_value_id int(11) NOT NULL COMMENT 'Filter value id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_filters (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',

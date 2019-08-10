@@ -91,10 +91,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		// Table: blog_cat_post_rel
 		if _, err = tx.Exec(
 			`CREATE TABLE blog_cat_post_rel (
-				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				post_id int(11) NOT NULL COMMENT 'Post id',
-				category_id int(11) NOT NULL COMMENT 'Category id',
-				PRIMARY KEY (id)
+				category_id int(11) NOT NULL COMMENT 'Category id'
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 		); err != nil {
 			tx.Rollback()
@@ -157,10 +155,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		// Table: shop_cat_product_rel
 		if _, err = tx.Exec(
 			`CREATE TABLE shop_cat_product_rel (
-				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				product_id int(11) NOT NULL COMMENT 'Product id',
-				category_id int(11) NOT NULL COMMENT 'Category id',
-				PRIMARY KEY (id)
+				category_id int(11) NOT NULL COMMENT 'Category id'
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 		); err != nil {
 			tx.Rollback()
@@ -204,10 +200,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		// Table: shop_filter_product_values
 		if _, err = tx.Exec(
 			`CREATE TABLE shop_filter_product_values (
-				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				product_id int(11) NOT NULL COMMENT 'Product id',
-				filter_value_id int(11) NOT NULL COMMENT 'Filter value id',
-				PRIMARY KEY (id)
+				filter_value_id int(11) NOT NULL COMMENT 'Filter value id'
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 		); err != nil {
 			tx.Rollback()
@@ -304,7 +298,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO blog_cat_post_rel (id, post_id, category_id) VALUES (1, 1, 9), (2, 2, 12), (3, 3, 8);`,
+			`INSERT INTO blog_cat_post_rel (post_id, category_id) VALUES (1, 9), (2, 12), (3, 8);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -456,9 +450,9 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO shop_cat_product_rel (id, product_id, category_id)
+			`INSERT INTO shop_cat_product_rel (product_id, category_id)
 				VALUES
-			(1, 1, 3);`,
+			(1, 3);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -485,13 +479,13 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO shop_filter_product_values (id, product_id, filter_value_id)
+			`INSERT INTO shop_filter_product_values (product_id, filter_value_id)
 				VALUES
-			(1, 1, 3),
-			(2, 1, 7),
-			(3, 1, 9),
-			(4, 1, 10),
-			(5, 1, 11);`,
+			(1, 3),
+			(1, 7),
+			(1, 9),
+			(1, 10),
+			(1, 11);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
