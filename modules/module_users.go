@@ -214,9 +214,6 @@ func (this *Modules) RegisterModule_Users() *Module {
 					Value:   utils.IntToStr(data.A_admin),
 				},
 				{
-					Kind: builder.DFKMessage,
-				},
-				{
 					Kind:   builder.DFKSubmit,
 					Value:  btn_caption,
 					Target: "add-edit-button",
