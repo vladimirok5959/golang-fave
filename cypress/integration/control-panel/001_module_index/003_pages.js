@@ -24,15 +24,6 @@ context('Module pages', () => {
     cy.logoutCMS();
   });
 
-  it('should not add new page', () => {
-    cy.loginCMS();
-    cy.visitCMS('/cp/index/add/');
-    cy.get('#add-edit-button').click();
-    cy.actionWait();
-    cy.get('.data-form.index-add div.sys-messages').should('exist');
-    cy.logoutCMS();
-  });
-
   it('should add new page', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/index/add/');
