@@ -92,7 +92,9 @@ context('Module blog categories updates', () => {
     cy.get('#add-edit-button').click();
     cy.actionWait();
 
-    cy.get('.data-form.blog-categories-modify div.sys-messages').should('exist');
+    cy.get('#sys-modal-system-message').should('exist');
+    cy.get('#sys-modal-system-message .modal-body').contains('Category can’t be moved inside here child');
+    cy.get('#sys-modal-system-message .modal-footer').find('button').click();
 
     cy.logoutCMS();
   });

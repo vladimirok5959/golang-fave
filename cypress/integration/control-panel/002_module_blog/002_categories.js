@@ -23,15 +23,6 @@ context('Module blog categories', () => {
     cy.logoutCMS();
   });
 
-  it('should not add new category', () => {
-    cy.loginCMS();
-    cy.visitCMS('/cp/blog/categories-add/');
-    cy.get('#add-edit-button').click();
-    cy.actionWait();
-    cy.get('.data-form.blog-categories-add div.sys-messages').should('exist');
-    cy.logoutCMS();
-  });
-
   it('should add new category', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/categories-add/');

@@ -32,7 +32,9 @@ context('Module users', () => {
     cy.get('.data-form.users-add input[name=password]').clear().type('some@text');
     cy.get('#add-edit-button').click();
     cy.actionWait();
-    cy.get('.data-form.users-add div.sys-messages').should('exist');
+    cy.get('#sys-modal-system-message').should('exist');
+    cy.get('#sys-modal-system-message .modal-body').contains('Please specify correct user email');
+    cy.get('#sys-modal-system-message .modal-footer').find('button').click();
     cy.logoutCMS();
   });
 

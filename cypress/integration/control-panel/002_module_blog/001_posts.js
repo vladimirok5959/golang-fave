@@ -25,15 +25,6 @@ context('Module blog posts', () => {
     cy.logoutCMS();
   });
 
-  it('should not add new post', () => {
-    cy.loginCMS();
-    cy.visitCMS('/cp/blog/add/');
-    cy.get('#add-edit-button').click();
-    cy.actionWait();
-    cy.get('.data-form.blog-add div.sys-messages').should('exist');
-    cy.logoutCMS();
-  });
-
   it('should add new post', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/add/');
