@@ -15,6 +15,7 @@ var VarShopHtmlFile = []byte(`{{template "header.html" .}}
 						{{.Briefly}}
 					</div>
 					<div class="post-date">
+						<div><small>Price: {{.PriceFormat "%.2f"}} {{.Currency.Code}}</small></div>
 						<div><small>Published on {{.DateTimeFormat "02/01/2006, 15:04:05"}}</small></div>
 						<div>Author: {{.User.FirstName}} {{.User.LastName}}</div>
 					</div>
@@ -23,7 +24,7 @@ var VarShopHtmlFile = []byte(`{{template "header.html" .}}
 		{{end}}
 	{{else}}
 		<div class="card-body">
-			Sorry, no posts matched your criteria
+			Sorry, no products matched your criteria
 		</div>
 	{{end}}
 </div>

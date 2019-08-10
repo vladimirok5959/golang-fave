@@ -10,7 +10,7 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 		</div>
 	</div>
 	<div class="card-footer text-muted">
-		<div>Price: {{$.Data.Shop.Product.PriceFormat "%.2f"}}</div>
+		<div>Price: {{$.Data.Shop.Product.PriceFormat "%.2f"}} {{$.Data.Shop.Product.Currency.Code}}</div>
 		<div>Published on {{$.Data.Shop.Product.DateTimeFormat "02/01/2006, 15:04:05"}}</div>
 		<div>Author: {{$.Data.Shop.Product.User.FirstName}} {{$.Data.Shop.Product.User.LastName}}</div>
 	</div>

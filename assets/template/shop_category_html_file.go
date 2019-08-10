@@ -4,7 +4,7 @@ var VarShopCategoryHtmlFile = []byte(`{{template "header.html" .}}
 <div class="card mb-4">
 	<div class="post">
 		<div class="card-body">
-			<b>Category author:</b> {{$.Data.Shop.Category.User.FirstName}} {{$.Data.Shop.Category.User.LastName}}
+			<b>Category:</b> {{$.Data.Shop.Category.Name}}
 		</div>
 	</div>
 </div>
@@ -22,6 +22,7 @@ var VarShopCategoryHtmlFile = []byte(`{{template "header.html" .}}
 						{{.Briefly}}
 					</div>
 					<div class="post-date">
+						<div><small>Price: {{.PriceFormat "%.2f"}} {{.Currency.Code}}</small></div>
 						<div><small>Published on {{.DateTimeFormat "02/01/2006, 15:04:05"}}</small></div>
 						<div>Author: {{.User.FirstName}} {{.User.LastName}}</div>
 					</div>
@@ -30,7 +31,7 @@ var VarShopCategoryHtmlFile = []byte(`{{template "header.html" .}}
 		{{end}}
 	{{else}}
 		<div class="card-body">
-			Sorry, no posts matched your criteria
+			Sorry, no products matched your criteria
 		</div>
 	{{end}}
 </div>
