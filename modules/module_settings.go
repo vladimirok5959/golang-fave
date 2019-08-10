@@ -49,15 +49,9 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					},
 				},
 				{
-					Kind: builder.DFKMessage,
-					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="row"><div class="col-12"><div class="sys-messages"></div></div></div>`
-					},
-				},
-				{
 					Kind: builder.DFKSubmit,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="row d-lg-none"><div class="col-12"><button type="submit" class="btn btn-primary" data-target="add-edit-button">Save</button></div></div>`
+						return `<div class="row d-lg-none"><div class="col-12"><div class="pt-3"><button type="submit" class="btn btn-primary" data-target="add-edit-button">Save</button></div></div></div>`
 					},
 				},
 			})
@@ -118,9 +112,6 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Max:      "100",
 					Required: true,
 					Value:    utils.IntToStr((*wrap.Config).Shop.Pagination.Category),
-				},
-				{
-					Kind: builder.DFKMessage,
 				},
 				{
 					Kind:   builder.DFKSubmit,

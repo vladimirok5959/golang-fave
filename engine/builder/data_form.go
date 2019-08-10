@@ -141,7 +141,7 @@ func DataForm(wrap *wrapper.Wrapper, data []DataFormField) string {
 				html_button += `&nbsp;`
 				html_button += `</div>`
 				html_button += `<div class="col-md-9">`
-				html_button += `<button type="submit" class="btn btn-primary" data-target="` + field.Target + `">` + html.EscapeString(field.Value) + `</button>`
+				html_button += `<div class="pt-3"><button type="submit" class="btn btn-primary" data-target="` + field.Target + `">` + html.EscapeString(field.Value) + `</button></div>`
 				html_button += `</div>`
 				html_button += `</div>`
 			}

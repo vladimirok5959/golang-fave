@@ -89,14 +89,14 @@ func (this *Modules) RegisterModule_Template() *Module {
 						CallBack: func(field *builder.DataFormField) string {
 							return `<div class="form-group n1">` +
 								`<div class="row">` +
-								`<div class="col-9">` +
+								`<div class="col-7">` +
 								`<div>` +
 								`<select class="form-control ignore-lost-data" id="lbl_file" name="file" onchange="setTimeout(function(){$('#lbl_file').val('` + selected_file + `')},500);document.location='/cp/` + wrap.CurrModule + `/?file='+encodeURI(this.value);">` +
 								list_of_files +
 								`</select>` +
 								`</div>` +
 								`</div>` +
-								`<div class="col-3">` +
+								`<div class="col-5">` +
 								`<button type="button" class="btn btn-danger" onclick="return fave.ActionRestoreThemeFile('template-restore-file','` + selected_file + `','Are you sure want to restore theme file?');">Restore</button>` +
 								`</div>` +
 								`</div>` +
@@ -110,15 +110,9 @@ func (this *Modules) RegisterModule_Template() *Module {
 						},
 					},
 					{
-						Kind: builder.DFKMessage,
-						CallBack: func(field *builder.DataFormField) string {
-							return `<div class="row"><div class="col-12"><div class="sys-messages"></div></div></div>`
-						},
-					},
-					{
 						Kind: builder.DFKSubmit,
 						CallBack: func(field *builder.DataFormField) string {
-							return `<div class="row d-lg-none"><div class="col-12"><button type="submit" class="btn btn-primary" data-target="add-edit-button">Save</button></div></div>`
+							return `<div class="row d-lg-none"><div class="col-12"><div class="pt-3"><button type="submit" class="btn btn-primary" data-target="add-edit-button">Save</button></div></div></div>`
 						},
 					},
 				})

@@ -829,7 +829,6 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<button type="button" class="btn btn-success" style="position:absolute;top:0px;right:0px;" onclick="fave.ShopProductsAdd();">Add attribute</button>` +
 							`</div>` +
 							`</div>` +
-							`<div class="d-lg-none" style="height:1rem;"></div>` +
 							`</div>` +
 							`</div>` +
 							`</div>`
@@ -1095,7 +1094,6 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`</div>` +
 							`<div class="list-button"><button type="button" class="btn btn-success" onclick="fave.ShopAttributesAdd();">Add attribute value</button></div>` +
 							`</div>` +
-							`<div class="d-lg-none" style="height:1rem;"></div>` +
 							`</div>` +
 							`</div>` +
 							`</div>`
