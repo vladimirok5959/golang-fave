@@ -28,7 +28,7 @@ func (this *Modules) RegisterAction_ShopAttributesDelete() *Action {
 			}
 			if _, err := tx.Exec(
 				`SELECT
-					shop_filter_product_values.id
+					shop_filter_product_values.product_id
 				FROM
 					shop_filter_product_values
 					LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id

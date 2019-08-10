@@ -131,10 +131,10 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					}
 					var bulkInsertArr []string
 					for _, el := range catids {
-						bulkInsertArr = append(bulkInsertArr, `(NULL,`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
+						bulkInsertArr = append(bulkInsertArr, `(`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err = tx.Exec(
-						`INSERT INTO shop_cat_product_rel (id,product_id,category_id) VALUES ` + strings.Join(bulkInsertArr, ",") + `;`,
+						`INSERT INTO shop_cat_product_rel (product_id,category_id) VALUES ` + strings.Join(bulkInsertArr, ",") + `;`,
 					); err != nil {
 						return err
 					}
@@ -169,10 +169,10 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				if _, err := tx.Exec("SELECT id FROM shop_currencies WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_currency)); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("SELECT id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec("SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("SELECT id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec("SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 
@@ -229,10 +229,10 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					}
 					var bulkInsertArr []string
 					for _, el := range catids {
-						bulkInsertArr = append(bulkInsertArr, `(NULL,`+pf_id+`,`+utils.IntToStr(el)+`)`)
+						bulkInsertArr = append(bulkInsertArr, `(`+pf_id+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err := tx.Exec(
-						`INSERT INTO shop_cat_product_rel (id,product_id,category_id) VALUES ` + strings.Join(bulkInsertArr, ",") + `;`,
+						`INSERT INTO shop_cat_product_rel (product_id,category_id) VALUES ` + strings.Join(bulkInsertArr, ",") + `;`,
 					); err != nil {
 						return err
 					}

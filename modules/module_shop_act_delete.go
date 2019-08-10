@@ -23,10 +23,10 @@ func (this *Modules) RegisterAction_ShopDelete() *Action {
 			if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", pf_id); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
 				return err
 			}
 

@@ -23,7 +23,7 @@ func (this *Modules) RegisterAction_ShopCategoriesDelete() *Action {
 			if _, err := tx.Exec("SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT id FROM shop_cat_product_rel WHERE category_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT category_id FROM shop_cat_product_rel WHERE category_id = ? FOR UPDATE;", pf_id); err != nil {
 				return err
 			}
 
