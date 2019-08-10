@@ -13,7 +13,7 @@ echo "import (" >> $TARGET_FILE
 echo "	\"golang-fave/engine/sqlw\"" >> $TARGET_FILE
 echo ")" >> $TARGET_FILE
 echo "" >> $TARGET_FILE
-echo "func Migrate_${NEXT_NUM_STR}(db *sqlw.DB) error {" >> $TARGET_FILE
+echo "func Migrate_${NEXT_NUM_STR}(db *sqlw.DB, host string) error {" >> $TARGET_FILE
 echo "	return nil" >> $TARGET_FILE
 echo "}" >> $TARGET_FILE
 
@@ -25,7 +25,7 @@ echo "import (" >> $LIST_FILE
 echo "	\"golang-fave/engine/sqlw\"" >> $LIST_FILE
 echo ")" >> $LIST_FILE
 echo "" >> $LIST_FILE
-echo "var Migrations = map[string]func(*sqlw.DB) error{" >> $LIST_FILE
+echo "var Migrations = map[string]func(*sqlw.DB, string) error{" >> $LIST_FILE
 echo "	\"000000000\": nil," >> $LIST_FILE
 echo "	\"000000001\": nil," >> $LIST_FILE
 for i in `ls ./support/migrate/*.go | sort -V`; do
