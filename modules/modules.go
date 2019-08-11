@@ -265,6 +265,10 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 	if wrap.R.Method == "POST" {
 		if err := wrap.R.ParseForm(); err == nil {
 			name := wrap.R.FormValue("action")
+			if name == "" {
+				wrap.R.ParseMultipartForm(32 << 20)
+				name = wrap.R.FormValue("action")
+			}
 			if name != "" {
 				if act, ok := this.acts[name]; ok {
 					if act.Info.WantDB {

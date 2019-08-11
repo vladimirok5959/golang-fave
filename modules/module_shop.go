@@ -849,6 +849,53 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					Classes: "wysiwyg",
 				},
 				{
+					Kind:    builder.DFKText,
+					Caption: "Product images",
+					Name:    "",
+					Value:   "",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<script>` +
+							`function UploadProductImage(product_id, input_id) {` +
+							`var fd = new FormData();` +
+							`var files = $('#' + input_id)[0].files[0];` +
+							`fd.append('action', 'shop-upload-image');` +
+							`fd.append('id', product_id);` +
+							`fd.append('file', files);` +
+							`$.ajax({` +
+							`url: '/cp/',` +
+							`method: 'POST',` +
+							`type: 'POST',` +
+							`data: fd,` +
+							`contentType: false,` +
+							`processData: false,` +
+							`success: function(response) {` +
+							`console.log('resp', response);` +
+							`}` +
+							`});` +
+							`}` +
+							`</script>` +
+							`<div class="form-group n6">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label>Product images</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div class="list-wrapper">` +
+							//
+							`<div id="list">` +
+							`` +
+							`</div>` +
+							`<div class="list-button position-relative">` +
+							`<input class="form-control" type="file" id="file" name="file" /><button type="button" class="btn btn-success btn-dynamic-remove" onclick="UploadProductImage(` + utils.IntToStr(data.A_id) + `, 'file');">Upload</button>` +
+							`</div>` +
+							//
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
+				},
+				{
 					Kind:    builder.DFKCheckBox,
 					Caption: "Active",
 					Name:    "active",
