@@ -1,9 +1,11 @@
 package template
 
 var VarFooterHtmlFile = []byte(`						</div>
-						<div class="col-md-4">
-							{{template "sidebar-right.html" .}}
-						</div>
+						{{if or (eq $.Data.Module "index") (eq $.Data.Module "404") (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}}
+							<div class="col-sm-5 col-md-4 col-lg-3">
+								{{template "sidebar-right.html" .}}
+							</div>
+						{{end}}
 					</div>
 				</div>
 			</div>

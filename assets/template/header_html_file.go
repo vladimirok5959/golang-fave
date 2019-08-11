@@ -114,4 +114,13 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 				</div>
 				<div class="container clear-top">
 					<div class="row pt-4">
-						<div class="col-md-8">`)
+						{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-category")}}
+							<div class="col-sm-5 col-md-4 col-lg-3">
+								{{template "sidebar-left.html" .}}
+							</div>
+						{{end}}
+						{{if or (eq $.Data.Module "shop-product")}}
+							<div class="col-md-12">
+						{{else}}
+							<div class="col-sm-7 col-md-8 col-lg-9">
+						{{end}}`)
