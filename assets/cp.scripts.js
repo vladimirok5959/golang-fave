@@ -3824,6 +3824,39 @@
 				PreventDataLost();
 			},
 
+			ShopProductsUploadImage: function(action_name, product_id, input_id) {
+				var fd = new FormData();
+				fd.append('action', action_name);
+				fd.append('id', product_id);
+				fd.append('file', $('#' + input_id)[0].files[0]);
+				$.ajax({
+					url: '/cp/',
+					method: 'POST',
+					type: 'POST',
+					data: fd,
+					contentType: false,
+					processData: false
+				}).done(function(data) {
+					try {
+						eval(data);
+					} catch(e) {
+						if(e instanceof SyntaxError) {
+							console.log(data);
+							console.log('Error: JavaScript code eval error', e.message);
+						}
+					}
+				}).fail(function(xhr, status, error) {
+					try {
+						eval(xhr.responseText);
+					} catch(e) {
+						if(e instanceof SyntaxError) {
+							console.log(xhr.responseText);
+							console.log('Error: JavaScript code eval error', e.message);
+						}
+					}
+				});
+			},
+
 			ActionLogout: function(message) {
 				if(confirm(message)) {
 					$.ajax({
