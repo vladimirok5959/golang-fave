@@ -30,8 +30,8 @@ func (this *Config) configDefault() {
 	this.Blog.Pagination.Index = 5
 	this.Blog.Pagination.Category = 5
 
-	this.Shop.Pagination.Index = 5
-	this.Shop.Pagination.Category = 5
+	this.Shop.Pagination.Index = 9
+	this.Shop.Pagination.Category = 9
 }
 
 func (this *Config) configRead(file string) error {
