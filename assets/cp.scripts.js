@@ -3857,6 +3857,25 @@
 				});
 			},
 
+			ShopProductsDeleteImage: function(button, product_id, filename) {
+				$.ajax({
+					type: "POST",
+					url: '/cp/',
+					data: {
+						action: 'shop-upload-delete',
+						id: product_id,
+						file: filename,
+					}
+				}).done(function(data) {
+					if(IsDebugMode()) console.log('done', data);
+					$(button).parent().remove();
+					AjaxDone(data);
+				}).fail(function(xhr, status, error) {
+					if(IsDebugMode()) console.log('fail', xhr, status, error);
+					AjaxFail(xhr.responseText, status, error);
+				});
+			},
+
 			ActionLogout: function(message) {
 				if(confirm(message)) {
 					$.ajax({

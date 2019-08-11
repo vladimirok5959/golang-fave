@@ -218,6 +218,36 @@ func (this *Modules) shop_GetAllCurrencies(wrap *wrapper.Wrapper) map[int]string
 	return result
 }
 
+func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id int) string {
+	result := ``
+	rows, err := wrap.DB.Query(
+		`SELECT
+			product_id,
+			filename
+		FROM
+			shop_product_images
+		WHERE
+			product_id = ?
+		;`,
+		product_id,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 2)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				result += `<div><a href="/products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `" target="_blank">` + html.EscapeString(string(values[1])) + `</a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[0])) + `, '` + html.EscapeString(string(values[1])) + `');">Delete</a></div>`
+			}
+		}
+	}
+	return result
+}
+
 func (this *Modules) RegisterModule_Shop() *Module {
 	return this.newModule(MInfo{
 		WantDB: true,
@@ -577,7 +607,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						},
 					})
 				},
-				"/cp/"+wrap.CurrModule+"/",
+				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
 				nil,
 				nil,
 				true,
@@ -635,7 +665,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						},
 					})
 				},
-				"/cp/"+wrap.CurrModule+"/",
+				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
 				nil,
 				nil,
 				true,
@@ -864,14 +894,12 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`</div>` +
 							`<div class="col-md-9">` +
 							`<div class="list-wrapper">` +
-							//
-							`<div id="list">` +
-							`` +
+							`<div id="list-images">` +
+							this.shop_GetAllProductImages(wrap, data.A_id) +
 							`</div>` +
 							`<div class="list-button position-relative">` +
 							`<input class="form-control" type="file" id="file" name="file" /><button type="button" class="btn btn-success btn-dynamic-remove" onclick="fave.ShopProductsUploadImage('shop-upload-image', ` + utils.IntToStr(data.A_id) + `, 'file');">Upload</button>` +
 							`</div>` +
-							//
 							`</div>` +
 							`</div>` +
 							`</div>` +
