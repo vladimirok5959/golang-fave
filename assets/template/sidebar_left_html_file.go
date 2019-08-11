@@ -12,9 +12,9 @@ var VarSidebarLeftHtmlFile = []byte(`<div class="card mb-4">
 		</ul>
 	</div>
 </div>
-<div class="card mb-4">
+<!-- <div class="card mb-4">
 	<h5 class="card-header">Shop filter</h5>
 	<div class="card-body">
 		Filter
 	</div>
-</div>`)
+</div> -->`)

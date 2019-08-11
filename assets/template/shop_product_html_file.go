@@ -52,7 +52,7 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 				<hr>
 				<h3>Specifications</h3>
 				<hr>
-				<table class="table table-striped table-bordered mb-0 table-specifications">
+				<!-- <table class="table table-striped table-bordered mb-0 table-specifications">
 					<tbody>
 						<tr>
 							<td class="tcol-1">Диагональ экрана</td>
@@ -87,14 +87,12 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 							<td class="tcol-2">1 ТБ + SSD 128 ГБ</td>
 						</tr>
 					</tbody>
-				</table>
-
+				</table> -->
 			</div>
 			<div class="tab-pane no-fade pt-3" id="specifications" role="tabpanel" aria-labelledby="specifications-tab">
 				<div class="row">
 					<div class="col-md-8">
-						
-						<table class="table table-striped table-bordered mb-0 table-specifications">
+						<!-- <table class="table table-striped table-bordered mb-0 table-specifications">
 							<tbody>
 								<tr>
 									<td class="tcol-1">Диагональ экрана</td>
@@ -129,8 +127,7 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 									<td class="tcol-2">1 ТБ + SSD 128 ГБ</td>
 								</tr>
 							</tbody>
-						</table>
-
+						</table> -->
 					</div>
 					<div class="col-md-4">
 						<div class="card mt-3 mt-sm-3 mt-md-0 mt-lg-0">
