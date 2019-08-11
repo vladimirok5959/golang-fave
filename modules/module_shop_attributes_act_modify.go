@@ -158,6 +158,27 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 					); err != nil {
 						return err
 					}
+				} else {
+					if _, err := tx.Exec(
+						`DELETE
+							shop_filter_product_values
+						FROM
+							shop_filter_product_values
+							LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
+						WHERE
+							shop_filters_values.id IS NOT NULL AND
+							shop_filters_values.filter_id = ?
+						;`,
+						utils.StrToInt(pf_id),
+					); err != nil {
+						return err
+					}
+					if _, err := tx.Exec(
+						`DELETE FROM shop_filters_values WHERE filter_id = ?;`,
+						utils.StrToInt(pf_id),
+					); err != nil {
+						return err
+					}
 				}
 
 				// Insert new values, update existed rows
