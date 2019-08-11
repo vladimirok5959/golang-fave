@@ -46,6 +46,7 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 				shop_filter_product_values,
 				shop_filters,
 				shop_filters_values,
+				shop_product_images,
 				shop_products,
 				users
 			;`,

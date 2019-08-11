@@ -237,6 +237,18 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
+		// Table: shop_product_images
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_product_images (
+				product_id int(11) NOT NULL,
+				filename varchar(255) NOT NULL
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
 		// Table: shop_products
 		if _, err = tx.Exec(
 			`CREATE TABLE shop_products (
@@ -443,7 +455,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000004');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000006');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -678,6 +690,16 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE shop_product_images ADD UNIQUE KEY product_filename (product_id,filename) USING BTREE;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_product_images ADD KEY FK_shop_product_images_product_id (product_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -783,6 +805,14 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(`
 			ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
 			FOREIGN KEY (filter_id) REFERENCES shop_filters (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id
+			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

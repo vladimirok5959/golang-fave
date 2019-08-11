@@ -77,6 +77,10 @@ CREATE TABLE shop_filters_values (
 	name varchar(255) NOT NULL COMMENT 'Value name',
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE shop_product_images (
+	product_id int(11) NOT NULL,
+	filename varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_products (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	user int(11) NOT NULL COMMENT 'User id',
@@ -126,6 +130,8 @@ ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_fil
 ALTER TABLE shop_filters ADD KEY name (name);
 ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);
 ALTER TABLE shop_filters_values ADD KEY name (name);
+ALTER TABLE shop_product_images ADD UNIQUE KEY product_filename (product_id,filename) USING BTREE;
+ALTER TABLE shop_product_images ADD KEY FK_shop_product_images_product_id (product_id);
 ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);
 ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);
 ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);
@@ -143,5 +149,6 @@ ALTER TABLE shop_cats ADD CONSTRAINT FK_shop_cats_user FOREIGN KEY (user) REFERE
 ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id FOREIGN KEY (filter_value_id) REFERENCES shop_filters_values (id) ON DELETE RESTRICT;
 ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id FOREIGN KEY (filter_id) REFERENCES shop_filters (id) ON DELETE RESTRICT;
+ALTER TABLE shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
