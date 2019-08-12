@@ -5,7 +5,7 @@ import (
 )
 
 const AssetsPath = "assets"
-const AssetsVersion = "37"
+const AssetsVersion = "38"
 const DirIndexFile = "index.html"
 
 // Bootstrap resources
