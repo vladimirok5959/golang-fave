@@ -3,11 +3,10 @@ package modules
 import (
 	"html"
 	"net/http"
+	"strings"
 	"time"
 
 	"golang-fave/assets"
-	// "golang-fave/consts"
-	// "golang-fave/engine/builder"
 	"golang-fave/engine/fetdata"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -101,33 +100,131 @@ func (this *Modules) api_GenerateXmlCategories(wrap *wrapper.Wrapper) string {
 	return result
 }
 
+func (this *Modules) api_GenerateXmlOfferPictures(wrap *wrapper.Wrapper, product_id int) string {
+	result := ``
+	rows, err := wrap.DB.Query(
+		`SELECT
+			shop_product_images.product_id,
+			shop_product_images.filename
+		FROM
+			shop_product_images
+		WHERE
+			shop_product_images.product_id = ?
+		;`,
+		product_id,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 2)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				result += `<picture>` + html.EscapeString((*wrap.Config).API.XML.Url) + `products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `</picture>`
+			}
+		}
+	}
+	return result
+}
+
+func (this *Modules) api_GenerateXmlOfferAttributes(wrap *wrapper.Wrapper, product_id int) string {
+	result := ``
+	filter_ids := []int{}
+	filter_names := map[int]string{}
+	filter_values := map[int][]string{}
+	rows, err := wrap.DB.Query(
+		`SELECT
+			shop_filters.id,
+			shop_filters.filter,
+			shop_filters_values.name
+		FROM
+			shop_filter_product_values
+			LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
+			LEFT JOIN shop_filters ON shop_filters.id = shop_filters_values.filter_id
+		WHERE
+			shop_filter_product_values.product_id = ?
+		ORDER BY
+			shop_filters.filter ASC,
+			shop_filters_values.name ASC
+		;`,
+		product_id,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 3)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				if !utils.InArrayInt(filter_ids, utils.StrToInt(string(values[0]))) {
+					filter_ids = append(filter_ids, utils.StrToInt(string(values[0])))
+				}
+				filter_names[utils.StrToInt(string(values[0]))] = html.EscapeString(string(values[1]))
+				filter_values[utils.StrToInt(string(values[0]))] = append(filter_values[utils.StrToInt(string(values[0]))], string(values[2]))
+			}
+		}
+	}
+	for _, filter_id := range filter_ids {
+		result += `<param name="` + html.EscapeString(filter_names[filter_id]) + `">` + html.EscapeString(strings.Join(filter_values[filter_id], ", ")) + `</param>`
+	}
+	return result
+}
+
 func (this *Modules) api_GenerateXmlOffers(wrap *wrapper.Wrapper) string {
-	/*
-		<offer id="19305" available="true">
-			<url>http://abc.ua/catalog/muzhskaya_odezhda/kurtki/kurtkabx.html</url>
-			<price>4499</price>
-			<currencyId>UAH</currencyId>
-			<categoryId>391</categoryId>
-			<picture>http://abc.ua/upload/iblock/a53/a5391cddb40be91705.jpg</picture>
-			<picture>http://abc.ua/upload/iblock/9d0/9d06805d219fb525fc.jpg</picture>
-			<picture>http://abc.ua/upload/iblock/93d/93de38537e1cc1f8f2.jpg</picture>
-			<vendor>Abc clothes</vendor>
-			<stock_quantity>100</stock_quantity>
-			<name>Куртка Abc clothes Scoperandom-HH XL Черная (1323280942900)</name>
-			<description><![CDATA[<p>Одежда<b>Abc clothes</b> способствует развитию функций головного мозга за счет поощрения мелкой моторики.</p><p>В Abc <b>New Collection</b> будет особенно удобно лазать, прыгать, бегать.</p><p>За счет своей универсальноcти и многофункциональности, <b>Abc clothes</b> отлично подходит:</p><ul><li><b>Для весны</b></li><li><b>Для лета</b></li><li><b>Для ранней осени</b> </li></ul><br><p><b>Состав:</b><br>• 92% полиэстер, 8% эластан, нетоксичность подтверждена лабораторно.</p><p><b>Вес:</b> 305 г</p>]]></description>
-			<param name="Вид">Куртка</param>
-			<param name="Размер">XL</param>
-			<param name="Сезон">Весна-Осень</param>
-			<param name="Категория">Мужская</param>
-			<param name="Цвет">Черный</param>
-			<param name="Длина">Средней длины</param>
-			<param name="Стиль">Повседневный (casual)</param>
-			<param name="Особенности">Модель с капюшоном</param>
-			<param name="Состав">92% полиэстер, 8% эластан</param>
-			<param name="Артикул">58265468</param>
-		</offer>
-	*/
-	return ``
+	result := ``
+	rows, err := wrap.DB.Query(
+		`SELECT
+			shop_products.id,
+			shop_currencies.code,
+			shop_products.price,
+			shop_products.name,
+			shop_products.alias,
+			shop_products.vendor,
+			shop_products.quantity,
+			shop_products.category,
+			shop_products.content
+		FROM
+			shop_products
+			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+		WHERE
+			shop_products.active = 1 AND
+			shop_products.category > 1
+		ORDER BY
+			shop_products.id
+		;`,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 9)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				result += `<offer id="` + html.EscapeString(string(values[0])) + `" available="true">`
+				result += `<url>` + html.EscapeString((*wrap.Config).API.XML.Url) + `shop/` + html.EscapeString(string(values[4])) + `/</url>`
+				result += `<price>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[0])), "%.2f") + `</price>`
+				result += `<currencyId>` + html.EscapeString(string(values[1])) + `</currencyId>`
+				result += `<categoryId>` + html.EscapeString(string(values[7])) + `</categoryId>`
+				result += this.api_GenerateXmlOfferPictures(wrap, utils.StrToInt(string(values[0])))
+				result += `<vendor>` + html.EscapeString(string(values[5])) + `</vendor>`
+				result += `<stock_quantity>` + html.EscapeString(string(values[6])) + `</stock_quantity>`
+				result += `<name>` + html.EscapeString(string(values[3])) + `</name>`
+				result += `<description><![CDATA[` + string(values[8]) + `]]></description>`
+				result += this.api_GenerateXmlOfferAttributes(wrap, utils.StrToInt(string(values[0])))
+				result += `</offer>`
+			}
+		}
+	}
+	return result
 }
 
 func (this *Modules) api_GenerateXml(wrap *wrapper.Wrapper) string {
@@ -155,8 +252,8 @@ func (this *Modules) RegisterModule_Api() *Module {
 		Icon:   assets.SysSvgIconPage,
 		Sub:    &[]MISub{},
 	}, func(wrap *wrapper.Wrapper) {
-		if (*wrap.Config).API.XML.Enabled == 1 {
-			if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "products" {
+		if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "products" {
+			if (*wrap.Config).API.XML.Enabled == 1 {
 				// Fix url
 				if wrap.R.URL.Path[len(wrap.R.URL.Path)-1] != '/' {
 					http.Redirect(wrap.W, wrap.R, wrap.R.URL.Path+"/"+utils.ExtractGetParams(wrap.R.RequestURI), 301)
@@ -168,22 +265,22 @@ func (this *Modules) RegisterModule_Api() *Module {
 				wrap.W.Header().Set("Content-Type", "text/xml; charset=utf-8")
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Write([]byte(this.api_GenerateXml(wrap)))
-			} else if len(wrap.UrlArgs) == 1 {
-				// Fix url
-				if wrap.R.URL.Path[len(wrap.R.URL.Path)-1] != '/' {
-					http.Redirect(wrap.W, wrap.R, wrap.R.URL.Path+"/"+utils.ExtractGetParams(wrap.R.RequestURI), 301)
-					return
-				}
-
-				// Some info
-				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-				wrap.W.WriteHeader(http.StatusOK)
-				wrap.W.Write([]byte("Fave engine API mount point!"))
 			} else {
-				// User error 404 page
-				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+				wrap.W.WriteHeader(http.StatusNotFound)
+				wrap.W.Write([]byte("Disabled!"))
+			}
+		} else if len(wrap.UrlArgs) == 1 {
+			// Fix url
+			if wrap.R.URL.Path[len(wrap.R.URL.Path)-1] != '/' {
+				http.Redirect(wrap.W, wrap.R, wrap.R.URL.Path+"/"+utils.ExtractGetParams(wrap.R.RequestURI), 301)
 				return
 			}
+
+			// Some info
+			wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			wrap.W.WriteHeader(http.StatusOK)
+			wrap.W.Write([]byte("Fave engine API mount point!"))
 		} else {
 			// User error 404 page
 			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
