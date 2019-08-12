@@ -18,6 +18,14 @@ type Config struct {
 			Category int
 		}
 	}
+	API struct {
+		XML struct {
+			Enabled int
+			Name    string
+			Company string
+			Url     string
+		}
+	}
 }
 
 func configNew() *Config {
@@ -32,6 +40,11 @@ func (this *Config) configDefault() {
 
 	this.Shop.Pagination.Index = 9
 	this.Shop.Pagination.Category = 9
+
+	this.API.XML.Enabled = 0
+	this.API.XML.Name = ""
+	this.API.XML.Company = ""
+	this.API.XML.Url = ""
 }
 
 func (this *Config) configRead(file string) error {

@@ -23,6 +23,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		Sub: &[]MISub{
 			{Mount: "default", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
 			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconList},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
@@ -112,6 +113,50 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Max:      "100",
 					Required: true,
 					Value:    utils.IntToStr((*wrap.Config).Shop.Pagination.Category),
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Save",
+					Target: "add-edit-button",
+				},
+			})
+
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+		} else if wrap.CurrSubModule == "api" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "API"},
+			})
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "settings-api",
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "XML enabled",
+					Name:    "xml-enabled",
+					Value:   utils.IntToStr((*wrap.Config).API.XML.Enabled),
+					Hint:    "XML: <a href=\"/api/products/\" target=\"_blank\">/api/products/</a>",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "XML name",
+					Name:    "xml-name",
+					Value:   (*wrap.Config).API.XML.Name,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "XML company",
+					Name:    "xml-company",
+					Value:   (*wrap.Config).API.XML.Company,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "XML url",
+					Name:    "xml-url",
+					Value:   (*wrap.Config).API.XML.Url,
 				},
 				{
 					Kind:   builder.DFKSubmit,
