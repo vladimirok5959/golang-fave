@@ -184,7 +184,9 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
 		if mod.Mount == "index" {
 			href = `/cp/`
 		}
-		html += `<a class="dropdown-item` + class + `" href="` + href + `">` + mod.Name + `</a>`
+		if !(sys && mod.Mount == "api") {
+			html += `<a class="dropdown-item` + class + `" href="` + href + `">` + mod.Name + `</a>`
+		}
 	}
 	return html
 }
@@ -211,7 +213,9 @@ func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
 		if !mod.System {
 			html_def += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
 		} else {
-			html_sys += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
+			if mod.Mount != "api" {
+				html_sys += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
+			}
 		}
 	}
 	if html_def != "" {
