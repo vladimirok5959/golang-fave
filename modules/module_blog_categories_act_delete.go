@@ -28,6 +28,9 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 			}
 
 			// Process
+			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", pf_id); err != nil {
+				return err
+			}
 			if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
 				return err
 			}
@@ -41,9 +44,6 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 				return err
 			}
 			if _, err := tx.Exec("UPDATE blog_cats SET rgt = rgt - 2 WHERE rgt > @mr;"); err != nil {
-				return err
-			}
-			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", pf_id); err != nil {
 				return err
 			}
 			return nil
