@@ -1,3 +1,3 @@
 package consts
 
-const ServerVersion = "1.1.6"
+const ServerVersion = "1.1.7"
