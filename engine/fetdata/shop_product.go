@@ -14,6 +14,7 @@ type ShopProduct struct {
 
 	user     *User
 	currency *Currency
+	category *ShopCategory
 }
 
 func (this *ShopProduct) Id() int {
@@ -73,6 +74,32 @@ func (this *ShopProduct) Alias() string {
 		return ""
 	}
 	return this.object.A_alias
+}
+
+func (this *ShopProduct) Vendor() string {
+	if this == nil {
+		return ""
+	}
+	return this.object.A_vendor
+}
+
+func (this *ShopProduct) Quantity() int {
+	if this == nil {
+		return 0
+	}
+	return this.object.A_quantity
+}
+
+func (this *ShopProduct) Category() *ShopCategory {
+	if this == nil {
+		return nil
+	}
+	if this.category != nil {
+		return this.category
+	}
+	this.category = &ShopCategory{wrap: this.wrap}
+	this.category.load(this.object.A_category)
+	return this.category
 }
 
 func (this *ShopProduct) Briefly() template.HTML {

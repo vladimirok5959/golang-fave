@@ -53,6 +53,9 @@ func (this *Shop) load() {
 			shop_products.price,
 			shop_products.name,
 			shop_products.alias,
+			shop_products.vendor,
+			shop_products.quantity,
+			shop_products.category,
 			shop_products.briefly,
 			shop_products.content,
 			UNIX_TIMESTAMP(shop_products.datetime) as datetime,
@@ -67,11 +70,18 @@ func (this *Shop) load() {
 			shop_currencies.name,
 			shop_currencies.coefficient,
 			shop_currencies.code,
-			shop_currencies.symbol
+			shop_currencies.symbol,
+			shop_cats.id,
+			shop_cats.user,
+			shop_cats.name,
+			shop_cats.alias,
+			shop_cats.lft,
+			shop_cats.rgt
 		FROM
 			shop_products
 			LEFT JOIN users ON users.id = shop_products.user
 			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+			LEFT JOIN shop_cats ON shop_cats.id = shop_products.category
 		WHERE
 			shop_products.active = 1
 		ORDER BY
@@ -133,6 +143,9 @@ func (this *Shop) load() {
 				shop_products.price,
 				shop_products.name,
 				shop_products.alias,
+				shop_products.vendor,
+				shop_products.quantity,
+				shop_products.category,
 				shop_products.briefly,
 				shop_products.content,
 				UNIX_TIMESTAMP(shop_products.datetime) AS datetime,
@@ -147,12 +160,19 @@ func (this *Shop) load() {
 				shop_currencies.name,
 				shop_currencies.coefficient,
 				shop_currencies.code,
-				shop_currencies.symbol
+				shop_currencies.symbol,
+				shop_cats.id,
+				shop_cats.user,
+				shop_cats.name,
+				shop_cats.alias,
+				shop_cats.lft,
+				shop_cats.rgt
 			FROM
 				shop_products
 				LEFT JOIN shop_cat_product_rel ON shop_cat_product_rel.product_id = shop_products.id
 				LEFT JOIN users ON users.id = shop_products.user
 				LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+				LEFT JOIN shop_cats ON shop_cats.id = shop_products.category
 			WHERE
 				shop_products.active = 1 AND
 				shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
@@ -179,6 +199,7 @@ func (this *Shop) load() {
 				rp := utils.MySql_shop_product{}
 				ru := utils.MySql_user{}
 				rc := utils.MySql_shop_currency{}
+				ro := utils.MySql_shop_category{}
 				if err := rows.Scan(
 					&rp.A_id,
 					&rp.A_user,
@@ -186,6 +207,9 @@ func (this *Shop) load() {
 					&rp.A_price,
 					&rp.A_name,
 					&rp.A_alias,
+					&rp.A_vendor,
+					&rp.A_quantity,
+					&rp.A_category,
 					&rp.A_briefly,
 					&rp.A_content,
 					&rp.A_datetime,
@@ -201,12 +225,19 @@ func (this *Shop) load() {
 					&rc.A_coefficient,
 					&rc.A_code,
 					&rc.A_symbol,
+					&ro.A_id,
+					&ro.A_user,
+					&ro.A_name,
+					&ro.A_alias,
+					&ro.A_lft,
+					&ro.A_rgt,
 				); err == nil {
 					this.products = append(this.products, &ShopProduct{
 						wrap:     this.wrap,
 						object:   &rp,
 						user:     &User{wrap: this.wrap, object: &ru},
 						currency: &Currency{wrap: this.wrap, object: &rc},
+						category: &ShopCategory{wrap: this.wrap, object: &ro},
 					})
 				}
 			}

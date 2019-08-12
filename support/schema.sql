@@ -88,6 +88,9 @@ CREATE TABLE shop_products (
 	price float(8,2) NOT NULL COMMENT 'Product price',
 	name varchar(255) NOT NULL COMMENT 'Product name',
 	alias varchar(255) NOT NULL COMMENT 'Product alias',
+	vendor varchar(255) NOT NULL,
+	quantity int(11) NOT NULL,
+	category int(11) NOT NULL,
 	briefly text NOT NULL COMMENT 'Product brief content',
 	content text NOT NULL COMMENT 'Product content',
 	datetime datetime NOT NULL COMMENT 'Creation date/time',
@@ -135,6 +138,7 @@ ALTER TABLE shop_product_images ADD KEY FK_shop_product_images_product_id (produ
 ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);
 ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);
 ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);
+ALTER TABLE shop_products ADD KEY FK_shop_products_category (category);
 ALTER TABLE users ADD UNIQUE KEY email (email);
 
 # References
@@ -152,3 +156,4 @@ ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id 
 ALTER TABLE shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
+ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_category FOREIGN KEY (category) REFERENCES shop_cats (id) ON DELETE RESTRICT;

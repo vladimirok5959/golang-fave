@@ -331,6 +331,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					price,
 					name,
 					alias,
+					vendor,
+					quantity,
+					category,
 					briefly,
 					content,
 					UNIX_TIMESTAMP(datetime) as datetime,
@@ -349,6 +352,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				&row.A_price,
 				&row.A_name,
 				&row.A_alias,
+				&row.A_vendor,
+				&row.A_quantity,
+				&row.A_category,
 				&row.A_briefly,
 				&row.A_content,
 				&row.A_datetime,
@@ -684,8 +690,14 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			data := utils.MySql_shop_product{
 				A_id:       0,
 				A_user:     0,
+				A_currency: 0,
+				A_price:    0,
 				A_name:     "",
 				A_alias:    "",
+				A_vendor:   "",
+				A_quantity: 0,
+				A_category: 0,
+				A_briefly:  "",
 				A_content:  "",
 				A_datetime: 0,
 				A_active:   0,
@@ -706,6 +718,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						price,
 						name,
 						alias,
+						vendor,
+						quantity,
+						category,
 						briefly,
 						content,
 						active
@@ -722,6 +737,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_price,
 					&data.A_name,
 					&data.A_alias,
+					&data.A_vendor,
+					&data.A_quantity,
+					&data.A_category,
 					&data.A_briefly,
 					&data.A_content,
 					&data.A_active,
@@ -816,6 +834,57 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				},
 				{
 					Kind:    builder.DFKText,
+					Caption: "Vendor/Count",
+					Name:    "vendor",
+					Value:   "0",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_vendor">Vendor/Count</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<div class="row">` +
+							`<div class="col-md-8">` +
+							`<div><input class="form-control" type="text" id="lbl_vendor" name="vendor" value="` + html.EscapeString(data.A_vendor) + `" placeholder="" autocomplete="off"></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-4">` +
+							`<input class="form-control" type="number" step="1" id="lbl_quantity" name="quantity" value="` + utils.IntToStr(data.A_quantity) + `" placeholder="" autocomplete="off">` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Category",
+					Name:    "category",
+					Value:   "0",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group n2">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_category">Category</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<select class="selectpicker form-control" id="lbl_category" name="category" data-live-search="true">` +
+							`<option title="Nothing selected" value="0">&mdash;</option>` +
+							this.shop_GetCategorySelectOptions(wrap, 0, data.A_category, []int{}) +
+							`</select>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
+				},
+				{
+					Kind:    builder.DFKText,
 					Caption: "Categories",
 					Name:    "cats",
 					Value:   "0",
@@ -823,7 +892,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						return `<div class="form-group n5">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
-							`<label for="lbl_parent">Categories</label>` +
+							`<label for="lbl_cats">Categories</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
 							`<div>` +

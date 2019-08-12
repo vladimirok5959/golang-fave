@@ -13,6 +13,40 @@ type ShopCategory struct {
 	user *User
 }
 
+func (this *ShopCategory) load(id int) {
+	if this == nil {
+		return
+	}
+	if this.object != nil {
+		return
+	}
+	this.object = &utils.MySql_shop_category{}
+	if err := this.wrap.DB.QueryRow(`
+		SELECT
+			id,
+			user,
+			name,
+			alias,
+			lft,
+			rgt
+		FROM
+			users
+		WHERE
+			id = ?
+		LIMIT 1;`,
+		id,
+	).Scan(
+		&this.object.A_id,
+		&this.object.A_user,
+		&this.object.A_name,
+		&this.object.A_alias,
+		&this.object.A_lft,
+		&this.object.A_rgt,
+	); err != nil {
+		return
+	}
+}
+
 func (this *ShopCategory) Id() int {
 	if this == nil {
 		return 0

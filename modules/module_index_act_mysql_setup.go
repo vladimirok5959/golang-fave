@@ -258,6 +258,9 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				price float(8,2) NOT NULL COMMENT 'Product price',
 				name varchar(255) NOT NULL COMMENT 'Product name',
 				alias varchar(255) NOT NULL COMMENT 'Product alias',
+				vendor varchar(255) NOT NULL,
+				quantity int(11) NOT NULL,
+				category int(11) NOT NULL,
 				briefly text NOT NULL COMMENT 'Product brief content',
 				content text NOT NULL COMMENT 'Product content',
 				datetime datetime NOT NULL COMMENT 'Creation date/time',
@@ -455,7 +458,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000006');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000007');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -541,6 +544,9 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				price = ?,
 				name = ?,
 				alias = ?,
+				vendor = ?,
+				quantity = ?,
+				category = ?,
 				briefly = ?,
 				content = ?,
 				datetime = ?,
@@ -552,6 +558,9 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			1000.00,
 			"Samsung Galaxy S10",
 			"samsung-galaxy-s10",
+			"Samsung",
+			"1",
+			"3",
 			"<p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent.</p>",
 			"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Et malesuada fames ac turpis egestas sed tempus urna et. Euismod elementum nisi quis eleifend. Nisi porta lorem mollis aliquam ut porttitor. Ac turpis egestas maecenas pharetra convallis posuere. Nunc non blandit massa enim nec dui. Commodo elit at imperdiet dui accumsan sit amet nulla. Viverra accumsan in nisl nisi scelerisque. Dui nunc mattis enim ut tellus. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Faucibus ornare suspendisse sed nisi lacus. Nulla facilisi morbi tempus iaculis. Ut eu sem integer vitae justo eget magna fermentum iaculis. Ullamcorper sit amet risus nullam eget felis eget nunc. Volutpat sed cras ornare arcu dui vivamus. Eget magna fermentum iaculis eu non diam.</p><p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent. Interdum velit euismod in pellentesque massa placerat duis. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt. Nisl rhoncus mattis rhoncus urna neque viverra justo. Odio ut enim blandit volutpat. Ac auctor augue mauris augue neque gravida. Ut lectus arcu bibendum at varius vel. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Dolor sit amet consectetur adipiscing elit duis tristique. Semper quis lectus nulla at volutpat diam ut. Sapien eget mi proin sed.</p>",
 			utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
@@ -715,6 +724,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_category (category);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE users ADD UNIQUE KEY email (email);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -829,6 +843,14 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(`
 			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency
 			FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_category
+			FOREIGN KEY (category) REFERENCES shop_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

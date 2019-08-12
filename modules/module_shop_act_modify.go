@@ -19,6 +19,9 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		pf_price := wrap.R.FormValue("price")
 		pf_currency := wrap.R.FormValue("currency")
 		pf_alias := wrap.R.FormValue("alias")
+		pf_vendor := wrap.R.FormValue("vendor")
+		pf_quantity := wrap.R.FormValue("quantity")
+		pf_category := wrap.R.FormValue("category")
 		pf_briefly := wrap.R.FormValue("briefly")
 		pf_content := wrap.R.FormValue("content")
 		pf_active := wrap.R.FormValue("active")
@@ -42,6 +45,16 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 			return
 		}
 
+		if !utils.IsNumeric(pf_quantity) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		if !utils.IsNumeric(pf_category) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
 		if pf_name == "" {
 			wrap.MsgError(`Please specify product name`)
 			return
@@ -54,6 +67,11 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		if !utils.IsValidSingleAlias(pf_alias) {
 			wrap.MsgError(`Please specify correct product alias`)
 			return
+		}
+
+		// Default is ROOT
+		if pf_category == "0" {
+			pf_category = "1"
 		}
 
 		// Collect fields and data for filter values
@@ -79,6 +97,9 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						price = ?,
 						name = ?,
 						alias = ?,
+						vendor = ?,
+						quantity = ?,
+						category = ?,
 						briefly = ?,
 						content = ?,
 						datetime = ?,
@@ -89,6 +110,9 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					utils.StrToFloat64(pf_price),
 					pf_name,
 					pf_alias,
+					pf_vendor,
+					utils.StrToInt(pf_quantity),
+					utils.StrToInt(pf_category),
 					pf_briefly,
 					pf_content,
 					utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
@@ -183,6 +207,9 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						price = ?,
 						name = ?,
 						alias = ?,
+						vendor = ?,
+						quantity = ?,
+						category = ?,
 						briefly = ?,
 						content = ?,
 						active = ?
@@ -193,6 +220,9 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					utils.StrToFloat64(pf_price),
 					pf_name,
 					pf_alias,
+					pf_vendor,
+					utils.StrToInt(pf_quantity),
+					utils.StrToInt(pf_category),
 					pf_briefly,
 					pf_content,
 					pf_active,
