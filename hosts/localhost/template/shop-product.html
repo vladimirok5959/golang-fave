@@ -2,6 +2,9 @@
 <nav aria-label="breadcrumb">
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="/shop/">Shop</a></li>
+		{{if $.Data.Shop.Product.Category.Id}}
+			<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Permalink}}">{{$.Data.Shop.Product.Category.Name}}</a></li>
+		{{end}}
 		<li class="breadcrumb-item active"><a href="{{$.Data.Shop.Product.Permalink}}">{{$.Data.Shop.Product.Name}}</a></li>
 	</ol>
 </nav>

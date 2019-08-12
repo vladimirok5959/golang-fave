@@ -30,9 +30,10 @@ func (this *ShopCategory) load(id int) {
 			lft,
 			rgt
 		FROM
-			users
+			shop_cats
 		WHERE
-			id = ?
+			id = ? AND
+			id > 1
 		LIMIT 1;`,
 		id,
 	).Scan(
