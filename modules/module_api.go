@@ -43,13 +43,62 @@ func (this *Modules) api_GenerateXmlCurrencies(wrap *wrapper.Wrapper) string {
 }
 
 func (this *Modules) api_GenerateXmlCategories(wrap *wrapper.Wrapper) string {
-	/*
-		<category id="2">Женская одежда</category>
-		<category id="261" parentId="2">Платья</category>
-		<category id="3">Мужская одежда</category>
-		<category id="391" parentId="3">Куртки</category>
-	*/
-	return ``
+	result := ``
+	rows, err := wrap.DB.Query(
+		`SELECT
+			data.id,
+			data.user,
+			data.name,
+			data.alias,
+			data.lft,
+			data.rgt,
+			MAX(data.parent_id) AS parent_id
+		FROM
+			(
+				SELECT
+					node.id,
+					node.user,
+					node.name,
+					node.alias,
+					node.lft,
+					node.rgt,
+					parent.id AS parent_id
+				FROM
+					shop_cats AS node,
+					shop_cats AS parent
+				WHERE
+					node.lft BETWEEN parent.lft AND parent.rgt AND
+					node.id > 1
+				ORDER BY
+					node.lft ASC
+			) AS data
+		WHERE
+			data.id <> data.parent_id
+		GROUP BY
+			data.id
+		ORDER BY
+			data.lft ASC
+		;`,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 7)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				if utils.StrToInt(string(values[6])) > 1 {
+					result += `<category id="` + html.EscapeString(string(values[0])) + `" parentId="` + html.EscapeString(string(values[6])) + `">` + html.EscapeString(string(values[2])) + `</category>`
+				} else {
+					result += `<category id="` + html.EscapeString(string(values[0])) + `">` + html.EscapeString(string(values[2])) + `</category>`
+				}
+			}
+		}
+	}
+	return result
 }
 
 func (this *Modules) api_GenerateXmlOffers(wrap *wrapper.Wrapper) string {
