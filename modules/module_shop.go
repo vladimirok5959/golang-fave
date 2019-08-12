@@ -241,7 +241,7 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if err == nil {
-				result += `<div><a href="/products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `" target="_blank">` + html.EscapeString(string(values[1])) + `</a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[0])) + `, '` + html.EscapeString(string(values[1])) + `');">Delete</a></div>`
+				result += `<div class="attached-img"><a href="/products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `" target="_blank">` + html.EscapeString(string(values[1])) + `</a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[0])) + `, '` + html.EscapeString(string(values[1])) + `');">Delete</a></div>`
 			}
 		}
 	}
@@ -898,7 +898,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							this.shop_GetAllProductImages(wrap, data.A_id) +
 							`</div>` +
 							`<div class="list-button position-relative">` +
-							`<input class="form-control" type="file" id="file" name="file" /><button type="button" class="btn btn-success btn-dynamic-remove" onclick="fave.ShopProductsUploadImage('shop-upload-image', ` + utils.IntToStr(data.A_id) + `, 'file');">Upload</button>` +
+							`<input class="form-control" type="file" id="file" name="file" style="font-size:13px;" /><button type="button" class="btn btn-success btn-dynamic-remove" onclick="fave.ShopProductsUploadImage('shop-upload-image', ` + utils.IntToStr(data.A_id) + `, 'file');">Upload</button>` +
 							`</div>` +
 							`</div>` +
 							`</div>` +

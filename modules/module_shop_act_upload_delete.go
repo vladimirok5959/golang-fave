@@ -49,5 +49,7 @@ func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+
+		wrap.Write(`$('#list-images a').each(function(i, e) { if(e.innerHTML == '` + pf_file + `') { $(e).parent().remove(); return; } });`)
 	})
 }

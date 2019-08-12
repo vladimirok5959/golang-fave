@@ -92,13 +92,6 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 			return
 		}
 
-		wrap.Write(`Some!`)
-
-		// wrap.Write(`if($('#prod_attr_` + pf_id + `').length > 0) {`)
-		// wrap.Write(`$('#prod_attr_` + pf_id + ` select').prop('disabled', false).prop('multiple', true);`)
-		// wrap.Write(`$('#prod_attr_` + pf_id + ` select').html('` + options + `');`)
-		// wrap.Write(`$('#prod_attr_` + pf_id + ` select').selectpicker({});`)
-		// wrap.Write(`$('#prod_attr_` + pf_id + ` button').prop('disabled', false);`)
-		// wrap.Write(`}`)
+		wrap.Write(`$('#list-images').append('<div class="attached-img"><a href="/products/images/` + pf_id + `/` + target_file_name + `" target="_blank">` + target_file_name + `</a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + pf_id + `, \'` + target_file_name + `\');">Delete</a></div>');`)
 	})
 }

@@ -3867,7 +3867,6 @@
 						file: filename,
 					}
 				}).done(function(data) {
-					$(button).parent().remove();
 					if(IsDebugMode()) console.log('done', data);
 					AjaxDone(data);
 				}).fail(function(xhr, status, error) {
