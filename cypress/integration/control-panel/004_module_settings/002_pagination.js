@@ -14,8 +14,8 @@ context('Module Pagination', () => {
     cy.get('.data-form.settings-pagination input[name=blog-category]').should('have.value', '5');
     cy.get('.data-form.settings-pagination input[name=shop-index]').should('exist');
     cy.get('.data-form.settings-pagination input[name=shop-category]').should('exist');
-    cy.get('.data-form.settings-pagination input[name=shop-index]').should('have.value', '5');
-    cy.get('.data-form.settings-pagination input[name=shop-category]').should('have.value', '5');
+    cy.get('.data-form.settings-pagination input[name=shop-index]').should('have.value', '9');
+    cy.get('.data-form.settings-pagination input[name=shop-category]').should('have.value', '9');
     cy.logoutCMS();
   });
 
@@ -35,8 +35,8 @@ context('Module Pagination', () => {
     cy.get('.data-form.settings-pagination input[name=blog-category]').clear().type('5');
     cy.get('.data-form.settings-pagination input[name=shop-index]').should('have.value', '2');
     cy.get('.data-form.settings-pagination input[name=shop-category]').should('have.value', '3');
-    cy.get('.data-form.settings-pagination input[name=shop-index]').clear().type('5');
-    cy.get('.data-form.settings-pagination input[name=shop-category]').clear().type('5');
+    cy.get('.data-form.settings-pagination input[name=shop-index]').clear().type('9');
+    cy.get('.data-form.settings-pagination input[name=shop-category]').clear().type('9');
     cy.get('#add-edit-button').click();
     cy.actionWait();
     cy.logoutCMS();
