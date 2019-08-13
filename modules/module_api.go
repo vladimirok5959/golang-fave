@@ -211,7 +211,7 @@ func (this *Modules) api_GenerateXmlOffers(wrap *wrapper.Wrapper) string {
 			if err == nil {
 				result += `<offer id="` + html.EscapeString(string(values[0])) + `" available="true">`
 				result += `<url>` + html.EscapeString((*wrap.Config).API.XML.Url) + `shop/` + html.EscapeString(string(values[4])) + `/</url>`
-				result += `<price>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[0])), "%.2f") + `</price>`
+				result += `<price>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[2])), "%.2f") + `</price>`
 				result += `<currencyId>` + html.EscapeString(string(values[1])) + `</currencyId>`
 				result += `<categoryId>` + html.EscapeString(string(values[7])) + `</categoryId>`
 				result += this.api_GenerateXmlOfferPictures(wrap, utils.StrToInt(string(values[0])))
