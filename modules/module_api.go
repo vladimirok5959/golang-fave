@@ -296,7 +296,7 @@ func (this *Modules) RegisterModule_Api() *Module {
 		// http://localhost:8080/api/product-image/thumb-2/1/1565650500.png/
 		// http://localhost:8080/api/product-image/thumb-3/1/1565650500.png/
 
-		if len(wrap.UrlArgs) == 5 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "product-image" && (wrap.UrlArgs[2] == "thumb-cp" || wrap.UrlArgs[2] == "thumb-1" || wrap.UrlArgs[2] == "thumb-2" || wrap.UrlArgs[2] == "thumb-3") {
+		if len(wrap.UrlArgs) == 5 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "product-image" && (wrap.UrlArgs[2] == "thumb-0" || wrap.UrlArgs[2] == "thumb-1" || wrap.UrlArgs[2] == "thumb-2" || wrap.UrlArgs[2] == "thumb-3") {
 			thumb_type := wrap.UrlArgs[2]
 			product_id := wrap.UrlArgs[3]
 			file_name := wrap.UrlArgs[4]
