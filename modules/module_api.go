@@ -308,8 +308,8 @@ func (this *Modules) RegisterModule_Api() *Module {
 				return
 			}
 
-			width := (*wrap.Config).Shop.Thumbnails.ControlPanel[0]
-			height := (*wrap.Config).Shop.Thumbnails.ControlPanel[1]
+			width := (*wrap.Config).Shop.Thumbnails.Thumbnail0[0]
+			height := (*wrap.Config).Shop.Thumbnails.Thumbnail0[1]
 
 			if thumb_type == "thumb-1" {
 				width = (*wrap.Config).Shop.Thumbnails.Thumbnail1[0]
