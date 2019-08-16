@@ -1,8 +1,12 @@
 package modules
 
 import (
+	"bufio"
+	"bytes"
 	"html"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -10,7 +14,40 @@ import (
 	"golang-fave/engine/fetdata"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
+
+	"github.com/disintegration/imaging"
 )
+
+func (this *Modules) api_GenerateImage(wrap *wrapper.Wrapper, width, height, color int, filename string) ([]byte, bool, string, error) {
+	file_ext := ""
+	if strings.ToLower(filepath.Ext(filename)) == ".png" {
+		file_ext = "image/png"
+	} else if strings.ToLower(filepath.Ext(filename)) == ".jpg" {
+		file_ext = "image/jpeg"
+	} else if strings.ToLower(filepath.Ext(filename)) == ".jpeg" {
+		file_ext = "image/jpeg"
+	}
+
+	src, err := imaging.Open(filename)
+	if err != nil {
+		return []byte(""), false, file_ext, err
+	}
+
+	src = imaging.Fill(src, width, height, imaging.Center, imaging.Lanczos)
+
+	var out_bytes bytes.Buffer
+	out := bufio.NewWriter(&out_bytes)
+
+	if file_ext == "image/png" {
+		imaging.Encode(out, src, imaging.PNG)
+	} else if file_ext == "image/jpeg" {
+		imaging.Encode(out, src, imaging.JPEG)
+	} else {
+		return []byte(""), false, file_ext, nil
+	}
+
+	return out_bytes.Bytes(), true, file_ext, nil
+}
 
 func (this *Modules) api_GenerateXmlCurrencies(wrap *wrapper.Wrapper) string {
 	result := ``
@@ -252,7 +289,55 @@ func (this *Modules) RegisterModule_Api() *Module {
 		Icon:   assets.SysSvgIconPage,
 		Sub:    &[]MISub{},
 	}, func(wrap *wrapper.Wrapper) {
-		if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "products" {
+
+		// http://localhost:8080/api/product-image/thumb-cp/1/1565650500.png/
+		// http://localhost:8080/api/product-image/thumb-1/1/1565650500.png/
+		// http://localhost:8080/api/product-image/thumb-2/1/1565650500.png/
+		// http://localhost:8080/api/product-image/thumb-3/1/1565650500.png/
+
+		if len(wrap.UrlArgs) == 5 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "product-image" && (wrap.UrlArgs[2] == "thumb-cp" || wrap.UrlArgs[2] == "thumb-1" || wrap.UrlArgs[2] == "thumb-2" || wrap.UrlArgs[2] == "thumb-3") {
+			thumb_type := wrap.UrlArgs[2]
+			product_id := wrap.UrlArgs[3]
+			file_name := wrap.UrlArgs[4]
+
+			original_file := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + product_id + string(os.PathSeparator) + file_name
+			if !utils.IsFileExists(original_file) {
+				// User error 404 page
+				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				return
+			}
+
+			width := (*wrap.Config).Shop.Thumbnails.ControlPanel[0]
+			height := (*wrap.Config).Shop.Thumbnails.ControlPanel[1]
+
+			if thumb_type == "thumb-1" {
+				width = (*wrap.Config).Shop.Thumbnails.Thumbnail1[0]
+				height = (*wrap.Config).Shop.Thumbnails.Thumbnail1[1]
+			} else if thumb_type == "thumb-2" {
+				width = (*wrap.Config).Shop.Thumbnails.Thumbnail2[0]
+				height = (*wrap.Config).Shop.Thumbnails.Thumbnail2[1]
+			} else if thumb_type == "thumb-3" {
+				width = (*wrap.Config).Shop.Thumbnails.Thumbnail3[0]
+				height = (*wrap.Config).Shop.Thumbnails.Thumbnail3[1]
+			}
+
+			data, ok, ext, err := this.api_GenerateImage(wrap, width, height, 0, original_file)
+			if err != nil {
+				// System error 500
+				utils.SystemErrorPageEngine(wrap.W, err)
+				return
+			}
+
+			if !ok {
+				// User error 404 page
+				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				return
+			}
+
+			wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			wrap.W.Header().Set("Content-Type", ext)
+			wrap.W.Write(data)
+		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "products" {
 			if (*wrap.Config).API.XML.Enabled == 1 {
 				// Fix url
 				if wrap.R.URL.Path[len(wrap.R.URL.Path)-1] != '/' {

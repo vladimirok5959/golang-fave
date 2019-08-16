@@ -23,6 +23,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		Sub: &[]MISub{
 			{Mount: "default", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
 			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "thumbnails", Name: "Thumbnails", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconList},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
@@ -113,6 +114,99 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Max:      "100",
 					Required: true,
 					Value:    utils.IntToStr((*wrap.Config).Shop.Pagination.Category),
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Save",
+					Target: "add-edit-button",
+				},
+			})
+
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+		} else if wrap.CurrSubModule == "thumbnails" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Thumbnails"},
+			})
+
+			// TODO: two fields in one line
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "settings-thumbnails",
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop thumbnail 1 width",
+					Name:     "shop-thumbnail-w-1",
+					Min:      "10",
+					Max:      "1000",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail1[0]),
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop thumbnail 1 height",
+					Name:     "shop-thumbnail-h-1",
+					Min:      "10",
+					Max:      "1000",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail1[1]),
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "",
+					Name:    "",
+					Value:   "",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<hr>`
+					},
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop thumbnail 2 width",
+					Name:     "shop-thumbnail-w-2",
+					Min:      "10",
+					Max:      "1000",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail2[0]),
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop thumbnail 2 height",
+					Name:     "shop-thumbnail-h-2",
+					Min:      "10",
+					Max:      "1000",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail2[1]),
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "",
+					Name:    "",
+					Value:   "",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<hr>`
+					},
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop thumbnail 3 width",
+					Name:     "shop-thumbnail-w-3",
+					Min:      "10",
+					Max:      "1000",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail3[0]),
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "Shop thumbnail 3 height",
+					Name:     "shop-thumbnail-h-3",
+					Min:      "10",
+					Max:      "1000",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail3[1]),
 				},
 				{
 					Kind:   builder.DFKSubmit,

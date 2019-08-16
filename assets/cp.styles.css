@@ -959,6 +959,21 @@ ul.pagination {
 	right: 0px;
 }
 
+/* Fix for bootstrap select */
+.dropdown.bootstrap-select {
+	position: relative;
+}
+
+.dropdown.bootstrap-select select {
+	position: static !important;
+}
+
+.dropdown.bootstrap-select button.dropdown-toggle {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
 /* Bootstrap fixes */
 #sys-modal-user-settings {
 	padding-right: 0px !important;
