@@ -34,6 +34,7 @@ func (this *Modules) api_GenerateImage(wrap *wrapper.Wrapper, width, height, col
 	}
 
 	src = imaging.Fill(src, width, height, imaging.Center, imaging.Lanczos)
+	// src = imaging.Fit(src, width, height, imaging.Lanczos)
 
 	var out_bytes bytes.Buffer
 	out := bufio.NewWriter(&out_bytes)
@@ -321,22 +322,32 @@ func (this *Modules) RegisterModule_Api() *Module {
 				height = (*wrap.Config).Shop.Thumbnails.Thumbnail3[1]
 			}
 
-			data, ok, ext, err := this.api_GenerateImage(wrap, width, height, 0, original_file)
-			if err != nil {
-				// System error 500
-				utils.SystemErrorPageEngine(wrap.W, err)
-				return
-			}
+			target_file := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + product_id + string(os.PathSeparator) + thumb_type + "-" + file_name
+			if !utils.IsFileExists(target_file) {
+				data, ok, ext, err := this.api_GenerateImage(wrap, width, height, 0, original_file)
+				if err != nil {
+					// System error 500
+					utils.SystemErrorPageEngine(wrap.W, err)
+					return
+				}
 
-			if !ok {
-				// User error 404 page
-				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
-				return
-			}
+				if !ok {
+					// User error 404 page
+					wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+					return
+				}
 
-			wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-			wrap.W.Header().Set("Content-Type", ext)
-			wrap.W.Write(data)
+				// Save file
+				if file, err := os.Create(target_file); err == nil {
+					file.Write(data)
+				}
+
+				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+				wrap.W.Header().Set("Content-Type", ext)
+				wrap.W.Write(data)
+			} else {
+				http.ServeFile(wrap.W, wrap.R, target_file)
+			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "products" {
 			if (*wrap.Config).API.XML.Enabled == 1 {
 				// Fix url
