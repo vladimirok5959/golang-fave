@@ -2,6 +2,7 @@ package modules
 
 import (
 	"os"
+	"path/filepath"
 
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -44,12 +45,22 @@ func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 			target_file_full := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + pf_id + string(os.PathSeparator) + pf_file
 			os.Remove(target_file_full)
 
+			// Delete thumbnails
+			pattern := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + pf_id + string(os.PathSeparator) + "thumb-*-" + pf_file
+			if files, err := filepath.Glob(pattern); err == nil {
+				for _, file := range files {
+					if err := os.Remove(file); err != nil {
+						wrap.LogError("[upload delete] Thumbnail file (%s) delete error: %s", file, err.Error())
+					}
+				}
+			}
+
 			return nil
 		}); err != nil {
 			wrap.MsgError(err.Error())
 			return
 		}
 
-		wrap.Write(`$('#list-images a').each(function(i, e) { if(e.innerHTML == '` + pf_file + `') { $(e).parent().remove(); return; } });`)
+		wrap.Write(`$('#list-images a').each(function(i, e) { if($(e).attr('title') == '` + pf_file + `') { $(e).parent().remove(); return; } });`)
 	})
 }

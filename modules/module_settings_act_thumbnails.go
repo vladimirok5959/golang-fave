@@ -101,7 +101,7 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		if files, err := filepath.Glob(pattern); err == nil {
 			for _, file := range files {
 				if err := os.Remove(file); err != nil {
-					wrap.LogError("Thumbnail file (%s) delete error: %s", file, err.Error())
+					wrap.LogError("[settings save] Thumbnail file (%s) delete error: %s", file, err.Error())
 				}
 			}
 		}

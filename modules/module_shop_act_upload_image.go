@@ -92,6 +92,6 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 			return
 		}
 
-		wrap.Write(`$('#list-images').append('<div class="attached-img"><a href="/products/images/` + pf_id + `/` + target_file_name + `" target="_blank">` + target_file_name + `</a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + pf_id + `, \'` + target_file_name + `\');">Delete</a></div>');`)
+		wrap.Write(`$('#list-images').append('<div class="attached-img"><a href="/products/images/` + pf_id + `/` + target_file_name + `" title="` + target_file_name + `" target="_blank"><img src="/api/product-image/thumb-0/` + pf_id + `/` + target_file_name + `" /></a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + pf_id + `, \'` + target_file_name + `\');">Delete</a></div>');`)
 	})
 }
