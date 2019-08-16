@@ -959,6 +959,20 @@ ul.pagination {
 	right: 0px;
 }
 
+/* Product images */
+#list-images {
+	display: block;
+}
+
+#list-images .attached-img {
+	display: inline-block;
+	padding: 1rem;
+	background: white;
+	margin-right: 1rem;
+	margin-bottom: 1rem;
+	border-radius: .25rem;
+}
+
 /* Fix for bootstrap select */
 .dropdown.bootstrap-select {
 	position: relative;
