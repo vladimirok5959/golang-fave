@@ -33,7 +33,7 @@ func (this *BlogPost) User() *User {
 	if this.user != nil {
 		return this.user
 	}
-	this.user = &User{wrap: this.wrap}
+	this.user = (&User{wrap: this.wrap}).load()
 	this.user.loadById(this.object.A_user)
 	return this.user
 }
