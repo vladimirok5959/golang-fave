@@ -2,6 +2,7 @@ package fetdata
 
 import (
 	"html/template"
+	"strings"
 	"time"
 
 	"golang-fave/engine/wrapper"
@@ -17,6 +18,7 @@ type ShopProduct struct {
 	category *ShopCategory
 
 	images []*ShopProductImage
+	specs  []*ShopProductSpec
 }
 
 func (this *ShopProduct) load() *ShopProduct {
@@ -47,6 +49,53 @@ func (this *ShopProduct) load() *ShopProduct {
 			}
 		}
 	}
+
+	filter_ids := []int{}
+	filter_names := map[int]string{}
+	filter_values := map[int][]string{}
+	if rows, err := this.wrap.DB.Query(
+		`SELECT
+			shop_filters.id,
+			shop_filters.filter,
+			shop_filters_values.name
+		FROM
+			shop_filter_product_values
+			LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
+			LEFT JOIN shop_filters ON shop_filters.id = shop_filters_values.filter_id
+		WHERE
+			shop_filter_product_values.product_id = ?
+		ORDER BY
+			shop_filters.filter ASC,
+			shop_filters_values.name ASC
+		;`,
+		this.object.A_id,
+	); err == nil {
+		defer rows.Close()
+		values := make([]string, 3)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				if !utils.InArrayInt(filter_ids, utils.StrToInt(string(values[0]))) {
+					filter_ids = append(filter_ids, utils.StrToInt(string(values[0])))
+				}
+				filter_names[utils.StrToInt(string(values[0]))] = string(values[1])
+				filter_values[utils.StrToInt(string(values[0]))] = append(filter_values[utils.StrToInt(string(values[0]))], string(values[2]))
+			}
+		}
+	}
+	for _, filter_id := range filter_ids {
+		this.specs = append(this.specs, &ShopProductSpec{wrap: this.wrap, object: &utils.MySql_shop_product_spec{
+			A_product_id:   this.object.A_id,
+			A_filter_id:    filter_id,
+			A_filter_name:  filter_names[filter_id],
+			A_filter_value: strings.Join(filter_values[filter_id], ", "),
+		}})
+	}
+
 	return this
 }
 
@@ -177,16 +226,6 @@ func (this *ShopProduct) Permalink() string {
 	return "/shop/" + this.object.A_alias + "/"
 }
 
-func (this *ShopProduct) HaveImages() bool {
-	if this == nil {
-		return false
-	}
-	if len(this.images) <= 0 {
-		return false
-	}
-	return true
-}
-
 func (this *ShopProduct) Image() *ShopProductImage {
 	if this == nil {
 		return nil
@@ -195,6 +234,16 @@ func (this *ShopProduct) Image() *ShopProductImage {
 		return nil
 	}
 	return this.images[0]
+}
+
+func (this *ShopProduct) HaveImages() bool {
+	if this == nil {
+		return false
+	}
+	if len(this.images) <= 0 {
+		return false
+	}
+	return true
 }
 
 func (this *ShopProduct) Images() []*ShopProductImage {
@@ -209,4 +258,28 @@ func (this *ShopProduct) ImagesCount() int {
 		return 0
 	}
 	return len(this.images)
+}
+
+func (this *ShopProduct) HaveSpecs() bool {
+	if this == nil {
+		return false
+	}
+	if len(this.specs) <= 0 {
+		return false
+	}
+	return true
+}
+
+func (this *ShopProduct) Specs() []*ShopProductSpec {
+	if this == nil {
+		return []*ShopProductSpec{}
+	}
+	return this.specs
+}
+
+func (this *ShopProduct) SpecsCount() int {
+	if this == nil {
+		return 0
+	}
+	return len(this.specs)
 }
