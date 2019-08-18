@@ -8,7 +8,6 @@ import (
 type ShopCategory struct {
 	wrap   *wrapper.Wrapper
 	object *utils.MySql_shop_category
-	depth  int
 
 	user *User
 }
@@ -27,18 +26,54 @@ func (this *ShopCategory) loadById(id int) {
 	this.object = &utils.MySql_shop_category{}
 	if err := this.wrap.DB.QueryRow(`
 		SELECT
-			id,
-			user,
-			name,
-			alias,
-			lft,
-			rgt
+			main.id,
+			main.user,
+			main.name,
+			main.alias,
+			main.lft,
+			main.rgt,
+			depth.depth,
+			MAX(main.parent_id) AS parent_id
 		FROM
-			shop_cats
+			(
+				SELECT
+					node.id,
+					node.user,
+					node.name,
+					node.alias,
+					node.lft,
+					node.rgt,
+					parent.id AS parent_id
+				FROM
+					shop_cats AS node,
+					shop_cats AS parent
+				WHERE
+					node.lft BETWEEN parent.lft AND parent.rgt AND
+					node.id > 1
+				ORDER BY
+					node.lft ASC
+			) AS main
+			LEFT JOIN (
+				SELECT
+					node.id,
+					(COUNT(parent.id) - 1) AS depth
+				FROM
+					shop_cats AS node,
+					shop_cats AS parent
+				WHERE
+					node.lft BETWEEN parent.lft AND parent.rgt
+				GROUP BY
+					node.id
+				ORDER BY
+					node.lft ASC
+			) AS depth ON depth.id = main.id
 		WHERE
-			id = ? AND
-			id > 1
-		LIMIT 1;`,
+			main.id > 1 AND
+			main.id <> main.parent_id AND
+			main.id = ?
+		GROUP BY
+			main.id
+		;`,
 		id,
 	).Scan(
 		&this.object.A_id,
@@ -47,6 +82,8 @@ func (this *ShopCategory) loadById(id int) {
 		&this.object.A_alias,
 		&this.object.A_lft,
 		&this.object.A_rgt,
+		&this.object.A_depth,
+		&this.object.A_parent,
 	); err != nil {
 		return
 	}
@@ -110,5 +147,12 @@ func (this *ShopCategory) Level() int {
 	if this == nil {
 		return 0
 	}
-	return this.depth
+	return this.object.A_depth
+}
+
+func (this *ShopCategory) ParentId() int {
+	if this == nil {
+		return 0
+	}
+	return this.object.A_parent
 }

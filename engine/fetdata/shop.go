@@ -462,13 +462,20 @@ func (this *Shop) Categories(mlvl int) []*ShopCategory {
 	key := ""
 	where := ``
 	if mlvl > 0 {
-		where += `AND tbl.depth <= ` + utils.IntToStr(mlvl)
+		where += `AND depth.depth <= ` + utils.IntToStr(mlvl)
 	}
 	if _, ok := this.bufferCats[key]; !ok {
 		var cats []*ShopCategory
 		if rows, err := this.wrap.DB.Query(`
 			SELECT
-				tbl.*
+				main.id,
+				main.user,
+				main.name,
+				main.alias,
+				main.lft,
+				main.rgt,
+				depth.depth,
+				MAX(main.parent_id) AS parent_id
 			FROM
 				(
 					SELECT
@@ -478,6 +485,19 @@ func (this *Shop) Categories(mlvl int) []*ShopCategory {
 						node.alias,
 						node.lft,
 						node.rgt,
+						parent.id AS parent_id
+					FROM
+						shop_cats AS node,
+						shop_cats AS parent
+					WHERE
+						node.lft BETWEEN parent.lft AND parent.rgt AND
+						node.id > 1
+					ORDER BY
+						node.lft ASC
+				) AS main
+				LEFT JOIN (
+					SELECT
+						node.id,
 						(COUNT(parent.id) - 1) AS depth
 					FROM
 						shop_cats AS node,
@@ -488,18 +508,22 @@ func (this *Shop) Categories(mlvl int) []*ShopCategory {
 						node.id
 					ORDER BY
 						node.lft ASC
-				) AS tbl
+				) AS depth ON depth.id = main.id
 			WHERE
-				tbl.id > 1
+				main.id > 1 AND
+				main.id <> main.parent_id
 				` + where + `
+			GROUP BY
+				main.id
+			ORDER BY
+				main.lft ASC
 			;
 		`); err == nil {
 			defer rows.Close()
 			for rows.Next() {
 				row := utils.MySql_shop_category{}
-				var Depth int
-				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_lft, &row.A_rgt, &Depth); err == nil {
-					cats = append(cats, &ShopCategory{object: &row, depth: Depth})
+				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_lft, &row.A_rgt, &row.A_depth, &row.A_parent); err == nil {
+					cats = append(cats, &ShopCategory{object: &row})
 				}
 			}
 		}
