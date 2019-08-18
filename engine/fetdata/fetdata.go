@@ -1,6 +1,7 @@
 package fetdata
 
 import (
+	"html"
 	"time"
 
 	"golang-fave/engine/wrapper"
@@ -119,4 +120,8 @@ func (this *FERData) DateTimeUnix() int {
 
 func (this *FERData) DateTimeFormat(format string) string {
 	return time.Unix(int64(time.Now().Unix()), 0).Format(format)
+}
+
+func (this *FERData) EscapeString(str string) string {
+	return html.EscapeString(str)
 }
