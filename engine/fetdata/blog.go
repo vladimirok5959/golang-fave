@@ -32,9 +32,9 @@ type Blog struct {
 	bufferCats map[string][]*BlogCategory
 }
 
-func (this *Blog) load() {
+func (this *Blog) load() *Blog {
 	if this == nil {
-		return
+		return this
 	}
 	sql_nums := `
 		SELECT
@@ -276,6 +276,8 @@ func (this *Blog) load() {
 			Current: this.postsCurrPage >= this.postsMaxPage,
 		}
 	}
+
+	return this
 }
 
 func (this *Blog) Category() *BlogCategory {

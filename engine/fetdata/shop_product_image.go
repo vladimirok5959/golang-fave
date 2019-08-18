@@ -10,6 +10,10 @@ type ShopProductImage struct {
 	object *utils.MySql_shop_product_image
 }
 
+func (this *ShopProductImage) load() *ShopProductImage {
+	return this
+}
+
 func (this *ShopProductImage) ProductId() int {
 	if this == nil {
 		return 0

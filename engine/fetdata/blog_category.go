@@ -13,6 +13,10 @@ type BlogCategory struct {
 	user *User
 }
 
+func (this *BlogCategory) load() *BlogCategory {
+	return this
+}
+
 func (this *BlogCategory) Id() int {
 	if this == nil {
 		return 0
@@ -28,7 +32,7 @@ func (this *BlogCategory) User() *User {
 		return this.user
 	}
 	this.user = &User{wrap: this.wrap}
-	this.user.load(this.object.A_user)
+	this.user.loadById(this.object.A_user)
 	return this.user
 }
 

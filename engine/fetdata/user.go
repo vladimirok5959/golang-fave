@@ -10,7 +10,11 @@ type User struct {
 	object *utils.MySql_user
 }
 
-func (this *User) load(id int) {
+func (this *User) load() *User {
+	return this
+}
+
+func (this *User) loadById(id int) {
 	if this == nil {
 		return
 	}

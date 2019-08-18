@@ -10,7 +10,11 @@ type Currency struct {
 	object *utils.MySql_shop_currency
 }
 
-func (this *Currency) load(id int) {
+func (this *Currency) load() *Currency {
+	return this
+}
+
+func (this *Currency) loadById(id int) {
 	if this == nil {
 		return
 	}

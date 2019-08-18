@@ -15,6 +15,10 @@ type Page struct {
 	user *User
 }
 
+func (this *Page) load() *Page {
+	return this
+}
+
 func (this *Page) Id() int {
 	if this == nil {
 		return 0
@@ -30,7 +34,7 @@ func (this *Page) User() *User {
 		return this.user
 	}
 	this.user = &User{wrap: this.wrap}
-	this.user.load(this.object.A_user)
+	this.user.loadById(this.object.A_user)
 	return this.user
 }
 

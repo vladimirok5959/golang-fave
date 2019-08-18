@@ -32,9 +32,9 @@ type Shop struct {
 	bufferCats map[string][]*ShopCategory
 }
 
-func (this *Shop) load() {
+func (this *Shop) load() *Shop {
 	if this == nil {
-		return
+		return this
 	}
 	sql_nums := `
 		SELECT
@@ -368,6 +368,8 @@ func (this *Shop) load() {
 			Current: this.productsCurrPage >= this.productsMaxPage,
 		}
 	}
+
+	return this
 }
 
 func (this *Shop) Category() *ShopCategory {

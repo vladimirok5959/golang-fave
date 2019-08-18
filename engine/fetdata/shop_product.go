@@ -65,7 +65,7 @@ func (this *ShopProduct) User() *User {
 		return this.user
 	}
 	this.user = &User{wrap: this.wrap}
-	this.user.load(this.object.A_user)
+	this.user.loadById(this.object.A_user)
 	return this.user
 }
 
@@ -77,7 +77,7 @@ func (this *ShopProduct) Currency() *Currency {
 		return this.currency
 	}
 	this.currency = &Currency{wrap: this.wrap}
-	this.currency.load(this.object.A_currency)
+	this.currency.loadById(this.object.A_currency)
 	return this.currency
 }
 
@@ -131,7 +131,7 @@ func (this *ShopProduct) Category() *ShopCategory {
 		return this.category
 	}
 	this.category = &ShopCategory{wrap: this.wrap}
-	this.category.load(this.object.A_category)
+	this.category.loadById(this.object.A_category)
 	return this.category
 }
 
