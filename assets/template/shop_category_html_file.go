@@ -1,13 +1,6 @@
 package template
 
 var VarShopCategoryHtmlFile = []byte(`{{template "header.html" .}}
-<div class="card mb-4">
-	<div class="post">
-		<div class="card-body">
-			<b>Category:</b> {{$.Data.Shop.Category.Name}}
-		</div>
-	</div>
-</div>
 <div class="mb-4">
 	{{if $.Data.Shop.HaveProducts}}
 		<div class="grid-products">

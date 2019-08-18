@@ -1,15 +1,6 @@
 package template
 
 var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
-<nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="/shop/">Shop</a></li>
-		{{if $.Data.Shop.Product.Category.Id}}
-			<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Permalink}}">{{$.Data.Shop.Product.Category.Name}}</a></li>
-		{{end}}
-		<li class="breadcrumb-item active"><a href="{{$.Data.Shop.Product.Permalink}}">{{$.Data.Shop.Product.Name}}</a></li>
-	</ol>
-</nav>
 <div class="card mb-4">
 	<div class="card-body product-full">
 		<h2 class="card-title">{{$.Data.Shop.Product.Name}}</h2>

@@ -1242,3 +1242,7 @@ footer {
 		padding: .75rem;
 	}
 }
+
+.fixed-top-bar .navbar.navbar-cats {
+	position: static;
+}

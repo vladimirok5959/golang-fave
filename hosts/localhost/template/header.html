@@ -107,6 +107,50 @@
 						</h1>
 					</div>
 				</div>
+				<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-cats">
+					<div class="container">
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarSupportedContent">
+							<ul class="navbar-nav mr-auto">
+							{{range $.Data.Shop.Categories 1}}
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{.Name}}</a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<a class="dropdown-item" href="{{.Permalink}}">All products</a>
+										<div class="dropdown-divider"></div>
+										<a class="dropdown-item" href="#">Sub category 1</a>
+										<a class="dropdown-item" href="#">Sub category 2</a>
+									</div>
+								</li>
+							{{end}}
+							</ul>
+						</div>
+					</div>
+				</nav>
+				{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-category") (eq $.Data.Module "shop-product")}}
+					<div class="container clear-top pt-4">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								{{if eq $.Data.Module "shop"}}
+									<li class="breadcrumb-item">Shop</li>
+								{{else}}
+									<li class="breadcrumb-item"><a href="/shop/">Shop</a></li>
+								{{end}}
+								{{if eq $.Data.Module "shop-category"}}
+									<li class="breadcrumb-item">{{$.Data.Shop.Category.Name}}</li>
+								{{end}}
+								{{if eq $.Data.Module "shop-product"}}
+									{{if $.Data.Shop.Product.Category.Id}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Permalink}}">{{$.Data.Shop.Product.Category.Name}}</a></li>
+									{{end}}
+									<li class="breadcrumb-item active">{{$.Data.Shop.Product.Name}}</li>
+								{{end}}
+							</ol>
+						</nav>
+					</div>
+				{{end}}
 				<div class="container clear-top">
 					<div class="row pt-4">
 						{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-category")}}

@@ -1243,4 +1243,8 @@ footer {
 		border: 1px solid #dee2e6;
 		padding: .75rem;
 	}
+}
+
+.fixed-top-bar .navbar.navbar-cats {
+	position: static;
 }`)
