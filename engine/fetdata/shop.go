@@ -624,7 +624,16 @@ func (this *Shop) Categories(mlvl int) []*ShopCategory {
 			defer rows.Close()
 			for rows.Next() {
 				row := utils.MySql_shop_category{}
-				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_lft, &row.A_rgt, &row.A_depth, &row.A_parent); err == nil {
+				if err := rows.Scan(
+					&row.A_id,
+					&row.A_user,
+					&row.A_name,
+					&row.A_alias,
+					&row.A_lft,
+					&row.A_rgt,
+					&row.A_depth,
+					&row.A_parent,
+				); err == nil {
 					cats = append(cats, &ShopCategory{object: &row})
 				}
 			}

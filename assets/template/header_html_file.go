@@ -141,10 +141,40 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 									<li class="breadcrumb-item"><a href="/shop/">Shop</a></li>
 								{{end}}
 								{{if eq $.Data.Module "shop-category"}}
+									{{if $.Data.Shop.Category.Parent.Parent.Parent.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Shop.Category.Parent.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Shop.Category.Parent.Parent.Parent.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Shop.Category.Parent.Parent.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Shop.Category.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Shop.Category.Parent.Parent.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Shop.Category.Parent.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Shop.Category.Parent.Parent.Parent.Permalink}}">{{$.Data.Shop.Category.Parent.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Shop.Category.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Shop.Category.Parent.Parent.Permalink}}">{{$.Data.Shop.Category.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Shop.Category.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Shop.Category.Parent.Permalink}}">{{$.Data.Shop.Category.Parent.Name}}</a></li>
+									{{end}}
 									<li class="breadcrumb-item">{{$.Data.Shop.Category.Name}}</li>
 								{{end}}
 								{{if eq $.Data.Module "shop-product"}}
 									{{if $.Data.Shop.Product.Category.Id}}
+										{{if $.Data.Shop.Product.Category.Parent.Parent.Parent.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Parent.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Shop.Product.Category.Parent.Parent.Parent.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Shop.Product.Category.Parent.Parent.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Shop.Product.Category.Parent.Parent.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Shop.Product.Category.Parent.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Parent.Parent.Parent.Permalink}}">{{$.Data.Shop.Product.Category.Parent.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Shop.Product.Category.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Parent.Parent.Permalink}}">{{$.Data.Shop.Product.Category.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Shop.Product.Category.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Parent.Permalink}}">{{$.Data.Shop.Product.Category.Parent.Name}}</a></li>
+										{{end}}
 										<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Permalink}}">{{$.Data.Shop.Product.Category.Name}}</a></li>
 									{{end}}
 									<li class="breadcrumb-item active">{{$.Data.Shop.Product.Name}}</li>

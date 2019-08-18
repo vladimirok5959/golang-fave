@@ -179,7 +179,7 @@ func (this *ShopProduct) Category() *ShopCategory {
 	if this.category != nil {
 		return this.category
 	}
-	this.category = (&ShopCategory{wrap: this.wrap}).load()
+	this.category = (&ShopCategory{wrap: this.wrap}).load(nil)
 	this.category.loadById(this.object.A_category)
 	return this.category
 }
