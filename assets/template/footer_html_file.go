@@ -27,5 +27,8 @@ var VarFooterHtmlFile = []byte(`						</div>
 		<script src="{{$.System.PathJsPopper}}"></script>
 		<script src="{{$.System.PathJsBootstrap}}"></script>
 		<script src="{{$.System.PathThemeScripts}}"></script>
+
+		<!-- Template JavaScript file from template folder -->
+		<script src="{{$.System.PathThemeScripts}}?v=2"></script>
 	</body>
 </html>`)

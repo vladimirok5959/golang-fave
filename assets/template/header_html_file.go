@@ -42,11 +42,8 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 
 		<!-- Template CSS file from template folder -->
 		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=2">
-
-		<!-- Template JavaScript file from template folder -->
-		<script src="{{$.System.PathThemeScripts}}?v=2"></script>
 	</head>
-	<body class="fixed-top-bar1">
+	<body class="fixed-top-bar">
 		<div id="wrap">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<div class="container">
