@@ -71,17 +71,67 @@ func (this *Shop) load() *Shop {
 			shop_currencies.coefficient,
 			shop_currencies.code,
 			shop_currencies.symbol,
-			shop_cats.id,
-			shop_cats.user,
-			shop_cats.name,
-			shop_cats.alias,
-			shop_cats.lft,
-			shop_cats.rgt
+			cats.id,
+			cats.user,
+			cats.name,
+			cats.alias,
+			cats.lft,
+			cats.rgt,
+			cats.depth,
+			cats.parent_id
 		FROM
 			shop_products
 			LEFT JOIN users ON users.id = shop_products.user
 			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
-			LEFT JOIN shop_cats ON shop_cats.id = shop_products.category
+			LEFT JOIN (
+				SELECT
+					main.id,
+					main.user,
+					main.name,
+					main.alias,
+					main.lft,
+					main.rgt,
+					depth.depth,
+					MAX(main.parent_id) AS parent_id
+				FROM
+					(
+						SELECT
+							node.id,
+							node.user,
+							node.name,
+							node.alias,
+							node.lft,
+							node.rgt,
+							parent.id AS parent_id
+						FROM
+							shop_cats AS node,
+							shop_cats AS parent
+						WHERE
+							node.lft BETWEEN parent.lft AND parent.rgt AND
+							node.id > 1
+						ORDER BY
+							node.lft ASC
+					) AS main
+					LEFT JOIN (
+						SELECT
+							node.id,
+							(COUNT(parent.id) - 1) AS depth
+						FROM
+							shop_cats AS node,
+							shop_cats AS parent
+						WHERE
+							node.lft BETWEEN parent.lft AND parent.rgt
+						GROUP BY
+							node.id
+						ORDER BY
+							node.lft ASC
+					) AS depth ON depth.id = main.id
+				WHERE
+					main.id > 1 AND
+					main.id <> main.parent_id
+				GROUP BY
+					main.id
+			) AS cats ON cats.id = shop_products.category
 		WHERE
 			shop_products.active = 1
 		ORDER BY
@@ -161,18 +211,68 @@ func (this *Shop) load() *Shop {
 				shop_currencies.coefficient,
 				shop_currencies.code,
 				shop_currencies.symbol,
-				shop_cats.id,
-				shop_cats.user,
-				shop_cats.name,
-				shop_cats.alias,
-				shop_cats.lft,
-				shop_cats.rgt
+				cats.id,
+				cats.user,
+				cats.name,
+				cats.alias,
+				cats.lft,
+				cats.rgt,
+				cats.depth,
+				cats.parent_id
 			FROM
 				shop_products
 				LEFT JOIN shop_cat_product_rel ON shop_cat_product_rel.product_id = shop_products.id
 				LEFT JOIN users ON users.id = shop_products.user
 				LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
-				LEFT JOIN shop_cats ON shop_cats.id = shop_products.category
+				LEFT JOIN (
+					SELECT
+						main.id,
+						main.user,
+						main.name,
+						main.alias,
+						main.lft,
+						main.rgt,
+						depth.depth,
+						MAX(main.parent_id) AS parent_id
+					FROM
+						(
+							SELECT
+								node.id,
+								node.user,
+								node.name,
+								node.alias,
+								node.lft,
+								node.rgt,
+								parent.id AS parent_id
+							FROM
+								shop_cats AS node,
+								shop_cats AS parent
+							WHERE
+								node.lft BETWEEN parent.lft AND parent.rgt AND
+								node.id > 1
+							ORDER BY
+								node.lft ASC
+						) AS main
+						LEFT JOIN (
+							SELECT
+								node.id,
+								(COUNT(parent.id) - 1) AS depth
+							FROM
+								shop_cats AS node,
+								shop_cats AS parent
+							WHERE
+								node.lft BETWEEN parent.lft AND parent.rgt
+							GROUP BY
+								node.id
+							ORDER BY
+								node.lft ASC
+						) AS depth ON depth.id = main.id
+					WHERE
+						main.id > 1 AND
+						main.id <> main.parent_id
+					GROUP BY
+						main.id
+				) AS cats ON cats.id = shop_products.category
 			WHERE
 				shop_products.active = 1 AND
 				shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
@@ -233,6 +333,8 @@ func (this *Shop) load() *Shop {
 					&ro.A_alias,
 					&ro.A_lft,
 					&ro.A_rgt,
+					&ro.A_depth,
+					&ro.A_parent,
 				); err == nil {
 					product_ids = append(product_ids, utils.IntToStr(rp.A_id))
 					this.products = append(this.products, &ShopProduct{
