@@ -156,7 +156,6 @@ footer {
 .grid-products .card-product .card-img-link img {
 	display: block;
 	border-radius: 0;
-	opacity: 0.8;
 }
 
 .grid-products .card-product .card-title {

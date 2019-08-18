@@ -290,12 +290,6 @@ func (this *Modules) RegisterModule_Api() *Module {
 		Icon:   assets.SysSvgIconPage,
 		Sub:    &[]MISub{},
 	}, func(wrap *wrapper.Wrapper) {
-
-		// http://localhost:8080/api/product-image/thumb-cp/1/1565650500.png/
-		// http://localhost:8080/api/product-image/thumb-1/1/1565650500.png/
-		// http://localhost:8080/api/product-image/thumb-2/1/1565650500.png/
-		// http://localhost:8080/api/product-image/thumb-3/1/1565650500.png/
-
 		if len(wrap.UrlArgs) == 5 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "product-image" && (wrap.UrlArgs[2] == "thumb-0" || wrap.UrlArgs[2] == "thumb-1" || wrap.UrlArgs[2] == "thumb-2" || wrap.UrlArgs[2] == "thumb-3") {
 			thumb_type := wrap.UrlArgs[2]
 			product_id := wrap.UrlArgs[3]

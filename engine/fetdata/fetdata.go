@@ -47,7 +47,7 @@ func New(wrap *wrapper.Wrapper, drow interface{}, is404 bool) *FERData {
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] != "" {
 			if o, ok := drow.(*utils.MySql_shop_product); ok {
-				d_Shop = &Shop{wrap: wrap, product: &ShopProduct{wrap: wrap, object: o}}
+				d_Shop = &Shop{wrap: wrap, product: (&ShopProduct{wrap: wrap, object: o}).load()}
 			}
 		} else {
 			d_Shop = &Shop{wrap: wrap}

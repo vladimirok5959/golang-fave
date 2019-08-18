@@ -41,10 +41,10 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 
 		<!-- Template CSS file from template folder -->
-		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=1">
+		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=2">
 
 		<!-- Template JavaScript file from template folder -->
-		<script src="{{$.System.PathThemeScripts}}?v=1"></script>
+		<script src="{{$.System.PathThemeScripts}}?v=2"></script>
 	</head>
 	<body class="fixed-top-bar1">
 		<div id="wrap">

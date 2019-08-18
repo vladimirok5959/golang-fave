@@ -184,6 +184,8 @@ func (this *Shop) load() {
 		`
 	}
 
+	product_ids := []string{}
+
 	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.productsCount); err == nil {
 		if this.category == nil {
 			this.productsPerPage = (*this.wrap.Config).Shop.Pagination.Index
@@ -232,6 +234,7 @@ func (this *Shop) load() {
 					&ro.A_lft,
 					&ro.A_rgt,
 				); err == nil {
+					product_ids = append(product_ids, utils.IntToStr(rp.A_id))
 					this.products = append(this.products, &ShopProduct{
 						wrap:     this.wrap,
 						object:   &rp,
@@ -241,6 +244,39 @@ func (this *Shop) load() {
 					})
 				}
 			}
+		}
+	}
+
+	// Product images
+	product_images := map[int][]*ShopProductImage{}
+	if len(product_ids) > 0 {
+		if rows, err := this.wrap.DB.Query(
+			`SELECT
+				shop_product_images.product_id,
+				shop_product_images.filename
+			FROM
+				shop_product_images
+			WHERE
+				shop_product_images.product_id IN (` + strings.Join(product_ids, ", ") + `)
+			ORDER BY
+				shop_product_images.filename ASC
+			;`,
+		); err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				img := utils.MySql_shop_product_image{}
+				if err := rows.Scan(
+					&img.A_product_id,
+					&img.A_filename,
+				); err == nil {
+					product_images[img.A_product_id] = append(product_images[img.A_product_id], &ShopProductImage{wrap: this.wrap, object: &img})
+				}
+			}
+		}
+	}
+	for index, product := range this.products {
+		if pimgs, ok := product_images[product.Id()]; ok {
+			this.products[index].images = pimgs
 		}
 	}
 

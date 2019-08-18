@@ -15,6 +15,39 @@ type ShopProduct struct {
 	user     *User
 	currency *Currency
 	category *ShopCategory
+
+	images []*ShopProductImage
+}
+
+func (this *ShopProduct) load() *ShopProduct {
+	if this == nil {
+		return this
+	}
+	if rows, err := this.wrap.DB.Query(
+		`SELECT
+			shop_product_images.product_id,
+			shop_product_images.filename
+		FROM
+			shop_product_images
+		WHERE
+			shop_product_images.product_id = ?
+		ORDER BY
+			shop_product_images.filename ASC
+		;`,
+		this.object.A_id,
+	); err == nil {
+		defer rows.Close()
+		for rows.Next() {
+			img := utils.MySql_shop_product_image{}
+			if err := rows.Scan(
+				&img.A_product_id,
+				&img.A_filename,
+			); err == nil {
+				this.images = append(this.images, &ShopProductImage{wrap: this.wrap, object: &img})
+			}
+		}
+	}
+	return this
 }
 
 func (this *ShopProduct) Id() int {
@@ -142,4 +175,38 @@ func (this *ShopProduct) Permalink() string {
 		return ""
 	}
 	return "/shop/" + this.object.A_alias + "/"
+}
+
+func (this *ShopProduct) HaveImages() bool {
+	if this == nil {
+		return false
+	}
+	if len(this.images) <= 0 {
+		return false
+	}
+	return true
+}
+
+func (this *ShopProduct) Image() *ShopProductImage {
+	if this == nil {
+		return nil
+	}
+	if len(this.images) <= 0 {
+		return nil
+	}
+	return this.images[0]
+}
+
+func (this *ShopProduct) Images() []*ShopProductImage {
+	if this == nil {
+		return []*ShopProductImage{}
+	}
+	return this.images
+}
+
+func (this *ShopProduct) ImagesCount() int {
+	if this == nil {
+		return 0
+	}
+	return len(this.images)
 }
