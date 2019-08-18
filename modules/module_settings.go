@@ -128,8 +128,6 @@ func (this *Modules) RegisterModule_Settings() *Module {
 				{Name: "Thumbnails"},
 			})
 
-			// TODO: two fields in one line
-
 			content += builder.DataForm(wrap, []builder.DataFormField{
 				{
 					Kind:  builder.DFKHidden,
@@ -137,76 +135,172 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Value: "settings-thumbnails",
 				},
 				{
-					Kind:     builder.DFKNumber,
-					Caption:  "Shop thumbnail 1 width",
-					Name:     "shop-thumbnail-w-1",
-					Min:      "10",
-					Max:      "1000",
-					Required: true,
-					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail1[0]),
-				},
-				{
-					Kind:     builder.DFKNumber,
-					Caption:  "Shop thumbnail 1 height",
-					Name:     "shop-thumbnail-h-1",
-					Min:      "10",
-					Max:      "1000",
-					Required: true,
-					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail1[1]),
-				},
-				{
-					Kind:    builder.DFKText,
-					Caption: "",
-					Name:    "",
-					Value:   "",
+					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<hr>`
+						resize_list := ``
+						resize_list += `<select class="form-control" name="shop-thumbnail-r-1">`
+						resize_list += `<option value="0"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail1[2] == 0 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Crop</option>`
+						resize_list += `<option value="1"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail1[2] == 1 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Resize</option>`
+						resize_list += `</select>`
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price">Shop thumbnail 1</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-w-1" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail1[0]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-h-1" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail1[1]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-6">` +
+							resize_list +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
 					},
 				},
 				{
-					Kind:     builder.DFKNumber,
-					Caption:  "Shop thumbnail 2 width",
-					Name:     "shop-thumbnail-w-2",
-					Min:      "10",
-					Max:      "1000",
-					Required: true,
-					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail2[0]),
-				},
-				{
-					Kind:     builder.DFKNumber,
-					Caption:  "Shop thumbnail 2 height",
-					Name:     "shop-thumbnail-h-2",
-					Min:      "10",
-					Max:      "1000",
-					Required: true,
-					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail2[1]),
-				},
-				{
-					Kind:    builder.DFKText,
-					Caption: "",
-					Name:    "",
-					Value:   "",
+					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<hr>`
+						resize_list := ``
+						resize_list += `<select class="form-control" name="shop-thumbnail-r-2">`
+						resize_list += `<option value="0"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail2[2] == 0 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Crop</option>`
+						resize_list += `<option value="1"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail2[2] == 1 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Resize</option>`
+						resize_list += `</select>`
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price">Shop thumbnail 2</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-w-2" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail2[0]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-h-2" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail2[1]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-6">` +
+							resize_list +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
 					},
 				},
 				{
-					Kind:     builder.DFKNumber,
-					Caption:  "Shop thumbnail 3 width",
-					Name:     "shop-thumbnail-w-3",
-					Min:      "10",
-					Max:      "1000",
-					Required: true,
-					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail3[0]),
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						resize_list := ``
+						resize_list += `<select class="form-control" name="shop-thumbnail-r-3">`
+						resize_list += `<option value="0"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail3[2] == 0 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Crop</option>`
+						resize_list += `<option value="1"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail3[2] == 1 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Resize</option>`
+						resize_list += `</select>`
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price">Shop thumbnail 3</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-w-3" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail3[0]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-h-3" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail3[1]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-6">` +
+							resize_list +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
 				},
 				{
-					Kind:     builder.DFKNumber,
-					Caption:  "Shop thumbnail 3 height",
-					Name:     "shop-thumbnail-h-3",
-					Min:      "10",
-					Max:      "1000",
-					Required: true,
-					Value:    utils.IntToStr((*wrap.Config).Shop.Thumbnails.Thumbnail3[1]),
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						resize_list := ``
+						resize_list += `<select class="form-control" name="shop-thumbnail-r-full">`
+						resize_list += `<option value="0"`
+						if (*wrap.Config).Shop.Thumbnails.ThumbnailFull[2] == 0 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Crop</option>`
+						resize_list += `<option value="1"`
+						if (*wrap.Config).Shop.Thumbnails.ThumbnailFull[2] == 1 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Resize</option>`
+						resize_list += `</select>`
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price">Shop thumbnail full</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-w-full" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.ThumbnailFull[0]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-3">` +
+							`<div><input class="form-control" type="number" name="shop-thumbnail-h-full" value="` + utils.IntToStr((*wrap.Config).Shop.Thumbnails.ThumbnailFull[1]) + `" min="100" max="1000" placeholder="" autocomplete="off" required></div>` +
+							`<div class="d-md-none mb-3"></div>` +
+							`</div>` +
+							`<div class="col-md-6">` +
+							resize_list +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
 				},
 				{
 					Kind:   builder.DFKSubmit,

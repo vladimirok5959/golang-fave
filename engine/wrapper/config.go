@@ -18,10 +18,11 @@ type Config struct {
 			Category int
 		}
 		Thumbnails struct {
-			Thumbnail0 [2]int
-			Thumbnail1 [2]int
-			Thumbnail2 [2]int
-			Thumbnail3 [2]int
+			Thumbnail0    [3]int
+			Thumbnail1    [3]int
+			Thumbnail2    [3]int
+			Thumbnail3    [3]int
+			ThumbnailFull [3]int
 		}
 	}
 	API struct {
@@ -49,12 +50,23 @@ func (this *Config) configDefault() {
 
 	this.Shop.Thumbnails.Thumbnail0[0] = 100
 	this.Shop.Thumbnails.Thumbnail0[1] = 100
+	this.Shop.Thumbnails.Thumbnail0[2] = 0
+
 	this.Shop.Thumbnails.Thumbnail1[0] = 200
 	this.Shop.Thumbnails.Thumbnail1[1] = 200
+	this.Shop.Thumbnails.Thumbnail1[2] = 0
+
 	this.Shop.Thumbnails.Thumbnail2[0] = 250
 	this.Shop.Thumbnails.Thumbnail2[1] = 250
+	this.Shop.Thumbnails.Thumbnail2[2] = 0
+
 	this.Shop.Thumbnails.Thumbnail3[0] = 450
 	this.Shop.Thumbnails.Thumbnail3[1] = 450
+	this.Shop.Thumbnails.Thumbnail3[2] = 0
+
+	this.Shop.Thumbnails.ThumbnailFull[0] = 1000
+	this.Shop.Thumbnails.ThumbnailFull[1] = 800
+	this.Shop.Thumbnails.ThumbnailFull[2] = 1
 
 	this.API.XML.Enabled = 0
 	this.API.XML.Name = ""

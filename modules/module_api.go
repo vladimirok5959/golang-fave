@@ -18,7 +18,7 @@ import (
 	"github.com/disintegration/imaging"
 )
 
-func (this *Modules) api_GenerateImage(wrap *wrapper.Wrapper, width, height, color int, filename string) ([]byte, bool, string, error) {
+func (this *Modules) api_GenerateImage(wrap *wrapper.Wrapper, width, height int, resize bool, filename string) ([]byte, bool, string, error) {
 	file_ext := ""
 	if strings.ToLower(filepath.Ext(filename)) == ".png" {
 		file_ext = "image/png"
@@ -33,8 +33,11 @@ func (this *Modules) api_GenerateImage(wrap *wrapper.Wrapper, width, height, col
 		return []byte(""), false, file_ext, err
 	}
 
-	src = imaging.Fill(src, width, height, imaging.Center, imaging.Lanczos)
-	// src = imaging.Fit(src, width, height, imaging.Lanczos)
+	if !resize {
+		src = imaging.Fill(src, width, height, imaging.Center, imaging.Lanczos)
+	} else {
+		src = imaging.Fit(src, width, height, imaging.Lanczos)
+	}
 
 	var out_bytes bytes.Buffer
 	out := bufio.NewWriter(&out_bytes)
@@ -290,7 +293,7 @@ func (this *Modules) RegisterModule_Api() *Module {
 		Icon:   assets.SysSvgIconPage,
 		Sub:    &[]MISub{},
 	}, func(wrap *wrapper.Wrapper) {
-		if len(wrap.UrlArgs) == 5 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "product-image" && (wrap.UrlArgs[2] == "thumb-0" || wrap.UrlArgs[2] == "thumb-1" || wrap.UrlArgs[2] == "thumb-2" || wrap.UrlArgs[2] == "thumb-3") {
+		if len(wrap.UrlArgs) == 5 && wrap.UrlArgs[0] == "api" && wrap.UrlArgs[1] == "product-image" && (wrap.UrlArgs[2] == "thumb-0" || wrap.UrlArgs[2] == "thumb-1" || wrap.UrlArgs[2] == "thumb-2" || wrap.UrlArgs[2] == "thumb-3" || wrap.UrlArgs[2] == "thumb-full") {
 			thumb_type := wrap.UrlArgs[2]
 			product_id := wrap.UrlArgs[3]
 			file_name := wrap.UrlArgs[4]
@@ -304,21 +307,37 @@ func (this *Modules) RegisterModule_Api() *Module {
 
 			width := (*wrap.Config).Shop.Thumbnails.Thumbnail0[0]
 			height := (*wrap.Config).Shop.Thumbnails.Thumbnail0[1]
+			resize := false
 
 			if thumb_type == "thumb-1" {
 				width = (*wrap.Config).Shop.Thumbnails.Thumbnail1[0]
 				height = (*wrap.Config).Shop.Thumbnails.Thumbnail1[1]
+				if (*wrap.Config).Shop.Thumbnails.Thumbnail1[2] == 1 {
+					resize = true
+				}
 			} else if thumb_type == "thumb-2" {
 				width = (*wrap.Config).Shop.Thumbnails.Thumbnail2[0]
 				height = (*wrap.Config).Shop.Thumbnails.Thumbnail2[1]
+				if (*wrap.Config).Shop.Thumbnails.Thumbnail2[2] == 1 {
+					resize = true
+				}
 			} else if thumb_type == "thumb-3" {
 				width = (*wrap.Config).Shop.Thumbnails.Thumbnail3[0]
 				height = (*wrap.Config).Shop.Thumbnails.Thumbnail3[1]
+				if (*wrap.Config).Shop.Thumbnails.Thumbnail3[2] == 1 {
+					resize = true
+				}
+			} else if thumb_type == "thumb-full" {
+				width = (*wrap.Config).Shop.Thumbnails.ThumbnailFull[0]
+				height = (*wrap.Config).Shop.Thumbnails.ThumbnailFull[1]
+				if (*wrap.Config).Shop.Thumbnails.ThumbnailFull[2] == 1 {
+					resize = true
+				}
 			}
 
 			target_file := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + product_id + string(os.PathSeparator) + thumb_type + "-" + file_name
 			if !utils.IsFileExists(target_file) {
-				data, ok, ext, err := this.api_GenerateImage(wrap, width, height, 0, original_file)
+				data, ok, ext, err := this.api_GenerateImage(wrap, width, height, resize, original_file)
 				if err != nil {
 					// System error 500
 					utils.SystemErrorPageEngine(wrap.W, err)

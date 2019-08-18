@@ -17,18 +17,29 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 	}, func(wrap *wrapper.Wrapper) {
 		pf_shop_thumbnail_w_1 := wrap.R.FormValue("shop-thumbnail-w-1")
 		pf_shop_thumbnail_h_1 := wrap.R.FormValue("shop-thumbnail-h-1")
+		pf_shop_thumbnail_r_1 := wrap.R.FormValue("shop-thumbnail-r-1")
 
 		pf_shop_thumbnail_w_2 := wrap.R.FormValue("shop-thumbnail-w-2")
 		pf_shop_thumbnail_h_2 := wrap.R.FormValue("shop-thumbnail-h-2")
+		pf_shop_thumbnail_r_2 := wrap.R.FormValue("shop-thumbnail-r-2")
 
 		pf_shop_thumbnail_w_3 := wrap.R.FormValue("shop-thumbnail-w-3")
 		pf_shop_thumbnail_h_3 := wrap.R.FormValue("shop-thumbnail-h-3")
+		pf_shop_thumbnail_r_3 := wrap.R.FormValue("shop-thumbnail-r-3")
+
+		pf_shop_thumbnail_w_full := wrap.R.FormValue("shop-thumbnail-w-full")
+		pf_shop_thumbnail_h_full := wrap.R.FormValue("shop-thumbnail-h-full")
+		pf_shop_thumbnail_r_full := wrap.R.FormValue("shop-thumbnail-r-full")
 
 		if _, err := strconv.Atoi(pf_shop_thumbnail_w_1); err != nil {
 			wrap.MsgError(`Must be integer number`)
 			return
 		}
 		if _, err := strconv.Atoi(pf_shop_thumbnail_h_1); err != nil {
+			wrap.MsgError(`Must be integer number`)
+			return
+		}
+		if _, err := strconv.Atoi(pf_shop_thumbnail_r_1); err != nil {
 			wrap.MsgError(`Must be integer number`)
 			return
 		}
@@ -41,6 +52,10 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 			wrap.MsgError(`Must be integer number`)
 			return
 		}
+		if _, err := strconv.Atoi(pf_shop_thumbnail_r_2); err != nil {
+			wrap.MsgError(`Must be integer number`)
+			return
+		}
 
 		if _, err := strconv.Atoi(pf_shop_thumbnail_w_3); err != nil {
 			wrap.MsgError(`Must be integer number`)
@@ -50,15 +65,39 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 			wrap.MsgError(`Must be integer number`)
 			return
 		}
+		if _, err := strconv.Atoi(pf_shop_thumbnail_r_3); err != nil {
+			wrap.MsgError(`Must be integer number`)
+			return
+		}
+
+		if _, err := strconv.Atoi(pf_shop_thumbnail_w_full); err != nil {
+			wrap.MsgError(`Must be integer number`)
+			return
+		}
+		if _, err := strconv.Atoi(pf_shop_thumbnail_h_full); err != nil {
+			wrap.MsgError(`Must be integer number`)
+			return
+		}
+		if _, err := strconv.Atoi(pf_shop_thumbnail_r_full); err != nil {
+			wrap.MsgError(`Must be integer number`)
+			return
+		}
 
 		pfi_shop_thumbnail_w_1 := utils.StrToInt(pf_shop_thumbnail_w_1)
 		pfi_shop_thumbnail_h_1 := utils.StrToInt(pf_shop_thumbnail_h_1)
+		pfi_shop_thumbnail_r_1 := utils.StrToInt(pf_shop_thumbnail_r_1)
 
 		pfi_shop_thumbnail_w_2 := utils.StrToInt(pf_shop_thumbnail_w_2)
 		pfi_shop_thumbnail_h_2 := utils.StrToInt(pf_shop_thumbnail_h_2)
+		pfi_shop_thumbnail_r_2 := utils.StrToInt(pf_shop_thumbnail_r_2)
 
 		pfi_shop_thumbnail_w_3 := utils.StrToInt(pf_shop_thumbnail_w_3)
 		pfi_shop_thumbnail_h_3 := utils.StrToInt(pf_shop_thumbnail_h_3)
+		pfi_shop_thumbnail_r_3 := utils.StrToInt(pf_shop_thumbnail_r_3)
+
+		pfi_shop_thumbnail_w_full := utils.StrToInt(pf_shop_thumbnail_w_full)
+		pfi_shop_thumbnail_h_full := utils.StrToInt(pf_shop_thumbnail_h_full)
+		pfi_shop_thumbnail_r_full := utils.StrToInt(pf_shop_thumbnail_r_full)
 
 		// Correct some values
 		if pfi_shop_thumbnail_w_1 < 10 {
@@ -67,12 +106,24 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		if pfi_shop_thumbnail_h_1 > 1000 {
 			pfi_shop_thumbnail_h_1 = 1000
 		}
+		if pfi_shop_thumbnail_r_1 > 1 {
+			pfi_shop_thumbnail_r_1 = 1
+		}
+		if pfi_shop_thumbnail_r_1 < 0 {
+			pfi_shop_thumbnail_r_1 = 0
+		}
 
 		if pfi_shop_thumbnail_w_2 < 10 {
 			pfi_shop_thumbnail_w_2 = 10
 		}
 		if pfi_shop_thumbnail_h_2 > 1000 {
 			pfi_shop_thumbnail_h_2 = 1000
+		}
+		if pfi_shop_thumbnail_r_2 > 1 {
+			pfi_shop_thumbnail_r_2 = 1
+		}
+		if pfi_shop_thumbnail_r_2 < 0 {
+			pfi_shop_thumbnail_r_2 = 0
 		}
 
 		if pfi_shop_thumbnail_w_3 < 10 {
@@ -81,15 +132,41 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		if pfi_shop_thumbnail_h_3 > 1000 {
 			pfi_shop_thumbnail_h_3 = 1000
 		}
+		if pfi_shop_thumbnail_r_3 > 1 {
+			pfi_shop_thumbnail_r_3 = 1
+		}
+		if pfi_shop_thumbnail_r_3 < 0 {
+			pfi_shop_thumbnail_r_3 = 0
+		}
+
+		if pfi_shop_thumbnail_w_full < 10 {
+			pfi_shop_thumbnail_w_full = 10
+		}
+		if pfi_shop_thumbnail_h_full > 1000 {
+			pfi_shop_thumbnail_h_full = 1000
+		}
+		if pfi_shop_thumbnail_r_full > 1 {
+			pfi_shop_thumbnail_r_full = 1
+		}
+		if pfi_shop_thumbnail_r_full < 0 {
+			pfi_shop_thumbnail_r_full = 0
+		}
 
 		(*wrap.Config).Shop.Thumbnails.Thumbnail1[0] = pfi_shop_thumbnail_w_1
 		(*wrap.Config).Shop.Thumbnails.Thumbnail1[1] = pfi_shop_thumbnail_h_1
+		(*wrap.Config).Shop.Thumbnails.Thumbnail1[2] = pfi_shop_thumbnail_r_1
 
 		(*wrap.Config).Shop.Thumbnails.Thumbnail2[0] = pfi_shop_thumbnail_w_2
 		(*wrap.Config).Shop.Thumbnails.Thumbnail2[1] = pfi_shop_thumbnail_h_2
+		(*wrap.Config).Shop.Thumbnails.Thumbnail2[2] = pfi_shop_thumbnail_r_2
 
 		(*wrap.Config).Shop.Thumbnails.Thumbnail3[0] = pfi_shop_thumbnail_w_3
 		(*wrap.Config).Shop.Thumbnails.Thumbnail3[1] = pfi_shop_thumbnail_h_3
+		(*wrap.Config).Shop.Thumbnails.Thumbnail3[2] = pfi_shop_thumbnail_r_3
+
+		(*wrap.Config).Shop.Thumbnails.ThumbnailFull[0] = pfi_shop_thumbnail_w_full
+		(*wrap.Config).Shop.Thumbnails.ThumbnailFull[1] = pfi_shop_thumbnail_h_full
+		(*wrap.Config).Shop.Thumbnails.ThumbnailFull[2] = pfi_shop_thumbnail_r_full
 
 		if err := wrap.ConfigSave(); err != nil {
 			wrap.MsgError(err.Error())

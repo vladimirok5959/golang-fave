@@ -63,18 +63,44 @@ func (this *ShopProductImage) Thumbnail3() string {
 	return "/api/product-image/thumb-3/" + utils.IntToStr(this.object.A_product_id) + "/" + this.object.A_filename
 }
 
+func (this *ShopProductImage) ThumbnailFull() string {
+	if this == nil {
+		return ""
+	}
+	return "/api/product-image/thumb-full/" + utils.IntToStr(this.object.A_product_id) + "/" + this.object.A_filename
+}
+
 func (this *ShopProductImage) ThumbnailSize0() [2]int {
-	return (*this.wrap.Config).Shop.Thumbnails.Thumbnail0
+	return [2]int{
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail0[0],
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail0[1],
+	}
 }
 
 func (this *ShopProductImage) ThumbnailSize1() [2]int {
-	return (*this.wrap.Config).Shop.Thumbnails.Thumbnail1
+	return [2]int{
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail1[0],
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail1[1],
+	}
 }
 
 func (this *ShopProductImage) ThumbnailSize2() [2]int {
-	return (*this.wrap.Config).Shop.Thumbnails.Thumbnail2
+	return [2]int{
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail2[0],
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail2[1],
+	}
 }
 
 func (this *ShopProductImage) ThumbnailSize3() [2]int {
-	return (*this.wrap.Config).Shop.Thumbnails.Thumbnail3
+	return [2]int{
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail3[0],
+		(*this.wrap.Config).Shop.Thumbnails.Thumbnail3[1],
+	}
+}
+
+func (this *ShopProductImage) ThumbnailSizeFull() [2]int {
+	return [2]int{
+		(*this.wrap.Config).Shop.Thumbnails.ThumbnailFull[0],
+		(*this.wrap.Config).Shop.Thumbnails.ThumbnailFull[1],
+	}
 }

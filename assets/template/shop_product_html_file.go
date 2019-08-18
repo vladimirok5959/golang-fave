@@ -36,7 +36,7 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 							<div class="card mt-1">
 								<div id="product_thumbnails" class="thumbnails d-flex flex-wrap">
 									{{range $index, $img := $.Data.Shop.Product.Images}}
-										<a class="thumbnail{{if gt $index 5}} thumbnail-hidden{{end}}" href="{{.FullImage}}" data-src="{{.FullImage}}">
+										<a class="thumbnail{{if gt $index 5}} thumbnail-hidden{{end}}" href="{{.ThumbnailFull}}" data-src="{{.ThumbnailFull}}">
 											<img class="img-responsive" alt="" src="{{.Thumbnail1}}" />
 										</a>
 									{{end}}
