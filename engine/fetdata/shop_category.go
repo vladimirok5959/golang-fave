@@ -244,3 +244,11 @@ func (this *ShopCategory) Parent() *ShopCategory {
 	cat := &ShopCategory{wrap: this.wrap, object: this.bufferCats[this.object.A_parent]}
 	return cat.load(&this.bufferCats)
 }
+
+func (this *ShopCategory) HaveChilds() bool {
+	// TODO: Add ability
+	if this == nil {
+		return false
+	}
+	return false
+}

@@ -635,10 +635,10 @@ func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 	for _, cat := range this.bufferCats {
 		if parent <= 1 {
 			if depth <= 0 {
-				result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+				result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
 			} else {
 				if cat.A_depth <= depth {
-					result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+					result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
 				}
 			}
 		} else {
@@ -647,10 +647,10 @@ func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 					depth_tmp = cat.A_depth
 				}
 				if depth <= 0 {
-					result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+					result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
 				} else {
 					if (cat.A_depth - depth_tmp + 1) <= depth {
-						result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+						result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
 					}
 				}
 			}
