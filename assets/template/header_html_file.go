@@ -132,6 +132,40 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 						</div>
 					</div>
 				</nav>
+				{{if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-category") (eq $.Data.Module "blog-post")}}
+					<div class="container clear-top pt-4">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								{{if eq $.Data.Module "blog"}}
+									<li class="breadcrumb-item">Blog</li>
+								{{else}}
+									<li class="breadcrumb-item"><a href="/blog/">Blog</a></li>
+								{{end}}
+								{{if eq $.Data.Module "blog-category"}}
+									{{if $.Data.Blog.Category.Parent.Parent.Parent.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Blog.Category.Parent.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Blog.Category.Parent.Parent.Parent.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Blog.Category.Parent.Parent.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Blog.Category.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Blog.Category.Parent.Parent.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Blog.Category.Parent.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Blog.Category.Parent.Parent.Parent.Permalink}}">{{$.Data.Blog.Category.Parent.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Blog.Category.Parent.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Blog.Category.Parent.Parent.Permalink}}">{{$.Data.Blog.Category.Parent.Parent.Name}}</a></li>
+									{{end}}
+									{{if $.Data.Blog.Category.Parent}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Blog.Category.Parent.Permalink}}">{{$.Data.Blog.Category.Parent.Name}}</a></li>
+									{{end}}
+									<li class="breadcrumb-item">{{$.Data.Blog.Category.Name}}</li>
+								{{end}}
+								{{if eq $.Data.Module "blog-post"}}
+									<li class="breadcrumb-item active">{{$.Data.Blog.Post.Name}}</li>
+								{{end}}
+							</ol>
+						</nav>
+					</div>
+				{{end}}
 				{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-category") (eq $.Data.Module "shop-product")}}
 					<div class="container clear-top pt-4">
 						<nav aria-label="breadcrumb">
