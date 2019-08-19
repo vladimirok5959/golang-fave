@@ -7,9 +7,9 @@ context('Module robots.txt', () => {
 
   it('should render edit form', () => {
     cy.loginCMS();
-    cy.visitCMS('/cp/settings/');
-    cy.get('.data-form.settings- textarea[name=content]').should('exist');
-    cy.get('.data-form.settings- textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n');
+    cy.visitCMS('/cp/settings/robots-txt/');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').should('exist');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n');
     cy.logoutCMS();
   });
 
@@ -26,13 +26,13 @@ context('Module robots.txt', () => {
   it('should change file content', () => {
     cy.loginCMS();
 
-    cy.visitCMS('/cp/settings/');
-    cy.get('.data-form.settings- textarea[name=content]').clear().type('Some file content');
+    cy.visitCMS('/cp/settings/robots-txt/');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').clear().type('Some file content');
     cy.get('#add-edit-button').click();
     cy.actionWait();
 
-    cy.visitCMS('/cp/settings/');
-    cy.get('.data-form.settings- textarea[name=content]').should('have.value', 'Some file content');
+    cy.visitCMS('/cp/settings/robots-txt/');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').should('have.value', 'Some file content');
 
     cy.request({
       url: cy.getBaseUrl() + '/robots.txt',
@@ -42,13 +42,13 @@ context('Module robots.txt', () => {
       expect(response.body).to.eq('Some file content');
     });
 
-    cy.visitCMS('/cp/settings/');
-    cy.get('.data-form.settings- textarea[name=content]').clear().type('User-agent: *\nDisallow: /\n');
+    cy.visitCMS('/cp/settings/robots-txt/');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').clear().type('User-agent: *\nDisallow: /\n');
     cy.get('#add-edit-button').click();
     cy.actionWait();
 
-    cy.visitCMS('/cp/settings/');
-    cy.get('.data-form.settings- textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n');
+    cy.visitCMS('/cp/settings/robots-txt/');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n');
 
     cy.request({
       url: cy.getBaseUrl() + '/robots.txt',
