@@ -178,6 +178,10 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			// Render template
 			wrap.RenderFrontEnd("blog", fetdata.New(wrap, nil, false), http.StatusOK)
 			return
+		} else if (*wrap.Config).Engine.MainModule == 1 {
+			// Render template
+			wrap.RenderFrontEnd("blog", fetdata.New(wrap, nil, false), http.StatusOK)
+			return
 		}
 
 		// User error 404 page

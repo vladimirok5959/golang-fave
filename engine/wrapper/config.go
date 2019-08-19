@@ -6,6 +6,9 @@ import (
 )
 
 type Config struct {
+	Engine struct {
+		MainModule int
+	}
 	Blog struct {
 		Pagination struct {
 			Index    int
@@ -42,6 +45,8 @@ func configNew() *Config {
 }
 
 func (this *Config) configDefault() {
+	this.Engine.MainModule = 0
+
 	this.Blog.Pagination.Index = 5
 	this.Blog.Pagination.Category = 5
 

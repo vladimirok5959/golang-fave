@@ -118,6 +118,19 @@ func (this *Modules) getCurrentModule(wrap *wrapper.Wrapper, backend bool) (*Mod
 				mod = m
 				modCurr = "index"
 			}
+			if (*wrap.Config).Engine.MainModule > 0 {
+				if (*wrap.Config).Engine.MainModule == 1 {
+					if m, ok := this.mods["blog"]; ok {
+						mod = m
+						modCurr = "blog"
+					}
+				} else if (*wrap.Config).Engine.MainModule == 2 {
+					if m, ok := this.mods["shop"]; ok {
+						mod = m
+						modCurr = "shop"
+					}
+				}
+			}
 		}
 	}
 

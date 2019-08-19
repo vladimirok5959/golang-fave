@@ -430,6 +430,10 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			// Render template
 			wrap.RenderFrontEnd("shop", fetdata.New(wrap, nil, false), http.StatusOK)
 			return
+		} else if (*wrap.Config).Engine.MainModule == 2 {
+			// Render template
+			wrap.RenderFrontEnd("shop", fetdata.New(wrap, nil, false), http.StatusOK)
+			return
 		}
 
 		// User error 404 page

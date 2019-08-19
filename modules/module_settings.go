@@ -21,7 +21,8 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		System: true,
 		Icon:   assets.SysSvgIconGear,
 		Sub: &[]MISub{
-			{Mount: "default", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
+			{Mount: "default", Name: "General", Show: true, Icon: assets.SysSvgIconGear},
+			{Mount: "robots-txt", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
 			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "thumbnails", Name: "Thumbnails", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconList},
@@ -31,6 +32,60 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		sidebar := ""
 
 		if wrap.CurrSubModule == "" || wrap.CurrSubModule == "default" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "General"},
+			})
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "settings-general",
+				},
+				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						modules_list := ``
+						modules_list += `<select class="form-control" id="lbl_module-at-home" name="module-at-home">`
+						modules_list += `<option value="0"`
+						if (*wrap.Config).Engine.MainModule == 0 {
+							modules_list += ` selected`
+						}
+						modules_list += `>Pages</option>`
+						modules_list += `<option value="1"`
+						if (*wrap.Config).Engine.MainModule == 1 {
+							modules_list += ` selected`
+						}
+						modules_list += `>Blog</option>`
+						modules_list += `<option value="2"`
+						if (*wrap.Config).Engine.MainModule == 2 {
+							modules_list += ` selected`
+						}
+						modules_list += `>Shop</option>`
+						modules_list += `</select>`
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_module-at-home">Module at home page</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							modules_list +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Save",
+					Target: "add-edit-button",
+				},
+			})
+
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+		} else if wrap.CurrSubModule == "robots-txt" {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Robots.txt"},
 			})
@@ -153,7 +208,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
-							`<label for="lbl_price">Shop thumbnail 1</label>` +
+							`<label>Shop thumbnail 1</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
 							`<div>` +
@@ -195,7 +250,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
-							`<label for="lbl_price">Shop thumbnail 2</label>` +
+							`<label>Shop thumbnail 2</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
 							`<div>` +
@@ -237,7 +292,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
-							`<label for="lbl_price">Shop thumbnail 3</label>` +
+							`<label>Shop thumbnail 3</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
 							`<div>` +
@@ -279,7 +334,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
-							`<label for="lbl_price">Shop thumbnail full</label>` +
+							`<label>Shop thumbnail full</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
 							`<div>` +
