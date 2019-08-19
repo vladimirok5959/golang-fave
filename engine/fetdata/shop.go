@@ -2,6 +2,7 @@ package fetdata
 
 import (
 	"math"
+	"sort"
 	"strings"
 
 	"golang-fave/engine/wrapper"
@@ -29,7 +30,7 @@ type Shop struct {
 	paginationPrev   *ShopPagination
 	paginationNext   *ShopPagination
 
-	bufferCats map[string][]*ShopCategory
+	bufferCats map[int]*utils.MySql_shop_category
 }
 
 func (this *Shop) load() *Shop {
@@ -554,20 +555,9 @@ func (this *Shop) PaginationNext() *ShopPagination {
 	return this.paginationNext
 }
 
-func (this *Shop) Categories(mlvl int) []*ShopCategory {
-	if this == nil {
-		return []*ShopCategory{}
-	}
+func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 	if this.bufferCats == nil {
-		this.bufferCats = map[string][]*ShopCategory{}
-	}
-	key := ""
-	where := ``
-	if mlvl > 0 {
-		where += `AND depth.depth <= ` + utils.IntToStr(mlvl)
-	}
-	if _, ok := this.bufferCats[key]; !ok {
-		var cats []*ShopCategory
+		this.bufferCats = map[int]*utils.MySql_shop_category{}
 		if rows, err := this.wrap.DB.Query(`
 			SELECT
 				main.id,
@@ -614,7 +604,6 @@ func (this *Shop) Categories(mlvl int) []*ShopCategory {
 			WHERE
 				main.id > 1 AND
 				main.id <> main.parent_id
-				` + where + `
 			GROUP BY
 				main.id
 			ORDER BY
@@ -634,11 +623,41 @@ func (this *Shop) Categories(mlvl int) []*ShopCategory {
 					&row.A_depth,
 					&row.A_parent,
 				); err == nil {
-					cats = append(cats, &ShopCategory{object: &row})
+					this.bufferCats[row.A_id] = &row
 				}
 			}
 		}
-		this.bufferCats[key] = cats
 	}
-	return this.bufferCats[key]
+
+	depth_tmp := 0
+	result := []*ShopCategory{}
+
+	for _, cat := range this.bufferCats {
+		if parent <= 1 {
+			if depth <= 0 {
+				result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+			} else {
+				if cat.A_depth <= depth {
+					result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+				}
+			}
+		} else {
+			if cat.A_parent == parent {
+				if depth_tmp == 0 {
+					depth_tmp = cat.A_depth
+				}
+				if depth <= 0 {
+					result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+				} else {
+					if (cat.A_depth - depth_tmp + 1) <= depth {
+						result = append(result, &ShopCategory{wrap: this.wrap, object: cat})
+					}
+				}
+			}
+		}
+	}
+
+	sort.Slice(result, func(i, j int) bool { return result[i].Left() < result[j].Left() })
+
+	return result
 }
