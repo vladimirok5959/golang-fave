@@ -37,18 +37,54 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			row := &utils.MySql_blog_category{}
 			err := wrap.DB.QueryRow(`
 				SELECT
-					id,
-					user,
-					name,
-					alias,
-					lft,
-					rgt
+					main.id,
+					main.user,
+					main.name,
+					main.alias,
+					main.lft,
+					main.rgt,
+					depth.depth,
+					MAX(main.parent_id) AS parent_id
 				FROM
-					blog_cats
+					(
+						SELECT
+							node.id,
+							node.user,
+							node.name,
+							node.alias,
+							node.lft,
+							node.rgt,
+							parent.id AS parent_id
+						FROM
+							blog_cats AS node,
+							blog_cats AS parent
+						WHERE
+							node.lft BETWEEN parent.lft AND parent.rgt AND
+							node.id > 1
+						ORDER BY
+							node.lft ASC
+					) AS main
+					LEFT JOIN (
+						SELECT
+							node.id,
+							(COUNT(parent.id) - 1) AS depth
+						FROM
+							blog_cats AS node,
+							blog_cats AS parent
+						WHERE
+							node.lft BETWEEN parent.lft AND parent.rgt
+						GROUP BY
+							node.id
+						ORDER BY
+							node.lft ASC
+					) AS depth ON depth.id = main.id
 				WHERE
-					alias = ? AND
-					id > 1
-				LIMIT 1;`,
+					main.id > 1 AND
+					main.id <> main.parent_id AND
+					main.alias = ?
+				GROUP BY
+					main.id
+				;`,
 				wrap.UrlArgs[2],
 			).Scan(
 				&row.A_id,
@@ -57,6 +93,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				&row.A_alias,
 				&row.A_lft,
 				&row.A_rgt,
+				&row.A_depth,
+				&row.A_parent,
 			)
 
 			if err != nil && err != wrapper.ErrNoRows {

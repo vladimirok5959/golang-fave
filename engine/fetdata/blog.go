@@ -2,6 +2,7 @@ package fetdata
 
 import (
 	"math"
+	"sort"
 	"strings"
 
 	"golang-fave/engine/wrapper"
@@ -29,7 +30,7 @@ type Blog struct {
 	paginationPrev *BlogPagination
 	paginationNext *BlogPagination
 
-	bufferCats map[string][]*BlogCategory
+	bufferCats map[int]*utils.MySql_blog_category
 }
 
 func (this *Blog) load() *Blog {
@@ -360,23 +361,19 @@ func (this *Blog) PaginationNext() *BlogPagination {
 	return this.paginationNext
 }
 
-func (this *Blog) Categories(mlvl int) []*BlogCategory {
-	if this == nil {
-		return []*BlogCategory{}
-	}
+func (this *Blog) Categories(parent, depth int) []*BlogCategory {
 	if this.bufferCats == nil {
-		this.bufferCats = map[string][]*BlogCategory{}
-	}
-	key := ""
-	where := ``
-	if mlvl > 0 {
-		where += `AND tbl.depth <= ` + utils.IntToStr(mlvl)
-	}
-	if _, ok := this.bufferCats[key]; !ok {
-		var cats []*BlogCategory
+		this.bufferCats = map[int]*utils.MySql_blog_category{}
 		if rows, err := this.wrap.DB.Query(`
 			SELECT
-				tbl.*
+				main.id,
+				main.user,
+				main.name,
+				main.alias,
+				main.lft,
+				main.rgt,
+				depth.depth,
+				MAX(main.parent_id) AS parent_id
 			FROM
 				(
 					SELECT
@@ -386,6 +383,19 @@ func (this *Blog) Categories(mlvl int) []*BlogCategory {
 						node.alias,
 						node.lft,
 						node.rgt,
+						parent.id AS parent_id
+					FROM
+						blog_cats AS node,
+						blog_cats AS parent
+					WHERE
+						node.lft BETWEEN parent.lft AND parent.rgt AND
+						node.id > 1
+					ORDER BY
+						node.lft ASC
+				) AS main
+				LEFT JOIN (
+					SELECT
+						node.id,
 						(COUNT(parent.id) - 1) AS depth
 					FROM
 						blog_cats AS node,
@@ -396,22 +406,64 @@ func (this *Blog) Categories(mlvl int) []*BlogCategory {
 						node.id
 					ORDER BY
 						node.lft ASC
-				) AS tbl
+				) AS depth ON depth.id = main.id
 			WHERE
-				tbl.id > 1
-				` + where + `
+				main.id > 1 AND
+				main.id <> main.parent_id
+			GROUP BY
+				main.id
+			ORDER BY
+				main.lft ASC
 			;
 		`); err == nil {
 			defer rows.Close()
 			for rows.Next() {
 				row := utils.MySql_blog_category{}
-				var Depth int
-				if err := rows.Scan(&row.A_id, &row.A_user, &row.A_name, &row.A_alias, &row.A_lft, &row.A_rgt, &Depth); err == nil {
-					cats = append(cats, &BlogCategory{object: &row, depth: Depth})
+				if err := rows.Scan(
+					&row.A_id,
+					&row.A_user,
+					&row.A_name,
+					&row.A_alias,
+					&row.A_lft,
+					&row.A_rgt,
+					&row.A_depth,
+					&row.A_parent,
+				); err == nil {
+					this.bufferCats[row.A_id] = &row
 				}
 			}
 		}
-		this.bufferCats[key] = cats
 	}
-	return this.bufferCats[key]
+
+	depth_tmp := 0
+	result := []*BlogCategory{}
+
+	for _, cat := range this.bufferCats {
+		if parent <= 1 {
+			if depth <= 0 {
+				result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+			} else {
+				if cat.A_depth <= depth {
+					result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+				}
+			}
+		} else {
+			if cat.A_parent == parent {
+				if depth_tmp == 0 {
+					depth_tmp = cat.A_depth
+				}
+				if depth <= 0 {
+					result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+				} else {
+					if (cat.A_depth - depth_tmp + 1) <= depth {
+						result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+					}
+				}
+			}
+		}
+	}
+
+	sort.Slice(result, func(i, j int) bool { return result[i].Left() < result[j].Left() })
+
+	return result
 }

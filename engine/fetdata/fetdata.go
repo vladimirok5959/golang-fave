@@ -29,7 +29,7 @@ func New(wrap *wrapper.Wrapper, drow interface{}, is404 bool) *FERData {
 	} else if wrap.CurrModule == "blog" {
 		if len(wrap.UrlArgs) == 3 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] == "category" && wrap.UrlArgs[2] != "" {
 			if o, ok := drow.(*utils.MySql_blog_category); ok {
-				d_Blog = &Blog{wrap: wrap, category: (&BlogCategory{wrap: wrap, object: o}).load()}
+				d_Blog = &Blog{wrap: wrap, category: (&BlogCategory{wrap: wrap, object: o}).load(nil)}
 				d_Blog.load()
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] != "" {
