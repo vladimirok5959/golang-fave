@@ -281,6 +281,90 @@ func (this *Blog) load() *Blog {
 	return this
 }
 
+func (this *Blog) preload_cats() {
+	if this.bufferCats == nil {
+		this.bufferCats = map[int]*utils.MySql_blog_category{}
+		if rows, err := this.wrap.DB.Query(`
+			SELECT
+				main.id,
+				main.user,
+				main.name,
+				main.alias,
+				main.lft,
+				main.rgt,
+				main.depth,
+				parent.id AS parent_id
+			FROM
+				(
+					SELECT
+						node.id,
+						node.user,
+						node.name,
+						node.alias,
+						node.lft,
+						node.rgt,
+						(COUNT(parent.id) - 1) AS depth
+					FROM
+						blog_cats AS node,
+						blog_cats AS parent
+					WHERE
+						node.lft BETWEEN parent.lft AND parent.rgt
+					GROUP BY
+						node.id
+					ORDER BY
+						node.lft ASC
+				) AS main
+				LEFT JOIN (
+					SELECT
+						node.id,
+						node.user,
+						node.name,
+						node.alias,
+						node.lft,
+						node.rgt,
+						(COUNT(parent.id) - 0) AS depth
+					FROM
+						blog_cats AS node,
+						blog_cats AS parent
+					WHERE
+						node.lft BETWEEN parent.lft AND parent.rgt
+					GROUP BY
+						node.id
+					ORDER BY
+						node.lft ASC
+				) AS parent ON
+				parent.depth = main.depth AND
+				main.lft > parent.lft AND
+				main.rgt < parent.rgt
+			WHERE
+				main.id > 1
+			ORDER BY
+				main.lft ASC
+			;
+		`); err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				row := utils.MySql_blog_category{}
+				if err := rows.Scan(
+					&row.A_id,
+					&row.A_user,
+					&row.A_name,
+					&row.A_alias,
+					&row.A_lft,
+					&row.A_rgt,
+					&row.A_depth,
+					&row.A_parent,
+				); err == nil {
+					this.bufferCats[row.A_id] = &row
+					if _, ok := this.bufferCats[row.A_parent]; ok {
+						this.bufferCats[row.A_parent].A_childs = true
+					}
+				}
+			}
+		}
+	}
+}
+
 func (this *Blog) Category() *BlogCategory {
 	if this == nil {
 		return nil
@@ -362,84 +446,7 @@ func (this *Blog) PaginationNext() *BlogPagination {
 }
 
 func (this *Blog) Categories(parent, depth int) []*BlogCategory {
-	if this.bufferCats == nil {
-		this.bufferCats = map[int]*utils.MySql_blog_category{}
-		if rows, err := this.wrap.DB.Query(`
-			SELECT
-				main.id,
-				main.user,
-				main.name,
-				main.alias,
-				main.lft,
-				main.rgt,
-				main.depth,
-				parent.id AS parent_id
-			FROM
-				(
-					SELECT
-						node.id,
-						node.user,
-						node.name,
-						node.alias,
-						node.lft,
-						node.rgt,
-						(COUNT(parent.id) - 1) AS depth
-					FROM
-						blog_cats AS node,
-						blog_cats AS parent
-					WHERE
-						node.lft BETWEEN parent.lft AND parent.rgt
-					GROUP BY
-						node.id
-					ORDER BY
-						node.lft ASC
-				) AS main
-				LEFT JOIN (
-					SELECT
-						node.id,
-						node.user,
-						node.name,
-						node.alias,
-						node.lft,
-						node.rgt,
-						(COUNT(parent.id) - 0) AS depth
-					FROM
-						blog_cats AS node,
-						blog_cats AS parent
-					WHERE
-						node.lft BETWEEN parent.lft AND parent.rgt
-					GROUP BY
-						node.id
-					ORDER BY
-						node.lft ASC
-				) AS parent ON
-				parent.depth = main.depth AND
-				main.lft > parent.lft AND
-				main.rgt < parent.rgt
-			WHERE
-				main.id > 1
-			ORDER BY
-				main.lft ASC
-			;
-		`); err == nil {
-			defer rows.Close()
-			for rows.Next() {
-				row := utils.MySql_blog_category{}
-				if err := rows.Scan(
-					&row.A_id,
-					&row.A_user,
-					&row.A_name,
-					&row.A_alias,
-					&row.A_lft,
-					&row.A_rgt,
-					&row.A_depth,
-					&row.A_parent,
-				); err == nil {
-					this.bufferCats[row.A_id] = &row
-				}
-			}
-		}
-	}
+	this.preload_cats()
 
 	depth_tmp := 0
 	result := []*BlogCategory{}

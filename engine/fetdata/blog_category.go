@@ -97,6 +97,9 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 				&row.A_parent,
 			); err == nil {
 				this.bufferCats[row.A_id] = &row
+				if _, ok := this.bufferCats[row.A_parent]; ok {
+					this.bufferCats[row.A_parent].A_childs = true
+				}
 			}
 		}
 	}
@@ -260,9 +263,8 @@ func (this *BlogCategory) Parent() *BlogCategory {
 }
 
 func (this *BlogCategory) HaveChilds() bool {
-	// TODO: Add ability
 	if this == nil {
 		return false
 	}
-	return false
+	return this.object.A_childs
 }

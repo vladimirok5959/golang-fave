@@ -97,6 +97,9 @@ func (this *ShopCategory) load(cache *map[int]*utils.MySql_shop_category) *ShopC
 				&row.A_parent,
 			); err == nil {
 				this.bufferCats[row.A_id] = &row
+				if _, ok := this.bufferCats[row.A_parent]; ok {
+					this.bufferCats[row.A_parent].A_childs = true
+				}
 			}
 		}
 	}
@@ -260,9 +263,8 @@ func (this *ShopCategory) Parent() *ShopCategory {
 }
 
 func (this *ShopCategory) HaveChilds() bool {
-	// TODO: Add ability
 	if this == nil {
 		return false
 	}
-	return false
+	return this.object.A_childs
 }

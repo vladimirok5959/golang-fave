@@ -9,4 +9,5 @@ type MySql_blog_category struct {
 	A_rgt    int
 	A_depth  int
 	A_parent int
+	A_childs bool
 }
