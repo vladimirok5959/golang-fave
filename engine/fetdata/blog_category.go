@@ -33,8 +33,8 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 			main.alias,
 			main.lft,
 			main.rgt,
-			depth.depth,
-			MAX(main.parent_id) AS parent_id
+			main.depth,
+			parent.id AS parent_id
 		FROM
 			(
 				SELECT
@@ -44,19 +44,6 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 					node.alias,
 					node.lft,
 					node.rgt,
-					parent.id AS parent_id
-				FROM
-					blog_cats AS node,
-					blog_cats AS parent
-				WHERE
-					node.lft BETWEEN parent.lft AND parent.rgt AND
-					node.id > 1
-				ORDER BY
-					node.lft ASC
-			) AS main
-			LEFT JOIN (
-				SELECT
-					node.id,
 					(COUNT(parent.id) - 1) AS depth
 				FROM
 					blog_cats AS node,
@@ -67,12 +54,31 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 					node.id
 				ORDER BY
 					node.lft ASC
-			) AS depth ON depth.id = main.id
+			) AS main
+			LEFT JOIN (
+				SELECT
+					node.id,
+					node.user,
+					node.name,
+					node.alias,
+					node.lft,
+					node.rgt,
+					(COUNT(parent.id) - 0) AS depth
+				FROM
+					blog_cats AS node,
+					blog_cats AS parent
+				WHERE
+					node.lft BETWEEN parent.lft AND parent.rgt
+				GROUP BY
+					node.id
+				ORDER BY
+					node.lft ASC
+			) AS parent ON
+			parent.depth = main.depth AND
+			main.lft > parent.lft AND
+			main.rgt < parent.rgt
 		WHERE
-			main.id > 1 AND
-			main.id <> main.parent_id
-		GROUP BY
-			main.id
+			main.id > 1
 		ORDER BY
 			main.lft ASC
 		;
@@ -113,8 +119,8 @@ func (this *BlogCategory) loadById(id int) {
 			main.alias,
 			main.lft,
 			main.rgt,
-			depth.depth,
-			MAX(main.parent_id) AS parent_id
+			main.depth,
+			parent.id AS parent_id
 		FROM
 			(
 				SELECT
@@ -124,19 +130,6 @@ func (this *BlogCategory) loadById(id int) {
 					node.alias,
 					node.lft,
 					node.rgt,
-					parent.id AS parent_id
-				FROM
-					blog_cats AS node,
-					blog_cats AS parent
-				WHERE
-					node.lft BETWEEN parent.lft AND parent.rgt AND
-					node.id > 1
-				ORDER BY
-					node.lft ASC
-			) AS main
-			LEFT JOIN (
-				SELECT
-					node.id,
 					(COUNT(parent.id) - 1) AS depth
 				FROM
 					blog_cats AS node,
@@ -147,13 +140,34 @@ func (this *BlogCategory) loadById(id int) {
 					node.id
 				ORDER BY
 					node.lft ASC
-			) AS depth ON depth.id = main.id
+			) AS main
+			LEFT JOIN (
+				SELECT
+					node.id,
+					node.user,
+					node.name,
+					node.alias,
+					node.lft,
+					node.rgt,
+					(COUNT(parent.id) - 0) AS depth
+				FROM
+					blog_cats AS node,
+					blog_cats AS parent
+				WHERE
+					node.lft BETWEEN parent.lft AND parent.rgt
+				GROUP BY
+					node.id
+				ORDER BY
+					node.lft ASC
+			) AS parent ON
+			parent.depth = main.depth AND
+			main.lft > parent.lft AND
+			main.rgt < parent.rgt
 		WHERE
 			main.id > 1 AND
-			main.id <> main.parent_id AND
 			main.id = ?
-		GROUP BY
-			main.id
+		ORDER BY
+			main.lft ASC
 		;`,
 		id,
 	).Scan(

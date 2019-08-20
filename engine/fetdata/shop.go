@@ -92,8 +92,8 @@ func (this *Shop) load() *Shop {
 					main.alias,
 					main.lft,
 					main.rgt,
-					depth.depth,
-					MAX(main.parent_id) AS parent_id
+					main.depth,
+					parent.id AS parent_id
 				FROM
 					(
 						SELECT
@@ -103,19 +103,6 @@ func (this *Shop) load() *Shop {
 							node.alias,
 							node.lft,
 							node.rgt,
-							parent.id AS parent_id
-						FROM
-							shop_cats AS node,
-							shop_cats AS parent
-						WHERE
-							node.lft BETWEEN parent.lft AND parent.rgt AND
-							node.id > 1
-						ORDER BY
-							node.lft ASC
-					) AS main
-					LEFT JOIN (
-						SELECT
-							node.id,
 							(COUNT(parent.id) - 1) AS depth
 						FROM
 							shop_cats AS node,
@@ -126,12 +113,33 @@ func (this *Shop) load() *Shop {
 							node.id
 						ORDER BY
 							node.lft ASC
-					) AS depth ON depth.id = main.id
+					) AS main
+					LEFT JOIN (
+						SELECT
+							node.id,
+							node.user,
+							node.name,
+							node.alias,
+							node.lft,
+							node.rgt,
+							(COUNT(parent.id) - 0) AS depth
+						FROM
+							shop_cats AS node,
+							shop_cats AS parent
+						WHERE
+							node.lft BETWEEN parent.lft AND parent.rgt
+						GROUP BY
+							node.id
+						ORDER BY
+							node.lft ASC
+					) AS parent ON
+					parent.depth = main.depth AND
+					main.lft > parent.lft AND
+					main.rgt < parent.rgt
 				WHERE
-					main.id > 1 AND
-					main.id <> main.parent_id
-				GROUP BY
-					main.id
+					main.id > 1
+				ORDER BY
+					main.lft ASC
 			) AS cats ON cats.id = shop_products.category
 		WHERE
 			shop_products.active = 1
@@ -233,8 +241,8 @@ func (this *Shop) load() *Shop {
 						main.alias,
 						main.lft,
 						main.rgt,
-						depth.depth,
-						MAX(main.parent_id) AS parent_id
+						main.depth,
+						parent.id AS parent_id
 					FROM
 						(
 							SELECT
@@ -244,19 +252,6 @@ func (this *Shop) load() *Shop {
 								node.alias,
 								node.lft,
 								node.rgt,
-								parent.id AS parent_id
-							FROM
-								shop_cats AS node,
-								shop_cats AS parent
-							WHERE
-								node.lft BETWEEN parent.lft AND parent.rgt AND
-								node.id > 1
-							ORDER BY
-								node.lft ASC
-						) AS main
-						LEFT JOIN (
-							SELECT
-								node.id,
 								(COUNT(parent.id) - 1) AS depth
 							FROM
 								shop_cats AS node,
@@ -267,12 +262,33 @@ func (this *Shop) load() *Shop {
 								node.id
 							ORDER BY
 								node.lft ASC
-						) AS depth ON depth.id = main.id
+						) AS main
+						LEFT JOIN (
+							SELECT
+								node.id,
+								node.user,
+								node.name,
+								node.alias,
+								node.lft,
+								node.rgt,
+								(COUNT(parent.id) - 0) AS depth
+							FROM
+								shop_cats AS node,
+								shop_cats AS parent
+							WHERE
+								node.lft BETWEEN parent.lft AND parent.rgt
+							GROUP BY
+								node.id
+							ORDER BY
+								node.lft ASC
+						) AS parent ON
+						parent.depth = main.depth AND
+						main.lft > parent.lft AND
+						main.rgt < parent.rgt
 					WHERE
-						main.id > 1 AND
-						main.id <> main.parent_id
-					GROUP BY
-						main.id
+						main.id > 1
+					ORDER BY
+						main.lft ASC
 				) AS cats ON cats.id = shop_products.category
 			WHERE
 				shop_products.active = 1 AND
@@ -566,8 +582,8 @@ func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 				main.alias,
 				main.lft,
 				main.rgt,
-				depth.depth,
-				MAX(main.parent_id) AS parent_id
+				main.depth,
+				parent.id AS parent_id
 			FROM
 				(
 					SELECT
@@ -577,19 +593,6 @@ func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 						node.alias,
 						node.lft,
 						node.rgt,
-						parent.id AS parent_id
-					FROM
-						shop_cats AS node,
-						shop_cats AS parent
-					WHERE
-						node.lft BETWEEN parent.lft AND parent.rgt AND
-						node.id > 1
-					ORDER BY
-						node.lft ASC
-				) AS main
-				LEFT JOIN (
-					SELECT
-						node.id,
 						(COUNT(parent.id) - 1) AS depth
 					FROM
 						shop_cats AS node,
@@ -600,12 +603,31 @@ func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 						node.id
 					ORDER BY
 						node.lft ASC
-				) AS depth ON depth.id = main.id
+				) AS main
+				LEFT JOIN (
+					SELECT
+						node.id,
+						node.user,
+						node.name,
+						node.alias,
+						node.lft,
+						node.rgt,
+						(COUNT(parent.id) - 0) AS depth
+					FROM
+						shop_cats AS node,
+						shop_cats AS parent
+					WHERE
+						node.lft BETWEEN parent.lft AND parent.rgt
+					GROUP BY
+						node.id
+					ORDER BY
+						node.lft ASC
+				) AS parent ON
+				parent.depth = main.depth AND
+				main.lft > parent.lft AND
+				main.rgt < parent.rgt
 			WHERE
-				main.id > 1 AND
-				main.id <> main.parent_id
-			GROUP BY
-				main.id
+				main.id > 1
 			ORDER BY
 				main.lft ASC
 			;
