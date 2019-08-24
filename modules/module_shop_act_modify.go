@@ -116,7 +116,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					pf_briefly,
 					pf_content,
 					utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
-					pf_active,
+					utils.StrToInt(pf_active),
 				)
 				if err != nil {
 					return err
@@ -225,14 +225,14 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					utils.StrToInt(pf_category),
 					pf_briefly,
 					pf_content,
-					pf_active,
+					utils.StrToInt(pf_active),
 					utils.StrToInt(pf_id),
 				); err != nil {
 					return err
 				}
 
 				// Delete product and categories relations
-				if _, err := tx.Exec("DELETE FROM shop_cat_product_rel WHERE product_id = ?;", pf_id); err != nil {
+				if _, err := tx.Exec("DELETE FROM shop_cat_product_rel WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 

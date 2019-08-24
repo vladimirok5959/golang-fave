@@ -23,26 +23,26 @@ func (this *Modules) RegisterAction_ShopCategoriesDelete() *Action {
 			if _, err := tx.Exec("SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT category_id FROM shop_cat_product_rel WHERE category_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT category_id FROM shop_cat_product_rel WHERE category_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT id FROM shop_products WHERE category = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT id FROM shop_products WHERE category = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Set root category
-			if _, err := tx.Exec("UPDATE shop_products SET category = 1 WHERE category = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("UPDATE shop_products SET category = 1 WHERE category = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Process
-			if _, err := tx.Exec("DELETE FROM shop_cat_product_rel WHERE category_id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM shop_cat_product_rel WHERE category_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM shop_cats WHERE id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM shop_cats WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("DELETE FROM shop_cats WHERE id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM shop_cats WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			if _, err := tx.Exec("UPDATE shop_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {

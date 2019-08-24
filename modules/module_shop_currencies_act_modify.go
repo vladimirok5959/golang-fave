@@ -77,7 +77,7 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 		} else {
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 				// Block rows
-				if _, err := tx.Exec("SELECT id FROM shop_currencies WHERE id = ? FOR UPDATE;", pf_id); err != nil {
+				if _, err := tx.Exec("SELECT id FROM shop_currencies WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 

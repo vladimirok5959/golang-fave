@@ -67,7 +67,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 					pf_meta_keywords,
 					pf_meta_description,
 					utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
-					pf_active,
+					utils.StrToInt(pf_active),
 				)
 				if err != nil {
 					return err
@@ -104,7 +104,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 					pf_meta_title,
 					pf_meta_keywords,
 					pf_meta_description,
-					pf_active,
+					utils.StrToInt(pf_active),
 					utils.StrToInt(pf_id),
 				)
 				if err != nil {

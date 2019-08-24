@@ -23,18 +23,18 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 			if _, err := tx.Exec("SELECT id FROM blog_cats FOR UPDATE;"); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT category_id FROM blog_cat_post_rel WHERE category_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT category_id FROM blog_cat_post_rel WHERE category_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Process
-			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT @ml := lft, @mr := rgt FROM blog_cats WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("DELETE FROM blog_cats WHERE id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM blog_cats WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			if _, err := tx.Exec("UPDATE blog_cats SET lft = lft - 1, rgt = rgt - 1 WHERE lft > @ml AND rgt < @mr;"); err != nil {

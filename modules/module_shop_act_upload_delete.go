@@ -29,15 +29,15 @@ func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 
 		if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT product_id FROM shop_product_images WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT product_id FROM shop_product_images WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Delete row
-			if _, err := tx.Exec("DELETE FROM shop_product_images WHERE product_id = ? AND filename = ?;", pf_id, pf_file); err != nil {
+			if _, err := tx.Exec("DELETE FROM shop_product_images WHERE product_id = ? AND filename = ?;", utils.StrToInt(pf_id), pf_file); err != nil {
 				return err
 			}
 

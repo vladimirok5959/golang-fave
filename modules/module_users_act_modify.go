@@ -72,7 +72,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 					pf_email,
 					pf_password,
 					pf_admin,
-					pf_active,
+					utils.StrToInt(pf_active),
 				)
 				if err != nil {
 					return err
@@ -106,7 +106,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 						pf_last_name,
 						pf_email,
 						pf_admin,
-						pf_active,
+						utils.StrToInt(pf_active),
 						utils.StrToInt(pf_id),
 					)
 					if err != nil {

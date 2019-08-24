@@ -22,16 +22,16 @@ func (this *Modules) RegisterAction_ShopDelete() *Action {
 
 		if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT product_id FROM shop_product_images WHERE product_id = ? FOR UPDATE;", pf_id); err != nil {
+			if _, err := tx.Exec("SELECT product_id FROM shop_product_images WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
@@ -62,18 +62,18 @@ func (this *Modules) RegisterAction_ShopDelete() *Action {
 					}
 				}
 			}
-			if _, err := tx.Exec("DELETE FROM shop_product_images WHERE product_id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM shop_product_images WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Delete target product with category connection data
-			if _, err := tx.Exec("DELETE FROM shop_filter_product_values WHERE product_id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM shop_filter_product_values WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("DELETE FROM shop_cat_product_rel WHERE product_id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM shop_cat_product_rel WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("DELETE FROM shop_products WHERE id = ?;", pf_id); err != nil {
+			if _, err := tx.Exec("DELETE FROM shop_products WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			return nil
