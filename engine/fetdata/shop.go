@@ -294,7 +294,8 @@ func (this *Shop) load() *Shop {
 				shop_products.active = 1 AND
 				shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 			GROUP BY
-				shop_products.id
+				shop_products.id,
+				cats.parent_id
 			ORDER BY
 				shop_products.id DESC
 			LIMIT ?, ?;

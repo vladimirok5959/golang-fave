@@ -20,7 +20,7 @@ func log(query string, s time.Time, e error, transaction bool) {
 	}
 	eStr := " (nil)"
 	if e != nil {
-		eStr = " (" + e.Error() + ") "
+		eStr = " \033[0m\033[0;31m(" + e.Error() + ")"
 	}
 	if consts.IS_WIN {
 		fmt.Fprintln(os.Stdout, "[SQL] "+msg+eStr+fmt.Sprintf(" %.3f ms", time.Now().Sub(s).Seconds()))
