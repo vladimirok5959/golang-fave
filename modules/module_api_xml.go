@@ -224,7 +224,7 @@ func (this *Modules) api_GenerateXmlOffers(wrap *wrapper.Wrapper) string {
 	return result
 }
 
-func (this *Modules) api_GenerateXml(wrap *wrapper.Wrapper) string {
+func (this *Modules) api_Generate(wrap *wrapper.Wrapper, currencies, categories, offers string) string {
 	return `<?xml version="1.0" encoding="UTF-8"?>` +
 		`<!DOCTYPE yml_catalog SYSTEM "shops.dtd">` +
 		`<yml_catalog date="` + time.Unix(int64(time.Now().Unix()), 0).Format("2006-01-02 15:04") + `">` +
@@ -232,24 +232,22 @@ func (this *Modules) api_GenerateXml(wrap *wrapper.Wrapper) string {
 		`<name>` + html.EscapeString((*wrap.Config).API.XML.Name) + `</name>` +
 		`<company>` + html.EscapeString((*wrap.Config).API.XML.Company) + `</company>` +
 		`<url>` + html.EscapeString((*wrap.Config).API.XML.Url) + `</url>` +
-		`<currencies>` + this.api_GenerateXmlCurrencies(wrap) + `</currencies>` +
-		`<categories>` + this.api_GenerateXmlCategories(wrap) + `</categories>` +
-		`<offers>` + this.api_GenerateXmlOffers(wrap) + `</offers>` +
+		`<currencies>` + currencies + `</currencies>` +
+		`<categories>` + categories + `</categories>` +
+		`<offers>` + offers + `</offers>` +
 		`</shop>` +
 		`</yml_catalog>`
 }
 
+func (this *Modules) api_GenerateXml(wrap *wrapper.Wrapper) string {
+	return this.api_Generate(
+		wrap,
+		this.api_GenerateXmlCurrencies(wrap),
+		this.api_GenerateXmlCategories(wrap),
+		this.api_GenerateXmlOffers(wrap),
+	)
+}
+
 func (this *Modules) api_GenerateEmptyXml(wrap *wrapper.Wrapper) string {
-	return `<?xml version="1.0" encoding="UTF-8"?>` +
-		`<!DOCTYPE yml_catalog SYSTEM "shops.dtd">` +
-		`<yml_catalog date="` + time.Unix(int64(time.Now().Unix()), 0).Format("2006-01-02 15:04") + `">` +
-		`<shop>` +
-		`<name>` + html.EscapeString((*wrap.Config).API.XML.Name) + `</name>` +
-		`<company>` + html.EscapeString((*wrap.Config).API.XML.Company) + `</company>` +
-		`<url>` + html.EscapeString((*wrap.Config).API.XML.Url) + `</url>` +
-		`<currencies></currencies>` +
-		`<categories></categories>` +
-		`<offers></offers>` +
-		`</shop>` +
-		`</yml_catalog>`
+	return this.api_Generate(wrap, "", "", "")
 }
