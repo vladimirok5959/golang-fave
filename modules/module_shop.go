@@ -241,7 +241,7 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if err == nil {
-				result += `<div class="attached-img"><a href="/products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `" title="` + html.EscapeString(string(values[1])) + `" target="_blank"><img src="/api/product-image/thumb-0/` + string(values[0]) + `/` + string(values[1]) + `" /></a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[0])) + `, '` + html.EscapeString(string(values[1])) + `');">Delete</a></div>`
+				result += `<div class="attached-img"><a href="/products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `" title="` + html.EscapeString(string(values[1])) + `" target="_blank"><img src="/products/images/` + string(values[0]) + `/thumb-0-` + string(values[1]) + `" /></a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[0])) + `, '` + html.EscapeString(string(values[1])) + `');">Delete</a></div>`
 			}
 		}
 	}

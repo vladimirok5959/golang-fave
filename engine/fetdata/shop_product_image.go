@@ -39,35 +39,35 @@ func (this *ShopProductImage) Thumbnail0() string {
 	if this == nil {
 		return ""
 	}
-	return "/api/product-image/thumb-0/" + utils.IntToStr(this.object.A_product_id) + "/" + this.object.A_filename
+	return "/products/images/" + utils.IntToStr(this.object.A_product_id) + "/thumb-0-" + this.object.A_filename
 }
 
 func (this *ShopProductImage) Thumbnail1() string {
 	if this == nil {
 		return ""
 	}
-	return "/api/product-image/thumb-1/" + utils.IntToStr(this.object.A_product_id) + "/" + this.object.A_filename
+	return "/products/images/" + utils.IntToStr(this.object.A_product_id) + "/thumb-1-" + this.object.A_filename
 }
 
 func (this *ShopProductImage) Thumbnail2() string {
 	if this == nil {
 		return ""
 	}
-	return "/api/product-image/thumb-2/" + utils.IntToStr(this.object.A_product_id) + "/" + this.object.A_filename
+	return "/products/images/" + utils.IntToStr(this.object.A_product_id) + "/thumb-2-" + this.object.A_filename
 }
 
 func (this *ShopProductImage) Thumbnail3() string {
 	if this == nil {
 		return ""
 	}
-	return "/api/product-image/thumb-3/" + utils.IntToStr(this.object.A_product_id) + "/" + this.object.A_filename
+	return "/products/images/" + utils.IntToStr(this.object.A_product_id) + "/thumb-3-" + this.object.A_filename
 }
 
 func (this *ShopProductImage) ThumbnailFull() string {
 	if this == nil {
 		return ""
 	}
-	return "/api/product-image/thumb-full/" + utils.IntToStr(this.object.A_product_id) + "/" + this.object.A_filename
+	return "/products/images/" + utils.IntToStr(this.object.A_product_id) + "/thumb-full-" + this.object.A_filename
 }
 
 func (this *ShopProductImage) ThumbnailSize0() [2]int {
