@@ -304,3 +304,7 @@ func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) e
 	}
 	return nil
 }
+
+func (this *Wrapper) RemoveProductXmlCacheFile() error {
+	return os.Remove(this.DHtdocs + string(os.PathSeparator) + "products.xml")
+}
