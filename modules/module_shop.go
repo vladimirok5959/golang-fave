@@ -972,10 +972,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							this.shop_GetProductValuesInputs(wrap, data.A_id) +
 							`</div>` +
 							`<div class="list-button position-relative">` +
-							`<select class="selectpicker form-control" id="lbl_attributes" data-live-search="true">` +
+							`<select class="selectpicker form-control" id="lbl_attributes" data-live-search="true" onchange="fave.ShopProductsAdd();">` +
 							this.shop_GetAllAttributesSelectOptions(wrap) +
 							`</select>` +
-							`<button type="button" class="btn btn-success btn-dynamic-remove" onclick="fave.ShopProductsAdd();">Add attribute</button>` +
 							`</div>` +
 							`</div>` +
 							`</div>` +
