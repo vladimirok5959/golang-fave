@@ -31,10 +31,18 @@ func (this *Modules) RegisterModule_Api() *Module {
 
 				target_file := wrap.DHtdocs + string(os.PathSeparator) + "products.xml"
 				if !utils.IsFileExists(target_file) {
-					// XML
-					data := []byte(this.api_GenerateXml(wrap))
+					data := []byte(this.api_GenerateEmptyXml(wrap))
+
+					// Make empty file
+					if file, err := os.Create(target_file); err == nil {
+						file.Write(data)
+					}
+
+					// Make regular XML
+					data = []byte(this.api_GenerateXml(wrap))
 
 					// Save file
+					wrap.RemoveProductXmlCacheFile()
 					if file, err := os.Create(target_file); err == nil {
 						file.Write(data)
 					}

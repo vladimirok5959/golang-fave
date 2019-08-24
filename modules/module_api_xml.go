@@ -238,3 +238,18 @@ func (this *Modules) api_GenerateXml(wrap *wrapper.Wrapper) string {
 		`</shop>` +
 		`</yml_catalog>`
 }
+
+func (this *Modules) api_GenerateEmptyXml(wrap *wrapper.Wrapper) string {
+	return `<?xml version="1.0" encoding="UTF-8"?>` +
+		`<!DOCTYPE yml_catalog SYSTEM "shops.dtd">` +
+		`<yml_catalog date="` + time.Unix(int64(time.Now().Unix()), 0).Format("2006-01-02 15:04") + `">` +
+		`<shop>` +
+		`<name>` + html.EscapeString((*wrap.Config).API.XML.Name) + `</name>` +
+		`<company>` + html.EscapeString((*wrap.Config).API.XML.Company) + `</company>` +
+		`<url>` + html.EscapeString((*wrap.Config).API.XML.Url) + `</url>` +
+		`<currencies></currencies>` +
+		`<categories></categories>` +
+		`<offers></offers>` +
+		`</shop>` +
+		`</yml_catalog>`
+}
