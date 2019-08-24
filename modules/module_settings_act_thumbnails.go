@@ -1,8 +1,6 @@
 package modules
 
 import (
-	"os"
-	"path/filepath"
 	"strconv"
 
 	"golang-fave/engine/wrapper"
@@ -174,13 +172,9 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		}
 
 		// Reset products images cache
-		pattern := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + "*" + string(os.PathSeparator) + "thumb-*"
-		if files, err := filepath.Glob(pattern); err == nil {
-			for _, file := range files {
-				if err := os.Remove(file); err != nil {
-					wrap.LogError("[settings save] Thumbnail file (%s) delete error: %s", file, err.Error())
-				}
-			}
+		if err := wrap.RemoveProductImageThumbnails("*", "thumb-*"); err != nil {
+			wrap.MsgError(err.Error())
+			return
 		}
 
 		// Reload current page

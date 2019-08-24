@@ -7,7 +7,9 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"golang-fave/consts"
@@ -287,4 +289,18 @@ func (this *Wrapper) GetCurrentPage(max int) int {
 
 func (this *Wrapper) ConfigSave() error {
 	return this.Config.configWrite(this.DConfig + string(os.PathSeparator) + "config.json")
+}
+
+func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) error {
+	pattern := this.DHtdocs + string(os.PathSeparator) + strings.Join([]string{"products", "images", product_id, filename}, string(os.PathSeparator))
+	if files, err := filepath.Glob(pattern); err != nil {
+		return err
+	} else {
+		for _, file := range files {
+			if err := os.Remove(file); err != nil {
+				return errors.New(fmt.Sprintf("[upload delete] Thumbnail file (%s) delete error: %s", file, err.Error()))
+			}
+		}
+	}
+	return nil
 }

@@ -2,7 +2,6 @@ package modules
 
 import (
 	"os"
-	"path/filepath"
 
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -41,18 +40,15 @@ func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 				return err
 			}
 
+			// Delete thumbnails
+			if err := wrap.RemoveProductImageThumbnails(pf_id, "thumb-*-"+pf_file); err != nil {
+				return err
+			}
+
 			// Delete file
 			target_file_full := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + pf_id + string(os.PathSeparator) + pf_file
-			os.Remove(target_file_full)
-
-			// Delete thumbnails
-			pattern := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + pf_id + string(os.PathSeparator) + "thumb-*-" + pf_file
-			if files, err := filepath.Glob(pattern); err == nil {
-				for _, file := range files {
-					if err := os.Remove(file); err != nil {
-						wrap.LogError("[upload delete] Thumbnail file (%s) delete error: %s", file, err.Error())
-					}
-				}
+			if err := os.Remove(target_file_full); err != nil {
+				return err
 			}
 
 			return nil
