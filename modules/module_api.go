@@ -29,11 +29,23 @@ func (this *Modules) RegisterModule_Api() *Module {
 					return
 				}
 
-				// XML
-				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-				wrap.W.Header().Set("Content-Type", "text/xml; charset=utf-8")
-				wrap.W.WriteHeader(http.StatusOK)
-				wrap.W.Write([]byte(this.api_GenerateXml(wrap)))
+				target_file := wrap.DHtdocs + string(os.PathSeparator) + "products.xml"
+				if !utils.IsFileExists(target_file) {
+					// XML
+					data := []byte(this.api_GenerateXml(wrap))
+
+					// Save file
+					if file, err := os.Create(target_file); err == nil {
+						file.Write(data)
+					}
+
+					wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+					wrap.W.Header().Set("Content-Type", "text/xml; charset=utf-8")
+					wrap.W.WriteHeader(http.StatusOK)
+					wrap.W.Write(data)
+				} else {
+					http.ServeFile(wrap.W, wrap.R, target_file)
+				}
 			} else {
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.WriteHeader(http.StatusNotFound)

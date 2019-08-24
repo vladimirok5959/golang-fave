@@ -27,6 +27,7 @@
 /hosts/*
 !/hosts/localhost
 /hosts/*/htdocs/products
+/hosts/*/htdocs/products.xml
 
 # Default host mysql config file
 /hosts/localhost/config/mysql.json
