@@ -183,6 +183,10 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+
+			// Delete products XML cache
+			wrap.RemoveProductXmlCacheFile()
+
 			wrap.Write(`window.location='/cp/shop/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
@@ -294,6 +298,10 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+
+			// Delete products XML cache
+			wrap.RemoveProductXmlCacheFile()
+
 			wrap.Write(`window.location='/cp/shop/modify/` + pf_id + `/';`)
 		}
 	})

@@ -76,6 +76,9 @@ func (this *Modules) RegisterAction_ShopAttributesDelete() *Action {
 			return
 		}
 
+		// Delete products XML cache
+		wrap.RemoveProductXmlCacheFile()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

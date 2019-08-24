@@ -223,12 +223,20 @@ func (this *Modules) RegisterAction_ShopCategoriesModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+
+			// Delete products XML cache
+			wrap.RemoveProductXmlCacheFile()
+
 			wrap.Write(`window.location='/cp/shop/categories-modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := this.shop_ActionCategoryUpdate(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
 				wrap.MsgError(err.Error())
 				return
 			}
+
+			// Delete products XML cache
+			wrap.RemoveProductXmlCacheFile()
+
 			wrap.Write(`window.location='/cp/shop/categories-modify/` + pf_id + `/';`)
 		}
 	})
