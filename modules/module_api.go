@@ -72,7 +72,7 @@ func (this *Modules) RegisterModule_Api() *Module {
 			wrap.W.Write([]byte("Fave engine API mount point!"))
 		} else {
 			// User error 404 page
-			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+			wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 			return
 		}
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
@@ -116,7 +116,7 @@ func (this *Modules) RegisterModule_ApiProducts() *Module {
 				original_file := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + wrap.UrlArgs[2] + string(os.PathSeparator) + file_name
 				if !utils.IsFileExists(original_file) {
 					// User error 404 page
-					wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+					wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 					return
 				}
 
@@ -161,7 +161,7 @@ func (this *Modules) RegisterModule_ApiProducts() *Module {
 
 					if !ok {
 						// User error 404 page
-						wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+						wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 						return
 					}
 
@@ -178,12 +178,12 @@ func (this *Modules) RegisterModule_ApiProducts() *Module {
 				}
 			} else {
 				// User error 404 page
-				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 				return
 			}
 		} else {
 			// User error 404 page
-			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+			wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 			return
 		}
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {

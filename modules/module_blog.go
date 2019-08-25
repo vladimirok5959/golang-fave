@@ -35,6 +35,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 		if len(wrap.UrlArgs) == 3 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] == "category" && wrap.UrlArgs[2] != "" {
 			// Blog category
 			row := &utils.MySql_blog_category{}
+			rou := &utils.MySql_user{}
 			err := wrap.DB.QueryRow(`
 				SELECT
 					main.id,
@@ -44,7 +45,13 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					main.lft,
 					main.rgt,
 					main.depth,
-					parent.id AS parent_id
+					parent.id AS parent_id,
+					users.id,
+					users.first_name,
+					users.last_name,
+					users.email,
+					users.admin,
+					users.active
 				FROM
 					(
 						SELECT
@@ -87,6 +94,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					parent.depth = main.depth AND
 					main.lft > parent.lft AND
 					main.rgt < parent.rgt
+					LEFT JOIN users ON users.id = main.user
 				WHERE
 					main.id > 1 AND
 					main.alias = ?
@@ -103,6 +111,12 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				&row.A_rgt,
 				&row.A_depth,
 				&row.A_parent,
+				&rou.A_id,
+				&rou.A_first_name,
+				&rou.A_last_name,
+				&rou.A_email,
+				&rou.A_admin,
+				&rou.A_active,
 			)
 
 			if err != nil && err != wrapper.ErrNoRows {
@@ -111,7 +125,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				return
 			} else if err == wrapper.ErrNoRows {
 				// User error 404 page
-				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 				return
 			}
 
@@ -122,27 +136,35 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			}
 
 			// Render template
-			wrap.RenderFrontEnd("blog-category", fetdata.New(wrap, row, false), http.StatusOK)
+			wrap.RenderFrontEnd("blog-category", fetdata.New(wrap, false, row, rou), http.StatusOK)
 			return
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] != "" {
 			// Blog post
 			row := &utils.MySql_blog_post{}
+			rou := &utils.MySql_user{}
 			err := wrap.DB.QueryRow(`
 				SELECT
-					id,
-					user,
-					name,
-					alias,
-					category,
-					briefly,
-					content,
-					UNIX_TIMESTAMP(datetime) as datetime,
-					active
+					blog_posts.id,
+					blog_posts.user,
+					blog_posts.name,
+					blog_posts.alias,
+					blog_posts.category,
+					blog_posts.briefly,
+					blog_posts.content,
+					UNIX_TIMESTAMP(blog_posts.datetime) as datetime,
+					blog_posts.active,
+					users.id,
+					users.first_name,
+					users.last_name,
+					users.email,
+					users.admin,
+					users.active
 				FROM
 					blog_posts
+					LEFT JOIN users ON users.id = blog_posts.user
 				WHERE
-					active = 1 and
-					alias = ?
+					blog_posts.active = 1 and
+					blog_posts.alias = ?
 				LIMIT 1;`,
 				wrap.UrlArgs[1],
 			).Scan(
@@ -155,6 +177,12 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				&row.A_content,
 				&row.A_datetime,
 				&row.A_active,
+				&rou.A_id,
+				&rou.A_first_name,
+				&rou.A_last_name,
+				&rou.A_email,
+				&rou.A_admin,
+				&rou.A_active,
 			)
 
 			if err != nil && err != wrapper.ErrNoRows {
@@ -163,7 +191,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				return
 			} else if err == wrapper.ErrNoRows {
 				// User error 404 page
-				wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+				wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 				return
 			}
 
@@ -174,7 +202,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			}
 
 			// Render template
-			wrap.RenderFrontEnd("blog-post", fetdata.New(wrap, row, false), http.StatusOK)
+			wrap.RenderFrontEnd("blog-post", fetdata.New(wrap, false, row, rou), http.StatusOK)
 			return
 		} else if len(wrap.UrlArgs) == 1 && wrap.UrlArgs[0] == "blog" {
 			// Blog
@@ -186,16 +214,16 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			}
 
 			// Render template
-			wrap.RenderFrontEnd("blog", fetdata.New(wrap, nil, false), http.StatusOK)
+			wrap.RenderFrontEnd("blog", fetdata.New(wrap, false, nil, nil), http.StatusOK)
 			return
 		} else if (*wrap.Config).Engine.MainModule == 1 {
 			// Render template
-			wrap.RenderFrontEnd("blog", fetdata.New(wrap, nil, false), http.StatusOK)
+			wrap.RenderFrontEnd("blog", fetdata.New(wrap, false, nil, nil), http.StatusOK)
 			return
 		}
 
 		// User error 404 page
-		wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+		wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""

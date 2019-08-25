@@ -17,24 +17,29 @@ type FERData struct {
 	Shop *Shop
 }
 
-func New(wrap *wrapper.Wrapper, drow interface{}, is404 bool) *FERData {
+func New(wrap *wrapper.Wrapper, is404 bool, drow interface{}, duser *utils.MySql_user) *FERData {
 	var d_Page *Page
 	var d_Blog *Blog
 	var d_Shop *Shop
 
+	var preUser *User
+	if duser != nil {
+		preUser = &User{wrap: wrap, object: duser}
+	}
+
 	if wrap.CurrModule == "index" {
 		if o, ok := drow.(*utils.MySql_page); ok {
-			d_Page = &Page{wrap: wrap, object: o}
+			d_Page = &Page{wrap: wrap, object: o, user: preUser}
 		}
 	} else if wrap.CurrModule == "blog" {
 		if len(wrap.UrlArgs) == 3 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] == "category" && wrap.UrlArgs[2] != "" {
 			if o, ok := drow.(*utils.MySql_blog_category); ok {
-				d_Blog = &Blog{wrap: wrap, category: (&BlogCategory{wrap: wrap, object: o}).load(nil)}
+				d_Blog = &Blog{wrap: wrap, category: (&BlogCategory{wrap: wrap, object: o, user: preUser}).load(nil)}
 				d_Blog.load()
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "blog" && wrap.UrlArgs[1] != "" {
 			if o, ok := drow.(*utils.MySql_blog_post); ok {
-				d_Blog = &Blog{wrap: wrap, post: (&BlogPost{wrap: wrap, object: o}).load()}
+				d_Blog = &Blog{wrap: wrap, post: (&BlogPost{wrap: wrap, object: o, user: preUser}).load()}
 			}
 		} else {
 			d_Blog = &Blog{wrap: wrap}
@@ -43,12 +48,12 @@ func New(wrap *wrapper.Wrapper, drow interface{}, is404 bool) *FERData {
 	} else if wrap.CurrModule == "shop" {
 		if len(wrap.UrlArgs) == 3 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] == "category" && wrap.UrlArgs[2] != "" {
 			if o, ok := drow.(*utils.MySql_shop_category); ok {
-				d_Shop = &Shop{wrap: wrap, category: (&ShopCategory{wrap: wrap, object: o}).load(nil)}
+				d_Shop = &Shop{wrap: wrap, category: (&ShopCategory{wrap: wrap, object: o, user: preUser}).load(nil)}
 				d_Shop.load()
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] != "" {
 			if o, ok := drow.(*utils.MySql_shop_product); ok {
-				d_Shop = &Shop{wrap: wrap, product: (&ShopProduct{wrap: wrap, object: o}).load()}
+				d_Shop = &Shop{wrap: wrap, product: (&ShopProduct{wrap: wrap, object: o, user: preUser}).load()}
 			}
 		} else {
 			d_Shop = &Shop{wrap: wrap}

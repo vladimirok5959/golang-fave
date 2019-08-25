@@ -27,23 +27,31 @@ func (this *Modules) RegisterModule_Index() *Module {
 	}, func(wrap *wrapper.Wrapper) {
 		// Front-end
 		row := &utils.MySql_page{}
+		rou := &utils.MySql_user{}
 		err := wrap.DB.QueryRow(`
 			SELECT
-				id,
-				user,
-				name,
-				alias,
-				content,
-				meta_title,
-				meta_keywords,
-				meta_description,
-				UNIX_TIMESTAMP(datetime) as datetime,
-				active
+				pages.id,
+				pages.user,
+				pages.name,
+				pages.alias,
+				pages.content,
+				pages.meta_title,
+				pages.meta_keywords,
+				pages.meta_description,
+				UNIX_TIMESTAMP(pages.datetime) as datetime,
+				pages.active,
+				users.id,
+				users.first_name,
+				users.last_name,
+				users.email,
+				users.admin,
+				users.active
 			FROM
 				pages
+				LEFT JOIN users ON users.id = pages.user
 			WHERE
-				active = 1 and
-				alias = ?
+				pages.active = 1 and
+				pages.alias = ?
 			LIMIT 1;`,
 			wrap.R.URL.Path,
 		).Scan(
@@ -57,6 +65,12 @@ func (this *Modules) RegisterModule_Index() *Module {
 			&row.A_meta_description,
 			&row.A_datetime,
 			&row.A_active,
+			&rou.A_id,
+			&rou.A_first_name,
+			&rou.A_last_name,
+			&rou.A_email,
+			&rou.A_admin,
+			&rou.A_active,
 		)
 		if err != nil && err != wrapper.ErrNoRows {
 			// System error 500
@@ -64,7 +78,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 			return
 		} else if err == wrapper.ErrNoRows {
 			// User error 404 page
-			wrap.RenderFrontEnd("404", fetdata.New(wrap, nil, true), http.StatusNotFound)
+			wrap.RenderFrontEnd("404", fetdata.New(wrap, true, nil, nil), http.StatusNotFound)
 			return
 		}
 
@@ -75,7 +89,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		}
 
 		// Render template
-		wrap.RenderFrontEnd(tname, fetdata.New(wrap, row, false), http.StatusOK)
+		wrap.RenderFrontEnd(tname, fetdata.New(wrap, false, row, rou), http.StatusOK)
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""
