@@ -106,6 +106,10 @@ func main() {
 
 		// Mounted assets
 		if res.Response(w, r, func(w http.ResponseWriter, r *http.Request, i *resource.OneResource) {
+			// ---
+			// fmt.Printf("%+v\n", i)
+			// fmt.Printf("%s\n", i.Path)
+			// ---
 			w.Header().Set("Cache-Control", "public, max-age=31536000")
 			if consts.ParamDebug && i.Path == "assets/cp/scripts.js" {
 				w.Write([]byte("window.fave_debug=true;"))
