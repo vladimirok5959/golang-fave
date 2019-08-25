@@ -11,12 +11,11 @@ type OneResource struct {
 }
 
 type Resource struct {
-	maxurl int
-	list   map[string]OneResource
+	list map[string]OneResource
 }
 
 func New() *Resource {
-	r := Resource{maxurl: 0}
+	r := Resource{}
 	r.list = map[string]OneResource{}
 	return &r
 }
@@ -28,7 +27,6 @@ func (this *Resource) Add(path string, ctype string, bytes []byte) {
 	}
 
 	// Add to resources list
-	this.maxurl = len(path)
 	this.list[path] = OneResource{
 		Path:  path,
 		Ctype: ctype,
@@ -38,7 +36,7 @@ func (this *Resource) Add(path string, ctype string, bytes []byte) {
 
 func (this *Resource) Response(w http.ResponseWriter, r *http.Request, before func(w http.ResponseWriter, r *http.Request, i *OneResource), after func(w http.ResponseWriter, r *http.Request, i *OneResource)) bool {
 	// Do not process if this is not necessary
-	if len(r.URL.Path) <= 1 || len(r.URL.Path)-1 > this.maxurl {
+	if len(r.URL.Path) <= 1 {
 		return false
 	}
 
