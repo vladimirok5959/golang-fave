@@ -52,6 +52,7 @@ func (this *Blog) load() *Blog {
 			blog_posts.user,
 			blog_posts.name,
 			blog_posts.alias,
+			blog_posts.category,
 			blog_posts.briefly,
 			blog_posts.content,
 			UNIX_TIMESTAMP(blog_posts.datetime) as datetime,
@@ -61,10 +62,75 @@ func (this *Blog) load() *Blog {
 			users.last_name,
 			users.email,
 			users.admin,
-			users.active
+			users.active,
+			cats.id,
+			cats.user,
+			cats.name,
+			cats.alias,
+			cats.lft,
+			cats.rgt,
+			cats.depth,
+			cats.parent_id
 		FROM
 			blog_posts
 			LEFT JOIN users ON users.id = blog_posts.user
+			LEFT JOIN (
+				SELECT
+					main.id,
+					main.user,
+					main.name,
+					main.alias,
+					main.lft,
+					main.rgt,
+					main.depth,
+					parent.id AS parent_id
+				FROM
+					(
+						SELECT
+							node.id,
+							node.user,
+							node.name,
+							node.alias,
+							node.lft,
+							node.rgt,
+							(COUNT(parent.id) - 1) AS depth
+						FROM
+							blog_cats AS node,
+							blog_cats AS parent
+						WHERE
+							node.lft BETWEEN parent.lft AND parent.rgt
+						GROUP BY
+							node.id
+						ORDER BY
+							node.lft ASC
+					) AS main
+					LEFT JOIN (
+						SELECT
+							node.id,
+							node.user,
+							node.name,
+							node.alias,
+							node.lft,
+							node.rgt,
+							(COUNT(parent.id) - 0) AS depth
+						FROM
+							blog_cats AS node,
+							blog_cats AS parent
+						WHERE
+							node.lft BETWEEN parent.lft AND parent.rgt
+						GROUP BY
+							node.id
+						ORDER BY
+							node.lft ASC
+					) AS parent ON
+					parent.depth = main.depth AND
+					main.lft > parent.lft AND
+					main.rgt < parent.rgt
+				WHERE
+					main.id > 1
+				ORDER BY
+					main.lft ASC
+			) AS cats ON cats.id = blog_posts.category
 		WHERE
 			blog_posts.active = 1
 		ORDER BY
@@ -124,6 +190,7 @@ func (this *Blog) load() *Blog {
 				blog_posts.user,
 				blog_posts.name,
 				blog_posts.alias,
+				blog_posts.category,
 				blog_posts.briefly,
 				blog_posts.content,
 				UNIX_TIMESTAMP(blog_posts.datetime) AS datetime,
@@ -133,16 +200,82 @@ func (this *Blog) load() *Blog {
 				users.last_name,
 				users.email,
 				users.admin,
-				users.active
+				users.active,
+				cats.id,
+				cats.user,
+				cats.name,
+				cats.alias,
+				cats.lft,
+				cats.rgt,
+				cats.depth,
+				cats.parent_id
 			FROM
 				blog_posts
 				LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
 				LEFT JOIN users ON users.id = blog_posts.user
+				LEFT JOIN (
+					SELECT
+						main.id,
+						main.user,
+						main.name,
+						main.alias,
+						main.lft,
+						main.rgt,
+						main.depth,
+						parent.id AS parent_id
+					FROM
+						(
+							SELECT
+								node.id,
+								node.user,
+								node.name,
+								node.alias,
+								node.lft,
+								node.rgt,
+								(COUNT(parent.id) - 1) AS depth
+							FROM
+								blog_cats AS node,
+								blog_cats AS parent
+							WHERE
+								node.lft BETWEEN parent.lft AND parent.rgt
+							GROUP BY
+								node.id
+							ORDER BY
+								node.lft ASC
+						) AS main
+						LEFT JOIN (
+							SELECT
+								node.id,
+								node.user,
+								node.name,
+								node.alias,
+								node.lft,
+								node.rgt,
+								(COUNT(parent.id) - 0) AS depth
+							FROM
+								blog_cats AS node,
+								blog_cats AS parent
+							WHERE
+								node.lft BETWEEN parent.lft AND parent.rgt
+							GROUP BY
+								node.id
+							ORDER BY
+								node.lft ASC
+						) AS parent ON
+						parent.depth = main.depth AND
+						main.lft > parent.lft AND
+						main.rgt < parent.rgt
+					WHERE
+						main.id > 1
+					ORDER BY
+						main.lft ASC
+				) AS cats ON cats.id = blog_posts.category
 			WHERE
 				blog_posts.active = 1 AND
 				blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 			GROUP BY
-				blog_posts.id
+				blog_posts.id,
+				cats.parent_id
 			ORDER BY
 				blog_posts.id DESC
 			LIMIT ?, ?;
@@ -163,11 +296,13 @@ func (this *Blog) load() *Blog {
 			for rows.Next() {
 				rp := utils.MySql_blog_post{}
 				ru := utils.MySql_user{}
+				ro := utils.MySql_blog_category{}
 				if err := rows.Scan(
 					&rp.A_id,
 					&rp.A_user,
 					&rp.A_name,
 					&rp.A_alias,
+					&rp.A_category,
 					&rp.A_briefly,
 					&rp.A_content,
 					&rp.A_datetime,
@@ -178,11 +313,20 @@ func (this *Blog) load() *Blog {
 					&ru.A_email,
 					&ru.A_admin,
 					&ru.A_active,
+					&ro.A_id,
+					&ro.A_user,
+					&ro.A_name,
+					&ro.A_alias,
+					&ro.A_lft,
+					&ro.A_rgt,
+					&ro.A_depth,
+					&ro.A_parent,
 				); err == nil {
 					this.posts = append(this.posts, &BlogPost{
-						wrap:   this.wrap,
-						object: &rp,
-						user:   &User{wrap: this.wrap, object: &ru},
+						wrap:     this.wrap,
+						object:   &rp,
+						user:     &User{wrap: this.wrap, object: &ru},
+						category: &BlogCategory{wrap: this.wrap, object: &ro},
 					})
 				}
 			}

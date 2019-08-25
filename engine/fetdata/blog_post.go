@@ -12,7 +12,8 @@ type BlogPost struct {
 	wrap   *wrapper.Wrapper
 	object *utils.MySql_blog_post
 
-	user *User
+	user     *User
+	category *BlogCategory
 }
 
 func (this *BlogPost) load() *BlogPost {
@@ -50,6 +51,18 @@ func (this *BlogPost) Alias() string {
 		return ""
 	}
 	return this.object.A_alias
+}
+
+func (this *BlogPost) Category() *BlogCategory {
+	if this == nil {
+		return nil
+	}
+	if this.category != nil {
+		return this.category
+	}
+	this.category = (&BlogCategory{wrap: this.wrap}).load(nil)
+	this.category.loadById(this.object.A_category)
+	return this.category
 }
 
 func (this *BlogPost) Briefly() template.HTML {
