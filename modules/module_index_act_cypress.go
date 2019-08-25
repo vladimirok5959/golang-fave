@@ -32,6 +32,7 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 
 		os.Remove(wrap.DConfig + string(os.PathSeparator) + "mysql.json")
 		os.Remove(wrap.DConfig + string(os.PathSeparator) + "config.json")
+		wrap.RemoveProductImageThumbnails("*", "*")
 
 		_, _ = db.Exec(
 			`DROP TABLE
