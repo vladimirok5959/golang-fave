@@ -5,7 +5,7 @@ import (
 )
 
 const AssetsPath = "assets"
-const AssetsVersion = "41"
+const AssetsVersion = "42"
 const DirIndexFile = "index.html"
 
 // Bootstrap resources
@@ -31,6 +31,10 @@ const AssetsCpWysiwygPellJs = AssetsPath + "/cp/wysiwyg/pell.js"
 const AssetsCpCodeMirrorCss = AssetsPath + "/cp/tmpl-editor/codemirror.css"
 const AssetsCpCodeMirrorJs = AssetsPath + "/cp/tmpl-editor/codemirror.js"
 
+// LightGallery for products
+const AssetsLightGalleryCss = AssetsPath + "/lightgallery.css"
+const AssetsLightGalleryJs = AssetsPath + "/lightgallery.js"
+
 // Make global for other packages
 var ParamDebug bool
 var ParamHost string
@@ -46,24 +50,26 @@ type BreadCrumb struct {
 
 // Template data
 type TmplSystem struct {
-	CpModule             string
 	CpSubModule          string
 	InfoVersion          string
 	PathCssBootstrap     string
 	PathCssCpCodeMirror  string
 	PathCssCpStyles      string
 	PathCssCpWysiwygPell string
+	PathCssLightGallery  string
 	PathCssStyles        string
+	PathIcoFav           string
 	PathJsBootstrap      string
 	PathJsCpCodeMirror   string
 	PathJsCpScripts      string
 	PathJsCpWysiwygPell  string
 	PathJsJquery         string
+	PathJsLightGallery   string
 	PathJsPopper         string
 	PathSvgLogo          string
 	PathThemeScripts     string
 	PathThemeStyles      string
-	PathIcoFav           string
+	CpModule             string
 }
 
 type TmplError struct {
@@ -76,7 +82,6 @@ type TmplData struct {
 }
 
 type TmplDataCpBase struct {
-	BodyClasses        string
 	Caption            string
 	Content            template.HTML
 	ModuleCurrentAlias string
@@ -84,11 +89,12 @@ type TmplDataCpBase struct {
 	NavBarModulesSys   template.HTML
 	SidebarLeft        template.HTML
 	SidebarRight       template.HTML
+	Title              string
 	UserAvatarLink     string
 	UserEmail          string
 	UserFirstName      string
 	UserId             int
 	UserLastName       string
 	UserPassword       string
-	Title              string
+	BodyClasses        string
 }

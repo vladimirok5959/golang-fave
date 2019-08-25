@@ -10,6 +10,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
+		<link rel="stylesheet" href="{{$.System.PathCssLightGallery}}">
 
 		<title>
 			{{if not (eq $.Data.Module "404")}}
@@ -41,7 +42,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 
 		<!-- Template CSS file from template folder -->
-		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=2">
+		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=3">
 	</head>
 	<body class="fixed-top-bar">
 		<div id="wrap">

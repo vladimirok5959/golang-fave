@@ -123,24 +123,26 @@ func GetAssetsUrl(filename string) string {
 
 func GetTmplSystemData(cpmod, cpsubmod string) consts.TmplSystem {
 	return consts.TmplSystem{
-		CpModule:             cpmod,
 		CpSubModule:          cpsubmod,
 		InfoVersion:          consts.ServerVersion,
 		PathCssBootstrap:     GetAssetsUrl(consts.AssetsBootstrapCss),
 		PathCssCpCodeMirror:  GetAssetsUrl(consts.AssetsCpCodeMirrorCss),
 		PathCssCpStyles:      GetAssetsUrl(consts.AssetsCpStylesCss),
 		PathCssCpWysiwygPell: GetAssetsUrl(consts.AssetsCpWysiwygPellCss),
+		PathCssLightGallery:  GetAssetsUrl(consts.AssetsLightGalleryCss),
 		PathCssStyles:        GetAssetsUrl(consts.AssetsSysStylesCss),
+		PathIcoFav:           GetAssetsUrl(consts.AssetsSysFaveIco),
 		PathJsBootstrap:      GetAssetsUrl(consts.AssetsBootstrapJs),
 		PathJsCpCodeMirror:   GetAssetsUrl(consts.AssetsCpCodeMirrorJs),
 		PathJsCpScripts:      GetAssetsUrl(consts.AssetsCpScriptsJs),
 		PathJsCpWysiwygPell:  GetAssetsUrl(consts.AssetsCpWysiwygPellJs),
 		PathJsJquery:         GetAssetsUrl(consts.AssetsJqueryJs),
+		PathJsLightGallery:   GetAssetsUrl(consts.AssetsLightGalleryJs),
 		PathJsPopper:         GetAssetsUrl(consts.AssetsPopperJs),
 		PathSvgLogo:          GetAssetsUrl(consts.AssetsSysLogoSvg),
 		PathThemeScripts:     "/assets/theme/scripts.js",
 		PathThemeStyles:      "/assets/theme/styles.css",
-		PathIcoFav:           GetAssetsUrl(consts.AssetsSysFaveIco),
+		CpModule:             cpmod,
 	}
 }
 

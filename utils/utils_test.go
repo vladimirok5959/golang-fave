@@ -145,6 +145,8 @@ func TestGetTmplSystemData(t *testing.T) {
 		PathThemeScripts:     "/assets/theme/scripts.js",
 		PathThemeStyles:      "/assets/theme/styles.css",
 		PathIcoFav:           "/assets/sys/fave.ico?v=" + consts.AssetsVersion,
+		PathCssLightGallery:  "/assets/lightgallery.css?v=" + consts.AssetsVersion,
+		PathJsLightGallery:   "/assets/lightgallery.js?v=" + consts.AssetsVersion,
 	})
 }
 
