@@ -18,8 +18,8 @@ context('Module blog posts', () => {
   it('should render data form', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/add/');
-    cy.get('.data-form.blog-add input[type=text]').should('have.length', 3);
-    cy.get('.data-form.blog-add select').should('have.length', 1);
+    cy.get('.data-form.blog-add input[type=text]').should('have.length', 4);
+    cy.get('.data-form.blog-add select').should('have.length', 2);
     cy.get('.data-form.blog-add textarea').should('have.length', 2);
     cy.get('.data-form.blog-add input[type=checkbox]').should('have.length', 1);
     cy.logoutCMS();
@@ -29,6 +29,8 @@ context('Module blog posts', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/blog/add/');
     cy.get('.data-form.blog-add input[name=name]').clear().type('Some test post');
+    cy.get('.data-form.blog-add select#lbl_category').parent().find('button').click();
+    cy.get('.data-form.blog-add select#lbl_category').parent().find('ul.dropdown-menu').contains('— — Natural').parent().click();
     cy.get('.data-form.blog-add select#lbl_cats').parent().find('button').click();
     cy.get('.data-form.blog-add select#lbl_cats').parent().find('ul.dropdown-menu').contains('Health and food').parent().click();
     cy.get('.data-form.blog-add select#lbl_cats').parent().find('ul.dropdown-menu').contains('— — Natural').parent().click();
@@ -56,6 +58,7 @@ context('Module blog posts', () => {
     cy.contains('table.data-table tbody tr td a', 'Some test post').click();
     cy.get('.data-form.blog-modify input[name=name]').should('have.value', 'Some test post');
     cy.get('.data-form.blog-modify input[name=alias]').should('have.value', 'some-test-post');
+    cy.get('.data-form.blog-modify select#lbl_category').should('have.value', '7');
     cy.get('.data-form.blog-modify select#lbl_cats').invoke('val').should('deep.equal', ['2', '7']);
     cy.get('.data-form.blog-modify textarea[name=briefly]').parent().find('.pell-content').should(($editor) => {
       expect($editor).to.have.text('Some brief content');
