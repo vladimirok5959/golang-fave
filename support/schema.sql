@@ -17,6 +17,7 @@ CREATE TABLE blog_posts (
 	user int(11) NOT NULL COMMENT 'User id',
 	name varchar(255) NOT NULL COMMENT 'Post name',
 	alias varchar(255) NOT NULL COMMENT 'Post alias',
+	category int(11) NOT NULL,
 	briefly text NOT NULL COMMENT 'Post brief content',
 	content text NOT NULL COMMENT 'Post content',
 	datetime datetime NOT NULL COMMENT 'Creation date/time',
@@ -117,6 +118,7 @@ ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);
 ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);
 ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);
 ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);
+ALTER TABLE blog_posts ADD KEY FK_blog_posts_category (category);
 ALTER TABLE pages ADD UNIQUE KEY alias (alias);
 ALTER TABLE pages ADD KEY alias_active (alias,active) USING BTREE;
 ALTER TABLE pages ADD KEY FK_pages_user (user);
@@ -146,6 +148,7 @@ ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id FOREIG
 ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id FOREIGN KEY (category_id) REFERENCES blog_cats (id) ON DELETE RESTRICT;
 ALTER TABLE blog_cats ADD CONSTRAINT FK_blog_cats_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_category FOREIGN KEY (category) REFERENCES blog_cats (id) ON DELETE RESTRICT;
 ALTER TABLE pages ADD CONSTRAINT FK_pages_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id FOREIGN KEY (category_id) REFERENCES shop_cats (id) ON DELETE RESTRICT;

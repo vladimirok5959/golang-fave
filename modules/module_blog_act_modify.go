@@ -17,6 +17,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		pf_id := wrap.R.FormValue("id")
 		pf_name := wrap.R.FormValue("name")
 		pf_alias := wrap.R.FormValue("alias")
+		pf_category := wrap.R.FormValue("category")
 		pf_briefly := wrap.R.FormValue("briefly")
 		pf_content := wrap.R.FormValue("content")
 		pf_active := wrap.R.FormValue("active")
@@ -26,6 +27,11 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		}
 
 		if !utils.IsNumeric(pf_id) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		if !utils.IsNumeric(pf_category) {
 			wrap.MsgError(`Inner system error`)
 			return
 		}
@@ -44,6 +50,11 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 			return
 		}
 
+		// Default is ROOT
+		if pf_category == "0" {
+			pf_category = "1"
+		}
+
 		if pf_id == "0" {
 			var lastID int64 = 0
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
@@ -53,6 +64,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 						user = ?,
 						name = ?,
 						alias = ?,
+						category = ?,
 						briefly = ?,
 						content = ?,
 						datetime = ?,
@@ -61,6 +73,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					wrap.User.A_id,
 					pf_name,
 					pf_alias,
+					utils.StrToInt(pf_category),
 					pf_briefly,
 					pf_content,
 					utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
@@ -133,6 +146,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					`UPDATE blog_posts SET
 						name = ?,
 						alias = ?,
+						category = ?,
 						briefly = ?,
 						content = ?,
 						active = ?
@@ -141,6 +155,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					;`,
 					pf_name,
 					pf_alias,
+					utils.StrToInt(pf_category),
 					pf_briefly,
 					pf_content,
 					utils.StrToInt(pf_active),

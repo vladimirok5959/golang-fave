@@ -133,6 +133,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					user,
 					name,
 					alias,
+					category,
 					briefly,
 					content,
 					UNIX_TIMESTAMP(datetime) as datetime,
@@ -149,6 +150,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				&row.A_user,
 				&row.A_name,
 				&row.A_alias,
+				&row.A_category,
 				&row.A_briefly,
 				&row.A_content,
 				&row.A_datetime,
@@ -369,6 +371,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				A_user:     0,
 				A_name:     "",
 				A_alias:    "",
+				A_category: 0,
 				A_content:  "",
 				A_datetime: 0,
 				A_active:   0,
@@ -387,6 +390,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						user,
 						name,
 						alias,
+						category,
 						briefly,
 						content,
 						active
@@ -401,6 +405,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					&data.A_user,
 					&data.A_name,
 					&data.A_alias,
+					&data.A_category,
 					&data.A_briefly,
 					&data.A_content,
 					&data.A_active,
@@ -465,11 +470,34 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				},
 				{
 					Kind:    builder.DFKText,
+					Caption: "Category",
+					Name:    "category",
+					Value:   "0",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group n4">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_category">Category</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<select class="selectpicker form-control" id="lbl_category" name="category" data-live-search="true">` +
+							`<option title="Nothing selected" value="0">&mdash;</option>` +
+							this.blog_GetCategorySelectOptions(wrap, 0, data.A_category, []int{}) +
+							`</select>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
+				},
+				{
+					Kind:    builder.DFKText,
 					Caption: "Categories",
 					Name:    "cats",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n4">` +
+						return `<div class="form-group n5">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label for="lbl_parent">Categories</label>` +

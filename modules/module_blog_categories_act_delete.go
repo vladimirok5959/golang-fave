@@ -26,6 +26,14 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 			if _, err := tx.Exec("SELECT category_id FROM blog_cat_post_rel WHERE category_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
+			if _, err := tx.Exec("SELECT id FROM blog_posts WHERE category = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				return err
+			}
+
+			// Set root category
+			if _, err := tx.Exec("UPDATE blog_posts SET category = 1 WHERE category = ?;", utils.StrToInt(pf_id)); err != nil {
+				return err
+			}
 
 			// Process
 			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE category_id = ?;", utils.StrToInt(pf_id)); err != nil {
