@@ -888,7 +888,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					Name:    "vendor",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n3">` +
+						return `<div class="form-group n5">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label for="lbl_vendor">Vendor/Count</label>` +
@@ -916,7 +916,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					Name:    "category",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n2">` +
+						return `<div class="form-group n6">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label for="lbl_category">Category</label>` +
@@ -939,7 +939,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					Name:    "cats",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n5">` +
+						return `<div class="form-group n7">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label for="lbl_cats">Categories</label>` +
@@ -961,7 +961,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					Name:    "",
 					Value:   "",
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group n6">` +
+						return `<div class="form-group n8">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label>Attributes</label>` +
@@ -1005,7 +1005,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						if data.A_id == 0 {
 							return ``
 						}
-						return `<div class="form-group n6">` +
+						return `<div class="form-group n11">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label>Product images</label>` +
