@@ -166,6 +166,24 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 									<li class="breadcrumb-item">{{$.Data.Blog.Category.Name}}</li>
 								{{end}}
 								{{if eq $.Data.Module "blog-post"}}
+									{{if $.Data.Blog.Post.Category.Id}}
+										{{if $.Data.Blog.Post.Category.Parent.Parent.Parent.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Blog.Post.Category.Parent.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Blog.Post.Category.Parent.Parent.Parent.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Blog.Post.Category.Parent.Parent.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Blog.Post.Category.Parent.Parent.Parent.Parent.Permalink}}">{{$.Data.Blog.Post.Category.Parent.Parent.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Blog.Post.Category.Parent.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Blog.Post.Category.Parent.Parent.Parent.Permalink}}">{{$.Data.Blog.Post.Category.Parent.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Blog.Post.Category.Parent.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Blog.Post.Category.Parent.Parent.Permalink}}">{{$.Data.Blog.Post.Category.Parent.Parent.Name}}</a></li>
+										{{end}}
+										{{if $.Data.Blog.Post.Category.Parent}}
+											<li class="breadcrumb-item"><a href="{{$.Data.Blog.Post.Category.Parent.Permalink}}">{{$.Data.Blog.Post.Category.Parent.Name}}</a></li>
+										{{end}}
+										<li class="breadcrumb-item"><a href="{{$.Data.Blog.Post.Category.Permalink}}">{{$.Data.Blog.Post.Category.Name}}</a></li>
+									{{end}}
 									<li class="breadcrumb-item active">{{$.Data.Blog.Post.Name}}</li>
 								{{end}}
 							</ol>
