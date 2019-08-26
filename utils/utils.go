@@ -416,3 +416,27 @@ func ArrayOfStringToArrayOfInt(arr []string) []int {
 	}
 	return res
 }
+
+func TemplateAdditionalFuncs() template.FuncMap {
+	return template.FuncMap{
+		"plus": func(a, b int) int {
+			return a + b
+		},
+		"minus": func(a, b int) int {
+			return a - b
+		},
+		"multiply": func(a, b int) int {
+			return a * b
+		},
+		"divide": func(a, b int) int {
+			return a / b
+		},
+		"repeat": func(a string, n int) template.HTML {
+			out := ""
+			for i := 1; i <= n; i++ {
+				out += a
+			}
+			return template.HTML(out)
+		},
+	}
+}

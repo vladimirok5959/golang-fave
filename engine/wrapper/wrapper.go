@@ -203,28 +203,7 @@ func (this *Wrapper) RenderToString(tcont []byte, data interface{}) string {
 }
 
 func (this *Wrapper) RenderFrontEnd(tname string, data interface{}, status int) {
-	tmplFuncs := template.FuncMap{
-		"plus": func(a, b int) int {
-			return a + b
-		},
-		"minus": func(a, b int) int {
-			return a - b
-		},
-		"multiply": func(a, b int) int {
-			return a * b
-		},
-		"divide": func(a, b int) int {
-			return a / b
-		},
-		"repeat": func(a string, n int) template.HTML {
-			out := ""
-			for i := 1; i <= n; i++ {
-				out += a
-			}
-			return template.HTML(out)
-		},
-	}
-	tmpl, err := template.New(tname+".html").Funcs(tmplFuncs).ParseFiles(
+	tmpl, err := template.New(tname+".html").Funcs(utils.TemplateAdditionalFuncs()).ParseFiles(
 		this.DTemplate+string(os.PathSeparator)+tname+".html",
 		this.DTemplate+string(os.PathSeparator)+"header.html",
 		this.DTemplate+string(os.PathSeparator)+"sidebar-left.html",
