@@ -52,7 +52,7 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-12">
 						{{if ne $.Data.Shop.Product.Content ""}}
 							<hr>
 							<h3>Description</h3>
@@ -77,7 +77,6 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 							</table>
 						{{end}}
 					</div>
-					<div class="col-md-6"></div>
 				</div>
 			</div>
 			{{if $.Data.Shop.Product.HaveSpecs}}
