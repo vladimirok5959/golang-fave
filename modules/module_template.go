@@ -90,14 +90,15 @@ func (this *Modules) RegisterModule_Template() *Module {
 							return `<div class="form-group n1">` +
 								`<div class="row">` +
 								`<div class="col-7">` +
-								`<div>` +
+								`<div style="position:relative;">` +
+								`<button type="button" class="btn btn-success" onclick="return fave.ActionRestoreThemeFile('template-restore-file','` + selected_file + `','Are you sure want to restore theme file?');" style="position:absolute;right:0;">Restore</button>` +
 								`<select class="form-control ignore-lost-data" id="lbl_file" name="file" onchange="setTimeout(function(){$('#lbl_file').val('` + selected_file + `')},500);document.location='/cp/` + wrap.CurrModule + `/?file='+encodeURI(this.value);">` +
 								list_of_files +
 								`</select>` +
 								`</div>` +
 								`</div>` +
 								`<div class="col-5">` +
-								`<button type="button" class="btn btn-danger" onclick="return fave.ActionRestoreThemeFile('template-restore-file','` + selected_file + `','Are you sure want to restore theme file?');">Restore</button>` +
+								`<button type="button" class="btn btn-danger" onclick="return fave.ActionRestoreThemeFile('template-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');">Restore All</button>` +
 								`</div>` +
 								`</div>` +
 								`</div>`
