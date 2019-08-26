@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"golang-fave/consts"
+	"golang-fave/domains"
 	"golang-fave/utils"
 )
 
@@ -68,7 +69,17 @@ func (this *Logger) write(msg *logMsg) {
 
 	// Extract host
 	host, _ := utils.ExtractHostPort(msg.host, false)
-	logs_dir := this.wwwDir + string(os.PathSeparator) + host + string(os.PathSeparator) + "logs"
+
+	// --- TODO: optimize this later
+	curr_host := host
+	doms := domains.New(this.wwwDir)
+	if mhost := doms.GetHost(host); mhost != "" {
+		curr_host = mhost
+
+	}
+	// ---
+
+	logs_dir := this.wwwDir + string(os.PathSeparator) + curr_host + string(os.PathSeparator) + "logs"
 
 	// Try use localhost folder for logs
 	if !utils.IsDirExists(logs_dir) {
