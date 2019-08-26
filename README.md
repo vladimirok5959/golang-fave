@@ -20,33 +20,38 @@ Usage of ./fave:
 ## Hosts structure
 ```
 hosts
-├── localhost              # Main host directory
-├──── config               # Config directory
-├────── .domains           # Attached domains
-├────── config.json        # CMS config file
-├────── mysql.json         # MySQL config file
-├──── htdocs               # Public http files
-├──── logs                 # Logs dir
-├────── access.log         # Access log file
-├────── error.log          # Error log file
-├──── template             # Engine templates
-├────── 404.html           # Template for 404 page
-├────── blog-category.html # Template for blog category
-├────── blog-post.html     # Template for blog post
-├────── blog.html          # Template for blog home page
-├────── footer.html        # Footer
-├────── header.html        # Header
-├────── index.html         # Template for home page
-├────── page.html          # Template for any other pages
-├────── robots.txt         # Host robots.txt file
-├────── scripts.js         # Theme scripts file
-├────── shop-category.html # Template for shop category
-├────── shop-product.html  # Template for shop product
-├────── shop.html          # Template for shop home page
-├────── sidebar-left.html  # Can be included in templates
-├────── sidebar-right.html # Can be included in templates
-├────── styles.css         # Theme styles file
-└──── tmp                  # Temporary dir for session files
+├── localhost               # Main host directory
+├──── config                # Config directory
+├────── .domains            # Attached domains
+├────── config.json         # CMS config file
+├────── mysql.json          # MySQL config file
+├──── htdocs                # Public http files
+├──── logs                  # Logs dir
+├────── access.log          # Access log file
+├────── error.log           # Error log file
+├──── template              # Engine templates
+├────── 404.html            # Template for 404 page
+├────── blog-category.html  # Template for blog category
+├────── blog-post.html      # Template for blog post
+├────── blog.html           # Template for blog home page
+├────── cached-block-1.html # Cached block 1
+├────── cached-block-2.html # Cached block 2
+├────── cached-block-3.html # Cached block 3
+├────── cached-block-4.html # Cached block 4
+├────── cached-block-5.html # Cached block 5
+├────── footer.html         # Footer
+├────── header.html         # Header
+├────── index.html          # Template for home page
+├────── page.html           # Template for any other pages
+├────── robots.txt          # Host robots.txt file
+├────── scripts.js          # Theme scripts file
+├────── shop-category.html  # Template for shop category
+├────── shop-product.html   # Template for shop product
+├────── shop.html           # Template for shop home page
+├────── sidebar-left.html   # Can be included in templates
+├────── sidebar-right.html  # Can be included in templates
+├────── styles.css          # Theme styles file
+└──── tmp                   # Temporary dir for session files
 ```
 Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).<br>
 Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.com/r/vladimirok5959/fave)
