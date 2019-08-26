@@ -1,9 +1,13 @@
 package fetdata
 
 import (
+	"bytes"
 	"html"
+	"html/template"
+	"os"
 	"time"
 
+	"golang-fave/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -131,22 +135,66 @@ func (this *FERData) EscapeString(str string) string {
 	return html.EscapeString(str)
 }
 
-func (this *FERData) CachedBlock1() string {
-	return ""
+func (this *FERData) cachedBlock(block string) template.HTML {
+	tmplFuncs := template.FuncMap{
+		"plus": func(a, b int) int {
+			return a + b
+		},
+		"minus": func(a, b int) int {
+			return a - b
+		},
+		"multiply": func(a, b int) int {
+			return a * b
+		},
+		"divide": func(a, b int) int {
+			return a / b
+		},
+		"repeat": func(a string, n int) template.HTML {
+			out := ""
+			for i := 1; i <= n; i++ {
+				out += a
+			}
+			return template.HTML(out)
+		},
+	}
+	tmpl, err := template.New(block + ".html").Funcs(tmplFuncs).ParseFiles(
+		this.wrap.DTemplate + string(os.PathSeparator) + block + ".html",
+	)
+	if err != nil {
+		return template.HTML(err.Error())
+	}
+	var tpl bytes.Buffer
+	err = tmpl.Execute(&tpl, consts.TmplData{
+		System: utils.GetTmplSystemData("", ""),
+		Data:   this,
+	})
+	if err != nil {
+		return template.HTML(err.Error())
+	}
+	return template.HTML(string(tpl.Bytes()))
 }
 
-func (this *FERData) CachedBlock2() string {
-	return ""
+func (this *FERData) CachedBlock1() template.HTML {
+	return this.cachedBlock("cached-block-1")
+	// return template.HTML("")
 }
 
-func (this *FERData) CachedBlock3() string {
-	return ""
+func (this *FERData) CachedBlock2() template.HTML {
+	return this.cachedBlock("cached-block-2")
+	// return template.HTML("")
 }
 
-func (this *FERData) CachedBlock4() string {
-	return ""
+func (this *FERData) CachedBlock3() template.HTML {
+	return this.cachedBlock("cached-block-3")
+	// return template.HTML("")
 }
 
-func (this *FERData) CachedBlock5() string {
-	return ""
+func (this *FERData) CachedBlock4() template.HTML {
+	return this.cachedBlock("cached-block-4")
+	// return template.HTML("")
+}
+
+func (this *FERData) CachedBlock5() template.HTML {
+	return this.cachedBlock("cached-block-5")
+	// return template.HTML("")
 }

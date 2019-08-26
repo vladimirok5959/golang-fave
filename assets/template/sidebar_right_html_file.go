@@ -4,11 +4,7 @@ var VarSidebarRightHtmlFile = []byte(`<div class="card mb-4">
 	<h5 class="card-header">Blog categories</h5>
 	<div class="card-body">
 		<ul class="m-0 p-0 pl-4">
-			{{range $.Data.Blog.Categories 0 0}}
-				<li class="{{if and $.Data.Blog.Category (eq $.Data.Blog.Category.Id .Id)}}active{{end}}">
-					<a href="{{.Permalink}}">{{.Name}}</a>
-				</li>
-			{{end}}
+			{{$.Data.CachedBlock5}}
 		</ul>
 	</div>
 </div>
