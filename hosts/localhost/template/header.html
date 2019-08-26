@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="{{$.System.PathCssBootstrap}}">
 		<link rel="stylesheet" href="{{$.System.PathCssLightGallery}}">
 
-		<title>Cached block 1</title>
+		<title>{{$.Data.CachedBlock1}}</title>
 		<meta name="keywords" content="{{$.Data.Page.MetaKeywords}}" />
 		<meta name="description" content="{{$.Data.Page.MetaDescription}}" />
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
@@ -53,10 +53,10 @@
 			<div id="main">
 				<div class="bg-fave">
 					<div class="container">
-						<h1 class="text-left text-white m-0 p-0 py-5">Cached block 2</h1>
+						<h1 class="text-left text-white m-0 p-0 py-5">{{$.Data.CachedBlock2}}</h1>
 					</div>
 				</div>
-				Cached block 3
+				{{$.Data.CachedBlock3}}
 				<div class="container clear-top">
 					<div class="row pt-4">
 						{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-category")}}

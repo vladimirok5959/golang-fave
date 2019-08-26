@@ -130,3 +130,23 @@ func (this *FERData) DateTimeFormat(format string) string {
 func (this *FERData) EscapeString(str string) string {
 	return html.EscapeString(str)
 }
+
+func (this *FERData) CachedBlock1() string {
+	return ""
+}
+
+func (this *FERData) CachedBlock2() string {
+	return ""
+}
+
+func (this *FERData) CachedBlock3() string {
+	return ""
+}
+
+func (this *FERData) CachedBlock4() string {
+	return ""
+}
+
+func (this *FERData) CachedBlock5() string {
+	return ""
+}
