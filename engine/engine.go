@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"golang-fave/assets"
+	"golang-fave/cblocks"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/wrapper"
 	"golang-fave/logger"
@@ -20,8 +21,8 @@ type Engine struct {
 	Mods *modules.Modules
 }
 
-func Response(mp *mysqlpool.MySqlPool, l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
-	wrap := wrapper.New(l, w, r, s, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp, mp)
+func Response(mp *mysqlpool.MySqlPool, l *logger.Logger, m *modules.Modules, w http.ResponseWriter, r *http.Request, s *session.Session, c *cblocks.CacheBlocks, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string) bool {
+	wrap := wrapper.New(l, w, r, s, c, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp, mp)
 	eng := &Engine{
 		Wrap: wrap,
 		Mods: m,

@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"golang-fave/cblocks"
 	"golang-fave/consts"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/sqlw"
@@ -30,6 +31,7 @@ type Wrapper struct {
 	W http.ResponseWriter
 	R *http.Request
 	S *session.Session
+	c *cblocks.CacheBlocks
 
 	Host     string
 	Port     string
@@ -53,7 +55,7 @@ type Wrapper struct {
 	User *utils.MySql_user
 }
 
-func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool) *Wrapper {
+func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, c *cblocks.CacheBlocks, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool) *Wrapper {
 
 	conf := configNew()
 	if err := conf.configRead(dirConfig + string(os.PathSeparator) + "config.json"); err != nil {
@@ -65,6 +67,7 @@ func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Se
 		W:             w,
 		R:             r,
 		S:             s,
+		c:             c,
 		Host:          host,
 		Port:          port,
 		CurrHost:      chost,
@@ -268,6 +271,18 @@ func (this *Wrapper) GetCurrentPage(max int) int {
 
 func (this *Wrapper) ConfigSave() error {
 	return this.Config.configWrite(this.DConfig + string(os.PathSeparator) + "config.json")
+}
+
+func (this *Wrapper) ResetBlock1() {
+	this.c.ResetBlock1(this.Host)
+}
+
+func (this *Wrapper) GetBlock1() (template.HTML, bool) {
+	return this.c.GetBlock1(this.Host, this.R.URL.Path)
+}
+
+func (this *Wrapper) SetBlock1(data template.HTML) {
+	this.c.SetBlock1(this.Host, this.R.URL.Path, data)
 }
 
 func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) error {

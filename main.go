@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"golang-fave/assets"
+	"golang-fave/cblocks"
 	"golang-fave/consts"
 	"golang-fave/domains"
 	"golang-fave/engine"
@@ -97,6 +98,9 @@ func main() {
 	// MySQL connections pool
 	mpool := mysqlpool.New()
 
+	// Init cache blocks
+	cbs := cblocks.New()
+
 	// Init and start web server
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
@@ -185,7 +189,7 @@ func main() {
 
 		// Logic
 		if mp != nil {
-			if engine.Response(mp, lg, mods, w, r, sess, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
+			if engine.Response(mp, lg, mods, w, r, sess, cbs, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
 				return
 			}
 		}
