@@ -19,3 +19,9 @@ type CacheBlocks struct {
 func New() *CacheBlocks {
 	return &CacheBlocks{}
 }
+
+func (this *CacheBlocks) Reset(host string) {
+	if _, ok := this.cacheBlocks[host]; ok {
+		delete(this.cacheBlocks, host)
+	}
+}
