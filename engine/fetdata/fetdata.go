@@ -154,26 +154,46 @@ func (this *FERData) cachedBlock(block string) template.HTML {
 }
 
 func (this *FERData) CachedBlock1() template.HTML {
-	return this.cachedBlock("cached-block-1")
-	// return template.HTML("")
+	if data, ok := this.wrap.GetBlock1(); ok {
+		return data
+	}
+	data := this.cachedBlock("cached-block-1")
+	this.wrap.SetBlock1(data)
+	return data
 }
 
 func (this *FERData) CachedBlock2() template.HTML {
-	return this.cachedBlock("cached-block-2")
-	// return template.HTML("")
+	if data, ok := this.wrap.GetBlock2(); ok {
+		return data
+	}
+	data := this.cachedBlock("cached-block-2")
+	this.wrap.SetBlock2(data)
+	return data
 }
 
 func (this *FERData) CachedBlock3() template.HTML {
-	return this.cachedBlock("cached-block-3")
-	// return template.HTML("")
+	if data, ok := this.wrap.GetBlock3(); ok {
+		return data
+	}
+	data := this.cachedBlock("cached-block-3")
+	this.wrap.SetBlock3(data)
+	return data
 }
 
 func (this *FERData) CachedBlock4() template.HTML {
-	return this.cachedBlock("cached-block-4")
-	// return template.HTML("")
+	if data, ok := this.wrap.GetBlock4(); ok {
+		return data
+	}
+	data := this.cachedBlock("cached-block-4")
+	this.wrap.SetBlock4(data)
+	return data
 }
 
 func (this *FERData) CachedBlock5() template.HTML {
-	return this.cachedBlock("cached-block-5")
-	// return template.HTML("")
+	if data, ok := this.wrap.GetBlock5(); ok {
+		return data
+	}
+	data := this.cachedBlock("cached-block-5")
+	this.wrap.SetBlock5(data)
+	return data
 }

@@ -14,8 +14,6 @@ func (this *CacheBlocks) GetBlock5(host, url string) (template.HTML, bool) {
 }
 
 func (this *CacheBlocks) SetBlock5(host, url string, data template.HTML) {
-	if _, ok := this.cacheBlocks[host]; !ok {
-		this.cacheBlocks[host] = cache{}
-	}
+	this.prepare(host)
 	this.cacheBlocks[host].CacheBlock5[url] = data
 }
