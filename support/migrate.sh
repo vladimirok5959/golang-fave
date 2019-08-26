@@ -1,6 +1,7 @@
 #!/bin/bash
 
 LAST_NUM_STR=`find ./support/migrate/ -maxdepth 1 -name '*.go' | sort -t_ -nk2,2 | tail -n1 | awk -F/ '{print $NF}' | awk -F. '{print $NR}'`
+LAST_NUM_STR=`echo "$LAST_NUM_STR" | sed 's/^[0]*//g'`
 
 NEXT_NUM_INT=$(($LAST_NUM_STR + 1))
 NEXT_NUM_STR=`printf %09d $NEXT_NUM_INT`
