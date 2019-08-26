@@ -82,6 +82,8 @@ func (this *Modules) RegisterAction_SettingsPagination() *Action {
 			return
 		}
 
+		wrap.ResetCacheBlocks()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

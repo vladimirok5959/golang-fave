@@ -223,12 +223,14 @@ func (this *Modules) RegisterAction_BlogCategoriesModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/blog/categories-modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := this.blog_ActionCategoryUpdate(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
 				wrap.MsgError(err.Error())
 				return
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/blog/categories-modify/` + pf_id + `/';`)
 		}
 	})

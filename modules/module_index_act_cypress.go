@@ -53,6 +53,8 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 			;`,
 		)
 
+		wrap.ResetCacheBlocks()
+
 		wrap.Write(`OK`)
 	})
 }

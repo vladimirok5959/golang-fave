@@ -37,6 +37,8 @@ func (this *Modules) RegisterAction_SettingsGeneral() *Action {
 			return
 		}
 
+		wrap.ResetCacheBlocks()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

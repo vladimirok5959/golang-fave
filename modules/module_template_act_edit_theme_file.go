@@ -50,6 +50,8 @@ func (this *Modules) RegisterAction_TemplateEditThemeFile() *Action {
 			return
 		}
 
+		wrap.ResetCacheBlocks()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

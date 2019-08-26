@@ -82,6 +82,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/index/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			// Update page
@@ -115,6 +116,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/index/modify/` + pf_id + `/';`)
 		}
 	})

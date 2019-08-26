@@ -54,6 +54,8 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 			return
 		}
 
+		wrap.ResetCacheBlocks()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

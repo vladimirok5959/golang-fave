@@ -31,6 +31,8 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 			return
 		}
 
+		wrap.ResetCacheBlocks()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

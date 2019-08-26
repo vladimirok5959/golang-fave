@@ -273,7 +273,7 @@ func (this *Wrapper) ConfigSave() error {
 	return this.Config.configWrite(this.DConfig + string(os.PathSeparator) + "config.json")
 }
 
-func (this *Wrapper) ResetBlocks() {
+func (this *Wrapper) ResetCacheBlocks() {
 	this.c.Reset(this.Host)
 }
 

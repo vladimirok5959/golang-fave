@@ -37,6 +37,8 @@ func (this *Modules) RegisterAction_ShopCurrenciesDelete() *Action {
 		// Delete products XML cache
 		wrap.RemoveProductXmlCacheFile()
 
+		wrap.ResetCacheBlocks()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

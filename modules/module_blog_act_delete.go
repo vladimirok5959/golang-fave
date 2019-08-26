@@ -40,6 +40,8 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 			return
 		}
 
+		wrap.ResetCacheBlocks()
+
 		// Reload current page
 		wrap.Write(`window.location.reload(false);`)
 	})

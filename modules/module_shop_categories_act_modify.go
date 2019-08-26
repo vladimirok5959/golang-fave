@@ -227,6 +227,8 @@ func (this *Modules) RegisterAction_ShopCategoriesModify() *Action {
 			// Delete products XML cache
 			wrap.RemoveProductXmlCacheFile()
 
+			wrap.ResetCacheBlocks()
+
 			wrap.Write(`window.location='/cp/shop/categories-modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := this.shop_ActionCategoryUpdate(wrap, pf_id, pf_name, pf_alias, pf_parent); err != nil {
@@ -236,6 +238,8 @@ func (this *Modules) RegisterAction_ShopCategoriesModify() *Action {
 
 			// Delete products XML cache
 			wrap.RemoveProductXmlCacheFile()
+
+			wrap.ResetCacheBlocks()
 
 			wrap.Write(`window.location='/cp/shop/categories-modify/` + pf_id + `/';`)
 		}

@@ -130,6 +130,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/blog/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
@@ -205,6 +206,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/blog/modify/` + pf_id + `/';`)
 		}
 	})

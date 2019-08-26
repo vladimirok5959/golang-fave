@@ -87,6 +87,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 				wrap.MsgError(err.Error())
 				return
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/users/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			// Update user
@@ -143,6 +144,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 					return
 				}
 			}
+			wrap.ResetCacheBlocks()
 			wrap.Write(`window.location='/cp/users/modify/` + pf_id + `/';`)
 		}
 	})

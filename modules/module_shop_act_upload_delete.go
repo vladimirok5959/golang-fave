@@ -60,6 +60,8 @@ func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 		// Delete products XML cache
 		wrap.RemoveProductXmlCacheFile()
 
+		wrap.ResetCacheBlocks()
+
 		wrap.Write(`$('#list-images a').each(function(i, e) { if($(e).attr('title') == '` + pf_file + `') { $(e).parent().remove(); return; } });`)
 	})
 }
