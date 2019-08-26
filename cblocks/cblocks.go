@@ -2,6 +2,7 @@ package cblocks
 
 import (
 	"html/template"
+	"sync"
 )
 
 type cache struct {
@@ -13,11 +14,13 @@ type cache struct {
 }
 
 type CacheBlocks struct {
+	mutex       *sync.Mutex
 	cacheBlocks map[string]cache
 }
 
 func New() *CacheBlocks {
 	return &CacheBlocks{
+		mutex:       &sync.Mutex{},
 		cacheBlocks: map[string]cache{},
 	}
 }
@@ -35,7 +38,9 @@ func (this *CacheBlocks) prepare(host string) {
 }
 
 func (this *CacheBlocks) Reset(host string) {
+	this.mutex.Lock()
 	if _, ok := this.cacheBlocks[host]; ok {
 		delete(this.cacheBlocks, host)
 	}
+	this.mutex.Unlock()
 }
