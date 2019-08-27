@@ -3639,6 +3639,7 @@
 		};
 
 		function MakeTextAreasTmplEditor() {
+			var IgnoreDataLost = true;
 			$('textarea.tmpl-editor').each(function() {
 				var targetTextArea = $(this)[0];
 				var targetFileExt = $(this).data('emode');
@@ -3655,8 +3656,14 @@
 					mode: targetEditorMode,
 				}).on('change', function(editor){
 					targetTextArea.value = editor.getValue();
+					if(!IgnoreDataLost) {
+						if(!FormDataWasChanged) {
+							FormDataWasChanged = true;
+						}
+					}
 				});
 			});
+			IgnoreDataLost = false;
 		};
 
 		function MakeTextAreasNotReactOnTab() {
