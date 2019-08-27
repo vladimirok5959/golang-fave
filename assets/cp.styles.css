@@ -1099,13 +1099,33 @@ div.wysiwyg.focused {
 		margin-bottom: 0px;
 	}
 
-	.data-form.blog-add .form-group.n7,
-	.data-form.blog-modify .form-group.n7 {
+	.data-form.blog-add .form-group.n8,
+	.data-form.blog-modify .form-group.n8 {
 		margin-bottom: 0px;
 	}
 
 	.data-form.blog-categories-add .form-group.n4,
 	.data-form.blog-categories-modify .form-group.n4 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.shop-add .form-group.n12,
+	.data-form.shop-modify .form-group.n12 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.shop-categories-add .form-group.n4,
+	.data-form.shop-categories-modify .form-group.n4 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.shop-attributes-add .form-group.n4,
+	.data-form.shop-attributes-modify .form-group.n4 {
+		margin-bottom: 0px;
+	}
+
+	.data-form.shop-currencies-add .form-group.n5,
+	.data-form.shop-currencies-modify .form-group.n5 {
 		margin-bottom: 0px;
 	}
 
