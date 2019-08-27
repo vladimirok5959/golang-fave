@@ -69,6 +69,13 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * **make cy** - cypress tests in console
 * **make ab** - http stress test
 
+## Modules status
+```
+* Pages | ready for use | done 100%
+* Blog  | ready for use | done 100%
+* Shop  | in progress   | done 80%
+```
+
 ## Used resources
 * [jQuery](https://github.com/jquery/jquery)
 * [Autosize](https://github.com/jackmoore/autosize)
