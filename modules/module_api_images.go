@@ -35,6 +35,11 @@ func (this *Modules) api_GenerateImage(wrap *wrapper.Wrapper, width, height int,
 	var out_bytes bytes.Buffer
 	out := bufio.NewWriter(&out_bytes)
 
+	defer func() {
+		out.Flush()
+		out_bytes.Reset()
+	}()
+
 	if file_ext == "image/png" {
 		imaging.Encode(out, src, imaging.PNG)
 	} else if file_ext == "image/jpeg" {

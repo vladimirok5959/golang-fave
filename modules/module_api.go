@@ -36,6 +36,7 @@ func (this *Modules) RegisterModule_Api() *Module {
 					// Make empty file
 					if file, err := os.Create(target_file); err == nil {
 						file.Write(data)
+						file.Close()
 					}
 
 					// Make regular XML
@@ -45,6 +46,7 @@ func (this *Modules) RegisterModule_Api() *Module {
 					wrap.RemoveProductXmlCacheFile()
 					if file, err := os.Create(target_file); err == nil {
 						file.Write(data)
+						file.Close()
 					}
 
 					wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -168,6 +170,7 @@ func (this *Modules) RegisterModule_ApiProducts() *Module {
 					// Save file
 					if file, err := os.Create(target_file); err == nil {
 						file.Write(data)
+						file.Close()
 					}
 
 					wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
