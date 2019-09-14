@@ -3503,6 +3503,10 @@
 			}
 		};
 
+		function FormDataIsChanged() {
+			return FormDataWasChanged;
+		}
+
 		function HtmlDecode(value) {
 			var doc = new DOMParser().parseFromString(value, "text/html");
 			return doc.documentElement.textContent;
@@ -3894,6 +3898,43 @@
 				}).fail(function(xhr, status, error) {
 					if(IsDebugMode()) console.log('fail', xhr, status, error);
 					AjaxFail(xhr.responseText, status, error);
+				});
+			},
+
+			ShopProductsDuplicate: function(button, product_id) {
+				if($(button).hasClass('in-progress')) return;
+				if(FormDataIsChanged()) {
+					fave.ShowMsgError('Warning!', 'Something was changed, save changes before duplicate product', true);
+					return;
+				}
+				$(button).addClass('in-progress');
+				$.ajax({
+					type: "POST",
+					url: '/cp/',
+					data: {
+						action: 'shop-duplicate',
+						id: product_id,
+					}
+				}).done(function(data) {
+					try {
+						eval(data);
+					} catch(e) {
+						if(e instanceof SyntaxError) {
+							console.log(data);
+							console.log('Error: JavaScript code eval error', e.message);
+						}
+					}
+				}).fail(function(xhr, status, error) {
+					try {
+						eval(xhr.responseText);
+					} catch(e) {
+						if(e instanceof SyntaxError) {
+							console.log(xhr.responseText);
+							console.log('Error: JavaScript code eval error', e.message);
+						}
+					}
+				}).always(function() {
+					$(button).removeClass('in-progress');
 				});
 			},
 
