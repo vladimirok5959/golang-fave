@@ -970,6 +970,7 @@ ul.pagination {
 	padding: 12px 18px;
 	background: #e9ecef;
 	color: #6c757d;
+	border-radius: 0 .25rem .25rem 0;
 }
 
 .product-copy a svg {
