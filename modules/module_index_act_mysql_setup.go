@@ -254,6 +254,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(
 			`CREATE TABLE shop_products (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				parent_id int(11) DEFAULT NULL,
 				user int(11) NOT NULL COMMENT 'User id',
 				currency int(11) NOT NULL COMMENT 'Currency id',
 				price float(8,2) NOT NULL COMMENT 'Product price',
@@ -465,7 +466,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000009');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000010');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -741,6 +742,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_parent_id (parent_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE users ADD UNIQUE KEY email (email);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -871,6 +877,14 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(`
 			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_category
 			FOREIGN KEY (category) REFERENCES shop_cats (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_parent_id
+			FOREIGN KEY (parent_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

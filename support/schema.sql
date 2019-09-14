@@ -84,6 +84,7 @@ CREATE TABLE shop_product_images (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_products (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+	parent_id int(11) DEFAULT NULL,
 	user int(11) NOT NULL COMMENT 'User id',
 	currency int(11) NOT NULL COMMENT 'Currency id',
 	price float(8,2) NOT NULL COMMENT 'Product price',
@@ -141,6 +142,7 @@ ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);
 ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);
 ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);
 ALTER TABLE shop_products ADD KEY FK_shop_products_category (category);
+ALTER TABLE shop_products ADD KEY FK_shop_products_parent_id (parent_id);
 ALTER TABLE users ADD UNIQUE KEY email (email);
 
 # References
@@ -160,3 +162,4 @@ ALTER TABLE shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id
 ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
 ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_category FOREIGN KEY (category) REFERENCES shop_cats (id) ON DELETE RESTRICT;
+ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_parent_id FOREIGN KEY (parent_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
