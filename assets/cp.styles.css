@@ -969,14 +969,15 @@ ul.pagination {
 	right: 0px;
 	padding: 12px 18px;
 	background: #e9ecef;
+	color: #6c757d;
+}
+
+.product-copy a svg {
+	fill: currentColor;
 }
 
 .product-copy a:hover {
 	color: #417cb9;
-}
-
-.product-copy a:hover svg {
-	fill: currentColor;
 }
 
 /* Product images */
