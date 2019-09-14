@@ -973,6 +973,17 @@ ul.pagination {
 	border-radius: .25rem;
 }
 
+#upload-msg {
+	position: absolute;
+	background: white;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #ced4da;
+	border-radius: .25rem;
+	padding: .375rem .75rem;
+	display: none;
+}
+
 /* Fix for bootstrap select */
 .dropdown.bootstrap-select {
 	position: relative;

@@ -1043,8 +1043,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<div id="list-images">` +
 							this.shop_GetAllProductImages(wrap, data.A_id) +
 							`</div>` +
-							`<div class="list-button position-relative">` +
-							`<input class="form-control ignore-lost-data" type="file" id="file" name="file" style="font-size:13px;" /><button type="button" class="btn btn-success btn-dynamic-remove" onclick="fave.ShopProductsUploadImage('shop-upload-image', ` + utils.IntToStr(data.A_id) + `, 'file');">Upload</button>` +
+							`<div id="img-upload-block" class="list-button position-relative">` +
+							`<div id="upload-msg">Uploading...</div>` +
+							`<input class="form-control ignore-lost-data" type="file" id="file" name="file" onchange="fave.ShopProductsUploadImage('shop-upload-image', ` + utils.IntToStr(data.A_id) + `, 'file');" style="font-size:13px;" multiple />` +
 							`</div>` +
 							`</div>` +
 							`</div>` +

@@ -3832,10 +3832,21 @@
 			},
 
 			ShopProductsUploadImage: function(action_name, product_id, input_id) {
+				var file_el = $('#' + input_id)[0];
+				if(!file_el.files) return;
+				if(file_el.files.length <= 0) return;
+
+				$('#img-upload-block input').prop('disabled', true);
+				$('#upload-msg').css('display', 'block');
+
 				var fd = new FormData();
 				fd.append('action', action_name);
 				fd.append('id', product_id);
-				fd.append('file', $('#' + input_id)[0].files[0]);
+				fd.append('count', file_el.files.length);
+				for(var i = 0; i < file_el.files.length; i++) {
+					fd.append('file_' + i, file_el.files[i]);
+				}
+
 				$.ajax({
 					url: '/cp/',
 					method: 'POST',
@@ -3861,6 +3872,10 @@
 							console.log('Error: JavaScript code eval error', e.message);
 						}
 					}
+				}).always(function() {
+					file_el.value = '';
+					$('#img-upload-block input').prop('disabled', false);
+					$('#upload-msg').css('display', 'none');
 				});
 			},
 
