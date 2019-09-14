@@ -968,6 +968,7 @@ ul.pagination {
 	position: absolute;
 	right: 0px;
 	padding: 12px 18px;
+	background: #e9ecef;
 }
 
 .product-copy a:hover {
