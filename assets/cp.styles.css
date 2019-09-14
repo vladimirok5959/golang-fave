@@ -959,6 +959,25 @@ ul.pagination {
 	right: 0px;
 }
 
+/* Duplicate product */
+.product-copy {
+	position: relative;
+}
+
+.product-copy a {
+	position: absolute;
+	right: 0px;
+	padding: 12px 18px;
+}
+
+.product-copy a:hover {
+	color: #417cb9;
+}
+
+.product-copy a:hover svg {
+	fill: currentColor;
+}
+
 /* Product images */
 #list-images {
 	display: block;
