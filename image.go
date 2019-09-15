@@ -74,18 +74,23 @@ func image_detect(www, file string, conf *config.Config) {
 			file_thumb_full := file[:index+1] + "thumb-full-" + file_name
 			if !utils.IsFileExists(file_thumb_0) {
 				image_create(www, file, file_thumb_0, "thumb-0", conf)
+				return
 			}
 			if !utils.IsFileExists(file_thumb_1) {
 				image_create(www, file, file_thumb_1, "thumb-1", conf)
+				return
 			}
 			if !utils.IsFileExists(file_thumb_2) {
 				image_create(www, file, file_thumb_2, "thumb-2", conf)
+				return
 			}
 			if !utils.IsFileExists(file_thumb_3) {
 				image_create(www, file, file_thumb_3, "thumb-3", conf)
+				return
 			}
 			if !utils.IsFileExists(file_thumb_full) {
 				image_create(www, file, file_thumb_full, "thumb-full", conf)
+				return
 			}
 		}
 	}
@@ -127,8 +132,8 @@ func image_start(www_dir string) (chan bool, chan bool) {
 	go func() {
 		for {
 			select {
-			case <-time.After(1 * time.Second):
-				// Run every second
+			case <-time.After(2 * time.Second):
+				// Run every 2 seconds
 				image_loop(www_dir, stop)
 			case <-ch:
 				ch <- true
