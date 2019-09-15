@@ -83,9 +83,12 @@ docker-img: dockerfile
 	docker build -t fave:latest .
 
 docker-push: docker-img
+	docker tag fave:latest vladimirok5959/fave:${VERSION}
 	docker tag fave:latest vladimirok5959/fave:latest
 	docker login
+	docker push vladimirok5959/fave:${VERSION}
 	docker push vladimirok5959/fave:latest
+	docker rmi vladimirok5959/fave:${VERSION}
 	docker rmi vladimirok5959/fave:latest
 	docker rmi fave:latest
 
