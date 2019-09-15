@@ -59,7 +59,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					category,
 					briefly,
 					content,
-					datetime,
+					'`+utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp())+`',
 					0
 				FROM
 					shop_products
