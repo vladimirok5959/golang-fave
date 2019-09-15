@@ -1,12 +1,14 @@
 package modules
 
 import (
+	"fmt"
 	"html"
 	"html/template"
 	"net/http"
 	"reflect"
 	"sort"
 	"strings"
+	"time"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
@@ -349,7 +351,11 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 					return true
 				}
 			}
+			start := time.Now()
 			mod.Front(wrap)
+			if !(mod.Info.Mount == "api" || mod.Info.Mount == "products") {
+				wrap.W.Write([]byte(fmt.Sprintf("<!-- %.3f ms -->", time.Now().Sub(start).Seconds())))
+			}
 			return true
 		}
 	}
