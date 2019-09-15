@@ -275,8 +275,11 @@ func (this *Wrapper) ConfigSave() error {
 }
 
 func (this *Wrapper) RecreateProductXmlFile() error {
-	if _, err := os.Create(this.DTmp + string(os.PathSeparator) + "trigger.xml.run"); err != nil {
-		return err
+	trigger := strings.Join([]string{this.DTmp, "trigger.xml.run"}, string(os.PathSeparator))
+	if !utils.IsFileExists(trigger) {
+		if _, err := os.Create(trigger); err != nil {
+			return err
+		}
 	}
 	return nil
 }
