@@ -995,6 +995,11 @@ ul.pagination {
 	border-radius: .25rem;
 }
 
+#list-images .attached-img a img {
+	width: 100px;
+	height: 100px;
+}
+
 #upload-msg {
 	position: absolute;
 	background: white;

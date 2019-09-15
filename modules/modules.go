@@ -205,7 +205,7 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
 		if mod.Mount == "index" {
 			href = `/cp/`
 		}
-		if !(sys && (mod.Mount == "api" || mod.Mount == "products")) {
+		if !(sys && (mod.Mount == "api")) {
 			html += `<a class="dropdown-item` + class + `" href="` + href + `">` + mod.Name + `</a>`
 		}
 	}
@@ -234,7 +234,7 @@ func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
 		if !mod.System {
 			html_def += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
 		} else {
-			if !(mod.Mount == "api" || mod.Mount == "products") {
+			if !(mod.Mount == "api") {
 				html_sys += `<li class="nav-item` + class + `"><a class="nav-link" href="` + href + `">` + icon + mod.Name + `</a>` + submenu + `</li>`
 			}
 		}
@@ -353,7 +353,7 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 			}
 			start := time.Now()
 			mod.Front(wrap)
-			if !(mod.Info.Mount == "api" || mod.Info.Mount == "products") {
+			if !(mod.Info.Mount == "api") {
 				wrap.W.Write([]byte(fmt.Sprintf("<!-- %.3f ms -->", time.Now().Sub(start).Seconds())))
 			}
 			return true

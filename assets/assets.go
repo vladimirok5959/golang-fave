@@ -7,6 +7,7 @@ import (
 )
 
 func PopulateResources(res *resource.Resource) {
+	res.Add(consts.AssetsCpImgLoadGif, "image/gif", CpImgLoadGif)
 	res.Add(consts.AssetsCpCodeMirrorCss, "text/css", CpCodeMirrorCss)
 	res.Add(consts.AssetsCpCodeMirrorJs, "application/javascript; charset=utf-8", CpCodeMirrorJs)
 	res.Add(consts.AssetsCpStylesCss, "text/css", CpStylesCss)

@@ -40,14 +40,14 @@ func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 				return err
 			}
 
-			// Delete thumbnails
-			if err := wrap.RemoveProductImageThumbnails(pf_id, "thumb-*-"+pf_file); err != nil {
-				return err
-			}
-
 			// Delete file
 			target_file_full := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + pf_id + string(os.PathSeparator) + pf_file
 			if err := os.Remove(target_file_full); err != nil {
+				return err
+			}
+
+			// Delete thumbnails
+			if err := wrap.RemoveProductImageThumbnails(pf_id, "thumb-*-"+pf_file); err != nil {
 				return err
 			}
 

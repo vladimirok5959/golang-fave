@@ -85,6 +85,10 @@ func main() {
 	sess_cl_ch, sess_cl_stop := session_clean_start(consts.ParamWwwDir)
 	defer session_clean_stop(sess_cl_ch, sess_cl_stop)
 
+	// Image processing
+	imgs_cl_ch, imgs_cl_stop := image_start(consts.ParamWwwDir)
+	defer image_stop(imgs_cl_ch, imgs_cl_stop)
+
 	// Init mounted resources
 	res := resource.New()
 	assets.PopulateResources(res)

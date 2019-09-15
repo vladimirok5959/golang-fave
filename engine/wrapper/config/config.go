@@ -1,4 +1,4 @@
-package wrapper
+package config
 
 import (
 	"encoding/json"
@@ -38,7 +38,7 @@ type Config struct {
 	}
 }
 
-func configNew() *Config {
+func ConfigNew() *Config {
 	c := &Config{}
 	c.configDefault()
 	return c
@@ -79,7 +79,7 @@ func (this *Config) configDefault() {
 	this.API.XML.Url = ""
 }
 
-func (this *Config) configRead(file string) error {
+func (this *Config) ConfigRead(file string) error {
 	f, err := os.Open(file)
 	if err != nil {
 		return err
@@ -90,7 +90,7 @@ func (this *Config) configRead(file string) error {
 	return dec.Decode(this)
 }
 
-func (this *Config) configWrite(file string) error {
+func (this *Config) ConfigWrite(file string) error {
 	r, err := json.Marshal(this)
 	if err != nil {
 		return err

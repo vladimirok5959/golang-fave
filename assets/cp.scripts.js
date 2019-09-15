@@ -529,8 +529,8 @@
 		'>': '&gt;',
 		'"': '&quot;',
 		"'": '&#x27;',
-		'`': '&#x60;'
 	};
+	escapeMap[String.fromCharCode(96)] = '&#x60;';
 
 	// Functions for escaping and unescaping strings to/from HTML interpolation.
 	var createEscaper = function (map) {
@@ -3936,6 +3936,14 @@
 				}).always(function() {
 					$(button).removeClass('in-progress');
 				});
+			},
+
+			ShopProductsRetryImage: function(img) {
+				var original = $(img).attr('src');
+				$(img).attr('src', '/assets/cp/img-load.gif');
+				setTimeout(function() {
+					$(img).attr('src', original);
+				}, 1000);
 			},
 
 			ActionLogout: function(message) {

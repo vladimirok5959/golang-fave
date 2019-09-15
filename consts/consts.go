@@ -5,7 +5,7 @@ import (
 )
 
 const AssetsPath = "assets"
-const AssetsVersion = "44"
+const AssetsVersion = "45"
 const DirIndexFile = "index.html"
 
 // Bootstrap resources
@@ -15,6 +15,7 @@ const AssetsJqueryJs = AssetsPath + "/jquery.js"
 const AssetsPopperJs = AssetsPath + "/popper.js"
 
 // System resources
+const AssetsCpImgLoadGif = AssetsPath + "/cp/img-load.gif"
 const AssetsCpScriptsJs = AssetsPath + "/cp/scripts.js"
 const AssetsCpStylesCss = AssetsPath + "/cp/styles.css"
 const AssetsSysBgPng = AssetsPath + "/sys/bg.png"

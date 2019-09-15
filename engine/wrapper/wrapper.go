@@ -16,6 +16,7 @@ import (
 	"golang-fave/consts"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/sqlw"
+	"golang-fave/engine/wrapper/config"
 	"golang-fave/logger"
 	"golang-fave/utils"
 
@@ -49,7 +50,7 @@ type Wrapper struct {
 	CurrModule      string
 	CurrSubModule   string
 	MSPool          *mysqlpool.MySqlPool
-	Config          *Config
+	Config          *config.Config
 
 	DB   *sqlw.DB
 	User *utils.MySql_user
@@ -57,8 +58,8 @@ type Wrapper struct {
 
 func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, c *cblocks.CacheBlocks, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool) *Wrapper {
 
-	conf := configNew()
-	if err := conf.configRead(dirConfig + string(os.PathSeparator) + "config.json"); err != nil {
+	conf := config.ConfigNew()
+	if err := conf.ConfigRead(dirConfig + string(os.PathSeparator) + "config.json"); err != nil {
 		l.Log("Host config file: %s", r, true, err.Error())
 	}
 
@@ -270,7 +271,7 @@ func (this *Wrapper) GetCurrentPage(max int) int {
 }
 
 func (this *Wrapper) ConfigSave() error {
-	return this.Config.configWrite(this.DConfig + string(os.PathSeparator) + "config.json")
+	return this.Config.ConfigWrite(this.DConfig + string(os.PathSeparator) + "config.json")
 }
 
 func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) error {
