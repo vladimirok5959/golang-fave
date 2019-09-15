@@ -151,11 +151,6 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 			return
 		}
 
-		// Delete products XML cache
-		wrap.RemoveProductXmlCacheFile()
-
-		wrap.ResetCacheBlocks()
-
 		// Navigate to new product page
 		wrap.Write(`window.location='/cp/shop/modify/` + utils.Int64ToStr(lastID) + `/';`)
 	})
