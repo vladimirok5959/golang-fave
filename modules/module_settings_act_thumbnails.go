@@ -150,6 +150,24 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 			pfi_shop_thumbnail_r_full = 0
 		}
 
+		is_changed_tb1 := false
+		is_changed_tb2 := false
+		is_changed_tb3 := false
+		is_changed_tbf := false
+
+		if (*wrap.Config).Shop.Thumbnails.Thumbnail1[0] != pfi_shop_thumbnail_w_1 || (*wrap.Config).Shop.Thumbnails.Thumbnail1[1] != pfi_shop_thumbnail_h_1 || (*wrap.Config).Shop.Thumbnails.Thumbnail1[2] != pfi_shop_thumbnail_r_1 {
+			is_changed_tb1 = true
+		}
+		if (*wrap.Config).Shop.Thumbnails.Thumbnail2[0] != pfi_shop_thumbnail_w_2 || (*wrap.Config).Shop.Thumbnails.Thumbnail2[1] != pfi_shop_thumbnail_h_2 || (*wrap.Config).Shop.Thumbnails.Thumbnail2[2] != pfi_shop_thumbnail_r_2 {
+			is_changed_tb2 = true
+		}
+		if (*wrap.Config).Shop.Thumbnails.Thumbnail3[0] != pfi_shop_thumbnail_w_3 || (*wrap.Config).Shop.Thumbnails.Thumbnail3[1] != pfi_shop_thumbnail_h_3 || (*wrap.Config).Shop.Thumbnails.Thumbnail3[2] != pfi_shop_thumbnail_r_3 {
+			is_changed_tb3 = true
+		}
+		if (*wrap.Config).Shop.Thumbnails.ThumbnailFull[0] != pfi_shop_thumbnail_w_full || (*wrap.Config).Shop.Thumbnails.ThumbnailFull[1] != pfi_shop_thumbnail_h_full || (*wrap.Config).Shop.Thumbnails.ThumbnailFull[2] != pfi_shop_thumbnail_r_full {
+			is_changed_tbf = true
+		}
+
 		(*wrap.Config).Shop.Thumbnails.Thumbnail1[0] = pfi_shop_thumbnail_w_1
 		(*wrap.Config).Shop.Thumbnails.Thumbnail1[1] = pfi_shop_thumbnail_h_1
 		(*wrap.Config).Shop.Thumbnails.Thumbnail1[2] = pfi_shop_thumbnail_r_1
@@ -172,9 +190,38 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		}
 
 		// Reset products images cache
-		if err := wrap.RemoveProductImageThumbnails("*", "thumb-*"); err != nil {
-			wrap.MsgError(err.Error())
-			return
+		if is_changed_tb1 || is_changed_tb2 || is_changed_tb3 || is_changed_tbf {
+			if is_changed_tb1 && is_changed_tb2 && is_changed_tb3 && is_changed_tbf {
+				if err := wrap.RemoveProductImageThumbnails("*", "thumb-*"); err != nil {
+					wrap.MsgError(err.Error())
+					return
+				}
+			} else {
+				if is_changed_tb1 {
+					if err := wrap.RemoveProductImageThumbnails("*", "thumb-1-*"); err != nil {
+						wrap.MsgError(err.Error())
+						return
+					}
+				}
+				if is_changed_tb2 {
+					if err := wrap.RemoveProductImageThumbnails("*", "thumb-2-*"); err != nil {
+						wrap.MsgError(err.Error())
+						return
+					}
+				}
+				if is_changed_tb3 {
+					if err := wrap.RemoveProductImageThumbnails("*", "thumb-3-*"); err != nil {
+						wrap.MsgError(err.Error())
+						return
+					}
+				}
+				if is_changed_tbf {
+					if err := wrap.RemoveProductImageThumbnails("*", "thumb-full-*"); err != nil {
+						wrap.MsgError(err.Error())
+						return
+					}
+				}
+			}
 		}
 
 		// Reload current page
