@@ -274,6 +274,13 @@ func (this *Wrapper) ConfigSave() error {
 	return this.Config.ConfigWrite(this.DConfig + string(os.PathSeparator) + "config.json")
 }
 
+func (this *Wrapper) RecreateProductXmlFile() error {
+	if _, err := os.Create(this.DTmp + string(os.PathSeparator) + "trigger.xml.run"); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) error {
 	pattern := this.DHtdocs + string(os.PathSeparator) + strings.Join([]string{"products", "images", product_id, filename}, string(os.PathSeparator))
 	if files, err := filepath.Glob(pattern); err != nil {
@@ -286,8 +293,4 @@ func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) e
 		}
 	}
 	return nil
-}
-
-func (this *Wrapper) RemoveProductXmlCacheFile() error {
-	return os.Remove(this.DHtdocs + string(os.PathSeparator) + "products.xml")
 }

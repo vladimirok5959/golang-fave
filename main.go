@@ -102,6 +102,10 @@ func main() {
 	// MySQL connections pool
 	mpool := mysqlpool.New()
 
+	// Xml generation
+	xml_cl_ch, xml_cl_stop := xml_start(consts.ParamWwwDir, mpool)
+	defer xml_stop(xml_cl_ch, xml_cl_stop)
+
 	// Init cache blocks
 	cbs := cblocks.New()
 

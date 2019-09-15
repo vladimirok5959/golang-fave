@@ -58,7 +58,7 @@ func session_clean_stop(ch, stop chan bool) {
 			<-ch
 			return
 		case <-time.After(3 * time.Second):
-			fmt.Println("Session cleaner error: force exit by timeout after 8 seconds")
+			fmt.Println("Session error: force exit by timeout after 3 seconds")
 			return
 		}
 	}

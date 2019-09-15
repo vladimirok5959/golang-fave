@@ -30,6 +30,8 @@ func (this *Modules) RegisterAction_SettingsApi() *Action {
 			return
 		}
 
+		wrap.RecreateProductXmlFile()
+
 		wrap.ResetCacheBlocks()
 
 		// Reload current page

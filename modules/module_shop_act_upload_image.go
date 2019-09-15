@@ -84,8 +84,7 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 			}
 		}
 
-		// Delete products XML cache
-		wrap.RemoveProductXmlCacheFile()
+		wrap.RecreateProductXmlFile()
 
 		wrap.ResetCacheBlocks()
 	})

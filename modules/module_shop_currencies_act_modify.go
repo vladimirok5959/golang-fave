@@ -74,8 +74,7 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 				return
 			}
 
-			// Delete products XML cache
-			wrap.RemoveProductXmlCacheFile()
+			wrap.RecreateProductXmlFile()
 
 			wrap.ResetCacheBlocks()
 
@@ -111,8 +110,7 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 				return
 			}
 
-			// Delete products XML cache
-			wrap.RemoveProductXmlCacheFile()
+			wrap.RecreateProductXmlFile()
 
 			wrap.ResetCacheBlocks()
 
