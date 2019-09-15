@@ -74,7 +74,7 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 									}
 									return nil
 								}); err == nil {
-									wrap.Write(`$('#list-images').append('<div class="attached-img"><a href="/products/images/` + pf_id + `/` + target_file_name + `" title="` + target_file_name + `" target="_blank"><img src="/products/images/` + pf_id + `/thumb-0-` + target_file_name + `" onerror="fave.ShopProductsRetryImage(this);" /></a>, <a href="javascript:fave.ShopProductsDeleteImage(this, ` + pf_id + `, \'` + target_file_name + `\');">Delete</a></div>');`)
+									wrap.Write(`$('#list-images').append('<div class="attached-img"><a href="/products/images/` + pf_id + `/` + target_file_name + `" title="` + target_file_name + `" target="_blank"><img src="/products/images/` + pf_id + `/thumb-0-` + target_file_name + `" onerror="fave.ShopProductsRetryImage(this);" /></a><a href="javascript:fave.ShopProductsDeleteImage(this, ` + pf_id + `, \'` + target_file_name + `\');">Delete</a></div>');`)
 								}
 							}
 						}
