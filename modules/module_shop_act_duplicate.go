@@ -53,7 +53,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					currency,
 					price,
 					CONCAT(name, ' (Copy)'),
-					CONCAT(alias, '-', '`+utils.Int64ToStr(time.Now().Unix())+`'),
+					CONCAT(REGEXP_REPLACE(alias, '-c[0-9]+$', ''), '-c', '`+utils.Int64ToStr(time.Now().Unix())+`'),
 					vendor,
 					quantity,
 					category,
