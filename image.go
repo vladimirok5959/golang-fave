@@ -151,7 +151,7 @@ func image_stop(ch, stop chan bool) {
 		case ch <- true:
 			<-ch
 			return
-		case <-time.After(8 * time.Second):
+		case <-time.After(3 * time.Second):
 			fmt.Println("Image error: force exit by timeout after 8 seconds")
 			return
 		}
