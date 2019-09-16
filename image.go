@@ -62,7 +62,7 @@ func image_create(www, src, dst, typ string, conf *config.Config) {
 	image_generate(width, height, resize, src, dst)
 }
 
-func image_detect(www, file string, conf *config.Config) bool {
+func image_detect(www, file string, conf *config.Config) {
 	index := strings.LastIndex(file, string(os.PathSeparator))
 	if index != -1 {
 		file_name := file[index+1:]
@@ -87,10 +87,8 @@ func image_detect(www, file string, conf *config.Config) bool {
 			if !utils.IsFileExists(file_thumb_full) {
 				image_create(www, file, file_thumb_full, "thumb-full", conf)
 			}
-			return false
 		}
 	}
-	return true
 }
 
 func image_loop(www_dir string, stop chan bool) {
@@ -104,24 +102,18 @@ func image_loop(www_dir string, stop chan bool) {
 					if utils.IsDirExists(target_dir) {
 						pattern := target_dir + string(os.PathSeparator) + "*" + string(os.PathSeparator) + "*.*"
 						if files, err := filepath.Glob(pattern); err == nil {
-							if len(files) > 0 {
-								for _, file := range files {
-									select {
-									case <-stop:
-										break
-									default:
-										if image_detect(www_dir, file, conf) {
-											os.Remove(trigger)
-											return
-										}
-									}
+							for _, file := range files {
+								select {
+								case <-stop:
+									break
+								default:
+									image_detect(www_dir, file, conf)
 								}
-							} else {
-								os.Remove(trigger)
 							}
 						}
 					}
 				}
+				os.Remove(trigger)
 			}
 		}
 	}
