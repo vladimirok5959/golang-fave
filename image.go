@@ -62,7 +62,7 @@ func image_create(www, src, dst, typ string, conf *config.Config) {
 	image_generate(width, height, resize, src, dst)
 }
 
-func image_detect(www, file string, conf *config.Config) {
+func image_detect(www, file string, conf *config.Config) bool {
 	index := strings.LastIndex(file, string(os.PathSeparator))
 	if index != -1 {
 		file_name := file[index+1:]
@@ -74,45 +74,50 @@ func image_detect(www, file string, conf *config.Config) {
 			file_thumb_full := file[:index+1] + "thumb-full-" + file_name
 			if !utils.IsFileExists(file_thumb_0) {
 				image_create(www, file, file_thumb_0, "thumb-0", conf)
-				return
 			}
 			if !utils.IsFileExists(file_thumb_1) {
 				image_create(www, file, file_thumb_1, "thumb-1", conf)
-				return
 			}
 			if !utils.IsFileExists(file_thumb_2) {
 				image_create(www, file, file_thumb_2, "thumb-2", conf)
-				return
 			}
 			if !utils.IsFileExists(file_thumb_3) {
 				image_create(www, file, file_thumb_3, "thumb-3", conf)
-				return
 			}
 			if !utils.IsFileExists(file_thumb_full) {
 				image_create(www, file, file_thumb_full, "thumb-full", conf)
-				return
 			}
+			return false
 		}
 	}
+	return true
 }
 
 func image_loop(www_dir string, stop chan bool) {
-	dirs, err := ioutil.ReadDir(www_dir)
-	if err == nil {
+	if dirs, err := ioutil.ReadDir(www_dir); err == nil {
 		for _, dir := range dirs {
-			target_dir := strings.Join([]string{www_dir, dir.Name(), "htdocs", "products", "images"}, string(os.PathSeparator))
-			if utils.IsDirExists(target_dir) {
-				cfile := strings.Join([]string{www_dir, dir.Name(), "config", "config.json"}, string(os.PathSeparator))
+			trigger := strings.Join([]string{www_dir, dir.Name(), "tmp", "trigger.img.run"}, string(os.PathSeparator))
+			if utils.IsFileExists(trigger) {
 				conf := config.ConfigNew()
-				if err := conf.ConfigRead(cfile); err == nil {
-					pattern := target_dir + string(os.PathSeparator) + "*" + string(os.PathSeparator) + "*.*"
-					if files, err := filepath.Glob(pattern); err == nil {
-						for _, file := range files {
-							select {
-							case <-stop:
-								break
-							default:
-								image_detect(www_dir, file, conf)
+				if err := conf.ConfigRead(strings.Join([]string{www_dir, dir.Name(), "config", "config.json"}, string(os.PathSeparator))); err == nil {
+					target_dir := strings.Join([]string{www_dir, dir.Name(), "htdocs", "products", "images"}, string(os.PathSeparator))
+					if utils.IsDirExists(target_dir) {
+						pattern := target_dir + string(os.PathSeparator) + "*" + string(os.PathSeparator) + "*.*"
+						if files, err := filepath.Glob(pattern); err == nil {
+							if len(files) > 0 {
+								for _, file := range files {
+									select {
+									case <-stop:
+										break
+									default:
+										if image_detect(www_dir, file, conf) {
+											os.Remove(trigger)
+											return
+										}
+									}
+								}
+							} else {
+								os.Remove(trigger)
 							}
 						}
 					}

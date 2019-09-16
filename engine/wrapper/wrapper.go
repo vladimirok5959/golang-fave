@@ -284,6 +284,16 @@ func (this *Wrapper) RecreateProductXmlFile() error {
 	return nil
 }
 
+func (this *Wrapper) RecreateProductImgFiles() error {
+	trigger := strings.Join([]string{this.DTmp, "trigger.img.run"}, string(os.PathSeparator))
+	if !utils.IsFileExists(trigger) {
+		if _, err := os.Create(trigger); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) error {
 	pattern := this.DHtdocs + string(os.PathSeparator) + strings.Join([]string{"products", "images", product_id, filename}, string(os.PathSeparator))
 	if files, err := filepath.Glob(pattern); err != nil {
@@ -295,5 +305,5 @@ func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) e
 			}
 		}
 	}
-	return nil
+	return this.RecreateProductImgFiles()
 }

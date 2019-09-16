@@ -84,6 +84,8 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 			}
 		}
 
+		wrap.RecreateProductImgFiles()
+
 		wrap.RecreateProductXmlFile()
 
 		wrap.ResetCacheBlocks()
