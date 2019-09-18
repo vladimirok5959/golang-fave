@@ -993,6 +993,8 @@ ul.pagination {
 	margin-right: 1rem;
 	margin-bottom: 1rem;
 	border-radius: .25rem;
+	position: relative;
+	vertical-align: top;
 }
 
 #list-images .attached-img a {
@@ -1002,6 +1004,26 @@ ul.pagination {
 #list-images .attached-img a img {
 	width: 84px;
 	height: 84px;
+}
+
+#list-images .attached-img a.remove {
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	top: -12px;
+	right: -12px;
+	border-radius: 12px;
+	background: #d9534f;
+	text-align: center;
+}
+
+#list-images .attached-img a.remove:hover {
+	background: #c9302c;
+}
+
+#list-images .attached-img a.remove svg {
+	color: #fff;
+	fill: currentColor;
 }
 
 #upload-msg {
