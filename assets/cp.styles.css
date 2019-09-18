@@ -1015,6 +1015,7 @@ ul.pagination {
 	border-radius: 12px;
 	background: #d9534f;
 	text-align: center;
+	cursor: pointer;
 }
 
 #list-images .attached-img a.remove:hover {

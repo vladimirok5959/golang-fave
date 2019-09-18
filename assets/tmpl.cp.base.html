@@ -24,7 +24,7 @@
 				email: '{{$.Data.UserEmail}}'
 			};
 			function WaitForFave(callback) {
-				if(fave) {
+				if(window && window.fave) {
 					callback();
 				} else {
 					setTimeout(function() {

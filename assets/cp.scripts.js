@@ -3884,9 +3884,11 @@
 			},
 
 			ShopProductsDeleteImage: function(button, product_id, filename) {
+				if($(button).hasClass('in-progress')) return;
 				if(!confirm('Are you sure want to delete image?')) {
 					return;
 				}
+				$(button).addClass('in-progress');
 				$.ajax({
 					type: "POST",
 					url: '/cp/',
@@ -3941,11 +3943,12 @@
 				});
 			},
 
-			ShopProductsRetryImage: function(img) {
-				var original = $(img).attr('src');
-				$(img).attr('src', '/assets/cp/img-load.gif');
+			ShopProductsRetryImage: function(img, id) {
+				var target = $('#' + id);
+				var src = target.attr('src');
+				target.attr('src', '/assets/cp/img-load.gif');
 				setTimeout(function() {
-					$(img).attr('src', original);
+					target.attr('src', src);
 				}, 1000);
 			},
 
