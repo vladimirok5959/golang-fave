@@ -58,9 +58,11 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 			shop_filters_values.name,
 			IF(shop_filter_product_values.filter_value_id > 0, 1, 0) as selected
 		FROM
-			shop_filters
-			LEFT JOIN shop_filters_values ON shop_filters_values.filter_id = shop_filters.id
-			LEFT JOIN shop_filter_product_values ON shop_filter_product_values.filter_value_id = shop_filters_values.id
+			shop_filters_values
+			LEFT JOIN shop_filters ON shop_filters.id = shop_filters_values.filter_id
+			LEFT JOIN shop_filter_product_values ON
+				shop_filter_product_values.filter_value_id = shop_filters_values.id AND
+				shop_filter_product_values.product_id = ` + utils.IntToStr(product_id) + `
 			LEFT JOIN (
 				SELECT
 					shop_filters_values.filter_id,
@@ -74,10 +76,6 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 					shop_filters_values.filter_id
 			) as filter_used ON filter_used.filter_id = shop_filters.id
 		WHERE
-			(
-				shop_filter_product_values.product_id = ` + utils.IntToStr(product_id) + ` OR
-				shop_filter_product_values.product_id IS NULL
-			) AND
 			filter_used.filter_id IS NOT NULL
 		ORDER BY
 			shop_filters.name ASC,
