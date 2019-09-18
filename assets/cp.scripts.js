@@ -3884,6 +3884,9 @@
 			},
 
 			ShopProductsDeleteImage: function(button, product_id, filename) {
+				if(!confirm('Are you sure want to delete image?')) {
+					return;
+				}
 				$.ajax({
 					type: "POST",
 					url: '/cp/',
