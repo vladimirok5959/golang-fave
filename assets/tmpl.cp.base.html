@@ -23,6 +23,15 @@
 				last_name: '{{$.Data.UserLastName}}',
 				email: '{{$.Data.UserEmail}}'
 			};
+			function WaitForFave(callback) {
+				if(fave) {
+					callback();
+				} else {
+					setTimeout(function() {
+						WaitForFave(callback);
+					}, 100);
+				}
+			};
 		</script>
 	</head>
 	<body class="{{$.Data.BodyClasses}} cp-mod-{{$.System.CpModule}} cp-sub-mod-{{$.System.CpSubModule}}">
