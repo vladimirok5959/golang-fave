@@ -61,10 +61,12 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 									if _, err := tx.Exec(
 										`INSERT INTO shop_product_images SET
 											product_id = ?,
-											filename = ?
+											filename = ?,
+											ord = ?
 										;`,
 										utils.StrToInt(pf_id),
 										target_file_name,
+										(utils.GetCurrentUnixTimestamp() + int64(i-1)),
 									); err != nil {
 										return err
 									}

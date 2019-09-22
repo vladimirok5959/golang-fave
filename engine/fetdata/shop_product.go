@@ -34,7 +34,7 @@ func (this *ShopProduct) load() *ShopProduct {
 		WHERE
 			shop_product_images.product_id = ?
 		ORDER BY
-			shop_product_images.filename ASC
+			shop_product_images.ord ASC
 		;`,
 		this.object.A_id,
 	); err == nil {

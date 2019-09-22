@@ -79,8 +79,11 @@ CREATE TABLE shop_filters_values (
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_product_images (
+	id int(11) NOT NULL AUTO_INCREMENT,
 	product_id int(11) NOT NULL,
-	filename varchar(255) NOT NULL
+	filename varchar(255) NOT NULL,
+	ord int(11) NOT NULL DEFAULT '0',
+	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE shop_products (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',

@@ -220,18 +220,21 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 	result := ``
 	rows, err := wrap.DB.Query(
 		`SELECT
+			id,
 			product_id,
 			filename
 		FROM
 			shop_product_images
 		WHERE
 			product_id = ?
+		ORDER BY
+			ord ASC
 		;`,
 		product_id,
 	)
 	if err == nil {
 		defer rows.Close()
-		values := make([]string, 2)
+		values := make([]string, 3)
 		scan := make([]interface{}, len(values))
 		for i := range values {
 			scan[i] = &values[i]
@@ -239,7 +242,7 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if err == nil {
-				result += `<div class="attached-img"><a href="/products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `" title="` + html.EscapeString(string(values[1])) + `" target="_blank"><img id="pimg_` + string(values[0]) + `_` + strings.Replace(string(values[1]), ".", "_", -1) + `" src="/products/images/` + string(values[0]) + `/thumb-0-` + string(values[1]) + `" onerror="WaitForFave(function(){fave.ShopProductsRetryImage(this, 'pimg_` + string(values[0]) + `_` + strings.Replace(string(values[1]), ".", "_", -1) + `');});" /></a><a class="remove" onclick="fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[0])) + `, '` + html.EscapeString(string(values[1])) + `');"><svg viewBox="1 1 11 14" width="10" height="12" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>`
+				result += `<div class="attached-img" data-id="` + html.EscapeString(string(values[0])) + `"><a href="/products/images/` + html.EscapeString(string(values[1])) + `/` + html.EscapeString(string(values[2])) + `" title="` + html.EscapeString(string(values[2])) + `" target="_blank"><img id="pimg_` + string(values[1]) + `_` + strings.Replace(string(values[2]), ".", "_", -1) + `" src="/products/images/` + string(values[1]) + `/thumb-0-` + string(values[2]) + `" onerror="WaitForFave(function(){fave.ShopProductsRetryImage(this, 'pimg_` + string(values[1]) + `_` + strings.Replace(string(values[2]), ".", "_", -1) + `');});" /></a><a class="remove" onclick="fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[1])) + `, '` + html.EscapeString(string(values[2])) + `');"><svg viewBox="1 1 11 14" width="10" height="12" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>`
 			}
 		}
 	}
@@ -1051,7 +1054,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`</div>` +
 							`</div>` +
 							`</div>` +
-							`</div>`
+							`</div>` +
+							`<script>WaitForFave(function(){Sortable.create(document.getElementById('list-images'),{animation:0,onEnd:function(evt){var orderData={};$('#list-images div.attached-img').each(function(i,v){orderData[$(v).data('id')]=i;});fave.ShopProductsImageReorder('shop-images-reorder',orderData);},});});</script>`
 					},
 				},
 				{

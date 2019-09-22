@@ -241,8 +241,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		// Table: shop_product_images
 		if _, err = tx.Exec(
 			`CREATE TABLE shop_product_images (
+				id int(11) NOT NULL AUTO_INCREMENT,
 				product_id int(11) NOT NULL,
-				filename varchar(255) NOT NULL
+				filename varchar(255) NOT NULL,
+				ord int(11) NOT NULL DEFAULT '0',
+				PRIMARY KEY (id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 		); err != nil {
 			tx.Rollback()
@@ -466,7 +469,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000010');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000011');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

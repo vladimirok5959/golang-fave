@@ -112,6 +112,8 @@ func xml_gen_offer_pictures(db *sqlw.DB, conf *config.Config, product_id int) st
 			shop_product_images
 		WHERE
 			shop_product_images.product_id = ?
+		ORDER BY
+			shop_product_images.ord ASC
 		;`,
 		product_id,
 	)

@@ -379,7 +379,7 @@ func (this *Shop) load() *Shop {
 			WHERE
 				shop_product_images.product_id IN (` + strings.Join(product_ids, ", ") + `)
 			ORDER BY
-				shop_product_images.filename ASC
+				shop_product_images.ord ASC
 			;`,
 		); err == nil {
 			defer rows.Close()
