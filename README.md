@@ -79,6 +79,7 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 ## Used resources
 * [jQuery](https://github.com/jquery/jquery) (MIT License)
 * [Autosize](https://github.com/jackmoore/autosize) (MIT License)
+* [Sortable](https://github.com/SortableJS/Sortable) (MIT License)
 * [Bootstrap](https://github.com/twbs/bootstrap) (MIT License)
 * [CodeMirror](https://github.com/codemirror/codemirror) (MIT License)
 * [Pell WYSIWYG](https://github.com/jaredreich/pell) (MIT License)
