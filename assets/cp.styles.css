@@ -1031,10 +1031,6 @@ ul.pagination {
 	opacity: 0.1;
 }
 
-#list-images.loading {
-	background: #fff url('/assets/cp/img-load.gif') no-repeat 50% 50%;
-}
-
 #list-images.loading .attached-img {
 	opacity: 0.1;
 }
