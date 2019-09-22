@@ -256,7 +256,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 		Name:   "Shop",
 		Order:  2,
 		System: false,
-		Icon:   assets.SysSvgIconList,
+		Icon:   assets.SysSvgIconShop,
 		Sub: &[]MISub{
 			{Mount: "default", Name: "List of products", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "add", Name: "Add new product", Show: true, Icon: assets.SysSvgIconPlus},
