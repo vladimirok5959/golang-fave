@@ -7636,7 +7636,6 @@
 						action: action,
 						data: JSON.stringify(orderData),
 					},
-					dataType: 'json'
 				}).done(function(data) {
 					if(IsDebugMode()) console.log('done', data);
 					AjaxDone(data);

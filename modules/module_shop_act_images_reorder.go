@@ -48,5 +48,8 @@ func (this *Modules) RegisterAction_ShopImagesReorder() *Action {
 		wrap.RecreateProductXmlFile()
 
 		wrap.ResetCacheBlocks()
+
+		// Remove loading effect
+		wrap.Write(`$('#list-images').removeClass('loading');`)
 	})
 }

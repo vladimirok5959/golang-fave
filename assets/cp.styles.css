@@ -1027,6 +1027,22 @@ ul.pagination {
 	fill: currentColor;
 }
 
+#list-images .attached-img.sortable-ghost {
+	opacity: 0.1;
+}
+
+#list-images.loading {
+	background: #fff url('/assets/cp/img-load.gif') no-repeat 50% 50%;
+}
+
+#list-images.loading .attached-img {
+	opacity: 0.1;
+}
+
+#list-images.loading .attached-img a.remove {
+	display: none;
+}
+
 #upload-msg {
 	position: absolute;
 	background: white;
