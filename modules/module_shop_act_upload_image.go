@@ -51,6 +51,7 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 							if err := os.MkdirAll(wrap.DHtdocs+string(os.PathSeparator)+"products"+string(os.PathSeparator)+"images"+string(os.PathSeparator)+pf_id, os.ModePerm); err == nil {
 								target_file_name := utils.Int64ToStr(time.Now().Unix()+int64(i-1)) + filepath.Ext(handler.Filename)
 								target_file_full := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + pf_id + string(os.PathSeparator) + target_file_name
+								var lastID int64 = 0
 								if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
 									// Block rows
 									if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
@@ -58,7 +59,7 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 									}
 
 									// Insert row
-									if _, err := tx.Exec(
+									res, err := tx.Exec(
 										`INSERT INTO shop_product_images SET
 											product_id = ?,
 											filename = ?,
@@ -67,7 +68,14 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 										utils.StrToInt(pf_id),
 										target_file_name,
 										(utils.GetCurrentUnixTimestamp() + int64(i-1)),
-									); err != nil {
+									)
+									if err != nil {
+										return err
+									}
+
+									// Get inserted post id
+									lastID, err = res.LastInsertId()
+									if err != nil {
 										return err
 									}
 
@@ -77,7 +85,7 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 									}
 									return nil
 								}); err == nil {
-									wrap.Write(`$('#list-images').append('<div class="attached-img"><a href="/products/images/` + pf_id + `/` + target_file_name + `" title="` + target_file_name + `" target="_blank"><img id="pimg_` + pf_id + `_` + strings.Replace(target_file_name, ".", "_", -1) + `" src="/products/images/` + pf_id + `/thumb-0-` + target_file_name + `" onerror="WaitForFave(function(){fave.ShopProductsRetryImage(this, \'pimg_` + pf_id + `_` + strings.Replace(target_file_name, ".", "_", -1) + `\');});" /></a><a class="remove" onclick="fave.ShopProductsDeleteImage(this, ` + pf_id + `, \'` + target_file_name + `\');"><svg viewBox="1 1 11 14" width="10" height="12" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>');`)
+									wrap.Write(`$('#list-images').append('<div class="attached-img" data-id="` + utils.Int64ToStr(lastID) + `"><a href="/products/images/` + pf_id + `/` + target_file_name + `" title="` + target_file_name + `" target="_blank"><img id="pimg_` + pf_id + `_` + strings.Replace(target_file_name, ".", "_", -1) + `" src="/products/images/` + pf_id + `/thumb-0-` + target_file_name + `" onerror="WaitForFave(function(){fave.ShopProductsRetryImage(this, \'pimg_` + pf_id + `_` + strings.Replace(target_file_name, ".", "_", -1) + `\');});" /></a><a class="remove" onclick="fave.ShopProductsDeleteImage(this, ` + pf_id + `, \'` + target_file_name + `\');"><svg viewBox="1 1 11 14" width="10" height="12" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>');`)
 								}
 							}
 						}
