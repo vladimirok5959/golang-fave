@@ -1055,7 +1055,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`</div>` +
 							`</div>` +
 							`</div>` +
-							`<script>WaitForFave(function(){Sortable.create(document.getElementById('list-images'),{animation:0,onEnd:function(evt){var orderData=[];$('#list-images div.attached-img').each(function(i,v){orderData.push({Id:$(v).data('id'),Order:i});});fave.ShopProductsImageReorder('shop-images-reorder',{Items:orderData});},});});</script>`
+							`<script>WaitForFave(function(){Sortable.create(document.getElementById('list-images'),{animation:0,onEnd:function(evt){var orderData=[];$('#list-images div.attached-img').each(function(i,v){orderData.push({Id:$(v).data('id'),Order:i+1});});fave.ShopProductsImageReorder('shop-images-reorder',{Items:orderData});},});});</script>`
 					},
 				},
 				{
