@@ -150,9 +150,6 @@ func image_start(www_dir string) (chan bool, chan bool) {
 	ch := make(chan bool)
 	stop := make(chan bool)
 
-	// Run at start
-	image_loop(www_dir, stop)
-
 	go func() {
 		for {
 			select {
