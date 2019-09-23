@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"image"
+	"image/color"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -14,16 +16,35 @@ import (
 	"github.com/disintegration/imaging"
 )
 
-func image_generate(width, height int, resize bool, fsrc, fdst string) {
+func image_generate(width, height int, resize int, fsrc, fdst string) {
 	src, err := imaging.Open(fsrc)
 	if err == nil {
-		if !resize {
+		if resize == 0 {
 			src = imaging.Fill(src, width, height, imaging.Center, imaging.Lanczos)
+			if err := imaging.Save(src, fdst); err != nil {
+				fmt.Printf("Image generation error (1): %v\n", err)
+			}
+		} else if resize == 1 {
+			src = imaging.Fit(src, width, height, imaging.Lanczos)
+			if err := imaging.Save(src, fdst); err != nil {
+				fmt.Printf("Image generation error (2): %v\n", err)
+			}
 		} else {
 			src = imaging.Fit(src, width, height, imaging.Lanczos)
-		}
-		if err := imaging.Save(src, fdst); err != nil {
-			fmt.Printf("Image generation error: %v\n", err)
+			dst := imaging.New(width, height, color.NRGBA{255, 255, 255, 255})
+			x := 0
+			y := 0
+			if src.Bounds().Dx() < width {
+				x = int((width - src.Bounds().Dx()) / 2)
+			}
+			if src.Bounds().Dy() < height {
+				y = int((height - src.Bounds().Dy()) / 2)
+			}
+			dst = imaging.Paste(dst, src, image.Pt(x, y))
+			if err := imaging.Save(dst, fdst); err != nil {
+				fmt.Printf("Image generation error (3): %v\n", err)
+			}
+			return
 		}
 	}
 }
@@ -31,32 +52,24 @@ func image_generate(width, height int, resize bool, fsrc, fdst string) {
 func image_create(www, src, dst, typ string, conf *config.Config) {
 	width := (*conf).Shop.Thumbnails.Thumbnail0[0]
 	height := (*conf).Shop.Thumbnails.Thumbnail0[1]
-	resize := false
+	resize := 0
 
 	if typ == "thumb-1" {
 		width = (*conf).Shop.Thumbnails.Thumbnail1[0]
 		height = (*conf).Shop.Thumbnails.Thumbnail1[1]
-		if (*conf).Shop.Thumbnails.Thumbnail1[2] == 1 {
-			resize = true
-		}
+		resize = (*conf).Shop.Thumbnails.Thumbnail1[2]
 	} else if typ == "thumb-2" {
 		width = (*conf).Shop.Thumbnails.Thumbnail2[0]
 		height = (*conf).Shop.Thumbnails.Thumbnail2[1]
-		if (*conf).Shop.Thumbnails.Thumbnail2[2] == 1 {
-			resize = true
-		}
+		resize = (*conf).Shop.Thumbnails.Thumbnail2[2]
 	} else if typ == "thumb-3" {
 		width = (*conf).Shop.Thumbnails.Thumbnail3[0]
 		height = (*conf).Shop.Thumbnails.Thumbnail3[1]
-		if (*conf).Shop.Thumbnails.Thumbnail3[2] == 1 {
-			resize = true
-		}
+		resize = (*conf).Shop.Thumbnails.Thumbnail3[2]
 	} else if typ == "thumb-full" {
 		width = (*conf).Shop.Thumbnails.ThumbnailFull[0]
 		height = (*conf).Shop.Thumbnails.ThumbnailFull[1]
-		if (*conf).Shop.Thumbnails.ThumbnailFull[2] == 1 {
-			resize = true
-		}
+		resize = (*conf).Shop.Thumbnails.ThumbnailFull[2]
 	}
 
 	image_generate(width, height, resize, src, dst)

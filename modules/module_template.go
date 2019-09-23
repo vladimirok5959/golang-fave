@@ -42,6 +42,7 @@ func (this *Modules) RegisterModule_Template() *Module {
 		Icon:   assets.SysSvgIconView,
 		Sub: &[]MISub{
 			{Mount: "default", Name: "Editor", Show: true, Icon: assets.SysSvgIconEdit},
+			{Mount: "restore", Name: "Restore", Show: true, Icon: assets.SysSvgIconRestore},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
@@ -50,6 +51,7 @@ func (this *Modules) RegisterModule_Template() *Module {
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 				{Name: "Editor"},
 			})
+
 			files := this.template_GetThemeFiles(wrap)
 			if len(files) > 0 {
 				selected_file, _ := url.QueryUnescape(wrap.R.URL.Query().Get("file"))
@@ -89,16 +91,13 @@ func (this *Modules) RegisterModule_Template() *Module {
 						CallBack: func(field *builder.DataFormField) string {
 							return `<div class="form-group n1">` +
 								`<div class="row">` +
-								`<div class="col-7">` +
+								`<div class="col-12">` +
 								`<div style="position:relative;">` +
 								`<button type="button" class="btn btn-success" onclick="return fave.ActionRestoreThemeFile('template-restore-file','` + selected_file + `','Are you sure want to restore theme file?');" style="position:absolute;right:0;">Restore</button>` +
 								`<select class="form-control ignore-lost-data" id="lbl_file" name="file" onchange="setTimeout(function(){$('#lbl_file').val('` + selected_file + `')},500);document.location='/cp/` + wrap.CurrModule + `/?file='+encodeURI(this.value);">` +
 								list_of_files +
 								`</select>` +
 								`</div>` +
-								`</div>` +
-								`<div class="col-5">` +
-								`<button type="button" class="btn btn-danger" onclick="return fave.ActionRestoreThemeFile('template-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');">Restore All</button>` +
 								`</div>` +
 								`</div>` +
 								`</div>`
@@ -126,6 +125,27 @@ func (this *Modules) RegisterModule_Template() *Module {
 					</div>
 				</div>`
 			}
+		} else if wrap.CurrSubModule == "restore" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Restore"},
+			})
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group last"><div class="row"><div class="col-12"><div class="alert alert-danger" style="margin:0;"><strong>WARNING!</strong> This action will restore current theme files to original, you will lost you theme changes! Think twice before run this action! If you still want to do this, please press <b>Restore</b> red button!</div></div></div></div>`
+					},
+				},
+				{
+					Kind: builder.DFKSubmit,
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="row d-lg-none"><div class="col-12"><div class="pt-3"><button type="button" class="btn btn-danger" onclick="return fave.ActionRestoreThemeFile('template-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');">Restore</button></div></div></div>`
+					},
+				},
+			})
+
+			sidebar += `<button class="btn btn-danger btn-sidebar" onclick="return fave.ActionRestoreThemeFile('template-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');" id="add-edit-button">Restore</button>`
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})

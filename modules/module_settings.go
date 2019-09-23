@@ -204,6 +204,11 @@ func (this *Modules) RegisterModule_Settings() *Module {
 							resize_list += ` selected`
 						}
 						resize_list += `>Resize</option>`
+						resize_list += `<option value="2"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail1[2] == 2 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Fit into size</option>`
 						resize_list += `</select>`
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
@@ -246,6 +251,11 @@ func (this *Modules) RegisterModule_Settings() *Module {
 							resize_list += ` selected`
 						}
 						resize_list += `>Resize</option>`
+						resize_list += `<option value="2"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail2[2] == 2 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Fit into size</option>`
 						resize_list += `</select>`
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
@@ -288,6 +298,11 @@ func (this *Modules) RegisterModule_Settings() *Module {
 							resize_list += ` selected`
 						}
 						resize_list += `>Resize</option>`
+						resize_list += `<option value="2"`
+						if (*wrap.Config).Shop.Thumbnails.Thumbnail3[2] == 2 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Fit into size</option>`
 						resize_list += `</select>`
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
@@ -330,6 +345,11 @@ func (this *Modules) RegisterModule_Settings() *Module {
 							resize_list += ` selected`
 						}
 						resize_list += `>Resize</option>`
+						resize_list += `<option value="2"`
+						if (*wrap.Config).Shop.Thumbnails.ThumbnailFull[2] == 2 {
+							resize_list += ` selected`
+						}
+						resize_list += `>Fit into size</option>`
 						resize_list += `</select>`
 						return `<div class="form-group n3">` +
 							`<div class="row">` +

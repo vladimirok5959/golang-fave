@@ -104,7 +104,7 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		if pfi_shop_thumbnail_h_1 > 1000 {
 			pfi_shop_thumbnail_h_1 = 1000
 		}
-		if pfi_shop_thumbnail_r_1 > 1 {
+		if pfi_shop_thumbnail_r_1 > 2 {
 			pfi_shop_thumbnail_r_1 = 1
 		}
 		if pfi_shop_thumbnail_r_1 < 0 {
@@ -117,7 +117,7 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		if pfi_shop_thumbnail_h_2 > 1000 {
 			pfi_shop_thumbnail_h_2 = 1000
 		}
-		if pfi_shop_thumbnail_r_2 > 1 {
+		if pfi_shop_thumbnail_r_2 > 2 {
 			pfi_shop_thumbnail_r_2 = 1
 		}
 		if pfi_shop_thumbnail_r_2 < 0 {
@@ -130,7 +130,7 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		if pfi_shop_thumbnail_h_3 > 1000 {
 			pfi_shop_thumbnail_h_3 = 1000
 		}
-		if pfi_shop_thumbnail_r_3 > 1 {
+		if pfi_shop_thumbnail_r_3 > 2 {
 			pfi_shop_thumbnail_r_3 = 1
 		}
 		if pfi_shop_thumbnail_r_3 < 0 {
@@ -143,7 +143,7 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		if pfi_shop_thumbnail_h_full > 1000 {
 			pfi_shop_thumbnail_h_full = 1000
 		}
-		if pfi_shop_thumbnail_r_full > 1 {
+		if pfi_shop_thumbnail_r_full > 2 {
 			pfi_shop_thumbnail_r_full = 1
 		}
 		if pfi_shop_thumbnail_r_full < 0 {
