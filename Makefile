@@ -24,7 +24,10 @@ build: clean version template dockerfile
 	cd ./bin && find . -name 'fave*' | xargs -I{} tar czf {}.tar.gz {}
 	@cp -R ./hosts/localhost ./bin/localhost
 	@-find ./bin/localhost -type f -name '.*' -exec rm -f {} \;
-	@-find ./bin/localhost -type f -name '*.json' -exec rm -f {} \;
+	@-rm -R ./bin/localhost/htdocs/products
+	@-rm ./bin/localhost/config/*
+	@-rm ./bin/localhost/htdocs/*
+	@-rm ./bin/localhost/logs/*
 	@-rm ./bin/localhost/tmp/*
 	cd ./bin && tar -zcf localhost.tar.gz ./localhost
 	@-rm -r ./bin/localhost
