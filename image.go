@@ -75,7 +75,8 @@ func image_create(www, src, dst, typ string, conf *config.Config) {
 	image_generate(width, height, resize, src, dst)
 }
 
-func image_detect(www, file string, conf *config.Config) {
+func image_detect(www, file string, conf *config.Config) bool {
+	result := false
 	index := strings.LastIndex(file, string(os.PathSeparator))
 	if index != -1 {
 		file_name := file[index+1:]
@@ -87,21 +88,27 @@ func image_detect(www, file string, conf *config.Config) {
 			file_thumb_full := file[:index+1] + "thumb-full-" + file_name
 			if !utils.IsFileExists(file_thumb_0) {
 				image_create(www, file, file_thumb_0, "thumb-0", conf)
+				result = true
 			}
 			if !utils.IsFileExists(file_thumb_1) {
 				image_create(www, file, file_thumb_1, "thumb-1", conf)
+				result = true
 			}
 			if !utils.IsFileExists(file_thumb_2) {
 				image_create(www, file, file_thumb_2, "thumb-2", conf)
+				result = true
 			}
 			if !utils.IsFileExists(file_thumb_3) {
 				image_create(www, file, file_thumb_3, "thumb-3", conf)
+				result = true
 			}
 			if !utils.IsFileExists(file_thumb_full) {
 				image_create(www, file, file_thumb_full, "thumb-full", conf)
+				result = true
 			}
 		}
 	}
+	return result
 }
 
 func image_loop(www_dir string, stop chan bool) {
@@ -109,6 +116,7 @@ func image_loop(www_dir string, stop chan bool) {
 		for _, dir := range dirs {
 			trigger := strings.Join([]string{www_dir, dir.Name(), "tmp", "trigger.img.run"}, string(os.PathSeparator))
 			if utils.IsFileExists(trigger) {
+				processed := false
 				conf := config.ConfigNew()
 				if err := conf.ConfigRead(strings.Join([]string{www_dir, dir.Name(), "config", "config.json"}, string(os.PathSeparator))); err == nil {
 					target_dir := strings.Join([]string{www_dir, dir.Name(), "htdocs", "products", "images"}, string(os.PathSeparator))
@@ -120,13 +128,19 @@ func image_loop(www_dir string, stop chan bool) {
 								case <-stop:
 									break
 								default:
-									image_detect(www_dir, file, conf)
+									if image_detect(www_dir, file, conf) {
+										if !processed {
+											processed = true
+										}
+									}
 								}
 							}
 						}
 					}
 				}
-				os.Remove(trigger)
+				if !processed {
+					os.Remove(trigger)
+				}
 			}
 		}
 	}
