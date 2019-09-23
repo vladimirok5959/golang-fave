@@ -359,7 +359,7 @@ func (this *Shop) load() *Shop {
 						wrap:     this.wrap,
 						object:   &rp,
 						user:     &User{wrap: this.wrap, object: &ru},
-						currency: &Currency{wrap: this.wrap, object: &rc},
+						currency: &ShopCurrency{wrap: this.wrap, object: &rc},
 						category: &ShopCategory{wrap: this.wrap, object: &ro},
 					})
 				}

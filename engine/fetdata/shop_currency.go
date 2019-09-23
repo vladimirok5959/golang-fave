@@ -5,16 +5,16 @@ import (
 	"golang-fave/utils"
 )
 
-type Currency struct {
+type ShopCurrency struct {
 	wrap   *wrapper.Wrapper
 	object *utils.MySql_shop_currency
 }
 
-func (this *Currency) load() *Currency {
+func (this *ShopCurrency) load() *ShopCurrency {
 	return this
 }
 
-func (this *Currency) loadById(id int) {
+func (this *ShopCurrency) loadById(id int) {
 	if this == nil {
 		return
 	}
@@ -46,35 +46,35 @@ func (this *Currency) loadById(id int) {
 	}
 }
 
-func (this *Currency) Id() int {
+func (this *ShopCurrency) Id() int {
 	if this == nil {
 		return 0
 	}
 	return this.object.A_id
 }
 
-func (this *Currency) Name() string {
+func (this *ShopCurrency) Name() string {
 	if this == nil {
 		return ""
 	}
 	return this.object.A_name
 }
 
-func (this *Currency) Coefficient() float64 {
+func (this *ShopCurrency) Coefficient() float64 {
 	if this == nil {
 		return 0
 	}
 	return this.object.A_coefficient
 }
 
-func (this *Currency) Code() string {
+func (this *ShopCurrency) Code() string {
 	if this == nil {
 		return ""
 	}
 	return this.object.A_code
 }
 
-func (this *Currency) Symbol() string {
+func (this *ShopCurrency) Symbol() string {
 	if this == nil {
 		return ""
 	}

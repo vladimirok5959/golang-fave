@@ -14,7 +14,7 @@ type ShopProduct struct {
 	object *utils.MySql_shop_product
 
 	user     *User
-	currency *Currency
+	currency *ShopCurrency
 	category *ShopCategory
 
 	images []*ShopProductImage
@@ -118,14 +118,14 @@ func (this *ShopProduct) User() *User {
 	return this.user
 }
 
-func (this *ShopProduct) Currency() *Currency {
+func (this *ShopProduct) Currency() *ShopCurrency {
 	if this == nil {
 		return nil
 	}
 	if this.currency != nil {
 		return this.currency
 	}
-	this.currency = (&Currency{wrap: this.wrap}).load()
+	this.currency = (&ShopCurrency{wrap: this.wrap}).load()
 	this.currency.loadById(this.object.A_currency)
 	return this.currency
 }
