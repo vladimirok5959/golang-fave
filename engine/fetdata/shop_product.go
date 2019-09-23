@@ -134,7 +134,11 @@ func (this *ShopProduct) Price() float64 {
 	if this == nil {
 		return 0
 	}
-	return this.object.A_price
+	if this.currency == nil {
+		return this.object.A_price
+	} else {
+		return this.object.A_price * this.currency.Coefficient()
+	}
 }
 
 func (this *ShopProduct) PriceFormat(format string) string {
