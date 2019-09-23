@@ -134,7 +134,9 @@ func (this *ShopProduct) Price() float64 {
 	if this == nil {
 		return 0
 	}
-	return this.object.A_price * this.Currency().Coefficient()
+	// TODO: read currency from session?
+	// this.object.A_price * this.Currency().Coefficient()
+	return this.object.A_price
 }
 
 func (this *ShopProduct) PriceFormat(format string) string {
