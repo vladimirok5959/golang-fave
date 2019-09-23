@@ -43,8 +43,6 @@ func (this *Modules) RegisterAction_ShopImagesReorder() *Action {
 			}
 		}
 
-		wrap.RecreateProductImgFiles()
-
 		wrap.RecreateProductXmlFile()
 
 		wrap.ResetCacheBlocks()
