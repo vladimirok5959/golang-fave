@@ -138,10 +138,7 @@ func (this *ShopProduct) Price() float64 {
 }
 
 func (this *ShopProduct) PriceFormat(format string) string {
-	if this == nil {
-		return ""
-	}
-	return utils.Float64ToStrF(this.object.A_price, format)
+	return utils.Float64ToStrF(this.Price(), format)
 }
 
 func (this *ShopProduct) Name() string {
