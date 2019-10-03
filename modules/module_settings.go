@@ -23,9 +23,9 @@ func (this *Modules) RegisterModule_Settings() *Module {
 		Sub: &[]MISub{
 			{Mount: "default", Name: "General", Show: true, Icon: assets.SysSvgIconGear},
 			{Mount: "robots-txt", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
-			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconList},
-			{Mount: "thumbnails", Name: "Thumbnails", Show: true, Icon: assets.SysSvgIconList},
-			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconPagination},
+			{Mount: "thumbnails", Name: "Thumbnails", Show: true, Icon: assets.SysSvgIconThumbnails},
+			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconApi},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
