@@ -9,3 +9,5 @@ require (
 	github.com/vladimirok5959/golang-server-static v1.0.0
 	google.golang.org/appengine v1.4.0 // indirect
 )
+
+go 1.13
