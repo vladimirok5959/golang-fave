@@ -81,6 +81,12 @@ func TestIsValidAlias(t *testing.T) {
 	Expect(t, IsValidAlias("/shop/some"), false)
 	Expect(t, IsValidAlias("/shop-1"), true)
 	Expect(t, IsValidAlias("/shop-some"), true)
+
+	Expect(t, IsValidAlias("/api"), false)
+	Expect(t, IsValidAlias("/api/"), false)
+	Expect(t, IsValidAlias("/api/some"), false)
+	Expect(t, IsValidAlias("/api-1"), true)
+	Expect(t, IsValidAlias("/api-some"), true)
 }
 
 func TestIsValidSingleAlias(t *testing.T) {

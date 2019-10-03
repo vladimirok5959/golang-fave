@@ -82,6 +82,12 @@ func IsValidAlias(alias string) bool {
 		return false
 	}
 
+	// API module
+	regexpeApi := regexp.MustCompile(`^\/api\/`)
+	if alias == "/api" || regexpeApi.MatchString(alias) {
+		return false
+	}
+
 	regexpeSlash := regexp.MustCompile(`[\/]{2,}`)
 	regexpeChars := regexp.MustCompile(`^\/([a-zA-Z0-9\/\-_\.]+)\/?$`)
 	return (!regexpeSlash.MatchString(alias) && regexpeChars.MatchString(alias)) || alias == "/"
