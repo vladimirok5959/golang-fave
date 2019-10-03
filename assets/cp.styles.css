@@ -960,11 +960,13 @@ ul.pagination {
 }
 
 /* Duplicate product */
-.product-copy {
+.product-copy,
+.product-another {
 	position: relative;
 }
 
-.product-copy a {
+.product-copy a,
+.product-another a {
 	position: absolute;
 	right: 0px;
 	padding: 12px 18px;
@@ -973,11 +975,17 @@ ul.pagination {
 	border-radius: 0 .25rem .25rem 0;
 }
 
-.product-copy a svg {
+.product-another a {
+	right: 52px;
+}
+
+.product-copy a svg,
+.product-another a svg {
 	fill: currentColor;
 }
 
-.product-copy a:hover {
+.product-copy a:hover,
+.product-another a:hover {
 	color: #417cb9;
 }
 
