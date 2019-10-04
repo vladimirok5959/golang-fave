@@ -43,7 +43,7 @@ func (this *Modules) RegisterAction_ShopGetAttributeValues() *Action {
 			}
 			for rows.Next() {
 				err = rows.Scan(scan...)
-				if wrap.LogCpError(err) == nil {
+				if *wrap.LogCpError(&err) == nil {
 					options += `<option value="` + html.EscapeString(string(values[0])) + `">` + html.EscapeString(utils.JavaScriptVarValue(string(values[1]))) + `</option>`
 				}
 			}

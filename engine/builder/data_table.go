@@ -38,10 +38,10 @@ func DataTable(
 	if pagination_enabled {
 		if custom_sql_count != nil {
 			num, err = custom_sql_count()
-			wrap.LogCpError(err)
+			wrap.LogCpError(&err)
 		} else {
 			err = wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
-			if wrap.LogCpError(err) != nil {
+			if *wrap.LogCpError(&err) != nil {
 				return ""
 			}
 		}
@@ -112,7 +112,7 @@ func DataTable(
 		} else {
 			rows, err = custom_sql_data(limit_offset, pear_page)
 		}
-		if wrap.LogCpError(err) == nil {
+		if *wrap.LogCpError(&err) == nil {
 			values := make([]sql.NullString, len(*data))
 			scan := make([]interface{}, len(values))
 			for i := range values {
@@ -120,7 +120,7 @@ func DataTable(
 			}
 			for rows.Next() {
 				err = rows.Scan(scan...)
-				if wrap.LogCpError(err) == nil {
+				if *wrap.LogCpError(&err) == nil {
 					if !have_records {
 						have_records = true
 					}

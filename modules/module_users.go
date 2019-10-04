@@ -147,7 +147,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 					&data.A_admin,
 					&data.A_active,
 				)
-				if wrap.LogCpError(err) != nil {
+				if *wrap.LogCpError(&err) != nil {
 					return "", "", ""
 				}
 			}

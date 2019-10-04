@@ -109,7 +109,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					).Scan(
 						&catsCount,
 					)
-					if wrap.LogCpError(err) != nil {
+					if *wrap.LogCpError(&err) != nil {
 						return err
 					}
 					if len(catids) != catsCount {
@@ -185,7 +185,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 					).Scan(
 						&catsCount,
 					)
-					if wrap.LogCpError(err) != nil {
+					if *wrap.LogCpError(&err) != nil {
 						return err
 					}
 					if len(catids) != catsCount {

@@ -76,13 +76,13 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 		var parentL int
 		var parentR int
-		if err := tx.QueryRow(`SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_parent)).Scan(&parentL, &parentR); wrap.LogCpError(err) != nil {
+		if err := tx.QueryRow(`SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_parent)).Scan(&parentL, &parentR); *wrap.LogCpError(&err) != nil {
 			return err
 		}
 
 		var targetL int
 		var targetR int
-		if err := tx.QueryRow(`SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_id)).Scan(&targetL, &targetR); wrap.LogCpError(err) != nil {
+		if err := tx.QueryRow(`SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_id)).Scan(&targetL, &targetR); *wrap.LogCpError(&err) != nil {
 			return err
 		}
 
@@ -100,7 +100,7 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				var row_id int
 				var row_lft int
 				var row_rgt int
-				if err := rows.Scan(&row_id, &row_lft, &row_rgt); wrap.LogCpError(err) == nil {
+				if err := rows.Scan(&row_id, &row_lft, &row_rgt); *wrap.LogCpError(&err) == nil {
 					rows_id = append(rows_id, row_id)
 					rows_lft = append(rows_lft, row_lft)
 					rows_rgt = append(rows_rgt, row_rgt)
@@ -210,7 +210,7 @@ func (this *Modules) RegisterAction_ShopCategoriesModify() *Action {
 				LIMIT 1;`,
 				utils.StrToInt(pf_parent),
 			).Scan(&parentId)
-			if wrap.LogCpError(err) != nil {
+			if *wrap.LogCpError(&err) != nil {
 				wrap.MsgError(err.Error())
 				return
 			}

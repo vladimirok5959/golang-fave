@@ -41,7 +41,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 		).Scan(
 			&count,
 		)
-		if wrap.LogCpError(err) != nil {
+		if *wrap.LogCpError(&err) != nil {
 			wrap.MsgError(err.Error())
 			return
 		}

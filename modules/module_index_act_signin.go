@@ -53,7 +53,7 @@ func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 		)
 
 		if err != nil && err != sqlw.ErrNoRows {
-			wrap.LogCpError(err)
+			wrap.LogCpError(&err)
 			wrap.MsgError(err.Error())
 			return
 		}

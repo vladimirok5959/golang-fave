@@ -43,7 +43,7 @@ func (this *User) loadById(id int) {
 		&this.object.A_email,
 		&this.object.A_admin,
 		&this.object.A_active,
-	); this.wrap.LogCpError(err) != nil {
+	); *this.wrap.LogCpError(&err) != nil {
 		return
 	}
 }

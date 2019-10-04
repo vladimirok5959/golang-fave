@@ -93,9 +93,9 @@ func (this *Wrapper) LogError(msg string, vars ...interface{}) {
 	this.l.Log(msg, this.R, true, vars...)
 }
 
-func (this *Wrapper) LogCpError(err error) error {
-	if err != nil {
-		this.LogError("%s", err)
+func (this *Wrapper) LogCpError(err *error) *error {
+	if *err != nil {
+		this.LogError("%s", *err)
 	}
 	return err
 }
@@ -175,7 +175,7 @@ func (this *Wrapper) LoadSessionUser() bool {
 		&user.A_admin,
 		&user.A_active,
 	)
-	if this.LogCpError(err) != nil {
+	if *this.LogCpError(&err) != nil {
 		return false
 	}
 	if user.A_id != this.S.GetInt("UserId", 0) {

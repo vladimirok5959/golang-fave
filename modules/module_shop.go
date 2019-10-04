@@ -36,7 +36,7 @@ func (this *Modules) shop_GetCurrencySelectOptions(wrap *wrapper.Wrapper, id int
 		idStr := utils.IntToStr(id)
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if wrap.LogCpError(err) == nil {
+			if *wrap.LogCpError(&err) == nil {
 				selected := ""
 				if string(values[0]) == idStr {
 					selected = " selected"
@@ -96,7 +96,7 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 		}
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if wrap.LogCpError(err) == nil {
+			if *wrap.LogCpError(&err) == nil {
 				filter_id := utils.StrToInt(string(values[0]))
 				if !utils.InArrayInt(filter_ids, filter_id) {
 					filter_ids = append(filter_ids, filter_id)
@@ -148,7 +148,7 @@ func (this *Modules) shop_GetFilterValuesInputs(wrap *wrapper.Wrapper, filter_id
 		}
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if wrap.LogCpError(err) == nil {
+			if *wrap.LogCpError(&err) == nil {
 				result += `<div class="form-group position-relative"><input class="form-control" type="text" name="value.` + html.EscapeString(string(values[0])) + `" value="` + html.EscapeString(string(values[1])) + `" placeholder="" autocomplete="off" required><button type="button" class="btn btn-danger btn-dynamic-remove" onclick="fave.ShopAttributesRemove(this);">&times;</button></div>`
 			}
 		}
@@ -179,7 +179,7 @@ func (this *Modules) shop_GetAllAttributesSelectOptions(wrap *wrapper.Wrapper) s
 		}
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if wrap.LogCpError(err) == nil {
+			if *wrap.LogCpError(&err) == nil {
 				result += `<option title="` + html.EscapeString(string(values[1])) + `" value="` + html.EscapeString(string(values[0])) + `">` + html.EscapeString(string(values[1])) + `</option>`
 			}
 		}
@@ -208,7 +208,7 @@ func (this *Modules) shop_GetAllCurrencies(wrap *wrapper.Wrapper) map[int]string
 		}
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if wrap.LogCpError(err) == nil {
+			if *wrap.LogCpError(&err) == nil {
 				result[utils.StrToInt(string(values[0]))] = html.EscapeString(string(values[1]))
 			}
 		}
@@ -241,7 +241,7 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 		}
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if wrap.LogCpError(err) == nil {
+			if *wrap.LogCpError(&err) == nil {
 				result += `<div class="attached-img" data-id="` + html.EscapeString(string(values[0])) + `"><a href="/products/images/` + html.EscapeString(string(values[1])) + `/` + html.EscapeString(string(values[2])) + `" title="` + html.EscapeString(string(values[2])) + `" target="_blank"><img id="pimg_` + string(values[1]) + `_` + strings.Replace(string(values[2]), ".", "_", -1) + `" src="/products/images/` + string(values[1]) + `/thumb-0-` + string(values[2]) + `" onerror="WaitForFave(function(){fave.ShopProductsRetryImage(this, 'pimg_` + string(values[1]) + `_` + strings.Replace(string(values[2]), ".", "_", -1) + `');});" /></a><a class="remove" onclick="fave.ShopProductsDeleteImage(this, ` + html.EscapeString(string(values[1])) + `, '` + html.EscapeString(string(values[2])) + `');"><svg viewBox="1 1 11 14" width="10" height="12" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>`
 			}
 		}
@@ -364,7 +364,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 
 			if err != nil && err != wrapper.ErrNoRows {
 				// System error 500
-				wrap.LogCpError(err)
+				wrap.LogCpError(&err)
 				utils.SystemErrorPageEngine(wrap.W, err)
 				return
 			} else if err == wrapper.ErrNoRows {
@@ -439,7 +439,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 
 			if err != nil && err != wrapper.ErrNoRows {
 				// System error 500
-				wrap.LogCpError(err)
+				wrap.LogCpError(&err)
 				utils.SystemErrorPageEngine(wrap.W, err)
 				return
 			} else if err == wrapper.ErrNoRows {
@@ -868,7 +868,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_content,
 					&data.A_active,
 				)
-				if wrap.LogCpError(err) != nil {
+				if *wrap.LogCpError(&err) != nil {
 					return "", "", ""
 				}
 			}
@@ -886,7 +886,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					}
 					for rows.Next() {
 						err = rows.Scan(scan...)
-						if wrap.LogCpError(err) == nil {
+						if *wrap.LogCpError(&err) == nil {
 							selids = append(selids, int(values[0]))
 						}
 					}
@@ -1169,7 +1169,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_lft,
 					&data.A_rgt,
 				)
-				if wrap.LogCpError(err) != nil {
+				if *wrap.LogCpError(&err) != nil {
 					return "", "", ""
 				}
 			}
@@ -1289,7 +1289,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_name,
 					&data.A_filter,
 				)
-				if wrap.LogCpError(err) != nil {
+				if *wrap.LogCpError(&err) != nil {
 					return "", "", ""
 				}
 			}
@@ -1411,7 +1411,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_code,
 					&data.A_symbol,
 				)
-				if wrap.LogCpError(err) != nil {
+				if *wrap.LogCpError(&err) != nil {
 					return "", "", ""
 				}
 			}
