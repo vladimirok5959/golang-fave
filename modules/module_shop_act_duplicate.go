@@ -36,6 +36,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 			// Duplicate product
 			res, err := tx.Exec(
 				`INSERT INTO shop_products (
+					parent_id,
 					user,
 					currency,
 					price,
@@ -49,6 +50,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					datetime,
 					active
 				) SELECT
+					parent_id,
 					user,
 					currency,
 					price,
