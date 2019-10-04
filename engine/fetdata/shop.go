@@ -142,7 +142,8 @@ func (this *Shop) load() *Shop {
 					main.lft ASC
 			) AS cats ON cats.id = shop_products.category
 		WHERE
-			shop_products.active = 1
+			shop_products.active = 1 AND
+			shop_products.parent_id IS NULL
 		ORDER BY
 			shop_products.id DESC
 		LIMIT ?, ?;
@@ -188,6 +189,7 @@ func (this *Shop) load() *Shop {
 						LEFT JOIN shop_cat_product_rel ON shop_cat_product_rel.product_id = shop_products.id
 					WHERE
 						shop_products.active = 1 AND
+						shop_products.parent_id IS NULL AND
 						shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 					GROUP BY
 						shop_products.id
@@ -292,6 +294,7 @@ func (this *Shop) load() *Shop {
 				) AS cats ON cats.id = shop_products.category
 			WHERE
 				shop_products.active = 1 AND
+				shop_products.parent_id IS NULL AND
 				shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 			GROUP BY
 				shop_products.id,
