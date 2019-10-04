@@ -41,7 +41,7 @@ func (this *ShopCurrency) loadById(id int) {
 		&this.object.A_coefficient,
 		&this.object.A_code,
 		&this.object.A_symbol,
-	); err != nil {
+	); this.wrap.LogCpError(err) != nil {
 		return
 	}
 }

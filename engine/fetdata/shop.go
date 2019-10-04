@@ -172,7 +172,7 @@ func (this *Shop) load() *Shop {
 			defer rows.Close()
 			for rows.Next() {
 				var cat_id string
-				if err := rows.Scan(&cat_id); err == nil {
+				if err := rows.Scan(&cat_id); this.wrap.LogCpError(err) == nil {
 					cat_ids = append(cat_ids, cat_id)
 				}
 			}
@@ -307,7 +307,7 @@ func (this *Shop) load() *Shop {
 
 	product_ids := []string{}
 
-	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.productsCount); err == nil {
+	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.productsCount); this.wrap.LogCpError(err) == nil {
 		if this.category == nil {
 			this.productsPerPage = (*this.wrap.Config).Shop.Pagination.Index
 		} else {
@@ -356,7 +356,7 @@ func (this *Shop) load() *Shop {
 					&ro.A_rgt,
 					&ro.A_depth,
 					&ro.A_parent,
-				); err == nil {
+				); this.wrap.LogCpError(err) == nil {
 					product_ids = append(product_ids, utils.IntToStr(rp.A_id))
 					this.products = append(this.products, &ShopProduct{
 						wrap:     this.wrap,
@@ -391,7 +391,7 @@ func (this *Shop) load() *Shop {
 				if err := rows.Scan(
 					&img.A_product_id,
 					&img.A_filename,
-				); err == nil {
+				); this.wrap.LogCpError(err) == nil {
 					product_images[img.A_product_id] = append(product_images[img.A_product_id], &ShopProductImage{wrap: this.wrap, object: &img})
 				}
 			}
@@ -568,7 +568,7 @@ func (this *Shop) preload_cats() {
 					&row.A_rgt,
 					&row.A_depth,
 					&row.A_parent,
-				); err == nil {
+				); this.wrap.LogCpError(err) == nil {
 					this.bufferCats[row.A_id] = &row
 					if _, ok := this.bufferCats[row.A_parent]; ok {
 						this.bufferCats[row.A_parent].A_childs = true

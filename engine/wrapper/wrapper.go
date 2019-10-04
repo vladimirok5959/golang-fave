@@ -175,7 +175,7 @@ func (this *Wrapper) LoadSessionUser() bool {
 		&user.A_admin,
 		&user.A_active,
 	)
-	if err != nil {
+	if this.LogCpError(err) != nil {
 		return false
 	}
 	if user.A_id != this.S.GetInt("UserId", 0) {

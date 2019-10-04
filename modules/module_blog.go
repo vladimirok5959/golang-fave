@@ -121,6 +121,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 
 			if err != nil && err != wrapper.ErrNoRows {
 				// System error 500
+				wrap.LogCpError(err)
 				utils.SystemErrorPageEngine(wrap.W, err)
 				return
 			} else if err == wrapper.ErrNoRows {
@@ -187,6 +188,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 
 			if err != nil && err != wrapper.ErrNoRows {
 				// System error 500
+				wrap.LogCpError(err)
 				utils.SystemErrorPageEngine(wrap.W, err)
 				return
 			} else if err == wrapper.ErrNoRows {
@@ -438,7 +440,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					&data.A_content,
 					&data.A_active,
 				)
-				if err != nil {
+				if wrap.LogCpError(err) != nil {
 					return "", "", ""
 				}
 			}
@@ -456,7 +458,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					}
 					for rows.Next() {
 						err = rows.Scan(scan...)
-						if err == nil {
+						if wrap.LogCpError(err) == nil {
 							selids = append(selids, int(values[0]))
 						}
 					}
@@ -624,7 +626,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					&data.A_lft,
 					&data.A_rgt,
 				)
-				if err != nil {
+				if wrap.LogCpError(err) != nil {
 					return "", "", ""
 				}
 			}

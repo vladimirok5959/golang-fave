@@ -161,7 +161,7 @@ func (this *Blog) load() *Blog {
 			defer rows.Close()
 			for rows.Next() {
 				var cat_id string
-				if err := rows.Scan(&cat_id); err == nil {
+				if err := rows.Scan(&cat_id); this.wrap.LogCpError(err) == nil {
 					cat_ids = append(cat_ids, cat_id)
 				}
 			}
@@ -282,7 +282,7 @@ func (this *Blog) load() *Blog {
 		`
 	}
 
-	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.postsCount); err == nil {
+	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.postsCount); this.wrap.LogCpError(err) == nil {
 		if this.category == nil {
 			this.postsPerPage = (*this.wrap.Config).Blog.Pagination.Index
 		} else {
@@ -321,7 +321,7 @@ func (this *Blog) load() *Blog {
 					&ro.A_rgt,
 					&ro.A_depth,
 					&ro.A_parent,
-				); err == nil {
+				); this.wrap.LogCpError(err) == nil {
 					this.posts = append(this.posts, &BlogPost{
 						wrap:     this.wrap,
 						object:   &rp,
@@ -498,7 +498,7 @@ func (this *Blog) preload_cats() {
 					&row.A_rgt,
 					&row.A_depth,
 					&row.A_parent,
-				); err == nil {
+				); this.wrap.LogCpError(err) == nil {
 					this.bufferCats[row.A_id] = &row
 					if _, ok := this.bufferCats[row.A_parent]; ok {
 						this.bufferCats[row.A_parent].A_childs = true

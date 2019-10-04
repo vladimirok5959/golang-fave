@@ -95,7 +95,7 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 				&row.A_rgt,
 				&row.A_depth,
 				&row.A_parent,
-			); err == nil {
+			); this.wrap.LogCpError(err) == nil {
 				this.bufferCats[row.A_id] = &row
 				if _, ok := this.bufferCats[row.A_parent]; ok {
 					this.bufferCats[row.A_parent].A_childs = true
@@ -182,7 +182,7 @@ func (this *BlogCategory) loadById(id int) {
 		&this.object.A_rgt,
 		&this.object.A_depth,
 		&this.object.A_parent,
-	); err != nil {
+	); this.wrap.LogCpError(err) != nil {
 		return
 	}
 }

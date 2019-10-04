@@ -40,7 +40,7 @@ func (this *Modules) shop_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 		parentIdStr := utils.IntToStr(parentId)
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if err == nil {
+			if wrap.LogCpError(err) == nil {
 				disabled := ""
 				if string(values[0]) == idStr {
 					disabled = " disabled"
@@ -84,7 +84,7 @@ func (this *Modules) shop_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int
 	).Scan(
 		&parentId,
 	)
-	if err != nil {
+	if wrap.LogCpError(err) != nil {
 		return 0
 	}
 	return parentId

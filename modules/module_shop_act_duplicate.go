@@ -100,7 +100,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 				for cat_rows.Next() {
 					var product_id int
 					var category_id int
-					if err := cat_rows.Scan(&product_id, &category_id); err == nil {
+					if err := cat_rows.Scan(&product_id, &category_id); wrap.LogCpError(err) == nil {
 						cat_sqls = append(cat_sqls, `
 							INSERT INTO shop_cat_product_rel SET
 								product_id = `+utils.Int64ToStr(lastID)+`,
@@ -131,7 +131,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 				for attributes_rows.Next() {
 					var product_id int
 					var filter_value_id int
-					if err := attributes_rows.Scan(&product_id, &filter_value_id); err == nil {
+					if err := attributes_rows.Scan(&product_id, &filter_value_id); wrap.LogCpError(err) == nil {
 						attributes_sqls = append(attributes_sqls, `
 							INSERT INTO shop_filter_product_values SET
 								product_id = `+utils.Int64ToStr(lastID)+`,

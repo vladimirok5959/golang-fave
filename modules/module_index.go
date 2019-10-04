@@ -74,6 +74,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		)
 		if err != nil && err != wrapper.ErrNoRows {
 			// System error 500
+			wrap.LogCpError(err)
 			utils.SystemErrorPageEngine(wrap.W, err)
 			return
 		} else if err == wrapper.ErrNoRows {
@@ -224,7 +225,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					&data.A_meta_description,
 					&data.A_active,
 				)
-				if err != nil {
+				if wrap.LogCpError(err) != nil {
 					return "", "", ""
 				}
 			}

@@ -148,7 +148,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					).Scan(
 						&catsCount,
 					)
-					if err != nil {
+					if wrap.LogCpError(err) != nil {
 						return err
 					}
 					if len(catids) != catsCount {
@@ -256,7 +256,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					).Scan(
 						&catsCount,
 					)
-					if err != nil {
+					if wrap.LogCpError(err) != nil {
 						return err
 					}
 					if len(catids) != catsCount {

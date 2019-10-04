@@ -44,7 +44,7 @@ func (this *ShopProduct) load() *ShopProduct {
 			if err := rows.Scan(
 				&img.A_product_id,
 				&img.A_filename,
-			); err == nil {
+			); this.wrap.LogCpError(err) == nil {
 				this.images = append(this.images, &ShopProductImage{wrap: this.wrap, object: &img})
 			}
 		}
@@ -78,7 +78,7 @@ func (this *ShopProduct) load() *ShopProduct {
 		}
 		for rows.Next() {
 			err = rows.Scan(scan...)
-			if err == nil {
+			if this.wrap.LogCpError(err) == nil {
 				if !utils.InArrayInt(filter_ids, utils.StrToInt(string(values[0]))) {
 					filter_ids = append(filter_ids, utils.StrToInt(string(values[0])))
 				}
