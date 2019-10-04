@@ -503,7 +503,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							alias := html.EscapeString((*values)[2])
 							parent := ``
 							if (*values)[7] != "" {
-								parent = `<div>&uarr;<small><a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[7] + `/">` + html.EscapeString((*values)[8]) + `</a></small></div>`
+								parent = `<div class="parent">&uarr;<small><a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[7] + `/">` + html.EscapeString((*values)[8]) + `</a></small></div>`
 							}
 							return `<div>` + name + `</div><div><small>/shop/` + alias + `/</small></div>` + parent
 						},

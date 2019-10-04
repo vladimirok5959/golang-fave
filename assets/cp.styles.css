@@ -777,6 +777,11 @@ ul.pagination {
 	border-top: 1px solid #dee2e6;
 }
 
+.data-table.table-bordered td .parent,
+.data-table.table-bordered td .parent a {
+	color: #adafb2;
+}
+
 /* Admin table: table_pages */
 .data-table.table_pages .col_datetime {
 	width: 8rem;
