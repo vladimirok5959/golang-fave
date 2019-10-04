@@ -1,6 +1,7 @@
 package builder
 
 import (
+	"database/sql"
 	"fmt"
 	"html"
 	"math"
@@ -8,6 +9,7 @@ import (
 
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 type DataTableRow struct {
@@ -36,9 +38,10 @@ func DataTable(
 	if pagination_enabled {
 		if custom_sql_count != nil {
 			num, err = custom_sql_count()
+			wrap.LogCpError(err)
 		} else {
 			err = wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
-			if err != nil {
+			if wrap.LogCpError(err) != nil {
 				return ""
 			}
 		}
@@ -109,15 +112,15 @@ func DataTable(
 		} else {
 			rows, err = custom_sql_data(limit_offset, pear_page)
 		}
-		if err == nil {
-			values := make([]string, len(*data))
+		if wrap.LogCpError(err) == nil {
+			values := make([]sql.NullString, len(*data))
 			scan := make([]interface{}, len(values))
 			for i := range values {
 				scan[i] = &values[i]
 			}
 			for rows.Next() {
 				err = rows.Scan(scan...)
-				if err == nil {
+				if wrap.LogCpError(err) == nil {
 					if !have_records {
 						have_records = true
 					}
@@ -129,14 +132,14 @@ func DataTable(
 								classes = " " + classes
 							}
 							if (*data)[i].CallBack == nil {
-								result += `<td class="col_` + (*data)[i].DBField + classes + `">` + html.EscapeString(string(val)) + `</td>`
+								result += `<td class="col_` + (*data)[i].DBField + classes + `">` + html.EscapeString(string(val.String)) + `</td>`
 							} else {
-								result += `<td class="col_` + (*data)[i].DBField + classes + `">` + (*data)[i].CallBack(&values) + `</td>`
+								result += `<td class="col_` + (*data)[i].DBField + classes + `">` + (*data)[i].CallBack(utils.SqlNullStringToString(&values)) + `</td>`
 							}
 						}
 					}
 					if action != nil {
-						result += `<td class="col_action">` + action(&values) + `</td>`
+						result += `<td class="col_action">` + action(utils.SqlNullStringToString(&values)) + `</td>`
 					}
 					result += `</tr>`
 				}

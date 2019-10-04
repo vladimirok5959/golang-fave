@@ -93,6 +93,13 @@ func (this *Wrapper) LogError(msg string, vars ...interface{}) {
 	this.l.Log(msg, this.R, true, vars...)
 }
 
+func (this *Wrapper) LogCpError(err error) error {
+	if err != nil {
+		this.LogError("%s", err)
+	}
+	return err
+}
+
 func (this *Wrapper) dbReconnect() error {
 	if !utils.IsMySqlConfigExists(this.DConfig + string(os.PathSeparator) + "mysql.json") {
 		return errors.New("can't read database configuration file")

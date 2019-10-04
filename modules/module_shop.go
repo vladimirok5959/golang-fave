@@ -538,6 +538,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							return builder.CheckBox(utils.StrToInt((*values)[6]))
 						},
 					},
+					{
+						DBField: "parent_id",
+					},
 				},
 				func(values *[]string) string {
 					return builder.DataTableAction(&[]builder.DataTableActionRow{
@@ -562,8 +565,32 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					})
 				},
 				"/cp/"+wrap.CurrModule+"/",
-				nil,
-				nil,
+				func() (int, error) {
+					var count int
+					return count, wrap.DB.QueryRow(
+						"SELECT COUNT(*) FROM `shop_products`;",
+					).Scan(&count)
+				},
+				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
+					return wrap.DB.Query(
+						`SELECT
+							shop_products.id,
+							shop_products.name,
+							shop_products.alias,
+							shop_products.currency,
+							shop_products.price,
+							UNIX_TIMESTAMP(`+"`shop_products`.`datetime`"+`) as datetime,
+							shop_products.active,
+							shop_products.parent_id
+						FROM
+							shop_products
+						ORDER BY
+							shop_products.id DESC
+						LIMIT ?, ?;`,
+						limit_offset,
+						pear_page,
+					)
+				},
 				true,
 			)
 		} else if wrap.CurrSubModule == "categories" {

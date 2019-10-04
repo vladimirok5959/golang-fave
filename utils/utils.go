@@ -2,6 +2,7 @@ package utils
 
 import (
 	"crypto/md5"
+	"database/sql"
 	"encoding/hex"
 	"fmt"
 	"html/template"
@@ -445,4 +446,12 @@ func TemplateAdditionalFuncs() template.FuncMap {
 			return template.HTML(out)
 		},
 	}
+}
+
+func SqlNullStringToString(arr *[]sql.NullString) *[]string {
+	values := make([]string, len(*arr))
+	for key, value := range *arr {
+		values[key] = value.String
+	}
+	return &values
 }
