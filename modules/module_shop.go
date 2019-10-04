@@ -501,7 +501,11 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						CallBack: func(values *[]string) string {
 							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
 							alias := html.EscapeString((*values)[2])
-							return `<div>` + name + `</div><div><small>/shop/` + alias + `/</small></div>`
+							parent := ``
+							if (*values)[7] != "" {
+								parent = `<div>&uarr;<small><a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[7] + `/">` + html.EscapeString((*values)[8]) + `</a></small></div>`
+							}
+							return `<div>` + name + `</div><div><small>/shop/` + alias + `/</small></div>` + parent
 						},
 					},
 					{
@@ -541,6 +545,10 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					{
 						DBField: "parent_id",
 					},
+					{
+						DBField: "pname",
+						DBExp:   "spp.name",
+					},
 				},
 				func(values *[]string) string {
 					return builder.DataTableAction(&[]builder.DataTableActionRow{
@@ -579,11 +587,13 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							shop_products.alias,
 							shop_products.currency,
 							shop_products.price,
-							UNIX_TIMESTAMP(`+"`shop_products`.`datetime`"+`) as datetime,
+							UNIX_TIMESTAMP(`+"`shop_products`.`datetime`"+`) AS datetime,
 							shop_products.active,
-							shop_products.parent_id
+							shop_products.parent_id,
+							spp.name AS pname
 						FROM
 							shop_products
+							LEFT JOIN shop_products AS spp ON spp.id = shop_products.parent_id
 						ORDER BY
 							shop_products.id DESC
 						LIMIT ?, ?;`,
