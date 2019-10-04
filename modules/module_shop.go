@@ -810,20 +810,19 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			}
 
 			data := utils.MySql_shop_product{
-				A_id:        0,
-				A_parent_id: 0,
-				A_user:      0,
-				A_currency:  0,
-				A_price:     0,
-				A_name:      "",
-				A_alias:     "",
-				A_vendor:    "",
-				A_quantity:  0,
-				A_category:  0,
-				A_briefly:   "",
-				A_content:   "",
-				A_datetime:  0,
-				A_active:    0,
+				A_id:       0,
+				A_user:     0,
+				A_currency: 0,
+				A_price:    0,
+				A_name:     "",
+				A_alias:    "",
+				A_vendor:   "",
+				A_quantity: 0,
+				A_category: 0,
+				A_briefly:  "",
+				A_content:  "",
+				A_datetime: 0,
+				A_active:   0,
 			}
 
 			if wrap.CurrSubModule == "modify" {
@@ -856,7 +855,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					utils.StrToInt(wrap.UrlArgs[2]),
 				).Scan(
 					&data.A_id,
-					&data.A_parent_id,
+					&data.A_parent,
 					&data.A_user,
 					&data.A_currency,
 					&data.A_price,
