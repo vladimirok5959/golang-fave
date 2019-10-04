@@ -873,6 +873,10 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				}
 			}
 
+			if data.A_parent_id() > 0 {
+				content += `<style>.product-another{display:none}</style>`
+			}
+
 			// All product current categories
 			var selids []int
 			if data.A_id > 0 {
