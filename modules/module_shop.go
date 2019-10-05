@@ -249,6 +249,38 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 	return result
 }
 
+func (this *Modules) shop_GetSubProducts(wrap *wrapper.Wrapper, id int) string {
+	result := ``
+	rows, err := wrap.DB.Query(
+		`SELECT
+			id,
+			name
+		FROM
+			shop_products
+		WHERE
+			parent_id = ?
+		ORDER BY
+			id DESC
+		;`,
+		id,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 2)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if *wrap.LogCpError(&err) == nil {
+				result += `<div><a href="/cp/` + wrap.CurrModule + `/modify/` + html.EscapeString(string(values[0])) + `/">` + html.EscapeString(string(values[1])) + `</a> <a class="ico delete" title="Delete" href="javascript:fave.ActionDataTableDelete(this,'shop-detach','` + html.EscapeString(string(values[0])) + `','Are you sure want to detach product?');"><svg viewBox="0 0 16 16" width="16" height="16" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>`
+			}
+		}
+	}
+	return result
+}
+
 func (this *Modules) RegisterModule_Shop() *Module {
 	return this.newModule(MInfo{
 		WantDB: true,
@@ -912,6 +944,26 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					Kind:  builder.DFKHidden,
 					Name:  "id",
 					Value: utils.IntToStr(data.A_id),
+				},
+				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						if data.A_id >= 1 && data.A_parent_id() <= 0 {
+							return `<div class="form-group nf">` +
+								`<div class="row">` +
+								`<div class="col-md-3">` +
+								`<label>Sub products</label>` +
+								`</div>` +
+								`<div class="col-md-9">` +
+								`<div class="list-wrapper">` +
+								this.shop_GetSubProducts(wrap, data.A_id) +
+								`</div>` +
+								`</div>` +
+								`</div>` +
+								`</div>`
+						}
+						return ""
+					},
 				},
 				{
 					Kind:     builder.DFKText,
