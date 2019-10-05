@@ -7525,7 +7525,7 @@
 				});
 			},
 
-			ShopProductsDuplicate: function(button, product_id) {
+			ShopProductsDuplicateBase: function(button, product_id, attach) {
 				if($(button).hasClass('in-progress')) return;
 				if(FormDataIsChanged()) {
 					fave.ShowMsgError('Warning!', 'Something was changed, save changes before duplicate product', true);
@@ -7538,6 +7538,7 @@
 					data: {
 						action: 'shop-duplicate',
 						id: product_id,
+						attach: attach,
 					}
 				}).done(function(data) {
 					try {
@@ -7560,6 +7561,14 @@
 				}).always(function() {
 					$(button).removeClass('in-progress');
 				});
+			},
+
+			ShopProductsDuplicate: function(button, product_id) {
+				fave.ShopProductsDuplicateBase(button, product_id, 0);
+			},
+
+			ShopProductsDuplicateWithAttach: function(button, product_id) {
+				fave.ShopProductsDuplicateBase(button, product_id, 1);
 			},
 
 			ShopProductsRetryImage: function(img, id) {

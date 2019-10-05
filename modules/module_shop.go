@@ -802,7 +802,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			} else {
 				if len(wrap.UrlArgs) >= 3 && utils.IsNumeric(wrap.UrlArgs[2]) {
 					content += `<div class="product-copy"><a title="Duplicate product" href="javascript:fave.ShopProductsDuplicate(this, ` + wrap.UrlArgs[2] + `);">` + assets.SysSvgIconCopy + `</a></div>`
-					content += `<div class="product-another"><a title="The same with another attributes" href="javascript:fave.ShopProductsAnother(this, ` + wrap.UrlArgs[2] + `);">` + assets.SysSvgIconPlus + `</a></div>`
+					content += `<div class="product-another"><a title="Duplicate product and attach to this" href="javascript:fave.ShopProductsDuplicateWithAttach(this, ` + wrap.UrlArgs[2] + `);">` + assets.SysSvgIconPlus + `</a></div>`
 				}
 				content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
 					{Name: "Modify product"},

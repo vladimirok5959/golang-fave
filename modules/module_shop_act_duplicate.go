@@ -14,6 +14,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_id := wrap.R.FormValue("id")
+		pf_attach := wrap.R.FormValue("attach")
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)
@@ -33,6 +34,11 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 				return err
 			}
 
+			parent_id := "parent_id"
+			if pf_attach == "1" {
+				parent_id = pf_id
+			}
+
 			// Duplicate product
 			res, err := tx.Exec(
 				`INSERT INTO shop_products (
@@ -50,7 +56,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					datetime,
 					active
 				) SELECT
-					parent_id,
+					`+parent_id+`,
 					user,
 					currency,
 					price,
