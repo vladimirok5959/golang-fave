@@ -377,7 +377,7 @@ func (this *ShopProduct) HaveVariations() bool {
 	if this == nil {
 		return false
 	}
-	if len(this.vars) <= 0 {
+	if len(this.vars) <= 1 {
 		return false
 	}
 	return true
