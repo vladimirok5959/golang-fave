@@ -7504,9 +7504,9 @@
 
 			ShopProductsDeleteImage: function(button, product_id, filename) {
 				if($(button).hasClass('in-progress')) return;
-				if(!confirm('Are you sure want to delete image?')) {
-					return;
-				}
+				// if(!confirm('Are you sure want to delete image?')) {
+				// 	return;
+				// }
 				$(button).addClass('in-progress');
 				$.ajax({
 					type: "POST",
