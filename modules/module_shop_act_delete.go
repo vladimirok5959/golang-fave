@@ -37,7 +37,6 @@ func (this *Modules) RegisterAction_ShopDelete() *Action {
 			if _, err := tx.Exec("DELETE FROM shop_product_images WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			wrap.RemoveProductImageThumbnails(pf_id, "*")
 
 			// Delete target product with category connection data
 			if _, err := tx.Exec("DELETE FROM shop_filter_product_values WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
@@ -54,6 +53,8 @@ func (this *Modules) RegisterAction_ShopDelete() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+
+		wrap.RemoveProductImageThumbnails(pf_id, "*")
 
 		wrap.RecreateProductXmlFile()
 
