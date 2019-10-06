@@ -102,9 +102,9 @@ func xml_gen_categories(db *sqlw.DB, conf *config.Config) string {
 	return result
 }
 
-func xml_gen_offer_pictures(db *sqlw.DB, conf *config.Config, product_id int) string {
+func xml_gen_offer_pictures(db *sqlw.DB, conf *config.Config, product_id, parent_id int) string {
 	result := ``
-	rows, err := db.Query(
+	if rows, err := db.Query(
 		`SELECT
 			shop_product_images.product_id,
 			shop_product_images.filename
@@ -116,8 +116,7 @@ func xml_gen_offer_pictures(db *sqlw.DB, conf *config.Config, product_id int) st
 			shop_product_images.ord ASC
 		;`,
 		product_id,
-	)
-	if err == nil {
+	); err == nil {
 		defer rows.Close()
 		values := make([]string, 2)
 		scan := make([]interface{}, len(values))
@@ -131,6 +130,37 @@ func xml_gen_offer_pictures(db *sqlw.DB, conf *config.Config, product_id int) st
 			}
 		}
 	}
+
+	// Get images from parent
+	if result == "" && parent_id > 0 {
+		if rows, err := db.Query(
+			`SELECT
+				shop_product_images.product_id,
+				shop_product_images.filename
+			FROM
+				shop_product_images
+			WHERE
+				shop_product_images.product_id = ?
+			ORDER BY
+				shop_product_images.ord ASC
+			;`,
+			parent_id,
+		); err == nil {
+			defer rows.Close()
+			values := make([]string, 2)
+			scan := make([]interface{}, len(values))
+			for i := range values {
+				scan[i] = &values[i]
+			}
+			for rows.Next() {
+				err = rows.Scan(scan...)
+				if err == nil {
+					result += `<picture>` + html.EscapeString((*conf).API.XML.Url) + `products/images/` + html.EscapeString(string(values[0])) + `/` + html.EscapeString(string(values[1])) + `</picture>`
+				}
+			}
+		}
+	}
+
 	return result
 }
 
@@ -192,7 +222,8 @@ func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
 			shop_products.vendor,
 			shop_products.quantity,
 			shop_products.category,
-			shop_products.content
+			shop_products.content,
+			IFNULL(shop_products.parent_id, 0)
 		FROM
 			shop_products
 			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
@@ -205,7 +236,7 @@ func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
 	)
 	if err == nil {
 		defer rows.Close()
-		values := make([]string, 9)
+		values := make([]string, 10)
 		scan := make([]interface{}, len(values))
 		for i := range values {
 			scan[i] = &values[i]
@@ -218,7 +249,7 @@ func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
 				result += `<price>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[2])), "%.2f") + `</price>`
 				result += `<currencyId>` + html.EscapeString(string(values[1])) + `</currencyId>`
 				result += `<categoryId>` + html.EscapeString(string(values[7])) + `</categoryId>`
-				result += xml_gen_offer_pictures(db, conf, utils.StrToInt(string(values[0])))
+				result += xml_gen_offer_pictures(db, conf, utils.StrToInt(string(values[0])), utils.StrToInt(string(values[9])))
 				result += `<vendor>` + html.EscapeString(string(values[5])) + `</vendor>`
 				result += `<stock_quantity>` + html.EscapeString(string(values[6])) + `</stock_quantity>`
 				result += `<name>` + html.EscapeString(string(values[3])) + `</name>`
