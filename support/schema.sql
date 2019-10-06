@@ -146,6 +146,7 @@ ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);
 ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);
 ALTER TABLE shop_products ADD KEY FK_shop_products_category (category);
 ALTER TABLE shop_products ADD KEY FK_shop_products_parent_id (parent_id);
+ALTER TABLE shop_products ADD KEY name (name);
 ALTER TABLE users ADD UNIQUE KEY email (email);
 
 # References

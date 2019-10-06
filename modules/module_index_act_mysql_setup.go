@@ -469,7 +469,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000011');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000012');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -746,6 +746,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_parent_id (parent_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY name (name);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
