@@ -281,6 +281,36 @@ func (this *Modules) shop_GetSubProducts(wrap *wrapper.Wrapper, id int) string {
 	return result
 }
 
+func (this *Modules) shop_GetParentProduct(wrap *wrapper.Wrapper, id int) string {
+	result := ``
+	rows, err := wrap.DB.Query(
+		`SELECT
+			id,
+			name
+		FROM
+			shop_products
+		WHERE
+			id = ?
+		;`,
+		id,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 2)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if *wrap.LogCpError(&err) == nil {
+				result += `<div><a href="/cp/` + wrap.CurrModule + `/modify/` + html.EscapeString(string(values[0])) + `/">` + html.EscapeString(string(values[1])) + `</a></div>`
+			}
+		}
+	}
+	return result
+}
+
 func (this *Modules) RegisterModule_Shop() *Module {
 	return this.newModule(MInfo{
 		WantDB: true,
@@ -958,6 +988,26 @@ func (this *Modules) RegisterModule_Shop() *Module {
 								`<div class="list-wrapper">` +
 								this.shop_GetSubProducts(wrap, data.A_id) +
 								`<div><a href="javascript:fave.ShopAttachProduct(` + utils.IntToStr(data.A_id) + `);"><b>Attach product</b></a></div>` +
+								`</div>` +
+								`</div>` +
+								`</div>` +
+								`</div>`
+						}
+						return ""
+					},
+				},
+				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						if data.A_id >= 1 && data.A_parent_id() != 0 {
+							return `<div class="form-group nf">` +
+								`<div class="row">` +
+								`<div class="col-md-3">` +
+								`<label>Parent</label>` +
+								`</div>` +
+								`<div class="col-md-9">` +
+								`<div class="list-wrapper">` +
+								this.shop_GetParentProduct(wrap, data.A_parent_id()) +
 								`</div>` +
 								`</div>` +
 								`</div>` +
