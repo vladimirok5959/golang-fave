@@ -172,7 +172,7 @@ func (this *ShopProduct) load() *ShopProduct {
 				}
 				this.vars = append(this.vars, &ShopProductVarItem{
 					Link:     "/shop/" + tmp_alias + "/",
-					Name:     tmp_name,
+					Name:     tmp_name + " (" + utils.IntToStr(tmp_id) + ")",
 					Selected: selected,
 				})
 			}

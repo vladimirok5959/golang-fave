@@ -53,7 +53,7 @@ func (this *Modules) shop_GetProductsListForAttaching(wrap *wrapper.Wrapper, nam
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if *wrap.LogCpError(&err) == nil {
-				result += `<div><a href="javascript:fave.ShopAttachProductTo(` + utils.IntToStr(id) + `,` + html.EscapeString(string(values[0])) + `);">` + html.EscapeString(string(values[1])) + `</a></div>`
+				result += `<div><a href="javascript:fave.ShopAttachProductTo(` + utils.IntToStr(id) + `,` + html.EscapeString(string(values[0])) + `);">` + html.EscapeString(string(values[1])) + ` (` + html.EscapeString(string(values[0])) + `)</a></div>`
 			}
 		}
 	}

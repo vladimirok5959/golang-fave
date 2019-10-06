@@ -15,7 +15,7 @@ var VarCachedBlock_1HtmlFile = []byte(`{{if not (eq $.Data.Module "404")}}
 		{{if eq $.Data.Module "shop-category"}}
 			Products of category "{{$.Data.Shop.Category.Name}}" | Shop
 		{{else if eq $.Data.Module "shop-product"}}
-			{{$.Data.Shop.Product.Name}} | Shop
+			{{$.Data.Shop.Product.Name}} ({{$.Data.Shop.Product.Id}}) | Shop
 		{{else}}
 			Latest products | Shop
 		{{end}}

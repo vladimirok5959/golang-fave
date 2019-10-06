@@ -18,7 +18,11 @@ var VarShopHtmlFile = []byte(`{{template "header.html" .}}
 					<div class="card-body">
 						<h5 class="card-title">
 							<a href="{{.Permalink}}">
-								{{.Name}}
+								{{if ne .Group ""}}
+									{{.Group}}
+								{{else}}
+									{{.Name}}
+								{{end}}
 							</a>
 						</h5>
 						<div class="card-text">{{.Briefly}}</div>
