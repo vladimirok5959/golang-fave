@@ -957,6 +957,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 								`<div class="col-md-9">` +
 								`<div class="list-wrapper">` +
 								this.shop_GetSubProducts(wrap, data.A_id) +
+								`<div><a href="javascript:fave.ShopAttachProduct(` + utils.IntToStr(data.A_id) + `);"><b>Attach product</b></a></div>` +
 								`</div>` +
 								`</div>` +
 								`</div>` +
