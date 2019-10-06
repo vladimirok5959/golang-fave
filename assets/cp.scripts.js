@@ -3718,7 +3718,7 @@
 	/**
 	 * Checks if a side of an element is scrolled past a side of its parents
 	 * @param  {HTMLElement}  el           The element who's side being scrolled out of view is in question
-	 * @param  {[DOMRect]}    rect         Optional rect of `el` to use
+	 * @param  {[DOMRect]}    rect         Optional rect of el to use
 	 * @param  {String}       elSide       Side of the element in question ('top', 'left', 'right', 'bottom')
 	 * @param  {String}       parentSide   Side of the parent in question ('top', 'left', 'right', 'bottom')
 	 * @return {HTMLElement}               The parent scroll element that the el's side is scrolled past, or null if there is no such element
@@ -4659,7 +4659,7 @@
 			}
 
 			if (lastDownEl === target) {
-				// Ignoring duplicate `down`
+				// Ignoring duplicate down
 				return;
 			} // Get the index of the dragged element within its parent
 
@@ -4713,7 +4713,7 @@
 
 			if (options.handle && !closest(originalTarget, options.handle, el, false)) {
 				return;
-			} // Prepare `dragstart`
+			} // Prepare
 
 
 			this._prepareDragStart(evt, touch, target);
@@ -5649,7 +5649,7 @@
 		/**
 		 * For each element in the set, get the first element that matches the selector by testing the element itself and traversing up through its ancestors in the DOM tree.
 		 * @param   {HTMLElement}  el
-		 * @param   {String}       [selector]  default: `options.draggable`
+		 * @param   {String}       [selector]  default: options.draggable
 		 * @returns {HTMLElement|null}
 		 */
 		closest: function closest$1(el, selector) {
@@ -7645,6 +7645,92 @@
 						action: action,
 						data: JSON.stringify(orderData),
 					},
+				}).done(function(data) {
+					if(IsDebugMode()) console.log('done', data);
+					AjaxDone(data);
+				}).fail(function(xhr, status, error) {
+					if(IsDebugMode()) console.log('fail', xhr, status, error);
+					AjaxFail(xhr.responseText, status, error);
+				});
+			},
+
+			ShopAttachProduct: function(product_id) {
+				var html = '<div class="modal fade" id="sys-modal-shop-product-attach" tabindex="-1" role="dialog" aria-labelledby="sysModalShopProductLabel" aria-hidden="true"> \
+					<div class="modal-dialog modal-dialog-centered" role="document"> \
+						<div class="modal-content"> \
+							<input type="hidden" name="action" value="index-user-update-profile"> \
+							<div class="modal-header"> \
+								<h5 class="modal-title" id="sysModalShopProductLabel">Attach product</h5> \
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
+									<span aria-hidden="true">&times;</span> \
+								</button> \
+							</div> \
+							<div class="modal-body text-left"> \
+								<div class="form-group"> \
+									<input type="text" class="form-control" name="product-name" value="" placeholder="Type product name here..." readonly autocomplete="off"> \
+								</div> \
+								<div class="form-group" style="margin-bottom:0px;"> \
+									<div class="products-list"></div> \
+								</div> \
+							</div> \
+							<div class="modal-footer"> \
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> \
+							</div> \
+						</div> \
+					</div> \
+				</div>';
+				$('#sys-modal-shop-product-attach-placeholder').html(html);
+				$("#sys-modal-shop-product-attach").modal({
+					backdrop: 'static',
+					keyboard: true,
+					show: false,
+				});
+				$('#sys-modal-shop-product-attach').on('hidden.bs.modal', function(e) {
+					$('#sys-modal-shop-product-attach-placeholder').html('');
+				});
+				$("#sys-modal-shop-product-attach").modal('show');
+				setTimeout(function() {
+					var SearchInput = $('#sys-modal-shop-product-attach input[name="product-name"]');
+					SearchInput.keyup(function() {
+						if(true || this.value != '') {
+							$.ajax({
+								type: "POST",
+								url: '/cp/',
+								data: {
+									action: 'shop-attach-product-search',
+									words: this.value,
+									id: product_id,
+								}
+							}).done(function(data) {
+								if($('#sys-modal-shop-product-attach').length > 0) {
+									if(IsDebugMode()) console.log('done', data);
+									AjaxDone(data);
+								}
+							}).fail(function(xhr, status, error) {
+								if(false) {
+									if($('#sys-modal-shop-product-attach').length > 0) {
+										if(IsDebugMode()) console.log('fail', xhr, status, error);
+										AjaxFail(xhr.responseText, status, error);
+									}
+								}
+							});
+						}
+					});
+					SearchInput.attr("readonly", false);
+					SearchInput.keyup();
+					SearchInput.focus();
+				}, 500);
+			},
+
+			ShopAttachProductTo: function(parent_id, product_id) {
+				$.ajax({
+					type: "POST",
+					url: '/cp/',
+					data: {
+						action: 'shop-attach-product-to',
+						parent_id: parent_id,
+						product_id: product_id,
+					}
 				}).done(function(data) {
 					if(IsDebugMode()) console.log('done', data);
 					AjaxDone(data);
