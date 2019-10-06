@@ -38,7 +38,16 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 						{{end}}
 					</div>
 					<div class="col-md-6">
-						<div class="card mt-3 mt-sm-3 mt-md-0 mt-lg-0">
+						{{if $.Data.Shop.Product.HaveVariations}}
+							<div class="card mt-3 mt-sm-3 mt-md-0 mt-lg-0">
+								<select class="form-control" onchange="document.location=this.value;">
+									{{range $variation := $.Data.Shop.Product.Variations}}
+										<option value="{{.Link}}"{{if .Selected}} selected{{end}}>{{.Name}}</option>
+									{{end}}
+								</select>
+							</div>
+						{{end}}
+						<div class="card mt-3{{if not $.Data.Shop.Product.HaveVariations}} mt-sm-3 mt-md-0 mt-lg-0{{end}}">
 							<div class="card-body">
 								<h3 class="price mb-0 mr-4">{{$.Data.Shop.Product.PriceFormat "%.2f"}} {{$.Data.Shop.Product.Currency.Code}}</h3><a href="" class="btn btn-success btn-buy">Buy</a>
 							</div>

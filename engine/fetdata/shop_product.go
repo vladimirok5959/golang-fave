@@ -9,6 +9,12 @@ import (
 	"golang-fave/utils"
 )
 
+type ShopProductVarItem struct {
+	Link     string
+	Name     string
+	Selected bool
+}
+
 type ShopProduct struct {
 	wrap   *wrapper.Wrapper
 	object *utils.MySql_shop_product
@@ -19,6 +25,7 @@ type ShopProduct struct {
 
 	images []*ShopProductImage
 	specs  []*ShopProductSpec
+	vars   []*ShopProductVarItem
 }
 
 func (this *ShopProduct) load() *ShopProduct {
@@ -122,6 +129,54 @@ func (this *ShopProduct) load() *ShopProduct {
 			A_filter_name:  filter_names[filter_id],
 			A_filter_value: strings.Join(filter_values[filter_id], ", "),
 		}})
+	}
+
+	// Variations
+	if rows, err := this.wrap.DB.Query(
+		`SELECT
+			shop_products.id,
+			shop_products.name,
+			shop_products.alias
+		FROM
+			shop_products
+		WHERE
+			shop_products.active = 1 AND
+			(
+				(shop_products.id = ? OR shop_products.parent_id = ?) OR
+				(
+					(shop_products.id = ?) OR
+					(shop_products.parent_id IS NOT NULL AND shop_products.parent_id = ?)
+				)
+			)
+		ORDER BY
+			shop_products.name ASC
+		;`,
+		this.object.A_id,
+		this.object.A_id,
+		this.object.A_parent_id(),
+		this.object.A_parent_id(),
+	); err == nil {
+		defer rows.Close()
+		for rows.Next() {
+			var tmp_id int
+			var tmp_name string
+			var tmp_alias string
+			if err := rows.Scan(
+				&tmp_id,
+				&tmp_name,
+				&tmp_alias,
+			); *this.wrap.LogCpError(&err) == nil {
+				selected := false
+				if tmp_id == this.object.A_id {
+					selected = true
+				}
+				this.vars = append(this.vars, &ShopProductVarItem{
+					Link:     "/shop/" + tmp_alias + "/",
+					Name:     tmp_name,
+					Selected: selected,
+				})
+			}
+		}
 	}
 
 	return this
@@ -316,4 +371,28 @@ func (this *ShopProduct) SpecsCount() int {
 		return 0
 	}
 	return len(this.specs)
+}
+
+func (this *ShopProduct) HaveVariations() bool {
+	if this == nil {
+		return false
+	}
+	if len(this.vars) <= 0 {
+		return false
+	}
+	return true
+}
+
+func (this *ShopProduct) Variations() []*ShopProductVarItem {
+	if this == nil {
+		return []*ShopProductVarItem{}
+	}
+	return this.vars
+}
+
+func (this *ShopProduct) VariationsCount() int {
+	if this == nil {
+		return 0
+	}
+	return len(this.vars)
 }
