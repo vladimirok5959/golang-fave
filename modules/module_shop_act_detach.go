@@ -24,8 +24,8 @@ func (this *Modules) RegisterAction_ShopDetach() *Action {
 					parent_id = NULL,
 					active = 0
 				WHERE
-					id = ?;
-				`,
+					id = ?
+				;`,
 				utils.StrToInt(pf_id),
 			); err != nil {
 				return err
