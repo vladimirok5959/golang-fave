@@ -169,7 +169,29 @@ func DataTable(
 			result += `<span class="sr-only">Previous</span>`
 			result += `</a>`
 			result += `</li>`
+
+			before := false
+			after := false
+
 			for i := 1; i <= max_pages; i++ {
+				// Before
+				if curr_page >= 5 && i > 1 && i+1 < curr_page {
+					if !before {
+						before = true
+						result += `<li class="page-item disabled"><a class="page-link" href="">...</a></li>`
+					}
+					continue
+				}
+
+				// After
+				if i-1 > curr_page && i < max_pages {
+					if !after {
+						after = true
+						result += `<li class="page-item disabled"><a class="page-link" href="">...</a></li>`
+					}
+					continue
+				}
+
 				class = ""
 				if i == curr_page {
 					class = " active"
