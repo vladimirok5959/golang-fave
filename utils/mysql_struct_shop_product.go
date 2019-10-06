@@ -10,6 +10,7 @@ type MySql_shop_product struct {
 	A_user     int
 	A_currency int
 	A_price    float64
+	A_gname    string
 	A_name     string
 	A_alias    string
 	A_vendor   string

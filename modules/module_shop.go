@@ -876,6 +876,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				A_user:     0,
 				A_currency: 0,
 				A_price:    0,
+				A_gname:    "",
 				A_name:     "",
 				A_alias:    "",
 				A_vendor:   "",
@@ -901,6 +902,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						user,
 						currency,
 						price,
+						gname,
 						name,
 						alias,
 						vendor,
@@ -921,6 +923,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_user,
 					&data.A_currency,
 					&data.A_price,
+					&data.A_gname,
 					&data.A_name,
 					&data.A_alias,
 					&data.A_vendor,
@@ -1009,6 +1012,24 @@ func (this *Modules) RegisterModule_Shop() *Module {
 								`<div class="list-wrapper">` +
 								this.shop_GetParentProduct(wrap, data.A_parent_id()) +
 								`</div>` +
+								`</div>` +
+								`</div>` +
+								`</div>`
+						}
+						return ""
+					},
+				},
+				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						if data.A_id >= 1 && data.A_parent_id() <= 0 {
+							return `<div class="form-group nf">` +
+								`<div class="row">` +
+								`<div class="col-md-3">` +
+								`<label for="lbl_gname">Group name</label>` +
+								`</div>` +
+								`<div class="col-md-9">` +
+								`<div><input class="form-control" type="text" id="lbl_gname" name="gname" value="` + html.EscapeString(data.A_gname) + `" maxlength="255" autocomplete="off"></div>` +
 								`</div>` +
 								`</div>` +
 								`</div>`
