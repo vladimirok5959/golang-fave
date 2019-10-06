@@ -127,7 +127,7 @@ var VarCachedBlock_3HtmlFile = []byte(`<nav class="navbar navbar-expand-lg navba
 						{{end}}
 						<li class="breadcrumb-item"><a href="{{$.Data.Shop.Product.Category.Permalink}}">{{$.Data.Shop.Product.Category.Name}}</a></li>
 					{{end}}
-					<li class="breadcrumb-item active">{{$.Data.Shop.Product.Name}} ({{$.Data.Shop.Product.Id}})</li>
+					<li class="breadcrumb-item active">{{$.Data.Shop.Product.Name}} {{$.Data.Shop.Product.Id}}</li>
 				{{end}}
 			</ol>
 		</nav>

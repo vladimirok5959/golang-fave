@@ -274,7 +274,7 @@ func (this *Modules) shop_GetSubProducts(wrap *wrapper.Wrapper, id int) string {
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if *wrap.LogCpError(&err) == nil {
-				result += `<div><a href="/cp/` + wrap.CurrModule + `/modify/` + html.EscapeString(string(values[0])) + `/">` + html.EscapeString(string(values[1])) + ` (` + html.EscapeString(string(values[0])) + `)</a> <a class="ico delete" title="Delete" href="javascript:fave.ActionDataTableDelete(this,'shop-detach','` + html.EscapeString(string(values[0])) + `','Are you sure want to detach product?');"><svg viewBox="0 0 16 16" width="16" height="16" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>`
+				result += `<div><a href="/cp/` + wrap.CurrModule + `/modify/` + html.EscapeString(string(values[0])) + `/">` + html.EscapeString(string(values[1])) + ` ` + html.EscapeString(string(values[0])) + `</a> <a class="ico delete" title="Delete" href="javascript:fave.ActionDataTableDelete(this,'shop-detach','` + html.EscapeString(string(values[0])) + `','Are you sure want to detach product?');"><svg viewBox="0 0 16 16" width="16" height="16" class="sicon" version="1.1"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg></a></div>`
 			}
 		}
 	}
@@ -304,7 +304,7 @@ func (this *Modules) shop_GetParentProduct(wrap *wrapper.Wrapper, id int) string
 		for rows.Next() {
 			err = rows.Scan(scan...)
 			if *wrap.LogCpError(&err) == nil {
-				result += `<div><a href="/cp/` + wrap.CurrModule + `/modify/` + html.EscapeString(string(values[0])) + `/">` + html.EscapeString(string(values[1])) + ` (` + html.EscapeString(string(values[0])) + `)</a></div>`
+				result += `<div><a href="/cp/` + wrap.CurrModule + `/modify/` + html.EscapeString(string(values[0])) + `/">` + html.EscapeString(string(values[1])) + ` ` + html.EscapeString(string(values[0])) + `</a></div>`
 			}
 		}
 	}
@@ -565,7 +565,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						DBField:     "name",
 						NameInTable: "Product / URL",
 						CallBack: func(values *[]string) string {
-							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + ` (` + html.EscapeString((*values)[0]) + `)</a>`
+							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + ` ` + html.EscapeString((*values)[0]) + `</a>`
 							alias := html.EscapeString((*values)[2])
 							parent := ``
 							if (*values)[7] != "" {

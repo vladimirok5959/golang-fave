@@ -252,7 +252,7 @@ func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
 				result += xml_gen_offer_pictures(db, conf, utils.StrToInt(string(values[0])), utils.StrToInt(string(values[9])))
 				result += `<vendor>` + html.EscapeString(string(values[5])) + `</vendor>`
 				result += `<stock_quantity>` + html.EscapeString(string(values[6])) + `</stock_quantity>`
-				result += `<name>` + html.EscapeString(string(values[3])) + ` (` + html.EscapeString(string(values[0])) + `)</name>`
+				result += `<name>` + html.EscapeString(string(values[3])) + ` ` + html.EscapeString(string(values[0])) + `</name>`
 				result += `<description><![CDATA[` + string(values[8]) + `]]></description>`
 				result += xml_gen_offer_attributes(db, conf, utils.StrToInt(string(values[0])))
 				result += `</offer>`
