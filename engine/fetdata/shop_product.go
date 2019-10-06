@@ -50,6 +50,34 @@ func (this *ShopProduct) load() *ShopProduct {
 		}
 	}
 
+	// Get images from parent
+	if len(this.images) <= 0 && this.object.A_parent_id() > 0 {
+		if rows, err := this.wrap.DB.Query(
+			`SELECT
+				shop_product_images.product_id,
+				shop_product_images.filename
+			FROM
+				shop_product_images
+			WHERE
+				shop_product_images.product_id = ?
+			ORDER BY
+				shop_product_images.ord ASC
+			;`,
+			this.object.A_parent_id(),
+		); err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				img := utils.MySql_shop_product_image{}
+				if err := rows.Scan(
+					&img.A_product_id,
+					&img.A_filename,
+				); *this.wrap.LogCpError(&err) == nil {
+					this.images = append(this.images, &ShopProductImage{wrap: this.wrap, object: &img})
+				}
+			}
+		}
+	}
+
 	filter_ids := []int{}
 	filter_names := map[int]string{}
 	filter_values := map[int][]string{}

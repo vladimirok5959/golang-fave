@@ -451,6 +451,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			err := wrap.DB.QueryRow(`
 				SELECT
 					shop_products.id,
+					shop_products.parent_id,
 					shop_products.user,
 					shop_products.currency,
 					shop_products.price,
@@ -479,6 +480,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				wrap.UrlArgs[1],
 			).Scan(
 				&row.A_id,
+				&row.A_parent,
 				&row.A_user,
 				&row.A_currency,
 				&row.A_price,
