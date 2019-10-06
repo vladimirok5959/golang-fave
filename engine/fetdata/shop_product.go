@@ -143,6 +143,13 @@ func (this *ShopProduct) PriceFormat(format string) string {
 	return utils.Float64ToStrF(this.Price(), format)
 }
 
+func (this *ShopProduct) Group() string {
+	if this == nil {
+		return ""
+	}
+	return this.object.A_gname
+}
+
 func (this *ShopProduct) Name() string {
 	if this == nil {
 		return ""
