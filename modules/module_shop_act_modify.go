@@ -15,6 +15,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_id := wrap.R.FormValue("id")
+		pf_gname := wrap.R.FormValue("gname")
 		pf_name := wrap.R.FormValue("name")
 		pf_price := wrap.R.FormValue("price")
 		pf_currency := wrap.R.FormValue("currency")
@@ -95,6 +96,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						user = ?,
 						currency = ?,
 						price = ?,
+						gname = ?,
 						name = ?,
 						alias = ?,
 						vendor = ?,
@@ -108,6 +110,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					wrap.User.A_id,
 					utils.StrToInt(pf_currency),
 					utils.StrToFloat64(pf_price),
+					pf_gname,
 					pf_name,
 					pf_alias,
 					pf_vendor,
@@ -210,6 +213,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					`UPDATE shop_products SET
 						currency = ?,
 						price = ?,
+						gname = ?,
 						name = ?,
 						alias = ?,
 						vendor = ?,
@@ -223,6 +227,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					;`,
 					utils.StrToInt(pf_currency),
 					utils.StrToFloat64(pf_price),
+					pf_gname,
 					pf_name,
 					pf_alias,
 					pf_vendor,
