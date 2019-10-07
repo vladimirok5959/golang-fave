@@ -120,6 +120,23 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
+		// Table: notify_mail
+		if _, err = tx.Exec(
+			`CREATE TABLE notify_mail (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				email varchar(255) NOT NULL COMMENT 'Email address',
+				subject varchar(800) NOT NULL COMMENT 'Email subject',
+				message text NOT NULL COMMENT 'Email body',
+				error text NOT NULL COMMENT 'Send error message',
+				status int(1) NOT NULL COMMENT 'Sending status',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
 		// Table: pages
 		if _, err = tx.Exec(
 			`CREATE TABLE pages (
@@ -470,7 +487,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000013');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000014');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -634,6 +651,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD KEY FK_blog_posts_category (category);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE notify_mail ADD KEY status (status);`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return

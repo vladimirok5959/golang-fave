@@ -24,6 +24,15 @@ CREATE TABLE blog_posts (
 	active int(1) NOT NULL COMMENT 'Is active post or not',
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE notify_mail (
+	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+	email varchar(255) NOT NULL COMMENT 'Email address',
+	subject varchar(800) NOT NULL COMMENT 'Email subject',
+	message text NOT NULL COMMENT 'Email body',
+	error text NOT NULL COMMENT 'Send error message',
+	status int(1) NOT NULL COMMENT 'Sending status',
+	PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE pages (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	user int(11) NOT NULL COMMENT 'User id',
@@ -124,6 +133,7 @@ ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);
 ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);
 ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);
 ALTER TABLE blog_posts ADD KEY FK_blog_posts_category (category);
+ALTER TABLE notify_mail ADD KEY status (status);
 ALTER TABLE pages ADD UNIQUE KEY alias (alias);
 ALTER TABLE pages ADD KEY alias_active (alias,active) USING BTREE;
 ALTER TABLE pages ADD KEY FK_pages_user (user);
