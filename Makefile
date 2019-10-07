@@ -22,6 +22,9 @@ build: clean version template dockerfile
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -mod vendor -a -o ./bin/fave.darwin-amd64 -ldflags='-X main.Version=$(VERSION) -extldflags "-static"'
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -mod vendor -a -o ./bin/fave.windows-amd64.exe -ldflags='-X main.Version=$(VERSION) -extldflags "-static"'
 	cd ./bin && find . -name 'fave*' | xargs -I{} tar czf {}.tar.gz {}
+	@-rm ./bin/fave.linux-amd64
+	@-rm ./bin/fave.darwin-amd64
+	@-rm ./bin/fave.windows-amd64.exe
 	@cp -R ./hosts/localhost ./bin/localhost
 	@-find ./bin/localhost -type f -name '.*' -exec rm -f {} \;
 	@-rm -R ./bin/localhost/htdocs/products
