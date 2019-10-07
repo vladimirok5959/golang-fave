@@ -13,6 +13,7 @@ func Migrate_000000014(db *sqlw.DB, host string) error {
 			subject varchar(800) NOT NULL COMMENT 'Email subject',
 			message text NOT NULL COMMENT 'Email body',
 			error text NOT NULL COMMENT 'Send error message',
+			datetime datetime NOT NULL COMMENT 'Creation date/time',
 			status int(1) NOT NULL COMMENT 'Sending status',
 			PRIMARY KEY (id)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
