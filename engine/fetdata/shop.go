@@ -43,7 +43,8 @@ func (this *Shop) load() *Shop {
 		FROM
 			shop_products
 		WHERE
-			active = 1
+			active = 1 AND
+			parent_id IS NULL
 		;
 	`
 	sql_rows := `
