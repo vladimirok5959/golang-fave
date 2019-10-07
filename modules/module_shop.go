@@ -1227,7 +1227,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`</div>` +
 							`<div id="img-upload-block" class="list-button position-relative">` +
 							`<div id="upload-msg">Uploading...</div>` +
-							`<input class="form-control ignore-lost-data" type="file" id="file" name="file" onchange="fave.ShopProductsUploadImage('shop-upload-image', ` + utils.IntToStr(data.A_id) + `, 'file');" style="font-size:13px;" multiple />` +
+							`<input class="form-control ignore-lost-data" type="file" id="file" name="file" onchange="fave.ShopProductsUploadImage('shop-upload-image', ` + utils.IntToStr(data.A_id) + `, 'file');" style="font-size:12px;" multiple />` +
 							`</div>` +
 							`</div>` +
 							`</div>` +
