@@ -964,6 +964,12 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				}
 			}
 
+			// Sub products
+			sub_products := ``
+			if data.A_id >= 1 && data.A_parent_id() <= 0 {
+				sub_products = this.shop_GetSubProducts(wrap, data.A_id)
+			}
+
 			btn_caption := "Add"
 			if wrap.CurrSubModule == "modify" {
 				btn_caption = "Save"
@@ -991,7 +997,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 								`</div>` +
 								`<div class="col-md-9">` +
 								`<div class="list-wrapper">` +
-								this.shop_GetSubProducts(wrap, data.A_id) +
+								sub_products +
 								`<div><a href="javascript:fave.ShopAttachProduct(` + utils.IntToStr(data.A_id) + `);"><b>Attach product</b></a></div>` +
 								`</div>` +
 								`</div>` +
@@ -1024,7 +1030,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				{
 					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
-						if data.A_id >= 1 && data.A_parent_id() <= 0 {
+						if data.A_id >= 1 && data.A_parent_id() <= 0 && sub_products != "" {
 							return `<div class="form-group nf">` +
 								`<div class="row">` +
 								`<div class="col-md-3">` +
