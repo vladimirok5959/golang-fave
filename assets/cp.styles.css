@@ -725,6 +725,11 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item svg.sicon {
 	color: #d9534f;
 }
 
+.svg-yellow svg {
+	fill: currentColor;
+	color: #f0ad4e;
+}
+
 /* Pagination */
 ul.pagination {
 	margin-top: 1rem;
@@ -865,6 +870,15 @@ ul.pagination {
 .data-table.table_users .col_action {
 	width: 6rem;
 	text-align: right;
+}
+
+/* Admin table: table_pages */
+.data-table.table_notify_mail .col_datetime {
+	width: 8rem;
+}
+
+.data-table.table_notify_mail .col_status {
+	width: 5rem;
 }
 
 /* Admin data form */

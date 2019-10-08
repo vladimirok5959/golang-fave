@@ -5,8 +5,12 @@ import (
 )
 
 func CheckBox(value int) string {
-	if value > 0 {
+	if value == 0 {
+		return `<span class="svg-red">` + assets.SysSvgIconError + `</span>`
+	} else if value == 1 {
 		return `<span class="svg-green">` + assets.SysSvgIconChecked + `</span>`
+	} else if value == 2 {
+		return `<span class="svg-yellow">` + assets.SysSvgIconRestore + `</span>`
 	}
-	return `<span class="svg-red">` + assets.SysSvgIconError + `</span>`
+	return ""
 }
