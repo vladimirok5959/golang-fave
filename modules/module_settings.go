@@ -425,7 +425,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Kind:    builder.DFKText,
 					Caption: "SMTP user password",
 					Name:    "smtp-password",
-					Value:   (*wrap.Config).SMTP.Password,
+					Value:   "",
 				},
 				{
 					Kind:   builder.DFKSubmit,
