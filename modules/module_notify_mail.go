@@ -63,12 +63,11 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 						DBField:     "email",
 						NameInTable: "Email / Subject",
 						CallBack: func(values *[]string) string {
-							email := `<a href="/cp/` + wrap.CurrModule + `/details/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
 							subject := html.EscapeString((*values)[2])
 							if subject != "" {
 								subject = `<div><small>` + subject + `</small></div>`
 							}
-							return `<div>` + email + `</div>` + subject
+							return `<div>` + html.EscapeString((*values)[1]) + `</div>` + subject
 						},
 					},
 					{
@@ -122,8 +121,6 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 				},
 				true,
 			)
-		} else if wrap.CurrSubModule == "details" {
-			//
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})
