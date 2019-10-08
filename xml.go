@@ -328,10 +328,6 @@ func xml_loop(www_dir string, stop chan bool, mp *mysqlpool.MySqlPool) {
 func xml_start(www_dir string, mp *mysqlpool.MySqlPool) (chan bool, chan bool) {
 	ch := make(chan bool)
 	stop := make(chan bool)
-
-	// Run at start
-	xml_loop(www_dir, stop, mp)
-
 	go func() {
 		for {
 			select {
