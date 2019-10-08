@@ -25,6 +25,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 			{Mount: "robots-txt", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
 			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconPagination},
 			{Mount: "thumbnails", Name: "Thumbnails", Show: true, Icon: assets.SysSvgIconThumbnails},
+			{Mount: "smtp", Name: "SMTP", Show: true, Icon: assets.SysSvgIconEmail},
 			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconApi},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
@@ -376,6 +377,55 @@ func (this *Modules) RegisterModule_Settings() *Module {
 							`</div>` +
 							`</div>`
 					},
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Save",
+					Target: "add-edit-button",
+				},
+			})
+
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+		} else if wrap.CurrSubModule == "smtp" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "SMTP"},
+			})
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "settings-smtp",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "SMTP server host",
+					Name:    "smtp-host",
+					Value:   (*wrap.Config).SMTP.Host,
+					Hint:    "Example: smtp.gmail.com",
+				},
+				{
+					Kind:     builder.DFKNumber,
+					Caption:  "SMTP server port",
+					Name:     "smtp-port",
+					Min:      "0",
+					Max:      "9999",
+					Required: true,
+					Value:    utils.IntToStr((*wrap.Config).SMTP.Port),
+					Hint:     "Example: 587",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "SMTP user login",
+					Name:    "smtp-login",
+					Value:   (*wrap.Config).SMTP.Login,
+					Hint:    "Example: example@gmail.com",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "SMTP user password",
+					Name:    "smtp-password",
+					Value:   (*wrap.Config).SMTP.Password,
 				},
 				{
 					Kind:   builder.DFKSubmit,

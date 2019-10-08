@@ -36,6 +36,12 @@ type Config struct {
 			Url     string
 		}
 	}
+	SMTP struct {
+		Host     string
+		Port     int
+		Login    string
+		Password string
+	}
 }
 
 func ConfigNew() *Config {
@@ -77,6 +83,11 @@ func (this *Config) configDefault() {
 	this.API.XML.Name = ""
 	this.API.XML.Company = ""
 	this.API.XML.Url = ""
+
+	this.SMTP.Host = ""
+	this.SMTP.Port = 587
+	this.SMTP.Login = ""
+	this.SMTP.Password = ""
 }
 
 func (this *Config) ConfigRead(file string) error {
