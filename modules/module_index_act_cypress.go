@@ -36,9 +36,10 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 
 		_, _ = db.Exec(
 			`DROP TABLE
-				blog_cats,
 				blog_cat_post_rel,
+				blog_cats,
 				blog_posts,
+				notify_mail,
 				pages,
 				settings,
 				shop_cat_product_rel,
