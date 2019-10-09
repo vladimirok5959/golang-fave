@@ -281,6 +281,27 @@ func (this *Wrapper) ConfigSave() error {
 	return this.Config.ConfigWrite(this.DConfig + string(os.PathSeparator) + "config.json")
 }
 
+func (this *Wrapper) SendEmail(email, subject, message string) error {
+	if _, err := this.DB.Exec(
+		`INSERT INTO notify_mail SET
+			id = NULL,
+			email = ?,
+			subject = ?,
+			message = ?,
+			error = '',
+			datetime = ?,
+			status = 2
+		;`,
+		email,
+		subject,
+		message,
+		utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+	); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (this *Wrapper) RecreateProductXmlFile() error {
 	trigger := strings.Join([]string{this.DTmp, "trigger.xml.run"}, string(os.PathSeparator))
 	if !utils.IsFileExists(trigger) {
