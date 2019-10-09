@@ -422,11 +422,18 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Hint:    "Example: example@gmail.com",
 				},
 				{
-					Kind:    builder.DFKText,
+					Kind:    builder.DFKPassword,
 					Caption: "SMTP user password",
 					Name:    "smtp-password",
 					Value:   "",
 					Hint:    "Leave this field empty if you don't want change password",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Email address for testing",
+					Name:    "smtp-test-email",
+					Value:   "",
+					Hint:    "To this email address will be send test email message if settings are correct",
 				},
 				{
 					Kind:   builder.DFKSubmit,
