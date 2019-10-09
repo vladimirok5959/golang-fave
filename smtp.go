@@ -75,7 +75,7 @@ func smtp_prepare(db *sqlw.DB, conf *config.Config) {
 				if _, err := db.Exec(
 					`UPDATE notify_mail SET status = 3 WHERE id = ?;`,
 					utils.StrToInt(string(values[0])),
-				); err != nil {
+				); err == nil {
 					go func(db *sqlw.DB, conf *config.Config, id int, subject, msg string, receivers []string) {
 						if err := smtp_send(
 							(*conf).SMTP.Host,
@@ -109,6 +109,8 @@ func smtp_prepare(db *sqlw.DB, conf *config.Config) {
 						html.EscapeString(string(values[3])),
 						[]string{html.EscapeString(string(values[1]))},
 					)
+				} else {
+					fmt.Printf("Smtp send error (sql, update): %v\n", err)
 				}
 			}
 		}

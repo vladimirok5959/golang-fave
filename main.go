@@ -106,6 +106,10 @@ func main() {
 	xml_cl_ch, xml_cl_stop := xml_start(consts.ParamWwwDir, mpool)
 	defer xml_stop(xml_cl_ch, xml_cl_stop)
 
+	// SMTP sender
+	smtp_cl_ch, smtp_cl_stop := smtp_start(consts.ParamWwwDir, mpool)
+	defer smtp_stop(smtp_cl_ch, smtp_cl_stop)
+
 	// Init cache blocks
 	cbs := cblocks.New()
 
