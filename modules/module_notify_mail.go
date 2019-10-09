@@ -67,7 +67,11 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 							if subject != "" {
 								subject = `<div><small>` + subject + `</small></div>`
 							}
-							return `<div>` + html.EscapeString((*values)[1]) + `</div>` + subject
+							error_message := html.EscapeString((*values)[5])
+							if error_message != "" {
+								error_message = `<div><small><b>` + error_message + `</b></small></div>`
+							}
+							return `<div>` + html.EscapeString((*values)[1]) + `</div>` + subject + error_message
 						},
 					},
 					{
@@ -92,6 +96,9 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 							return builder.CheckBox(utils.StrToInt((*values)[4]))
 						},
 					},
+					{
+						DBField: "error",
+					},
 				},
 				nil,
 				ModulePagination,
@@ -108,7 +115,8 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 							notify_mail.email,
 							notify_mail.subject,
 							UNIX_TIMESTAMP(`+"`notify_mail`.`datetime`"+`) AS datetime,
-							notify_mail.status
+							notify_mail.status,
+							notify_mail.error
 						FROM
 							notify_mail
 						`+ModuleSqlWhere+`
