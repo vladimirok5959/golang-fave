@@ -50,16 +50,16 @@ func smtp_send(host, port, user, pass, subject, msg string, receivers []string) 
 func smtp_prepare(db *sqlw.DB, conf *config.Config) {
 	rows, err := db.Query(
 		`SELECT
-			notify_mail.id,
-			notify_mail.email,
-			notify_mail.subject,
-			notify_mail.message
+			id,
+			email,
+			subject,
+			message
 		FROM
 			notify_mail
 		WHERE
-			notify_mail.status = 2
+			status = 2
 		ORDER BY
-			notify_mail.id ASC
+			id ASC
 		;`,
 	)
 	if err == nil {
