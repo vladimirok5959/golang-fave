@@ -497,7 +497,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(
 			`INSERT INTO shop_cat_product_rel (product_id, category_id)
 				VALUES
-			(1, 3);`,
+			(1, 3),
+			(2, 3);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -530,7 +531,12 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			(1, 7),
 			(1, 9),
 			(1, 10),
-			(1, 11);`,
+			(1, 11),
+			(2, 3),
+			(2, 8),
+			(2, 9),
+			(2, 10),
+			(2, 11);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -587,9 +593,47 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			1,
 			1,
 			1000.00,
-			"",
 			"Samsung Galaxy S10",
-			"samsung-galaxy-s10",
+			"Samsung Galaxy S10 (128 Gb)",
+			"samsung-galaxy-s10-128-gb",
+			"Samsung",
+			"1",
+			"3",
+			"<p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent.</p>",
+			"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Et malesuada fames ac turpis egestas sed tempus urna et. Euismod elementum nisi quis eleifend. Nisi porta lorem mollis aliquam ut porttitor. Ac turpis egestas maecenas pharetra convallis posuere. Nunc non blandit massa enim nec dui. Commodo elit at imperdiet dui accumsan sit amet nulla. Viverra accumsan in nisl nisi scelerisque. Dui nunc mattis enim ut tellus. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Faucibus ornare suspendisse sed nisi lacus. Nulla facilisi morbi tempus iaculis. Ut eu sem integer vitae justo eget magna fermentum iaculis. Ullamcorper sit amet risus nullam eget felis eget nunc. Volutpat sed cras ornare arcu dui vivamus. Eget magna fermentum iaculis eu non diam.</p><p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent. Interdum velit euismod in pellentesque massa placerat duis. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt. Nisl rhoncus mattis rhoncus urna neque viverra justo. Odio ut enim blandit volutpat. Ac auctor augue mauris augue neque gravida. Ut lectus arcu bibendum at varius vel. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Dolor sit amet consectetur adipiscing elit duis tristique. Semper quis lectus nulla at volutpat diam ut. Sapien eget mi proin sed.</p>",
+			utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+			1,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_products SET
+				id = ?,
+				parent_id = ?,
+				user = ?,
+				currency = ?,
+				price = ?,
+				gname = ?,
+				name = ?,
+				alias = ?,
+				vendor = ?,
+				quantity = ?,
+				category = ?,
+				briefly = ?,
+				content = ?,
+				datetime = ?,
+				active = ?
+			;`,
+			2,
+			1,
+			1,
+			1,
+			1200.00,
+			"",
+			"Samsung Galaxy S10 (256 Gb)",
+			"samsung-galaxy-s10-256-gb",
 			"Samsung",
 			"1",
 			"3",
