@@ -37,7 +37,7 @@ func (this *Modules) RegisterAction_SettingsSmtp() *Action {
 		if pf_smtp_test_email != "" {
 			if err := wrap.SendEmail(
 				pf_smtp_test_email,
-				"Fave.Pro SMTP test message",
+				"❤️ Fave.Pro SMTP test message",
 				"Hello! This is Fave.Pro test message.<br />If you see this message, then you right configured SMTP settings!",
 			); err != nil {
 				wrap.MsgError(err.Error())
