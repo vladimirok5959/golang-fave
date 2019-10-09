@@ -106,7 +106,7 @@ func smtp_prepare(db *sqlw.DB, conf *config.Config) {
 						conf,
 						utils.StrToInt(string(values[0])),
 						html.EscapeString(string(values[2])),
-						html.EscapeString(string(values[3])),
+						string(values[3]),
 						[]string{html.EscapeString(string(values[1]))},
 					)
 				} else {
