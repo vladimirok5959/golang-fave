@@ -426,6 +426,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Caption: "SMTP user password",
 					Name:    "smtp-password",
 					Value:   "",
+					Hint:    "Leave this field empty if you don't want change password",
 				},
 				{
 					Kind:   builder.DFKSubmit,
