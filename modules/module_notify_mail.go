@@ -40,7 +40,7 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 			} else if wrap.CurrSubModule == "in-progress" {
 				ModuleName = "In progress"
 				ModulePagination = "/cp/" + wrap.CurrModule + "/in-progress/"
-				ModuleSqlWhere = " WHERE notify_mail.status = 2"
+				ModuleSqlWhere = " WHERE notify_mail.status = 2 OR notify_mail.status = 3"
 			} else if wrap.CurrSubModule == "error" {
 				ModuleName = "Error"
 				ModulePagination = "/cp/" + wrap.CurrModule + "/error/"

@@ -11,6 +11,8 @@ func CheckBox(value int) string {
 		return `<span class="svg-green">` + assets.SysSvgIconChecked + `</span>`
 	} else if value == 2 {
 		return `<span class="svg-yellow">` + assets.SysSvgIconRestore + `</span>`
+	} else if value == 3 {
+		return `<span class="svg-yellow">` + assets.SysSvgIconEmail + `</span>`
 	}
 	return ""
 }
