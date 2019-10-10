@@ -29,6 +29,7 @@ var VarStylesCssFile = []byte(`/* Fix bootstrap */
 		 max-width: 1000px; 
 		/*background: red;*/
 	}
+
 	.navbar-expand-lg .navbar-nav {
 		margin-right: -.5rem;
 	}
@@ -100,6 +101,12 @@ footer {
 	padding-top: 3.5rem;
 }
 
+/* Basket button */
+#basket-nav-btn .badge {
+	vertical-align: top;
+	margin-top: 3px;
+}
+
 /* Fave background */
 .bg-fave {
 	background: #205081 url(/assets/sys/bg.png) repeat 0 0;
@@ -135,9 +142,23 @@ footer {
 	margin-left: -1px;
 }
 
-@media (min-width: 768px) { .grid-products .card-product { width: 50%; } }
-@media (min-width: 992px) { .grid-products .card-product { width: 33.33333%; } }
-@media (min-width: 1200px) { .grid-products .card-product { width: 33.33333%; } }
+@media (min-width: 768px) {
+	.grid-products .card-product {
+		width: 50%;
+	}
+}
+
+@media (min-width: 992px) {
+	.grid-products .card-product {
+		width: 33.33333%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.grid-products .card-product {
+		width: 33.33333%;
+	}
+}
 
 .grid-products .card-product:hover {
 	background-color: #f2f4f6;

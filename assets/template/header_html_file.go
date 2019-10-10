@@ -48,6 +48,9 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 							<li class="nav-item">
 								<a class="nav-link{{if eq $.Data.Module "404"}} active{{end}}" href="/not-existent-page/">404</a>
 							</li>
+							<li class="nav-item">
+								<a id="basket-nav-btn" class="nav-link" href="" onclick="window&&window.frontend&&frontend.ShopOpenBasket(this);return false;">Basket <span class="badge badge-pill badge-primary">0</span></a>
+							</li>
 						</ul>
 					</div>
 				</div>
