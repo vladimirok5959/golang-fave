@@ -1,4 +1,6 @@
-$(document).ready(function() {
+var GlobalLastProductImage = '';
+
+function ShopProductImagesLightGallery() {
 	$('#product_thumbnails').lightGallery({
 		pager: false,
 		showThumbByDefault: false,
@@ -8,11 +10,19 @@ $(document).ready(function() {
 	});
 	$('#product_image img').css('cursor', 'pointer').click(function() {
 		$($('#product_thumbnails a.thumbnail').get($(this).data('index'))).click();
-    });
+	});
 	$('#product_thumbnails a.thumbnail').each(function() {
 		$(this).mouseover(function() {
-			$('#product_image img').attr('src', $(this).data('hover'));
-			$('#product_image img').data('index', $(this).data('index'));
+			if($(this).data('hover') != GlobalLastProductImage) {
+				GlobalLastProductImage = $(this).data('hover');
+				$('#product_image img').attr('src', $(this).data('hover'));
+				$('#product_image img').data('index', $(this).data('index'));
+			}
 		});
-    });
+	});
+}
+
+// Init all
+$(document).ready(function() {
+	ShopProductImagesLightGallery();
 });
