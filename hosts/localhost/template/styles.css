@@ -100,7 +100,7 @@ footer {
 }
 
 /* Basket button */
-a.nav-link.basket .badge {
+#basket-nav-btn .badge {
 	vertical-align: top;
 	margin-top: 3px;
 }
