@@ -353,7 +353,7 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 			}
 			start := time.Now()
 			mod.Front(wrap)
-			if !(mod.Info.Mount == "api") {
+			if !(mod.Info.Mount == "api" || (mod.Info.Mount == "shop" && len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[1] == "basket")) {
 				wrap.W.Write([]byte(fmt.Sprintf("<!-- %.3f ms -->", time.Now().Sub(start).Seconds())))
 			}
 			return true

@@ -31,16 +31,16 @@ func (this *Modules) RegisterModule_Api() *Module {
 				// Response
 				target_file := wrap.DHtdocs + string(os.PathSeparator) + "products.xml"
 				if !utils.IsFileExists(target_file) {
+					wrap.W.WriteHeader(http.StatusServiceUnavailable)
 					wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 					wrap.W.Header().Set("Content-Type", "text/xml; charset=utf-8")
-					wrap.W.WriteHeader(http.StatusServiceUnavailable)
 					wrap.W.Write([]byte("In progress..."))
 				} else {
 					http.ServeFile(wrap.W, wrap.R, target_file)
 				}
 			} else {
-				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.WriteHeader(http.StatusServiceUnavailable)
+				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Write([]byte("Disabled!"))
 			}
 		} else if len(wrap.UrlArgs) == 1 {
@@ -51,8 +51,8 @@ func (this *Modules) RegisterModule_Api() *Module {
 			}
 
 			// Some info
-			wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 			wrap.W.WriteHeader(http.StatusOK)
+			wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 			wrap.W.Write([]byte("Fave engine API mount point!"))
 		} else {
 			// User error 404 page

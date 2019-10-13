@@ -14,6 +14,7 @@ import (
 
 	"golang-fave/cblocks"
 	"golang-fave/consts"
+	"golang-fave/engine/basket"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper/config"
@@ -50,13 +51,14 @@ type Wrapper struct {
 	CurrModule      string
 	CurrSubModule   string
 	MSPool          *mysqlpool.MySqlPool
+	ShopBasket      *basket.Basket
 	Config          *config.Config
 
 	DB   *sqlw.DB
 	User *utils.MySql_user
 }
 
-func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, c *cblocks.CacheBlocks, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool) *Wrapper {
+func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, c *cblocks.CacheBlocks, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool, sb *basket.Basket) *Wrapper {
 
 	conf := config.ConfigNew()
 	if err := conf.ConfigRead(dirConfig + string(os.PathSeparator) + "config.json"); err != nil {
@@ -81,6 +83,7 @@ func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Se
 		CurrModule:    "",
 		CurrSubModule: "",
 		MSPool:        mp,
+		ShopBasket:    sb,
 		Config:        conf,
 	}
 }
@@ -300,6 +303,14 @@ func (this *Wrapper) SendEmail(email, subject, message string) error {
 		return err
 	}
 	return nil
+}
+
+func (this *Wrapper) GetSessionId() string {
+	cookie, err := this.R.Cookie("session")
+	if err == nil && len(cookie.Value) == 40 {
+		return cookie.Value
+	}
+	return ""
 }
 
 func (this *Wrapper) RecreateProductXmlFile() error {

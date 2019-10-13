@@ -12,6 +12,7 @@ import (
 	"golang-fave/consts"
 	"golang-fave/domains"
 	"golang-fave/engine"
+	"golang-fave/engine/basket"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/logger"
 	"golang-fave/modules"
@@ -113,6 +114,9 @@ func main() {
 	// Init cache blocks
 	cbs := cblocks.New()
 
+	// Shop basket
+	sb := basket.New()
+
 	// Init and start web server
 	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
@@ -201,7 +205,7 @@ func main() {
 
 		// Logic
 		if mp != nil {
-			if engine.Response(mp, lg, mods, w, r, sess, cbs, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
+			if engine.Response(mp, sb, lg, mods, w, r, sess, cbs, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
 				return
 			}
 		}
