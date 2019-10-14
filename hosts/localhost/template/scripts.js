@@ -29,10 +29,45 @@
 			$('#basket-nav-btn .badge').html(value);
 		};
 
+		function ShopBasketAjaxCommand(cmd, product_id, success, fail, always) {
+			$.ajax({
+				type: "GET",
+				dataType: 'json',
+				url: '/shop/basket/' + cmd + '/' + product_id + '/'
+			}).done(function(data) {
+				if(success) { success(data); }
+			}).fail(function(xhr, status, error) {
+				if(fail) { fail(xhr, status, error); }
+			}).always(function() {
+				if(always) { always(); }
+			});
+		};
+
+		function ShopBasketAjaxGetCount(success, fail, always) {
+			$.ajax({
+				type: "GET",
+				dataType: 'json',
+				url: '/shop/basket/info/'
+			}).done(function(data) {
+				if(success && data && data.total_count) { success(data.total_count); }
+			}).fail(function(xhr, status, error) {
+				if(fail) { fail(xhr, status, error); }
+			}).always(function() {
+				if(always) { always(); }
+			});
+		};
+
+		function ShopBasketAjaxUpdateCount() {
+			ShopBasketAjaxGetCount(function(count) {
+				ShopSetBasketNavBtnProductsCount(count);
+			});
+		};
+
 		function Initialize() {
 			// Check if jQuery was loaded
 			if(typeof $ == 'function') {
 				ShopProductsInitLightGallery();
+				ShopBasketAjaxUpdateCount();
 			} else {
 				console.log('Error: jQuery is not loaded!');
 			}
@@ -54,7 +89,7 @@
 					$(object).addClass('click-blocked');
 
 					// ShopSetBasketNavBtnProductsCount(0);
-					console.log('ShopOpenBasket', object);
+					// console.log('ShopOpenBasket', object);
 
 					$(object).removeClass('click-blocked');
 				}
@@ -64,14 +99,12 @@
 			ShopBasketProductPlus: function(object, product_id) {
 				if(!$(object).hasClass('click-blocked')) {
 					$(object).addClass('click-blocked');
-					$.ajax({
-						type: "GET",
-						url: '/shop/basket/plus/' + product_id + '/'
-					}).done(function(data) {
-						console.log('AJAX', data, product_id);
-					}).fail(function(xhr, status, error) {
-						console.log('AJAX', xhr.responseText, product_id);
-					}).always(function() {
+					ShopBasketAjaxCommand('plus', product_id, function(data) {
+						// console.log('success', data, product_id);
+					}, function(xhr, status, error) {
+						// console.log('fail', xhr, status, error, product_id);
+					}, function() {
+						ShopBasketAjaxUpdateCount();
 						$(object).removeClass('click-blocked');
 					});
 				}
@@ -81,14 +114,27 @@
 			ShopBasketProductMinus: function(object, product_id) {
 				if(!$(object).hasClass('click-blocked')) {
 					$(object).addClass('click-blocked');
-					$.ajax({
-						type: "GET",
-						url: '/shop/basket/minus/' + product_id + '/'
-					}).done(function(data) {
-						console.log('AJAX', data, product_id);
-					}).fail(function(xhr, status, error) {
-						console.log('AJAX', xhr.responseText, product_id);
-					}).always(function() {
+					ShopBasketAjaxCommand('minus', product_id, function(data) {
+						// console.log('success', data, product_id);
+					}, function(xhr, status, error) {
+						// console.log('fail', xhr, status, error, product_id);
+					}, function() {
+						ShopBasketAjaxUpdateCount();
+						$(object).removeClass('click-blocked');
+					});
+				}
+				return false;
+			},
+
+			ShopBasketProductRemove: function(object, product_id) {
+				if(!$(object).hasClass('click-blocked')) {
+					$(object).addClass('click-blocked');
+					ShopBasketAjaxCommand('remove', product_id, function(data) {
+						// console.log('success', data, product_id);
+					}, function(xhr, status, error) {
+						// console.log('fail', xhr, status, error, product_id);
+					}, function() {
+						ShopBasketAjaxUpdateCount();
 						$(object).removeClass('click-blocked');
 					});
 				}
