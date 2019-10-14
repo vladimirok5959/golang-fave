@@ -27,7 +27,26 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 			});
 		};
 
-		function ShopSetBasketNavBtnProductsCount(value) {
+		function ShopBasketBlockObject(object) {
+			if(object && !$(object).hasClass('click-blocked')) {
+				$(object).addClass('click-blocked');
+			}
+		};
+
+		function ShopBasketUnBlockObject(object) {
+			if(object && $(object).hasClass('click-blocked')) {
+				$(object).removeClass('click-blocked');
+			}
+		};
+
+		function ShopBasketObjectIsNotBlocked(object) {
+			if(!object) {
+				return false;
+			}
+			return !$(object).hasClass('click-blocked');
+		};
+
+		function ShopBasketSetNavBtnProductsCount(value) {
 			$('#basket-nav-btn .badge').html(value);
 		};
 
@@ -61,7 +80,7 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 
 		function ShopBasketAjaxUpdateCount() {
 			ShopBasketAjaxGetCount(function(count) {
-				ShopSetBasketNavBtnProductsCount(count);
+				ShopBasketSetNavBtnProductsCount(count);
 			});
 		};
 
@@ -87,57 +106,57 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 		// Public
 		return {
 			ShopBasketOpen: function(object) {
-				if(!$(object).hasClass('click-blocked')) {
-					$(object).addClass('click-blocked');
+				if(ShopBasketObjectIsNotBlocked(object)) {
+					ShopBasketBlockObject(object);
 
-					// ShopSetBasketNavBtnProductsCount(0);
+					// ShopBasketSetNavBtnProductsCount(0);
 					// console.log('ShopOpenBasket', object);
 
-					$(object).removeClass('click-blocked');
+					ShopBasketUnBlockObject(object);
 				}
 				return false;
 			},
 
 			ShopBasketProductPlus: function(object, product_id) {
-				if(!$(object).hasClass('click-blocked')) {
-					$(object).addClass('click-blocked');
+				if(ShopBasketObjectIsNotBlocked(object)) {
+					ShopBasketBlockObject(object);
 					ShopBasketAjaxCommand('plus', product_id, function(data) {
 						// console.log('success', data, product_id);
 					}, function(xhr, status, error) {
 						// console.log('fail', xhr, status, error, product_id);
 					}, function() {
 						ShopBasketAjaxUpdateCount();
-						$(object).removeClass('click-blocked');
+						ShopBasketUnBlockObject(object);
 					});
 				}
 				return false;
 			},
 
 			ShopBasketProductMinus: function(object, product_id) {
-				if(!$(object).hasClass('click-blocked')) {
-					$(object).addClass('click-blocked');
+				if(ShopBasketObjectIsNotBlocked(object)) {
+					ShopBasketBlockObject(object);
 					ShopBasketAjaxCommand('minus', product_id, function(data) {
 						// console.log('success', data, product_id);
 					}, function(xhr, status, error) {
 						// console.log('fail', xhr, status, error, product_id);
 					}, function() {
 						ShopBasketAjaxUpdateCount();
-						$(object).removeClass('click-blocked');
+						ShopBasketUnBlockObject(object);
 					});
 				}
 				return false;
 			},
 
 			ShopBasketProductRemove: function(object, product_id) {
-				if(!$(object).hasClass('click-blocked')) {
-					$(object).addClass('click-blocked');
+				if(ShopBasketObjectIsNotBlocked(object)) {
+					ShopBasketBlockObject(object);
 					ShopBasketAjaxCommand('remove', product_id, function(data) {
 						// console.log('success', data, product_id);
 					}, function(xhr, status, error) {
 						// console.log('fail', xhr, status, error, product_id);
 					}, function() {
 						ShopBasketAjaxUpdateCount();
-						$(object).removeClass('click-blocked');
+						ShopBasketUnBlockObject(object);
 					});
 				}
 				return false;
