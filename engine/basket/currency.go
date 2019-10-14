@@ -1,9 +1,5 @@
 package basket
 
-// import (
-// 	"encoding/json"
-// )
-
 type currency struct {
 	Id          int     `json:"id"`
 	Name        string  `json:"name"`

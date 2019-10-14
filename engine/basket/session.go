@@ -23,11 +23,6 @@ func (this *session) String() string {
 	return string(json)
 }
 
-func (this *session) Info(db *sqlw.DB, currency_id int) {
-	// Update prices
-	// Update total
-}
-
 func (this *session) Plus(db *sqlw.DB, product_id int) {
 	if p, ok := this.Products[product_id]; ok == true {
 		p.Quantity++

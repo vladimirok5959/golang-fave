@@ -28,7 +28,6 @@ func (this *Basket) Info(host, session_id string, db *sqlw.DB, currency_id int) 
 	defer this.Unlock()
 	if h, ok := this.hosts[host]; ok == true {
 		if s, ok := h.sessions[session_id]; ok == true {
-			s.Info(db, currency_id)
 			return s.String()
 		} else {
 			return (&dResponse{IsError: false, Msg: "basket_is_empty", Message: ""}).String()
