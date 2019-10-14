@@ -21,6 +21,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=3">
 	</head>
 	<body class="fixed-top-bar">
+		<div id="sys-modal-shop-basket-placeholder"></div>
 		<div id="wrap">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<div class="container">

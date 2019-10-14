@@ -41,7 +41,7 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 
 		function ShopBasketObjectIsNotBlocked(object) {
 			if(!object) {
-				return false;
+				return true;
 			}
 			return !$(object).hasClass('click-blocked');
 		};
@@ -111,8 +111,60 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 
 					// ShopBasketSetNavBtnProductsCount(0);
 					// console.log('ShopOpenBasket', object);
+					// --------------------------------------------------
+					var html = '<div class="modal fade" id="sys-modal-shop-basket" tabindex="-1" role="dialog" aria-labelledby="sysModalShopBasketLabel" aria-hidden="true"> \
+						<div class="modal-dialog modal-dialog-centered" role="document"> \
+							<div class="modal-content"> \
+								<input type="hidden" name="action" value="index-user-update-profile"> \
+								<div class="modal-header"> \
+									<h5 class="modal-title" id="sysModalShopBasketLabel">Basket</h5> \
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
+										<span aria-hidden="true">&times;</span> \
+									</button> \
+								</div> \
+								<div class="modal-body text-left"> \
+									<div class="form-group"> \
+										<input type="text" class="form-control" name="product-name" value="" placeholder="Type product name here..." readonly autocomplete="off"> \
+									</div> \
+									<div class="form-group" style="margin-bottom:0px;"> \
+										<div class="products-list"></div> \
+									</div> \
+								</div> \
+								<div class="modal-footer"> \
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Continue shopping</button> \
+								</div> \
+							</div> \
+						</div> \
+					</div>';
+					$('#sys-modal-shop-basket-placeholder').html(html);
+					$("#sys-modal-shop-basket").modal({
+						backdrop: 'static',
+						keyboard: true,
+						show: false,
+					});
+					$('#sys-modal-shop-basket').on('hidden.bs.modal', function(e) {
+						$('#sys-modal-shop-basket-placeholder').html('');
+					});
+					$("#sys-modal-shop-basket").modal('show');
+					// --------------------------------------------------
 
 					ShopBasketUnBlockObject(object);
+				}
+				return false;
+			},
+
+			ShopBasketProductAdd: function(object, product_id) {
+				if(ShopBasketObjectIsNotBlocked(object)) {
+					ShopBasketBlockObject(object);
+					ShopBasketAjaxCommand('plus', product_id, function(data) {
+						frontend.ShopBasketOpen();
+					}, function(xhr, status, error) {
+						// console.log('fail', xhr, status, error, product_id);
+						// Page reload
+					}, function() {
+						ShopBasketAjaxUpdateCount();
+						ShopBasketUnBlockObject(object);
+					});
 				}
 				return false;
 			},
@@ -122,8 +174,10 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					ShopBasketBlockObject(object);
 					ShopBasketAjaxCommand('plus', product_id, function(data) {
 						// console.log('success', data, product_id);
+						// Update popup content
 					}, function(xhr, status, error) {
 						// console.log('fail', xhr, status, error, product_id);
+						// Page reload
 					}, function() {
 						ShopBasketAjaxUpdateCount();
 						ShopBasketUnBlockObject(object);
@@ -137,8 +191,10 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					ShopBasketBlockObject(object);
 					ShopBasketAjaxCommand('minus', product_id, function(data) {
 						// console.log('success', data, product_id);
+						// Update popup content
 					}, function(xhr, status, error) {
 						// console.log('fail', xhr, status, error, product_id);
+						// Page reload
 					}, function() {
 						ShopBasketAjaxUpdateCount();
 						ShopBasketUnBlockObject(object);
@@ -152,8 +208,10 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					ShopBasketBlockObject(object);
 					ShopBasketAjaxCommand('remove', product_id, function(data) {
 						// console.log('success', data, product_id);
+						// Update popup content
 					}, function(xhr, status, error) {
 						// console.log('fail', xhr, status, error, product_id);
+						// Page reload
 					}, function() {
 						ShopBasketAjaxUpdateCount();
 						ShopBasketUnBlockObject(object);
