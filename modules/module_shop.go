@@ -444,7 +444,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			// Render template
 			wrap.RenderFrontEnd("shop-category", fetdata.New(wrap, false, row, rou), http.StatusOK)
 			return
-		} else if len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] == "basket" && (wrap.UrlArgs[2] == "info" || wrap.UrlArgs[2] == "add" || wrap.UrlArgs[2] == "update" || wrap.UrlArgs[2] == "remove") {
+		} else if len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] == "basket" && (wrap.UrlArgs[2] == "info" || wrap.UrlArgs[2] == "plus" || wrap.UrlArgs[2] == "minus" || wrap.UrlArgs[2] == "remove") {
 			if wrap.UrlArgs[2] == "info" {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")

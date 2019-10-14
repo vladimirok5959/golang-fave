@@ -51,11 +51,11 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 
 		// Public
 		return {
-			ShopOpenBasket: function(object) {
+			ShopBasketOpen: function(object) {
 				if(!$(object).hasClass('click-blocked')) {
 					$(object).addClass('click-blocked');
 
-					ShopSetBasketNavBtnProductsCount(0);
+					// ShopSetBasketNavBtnProductsCount(0);
 					console.log('ShopOpenBasket', object);
 
 					$(object).removeClass('click-blocked');
@@ -63,17 +63,36 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 				return false;
 			},
 
-			// TODO: add product to basket or count++ if already in basket
-			// Update products counter in header nav bar button
-			// Automatically open basket popup
-			ShopAddProductToBasket: function(object, product_id) {
+			ShopBasketProductPlus: function(object, product_id) {
 				if(!$(object).hasClass('click-blocked')) {
 					$(object).addClass('click-blocked');
+					$.ajax({
+						type: "GET",
+						url: '/shop/basket/plus/' + product_id + '/'
+					}).done(function(data) {
+						console.log('AJAX', data, product_id);
+					}).fail(function(xhr, status, error) {
+						console.log('AJAX', xhr.responseText, product_id);
+					}).always(function() {
+						$(object).removeClass('click-blocked');
+					});
+				}
+				return false;
+			},
 
-					ShopSetBasketNavBtnProductsCount(product_id);
-					console.log('ShopAddProductToBasket', object, product_id);
-
-					$(object).removeClass('click-blocked');
+			ShopBasketProductMinus: function(object, product_id) {
+				if(!$(object).hasClass('click-blocked')) {
+					$(object).addClass('click-blocked');
+					$.ajax({
+						type: "GET",
+						url: '/shop/basket/minus/' + product_id + '/'
+					}).done(function(data) {
+						console.log('AJAX', data, product_id);
+					}).fail(function(xhr, status, error) {
+						console.log('AJAX', xhr.responseText, product_id);
+					}).always(function() {
+						$(object).removeClass('click-blocked');
+					});
 				}
 				return false;
 			},
