@@ -24,7 +24,8 @@
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<div class="container">
 					<a class="navbar-brand" href="/">Fave {{$.System.InfoVersion}}</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+					<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+						<span id="basket-mobile-btn" class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span>
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarResponsive">
@@ -48,7 +49,14 @@
 								<a class="nav-link{{if eq $.Data.Module "404"}} active{{end}}" href="/not-existent-page/">404</a>
 							</li>
 							<li class="nav-item">
-								<a id="basket-nav-btn" class="nav-link" href="" onclick="window&&window.frontend&&frontend.ShopBasketOpen(this);return false;">Basket <span class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span></a>
+								<a id="basket-nav-btn" class="nav-link" href="" onclick="window&&window.frontend&&frontend.ShopBasketBtnCollapse()&&frontend.ShopBasketOpen(this);return false;">Basket <span class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span></a>
+							</li>
+							<li>
+								<select class="form-control" onchange="document.location.reload(true);">
+									{{range $.Data.Shop.Currencies}}
+										<option value="{{.Id}}"{{if eq .Id $.Data.Shop.CurrentCurrency.Id}} selected{{end}}>{{.Code}}</option>
+									{{end}}
+								</select>
 							</li>
 						</ul>
 					</div>

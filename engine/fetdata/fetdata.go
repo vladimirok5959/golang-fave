@@ -199,5 +199,5 @@ func (this *FERData) CachedBlock5() template.HTML {
 }
 
 func (this *FERData) ShopBasketProductsCount() int {
-	return this.wrap.ShopBasket.ProductsCount(this.wrap.CurrHost, this.wrap.GetSessionId())
+	return this.wrap.ShopBasket.ProductsCount(this.wrap.R, this.wrap.CurrHost, this.wrap.GetSessionId())
 }

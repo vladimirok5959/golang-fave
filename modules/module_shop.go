@@ -449,25 +449,25 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
-				wrap.W.Write([]byte(wrap.ShopBasket.Info(wrap.CurrHost, wrap.GetSessionId(), wrap.DB, 1)))
+				wrap.W.Write([]byte(wrap.ShopBasket.Info(wrap.R, wrap.CurrHost, wrap.GetSessionId(), wrap.DB, 1)))
 				return
 			} else if wrap.UrlArgs[2] == "plus" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
-				wrap.W.Write([]byte(wrap.ShopBasket.Plus(wrap.CurrHost, wrap.GetSessionId(), wrap.DB, utils.StrToInt(wrap.UrlArgs[3]))))
+				wrap.W.Write([]byte(wrap.ShopBasket.Plus(wrap.R, wrap.CurrHost, wrap.GetSessionId(), wrap.DB, utils.StrToInt(wrap.UrlArgs[3]))))
 				return
 			} else if wrap.UrlArgs[2] == "minus" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
-				wrap.W.Write([]byte(wrap.ShopBasket.Minus(wrap.CurrHost, wrap.GetSessionId(), wrap.DB, utils.StrToInt(wrap.UrlArgs[3]))))
+				wrap.W.Write([]byte(wrap.ShopBasket.Minus(wrap.R, wrap.CurrHost, wrap.GetSessionId(), wrap.DB, utils.StrToInt(wrap.UrlArgs[3]))))
 				return
 			} else if wrap.UrlArgs[2] == "remove" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
-				wrap.W.Write([]byte(wrap.ShopBasket.Remove(wrap.CurrHost, wrap.GetSessionId(), wrap.DB, utils.StrToInt(wrap.UrlArgs[3]))))
+				wrap.W.Write([]byte(wrap.ShopBasket.Remove(wrap.R, wrap.CurrHost, wrap.GetSessionId(), wrap.DB, utils.StrToInt(wrap.UrlArgs[3]))))
 				return
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] != "" {

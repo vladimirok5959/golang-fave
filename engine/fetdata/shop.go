@@ -663,6 +663,23 @@ func (this *Shop) PaginationNext() *ShopPagination {
 	return this.paginationNext
 }
 
+func (this *Shop) Currencies() []*ShopCurrency {
+	result := []*ShopCurrency{}
+	for _, currency := range *this.wrap.ShopGetAllCurrencies() {
+		obj := currency
+		result = append(result, (&ShopCurrency{wrap: this.wrap, object: &obj}).load())
+	}
+
+	sort.Slice(result, func(i, j int) bool { return result[i].Id() < result[j].Id() })
+
+	return result
+}
+
+func (this *Shop) CurrentCurrency() *ShopCurrency {
+	obj := *this.wrap.ShopGetCurrentCurrency()
+	return (&ShopCurrency{wrap: this.wrap, object: &obj}).load()
+}
+
 func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 	this.preload_cats()
 

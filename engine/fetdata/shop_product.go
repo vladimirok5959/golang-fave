@@ -217,9 +217,24 @@ func (this *ShopProduct) Price() float64 {
 	if this == nil {
 		return 0
 	}
-	// TODO: read currency from session?
-	// this.object.A_price * this.Currency().Coefficient()
-	return this.object.A_price
+	if this.Currency() == nil {
+		return this.object.A_price
+	}
+	if this.wrap.ShopGetCurrentCurrency() == nil {
+		return this.object.A_price
+	}
+	if this.wrap.ShopGetCurrentCurrency().A_id == this.Currency().Id() {
+		return this.object.A_price
+	}
+	if this.Currency().Id() == 1 {
+		return this.object.A_price * this.wrap.ShopGetCurrentCurrency().A_coefficient
+	} else {
+		if c, ok := (*this.wrap.ShopGetAllCurrencies())[this.Currency().Id()]; ok == true {
+			return this.object.A_price / c.A_coefficient
+		} else {
+			return this.object.A_price
+		}
+	}
 }
 
 func (this *ShopProduct) PriceFormat(format string) string {

@@ -56,6 +56,8 @@ type Wrapper struct {
 
 	DB   *sqlw.DB
 	User *utils.MySql_user
+
+	ShopAllCurrencies *map[int]utils.MySql_shop_currency
 }
 
 func New(l *logger.Logger, w http.ResponseWriter, r *http.Request, s *session.Session, c *cblocks.CacheBlocks, host, port, chost, dirConfig, dirHtdocs, dirLogs, dirTemplate, dirTmp string, mp *mysqlpool.MySqlPool, sb *basket.Basket) *Wrapper {
@@ -345,4 +347,52 @@ func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) e
 		}
 	}
 	return this.RecreateProductImgFiles()
+}
+
+func (this *Wrapper) ShopGetAllCurrencies() *map[int]utils.MySql_shop_currency {
+	if this.ShopAllCurrencies == nil {
+		this.ShopAllCurrencies = &map[int]utils.MySql_shop_currency{}
+		if rows, err := this.DB.Query(
+			`SELECT
+				id,
+				name,
+				coefficient,
+				code,
+				symbol
+			FROM
+				shop_currencies
+			ORDER BY
+				id ASC
+			;`,
+		); err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				row := utils.MySql_shop_currency{}
+				if err = rows.Scan(
+					&row.A_id,
+					&row.A_name,
+					&row.A_coefficient,
+					&row.A_code,
+					&row.A_symbol,
+				); err == nil {
+					(*this.ShopAllCurrencies)[row.A_id] = row
+				}
+			}
+		}
+	}
+	return this.ShopAllCurrencies
+}
+
+func (this *Wrapper) ShopGetCurrentCurrency() *utils.MySql_shop_currency {
+	currency_id := 1
+	if cookie, err := this.R.Cookie("currency"); err == nil {
+		currency_id = utils.StrToInt(cookie.Value)
+	}
+	if _, ok := (*this.ShopGetAllCurrencies())[currency_id]; ok != true {
+		currency_id = 1
+	}
+	if p, ok := (*this.ShopGetAllCurrencies())[currency_id]; ok == true {
+		return &p
+	}
+	return nil
 }

@@ -46,6 +46,7 @@
 
 		function ShopBasketSetNavBtnProductsCount(value) {
 			$('#basket-nav-btn .badge').html(value);
+			$('#basket-mobile-btn').html(value);
 		};
 
 		function ShopBasketAjaxCommand(cmd, product_id, success, fail, always) {
@@ -62,16 +63,28 @@
 			});
 		};
 
-		function ShopBasketAjaxGetCount(success, fail, always) {
+		function ShopBasketAjaxGetInfo(success, fail, always) {
 			$.ajax({
 				type: "GET",
 				dataType: 'json',
 				url: '/shop/basket/info/'
 			}).done(function(data) {
-				if(success && data && data.total_count) { success(data.total_count); }
+				if(success && data) { success(data); }
 			}).fail(function(xhr, status, error) {
 				if(fail) { fail(xhr, status, error); }
 			}).always(function() {
+				if(always) { always(); }
+			});
+		};
+
+		function ShopBasketAjaxGetCount(success, fail, always) {
+			ShopBasketAjaxGetInfo(function(data) {
+				if(success && data && data.total_count != undefined) {
+					success(data.total_count);
+				}
+			}, function(xhr, status, error) {
+				if(fail) { fail(xhr, status, error); }
+			}, function() {
 				if(always) { always(); }
 			});
 		};
@@ -82,11 +95,49 @@
 			});
 		};
 
+		function ShopBasketAjaxProductsHtml(success, fail, always) {
+			ShopBasketAjaxGetInfo(function(data) {
+				if(data) {
+					if(data.total_count != undefined && data.total_count > 0) {
+						var table = '';
+						table += '<table class="table data-table table-striped table-bordered">';
+						table += '<thead><tr><th class="thc-1">&nbsp;</th><th class="thc-2">Product</th><th class="thc-3">Price</th><th class="thc-4">Quantity</th><th class="thc-5">Sum</th><th class="thc-6">&nbsp;</th></tr></thead>';
+						table += '<tbody>';
+						for(var i in data.products) {
+							table += '<tr>';
+							table += '<td class="thc-1"><img src="' + data.products[i].image + '" width="50" height="50" /></td>';
+							table += '<td class="thc-2"><a href="' + data.products[i].link + '">' + data.products[i].name + '</a></td>';
+							table += '<td class="thc-3">' + data.products[i].price + ' ' + data.currency.code + '</td>';
+							table += '<td class="thc-4"><button type="button" class="btn btn-minus" onclick="frontend.ShopBasketProductMinus(this,' + data.products[i].id + ');"><span>-</span></button><input class="form-control" type="text" value="' + data.products[i].quantity + '" readonly><button type="button" class="btn btn-plus" onclick="frontend.ShopBasketProductPlus(this,' + data.products[i].id + ');"><span>+</span></button></td>';
+							table += '<td class="thc-5">' + data.products[i].sum + ' ' + data.currency.code + '</td>';
+							table += '<td class="thc-6"><a href="" onclick="frontend.ShopBasketProductRemove(this,' + data.products[i].id + ');return false;">&times;</a></td>';
+							table += '</tr>';
+						}
+						table += '</tbody>';
+						table += '</table>';
+						table += '<div class="total"><span class="caption">Total sum:</span><span class="value">' + data.total_sum + ' ' + data.currency.code + '</span></div>';
+						if(success) { success(table, data.total_count); }
+					} else {
+						if(success) { success('You basket currently empty...', 0); }
+					}
+				} else {
+					window.location.reload(true);
+				}
+			}, function(xhr, status, error) {
+				if(fail) { fail(xhr, status, error); }
+			}, function() {
+				if(always) { always(); }
+			});
+		};
+
+		function ShopBasketEnableDisableOrderBtn(total) {
+			$('#sys-modal-shop-basket button.btn-order').prop('disabled', total <= 0);
+		};
+
 		function Initialize() {
 			// Check if jQuery was loaded
 			if(typeof $ == 'function') {
 				ShopProductsInitLightGallery();
-				// ShopBasketAjaxUpdateCount();
 			} else {
 				console.log('Error: jQuery is not loaded!');
 			}
@@ -103,13 +154,16 @@
 
 		// Public
 		return {
+			ShopBasketBtnCollapse: function() {
+				if(!$('.navbar-toggler').hasClass('collapsed')) {
+					$('.navbar-toggler').click();
+				}
+				return true;
+			},
+
 			ShopBasketOpen: function(object) {
 				if(ShopBasketObjectIsNotBlocked(object)) {
 					ShopBasketBlockObject(object);
-
-					// ShopBasketSetNavBtnProductsCount(0);
-					// console.log('ShopOpenBasket', object);
-					// --------------------------------------------------
 					var html = '<div class="modal fade" id="sys-modal-shop-basket" tabindex="-1" role="dialog" aria-labelledby="sysModalShopBasketLabel" aria-hidden="true"> \
 						<div class="modal-dialog modal-dialog-centered" role="document"> \
 							<div class="modal-content"> \
@@ -120,16 +174,13 @@
 										<span aria-hidden="true">&times;</span> \
 									</button> \
 								</div> \
-								<div class="modal-body text-left"> \
-									<div class="form-group"> \
-										<input type="text" class="form-control" name="product-name" value="" placeholder="Type product name here..." readonly autocomplete="off"> \
-									</div> \
-									<div class="form-group" style="margin-bottom:0px;"> \
-										<div class="products-list"></div> \
-									</div> \
+								<div class="modal-body text-left" style="position:relative;"> \
+									<div class="blocker" style="position:absolute;left:0px;top:0px;width:100%;height:100%;background:#fff;opacity:0.5;display:none;"></div> \
+									<div class="data"></div> \
 								</div> \
 								<div class="modal-footer"> \
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Continue shopping</button> \
+									<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">Continue Shopping</button> \
+									<button type="button" class="btn btn-order btn-success" disabled>Make order</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -143,8 +194,14 @@
 					$('#sys-modal-shop-basket').on('hidden.bs.modal', function(e) {
 						$('#sys-modal-shop-basket-placeholder').html('');
 					});
-					$("#sys-modal-shop-basket").modal('show');
-					// --------------------------------------------------
+
+					ShopBasketAjaxProductsHtml(function(html, total) {
+						$('#sys-modal-shop-basket .modal-body .data').html(html);
+						ShopBasketEnableDisableOrderBtn(total);
+						$("#sys-modal-shop-basket").modal('show');
+					}, function(xhr, status, error) {
+						window.location.reload(true);
+					});
 
 					ShopBasketUnBlockObject(object);
 				}
@@ -157,8 +214,7 @@
 					ShopBasketAjaxCommand('plus', product_id, function(data) {
 						frontend.ShopBasketOpen();
 					}, function(xhr, status, error) {
-						// console.log('fail', xhr, status, error, product_id);
-						// Page reload
+						window.location.reload(true);
 					}, function() {
 						ShopBasketAjaxUpdateCount();
 						ShopBasketUnBlockObject(object);
@@ -170,15 +226,20 @@
 			ShopBasketProductPlus: function(object, product_id) {
 				if(ShopBasketObjectIsNotBlocked(object)) {
 					ShopBasketBlockObject(object);
+					$('#sys-modal-shop-basket .modal-body .blocker').css('display', 'block');
 					ShopBasketAjaxCommand('plus', product_id, function(data) {
-						// console.log('success', data, product_id);
-						// Update popup content
+						ShopBasketAjaxProductsHtml(function(html, total) {
+							$('#sys-modal-shop-basket .modal-body .data').html(html);
+							ShopBasketEnableDisableOrderBtn(total);
+						}, function(xhr, status, error) {
+							window.location.reload(true);
+						});
 					}, function(xhr, status, error) {
-						// console.log('fail', xhr, status, error, product_id);
-						// Page reload
+						window.location.reload(true);
 					}, function() {
 						ShopBasketAjaxUpdateCount();
 						ShopBasketUnBlockObject(object);
+						$('#sys-modal-shop-basket .modal-body .blocker').css('display', 'none');
 					});
 				}
 				return false;
@@ -187,15 +248,20 @@
 			ShopBasketProductMinus: function(object, product_id) {
 				if(ShopBasketObjectIsNotBlocked(object)) {
 					ShopBasketBlockObject(object);
+					$('#sys-modal-shop-basket .modal-body .blocker').css('display', 'block');
 					ShopBasketAjaxCommand('minus', product_id, function(data) {
-						// console.log('success', data, product_id);
-						// Update popup content
+						ShopBasketAjaxProductsHtml(function(html, total) {
+							$('#sys-modal-shop-basket .modal-body .data').html(html);
+							ShopBasketEnableDisableOrderBtn(total);
+						}, function(xhr, status, error) {
+							window.location.reload(true);
+						});
 					}, function(xhr, status, error) {
-						// console.log('fail', xhr, status, error, product_id);
-						// Page reload
+						window.location.reload(true);
 					}, function() {
 						ShopBasketAjaxUpdateCount();
 						ShopBasketUnBlockObject(object);
+						$('#sys-modal-shop-basket .modal-body .blocker').css('display', 'none');
 					});
 				}
 				return false;
@@ -204,15 +270,20 @@
 			ShopBasketProductRemove: function(object, product_id) {
 				if(ShopBasketObjectIsNotBlocked(object)) {
 					ShopBasketBlockObject(object);
+					$('#sys-modal-shop-basket .modal-body .blocker').css('display', 'block');
 					ShopBasketAjaxCommand('remove', product_id, function(data) {
-						// console.log('success', data, product_id);
-						// Update popup content
+						ShopBasketAjaxProductsHtml(function(html, total) {
+							$('#sys-modal-shop-basket .modal-body .data').html(html);
+							ShopBasketEnableDisableOrderBtn(total);
+						}, function(xhr, status, error) {
+							window.location.reload(true);
+						});
 					}, function(xhr, status, error) {
-						// console.log('fail', xhr, status, error, product_id);
-						// Page reload
+						window.location.reload(true);
 					}, function() {
 						ShopBasketAjaxUpdateCount();
 						ShopBasketUnBlockObject(object);
+						$('#sys-modal-shop-basket .modal-body .blocker').css('display', 'none');
 					});
 				}
 				return false;
