@@ -86,7 +86,7 @@
 			// Check if jQuery was loaded
 			if(typeof $ == 'function') {
 				ShopProductsInitLightGallery();
-				ShopBasketAjaxUpdateCount();
+				// ShopBasketAjaxUpdateCount();
 			} else {
 				console.log('Error: jQuery is not loaded!');
 			}
