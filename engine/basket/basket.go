@@ -95,3 +95,18 @@ func (this *Basket) Remove(host, session_id string, db *sqlw.DB, product_id int)
 
 	return (&dResponse{IsError: false, Msg: "basket_product_remove", Message: ""}).String()
 }
+
+func (this *Basket) ProductsCount(host, session_id string) int {
+	if host != "" && session_id != "" {
+		this.Lock()
+		defer this.Unlock()
+
+		if h, ok := this.hosts[host]; ok == true {
+			if s, ok := h.sessions[session_id]; ok == true {
+				return s.ProductsCount()
+			}
+		}
+	}
+
+	return 0
+}

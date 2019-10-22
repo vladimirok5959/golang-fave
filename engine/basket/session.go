@@ -80,6 +80,10 @@ func (this *session) Remove(db *sqlw.DB, product_id int) {
 	}
 }
 
+func (this *session) ProductsCount() int {
+	return this.TotalCount
+}
+
 func (this *session) updateTotals() {
 	this.TotalSum = 0
 	this.TotalCount = 0

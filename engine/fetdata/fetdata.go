@@ -197,3 +197,7 @@ func (this *FERData) CachedBlock5() template.HTML {
 	this.wrap.SetBlock5(data)
 	return data
 }
+
+func (this *FERData) ShopBasketProductsCount() int {
+	return this.wrap.ShopBasket.ProductsCount(this.wrap.CurrHost, this.wrap.GetSessionId())
+}
