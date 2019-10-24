@@ -4,6 +4,7 @@ import (
 	"html"
 	"net/http"
 	"strings"
+	"time"
 
 	"golang-fave/assets"
 	"golang-fave/consts"
@@ -444,7 +445,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			// Render template
 			wrap.RenderFrontEnd("shop-category", fetdata.New(wrap, false, row, rou), http.StatusOK)
 			return
-		} else if len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] == "basket" && (wrap.UrlArgs[2] == "info" || wrap.UrlArgs[2] == "plus" || wrap.UrlArgs[2] == "minus" || wrap.UrlArgs[2] == "remove") {
+		} else if len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] == "basket" && (wrap.UrlArgs[2] == "info" || wrap.UrlArgs[2] == "plus" || wrap.UrlArgs[2] == "minus" || wrap.UrlArgs[2] == "remove" || wrap.UrlArgs[2] == "currency") {
 			if wrap.UrlArgs[2] == "info" {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -468,6 +469,20 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
 				wrap.W.Write([]byte(wrap.ShopBasket.Remove(wrap.R, wrap.CurrHost, wrap.GetSessionId(), wrap.DB, utils.StrToInt(wrap.UrlArgs[3]))))
+				return
+			} else if wrap.UrlArgs[2] == "currency" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
+				http.SetCookie(wrap.W, &http.Cookie{
+					Name:     "currency",
+					Value:    wrap.UrlArgs[3],
+					Path:     "/",
+					Expires:  time.Now().Add(7 * 24 * time.Hour),
+					HttpOnly: true,
+				})
+				redirectUrl := wrap.R.Referer()
+				if redirectUrl == "" {
+					redirectUrl = "/"
+				}
+				http.Redirect(wrap.W, wrap.R, redirectUrl, 302)
 				return
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] != "" {

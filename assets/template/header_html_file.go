@@ -54,7 +54,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 								<a id="basket-nav-btn" class="nav-link" href="" onclick="window&&window.frontend&&frontend.ShopBasketBtnCollapse()&&frontend.ShopBasketOpen(this);return false;">Basket <span class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span></a>
 							</li>
 							<li class="currency-changer">
-								<select class="form-control" onchange="document.location.reload(true);">
+								<select class="form-control" onchange="document.location='/shop/basket/currency/'+this.value+'/';">
 									{{range $.Data.Shop.Currencies}}
 										<option value="{{.Id}}"{{if eq .Id $.Data.Shop.CurrentCurrency.Id}} selected{{end}}>{{.Code}}</option>
 									{{end}}
