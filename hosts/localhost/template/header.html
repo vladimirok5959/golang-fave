@@ -51,7 +51,7 @@
 							<li class="nav-item">
 								<a id="basket-nav-btn" class="nav-link" href="" onclick="window&&window.frontend&&frontend.ShopBasketBtnCollapse()&&frontend.ShopBasketOpen(this);return false;">Basket <span class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span></a>
 							</li>
-							<li>
+							<li class="currency-changer">
 								<select class="form-control" onchange="document.location.reload(true);">
 									{{range $.Data.Shop.Currencies}}
 										<option value="{{.Id}}"{{if eq .Id $.Data.Shop.CurrentCurrency.Id}} selected{{end}}>{{.Code}}</option>

@@ -389,11 +389,13 @@ footer {
 
 	#sys-modal-shop-basket .modal-footer>:not(:last-child) {
 		margin-right: 0px;
+		display: block;
 	}
 
 	#sys-modal-shop-basket .modal-footer>:not(:first-child) {
 		margin-left: 0px;
 		margin-top: 1rem;
+		display: block;
 	}
 }
 
@@ -415,6 +417,10 @@ footer {
 	#sys-modal-shop-basket .data .table .thc-3 {
 		display: table-cell;
 	}
+
+	li.currency-changer {
+		padding-right: 8px;
+	}
 }
 
 @media (min-width: 1200px) {
@@ -424,5 +430,9 @@ footer {
 
 	#sys-modal-shop-basket .data .table .thc-3 {
 		display: table-cell;
+	}
+
+	li.currency-changer {
+		padding-right: 8px;
 	}
 }`)
