@@ -128,7 +128,7 @@ func TestExtractHostPort(t *testing.T) {
 }
 
 func TestGetAssetsUrl(t *testing.T) {
-	Expect(t, GetAssetsUrl("style.css"), "/style.css?v="+consts.AssetsVersion)
+	Expect(t, GetAssetsUrl("style.css"), "/style.css?v="+consts.ServerVersion)
 }
 
 func TestGetTmplSystemData(t *testing.T) {
@@ -136,23 +136,23 @@ func TestGetTmplSystemData(t *testing.T) {
 		CpModule:             "module",
 		CpSubModule:          "module",
 		InfoVersion:          consts.ServerVersion,
-		PathCssBootstrap:     "/assets/bootstrap.css?v=" + consts.AssetsVersion,
-		PathCssCpCodeMirror:  "/assets/cp/tmpl-editor/codemirror.css?v=" + consts.AssetsVersion,
-		PathCssCpStyles:      "/assets/cp/styles.css?v=" + consts.AssetsVersion,
-		PathCssCpWysiwygPell: "/assets/cp/wysiwyg/pell.css?v=" + consts.AssetsVersion,
-		PathCssStyles:        "/assets/sys/styles.css?v=" + consts.AssetsVersion,
-		PathJsBootstrap:      "/assets/bootstrap.js?v=" + consts.AssetsVersion,
-		PathJsCpCodeMirror:   "/assets/cp/tmpl-editor/codemirror.js?v=" + consts.AssetsVersion,
-		PathJsCpScripts:      "/assets/cp/scripts.js?v=" + consts.AssetsVersion,
-		PathJsCpWysiwygPell:  "/assets/cp/wysiwyg/pell.js?v=" + consts.AssetsVersion,
-		PathJsJquery:         "/assets/jquery.js?v=" + consts.AssetsVersion,
-		PathJsPopper:         "/assets/popper.js?v=" + consts.AssetsVersion,
-		PathSvgLogo:          "/assets/sys/logo.svg?v=" + consts.AssetsVersion,
-		PathThemeScripts:     "/assets/theme/scripts.js",
-		PathThemeStyles:      "/assets/theme/styles.css",
-		PathIcoFav:           "/assets/sys/fave.ico?v=" + consts.AssetsVersion,
-		PathCssLightGallery:  "/assets/lightgallery.css?v=" + consts.AssetsVersion,
-		PathJsLightGallery:   "/assets/lightgallery.js?v=" + consts.AssetsVersion,
+		PathCssBootstrap:     "/assets/bootstrap.css?v=" + consts.ServerVersion,
+		PathCssCpCodeMirror:  "/assets/cp/tmpl-editor/codemirror.css?v=" + consts.ServerVersion,
+		PathCssCpStyles:      "/assets/cp/styles.css?v=" + consts.ServerVersion,
+		PathCssCpWysiwygPell: "/assets/cp/wysiwyg/pell.css?v=" + consts.ServerVersion,
+		PathCssStyles:        "/assets/sys/styles.css?v=" + consts.ServerVersion,
+		PathJsBootstrap:      "/assets/bootstrap.js?v=" + consts.ServerVersion,
+		PathJsCpCodeMirror:   "/assets/cp/tmpl-editor/codemirror.js?v=" + consts.ServerVersion,
+		PathJsCpScripts:      "/assets/cp/scripts.js?v=" + consts.ServerVersion,
+		PathJsCpWysiwygPell:  "/assets/cp/wysiwyg/pell.js?v=" + consts.ServerVersion,
+		PathJsJquery:         "/assets/jquery.js?v=" + consts.ServerVersion,
+		PathJsPopper:         "/assets/popper.js?v=" + consts.ServerVersion,
+		PathSvgLogo:          "/assets/sys/logo.svg?v=" + consts.ServerVersion,
+		PathThemeScripts:     "/assets/theme/scripts.js?v=" + consts.ServerVersion,
+		PathThemeStyles:      "/assets/theme/styles.css?v=" + consts.ServerVersion,
+		PathIcoFav:           "/assets/sys/fave.ico?v=" + consts.ServerVersion,
+		PathCssLightGallery:  "/assets/lightgallery.css?v=" + consts.ServerVersion,
+		PathJsLightGallery:   "/assets/lightgallery.js?v=" + consts.ServerVersion,
 	})
 }
 

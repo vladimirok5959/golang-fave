@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"golang-fave/consts"
+	"golang-fave/engine/basket"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -199,5 +200,10 @@ func (this *FERData) CachedBlock5() template.HTML {
 }
 
 func (this *FERData) ShopBasketProductsCount() int {
-	return this.wrap.ShopBasket.ProductsCount(this.wrap.R, this.wrap.CurrHost, this.wrap.GetSessionId())
+	return this.wrap.ShopBasket.ProductsCount(&basket.SBParam{
+		R:         this.wrap.R,
+		DB:        this.wrap.DB,
+		Host:      this.wrap.CurrHost,
+		SessionId: this.wrap.GetSessionId(),
+	})
 }

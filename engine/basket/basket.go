@@ -7,6 +7,13 @@ import (
 	"golang-fave/engine/sqlw"
 )
 
+type SBParam struct {
+	R         *http.Request
+	DB        *sqlw.DB
+	Host      string
+	SessionId string
+}
+
 type Basket struct {
 	sync.RWMutex
 	hosts map[string]*onehost
@@ -18,19 +25,18 @@ func New() *Basket {
 	return &b
 }
 
-func (this *Basket) Info(r *http.Request, host, session_id string, db *sqlw.DB, currency_id int) string {
-	if host == "" || session_id == "" {
+func (this *Basket) Info(p *SBParam) string {
+	if p.Host == "" || p.SessionId == "" {
 		return (&dResponse{IsError: true, Msg: "basket_host_or_session_not_set", Message: ""}).String()
 	}
 
-	// Load currency here
-
 	this.Lock()
 	defer this.Unlock()
-	if h, ok := this.hosts[host]; ok == true {
-		if s, ok := h.sessions[session_id]; ok == true {
-			s.Preload(r, db)
-			return s.String(db)
+
+	if h, ok := this.hosts[p.Host]; ok == true {
+		if s, ok := h.sessions[p.SessionId]; ok == true {
+			s.Preload(p.R, p.DB)
+			return s.String(p.DB)
 		} else {
 			return (&dResponse{IsError: false, Msg: "basket_is_empty", Message: ""}).String()
 		}
@@ -39,77 +45,77 @@ func (this *Basket) Info(r *http.Request, host, session_id string, db *sqlw.DB, 
 	}
 }
 
-func (this *Basket) Plus(r *http.Request, host, session_id string, db *sqlw.DB, product_id int) string {
-	if host == "" || session_id == "" {
+func (this *Basket) Plus(p *SBParam, product_id int) string {
+	if p.Host == "" || p.SessionId == "" {
 		return (&dResponse{IsError: true, Msg: "basket_host_or_session_not_set", Message: ""}).String()
 	}
 
 	this.Lock()
 	defer this.Unlock()
 
-	if h, ok := this.hosts[host]; ok == true {
-		if s, ok := h.sessions[session_id]; ok == true {
-			s.Preload(r, db)
-			s.Plus(db, product_id)
+	if h, ok := this.hosts[p.Host]; ok == true {
+		if s, ok := h.sessions[p.SessionId]; ok == true {
+			s.Preload(p.R, p.DB)
+			s.Plus(p.DB, product_id)
 		}
 	} else {
 		s := &session{}
 		s.listCurrencies = map[int]*currency{}
 		s.Products = map[int]*product{}
-		s.Preload(r, db)
-		s.Plus(db, product_id)
+		s.Preload(p.R, p.DB)
+		s.Plus(p.DB, product_id)
 		h := &onehost{}
 		h.sessions = map[string]*session{}
-		h.sessions[session_id] = s
-		this.hosts[host] = h
+		h.sessions[p.SessionId] = s
+		this.hosts[p.Host] = h
 	}
 
 	return (&dResponse{IsError: false, Msg: "basket_product_plus", Message: ""}).String()
 }
 
-func (this *Basket) Minus(r *http.Request, host, session_id string, db *sqlw.DB, product_id int) string {
-	if host == "" || session_id == "" {
+func (this *Basket) Minus(p *SBParam, product_id int) string {
+	if p.Host == "" || p.SessionId == "" {
 		return (&dResponse{IsError: true, Msg: "basket_host_or_session_not_set", Message: ""}).String()
 	}
 
 	this.Lock()
 	defer this.Unlock()
 
-	if h, ok := this.hosts[host]; ok == true {
-		if s, ok := h.sessions[session_id]; ok == true {
-			s.Preload(r, db)
-			s.Minus(db, product_id)
+	if h, ok := this.hosts[p.Host]; ok == true {
+		if s, ok := h.sessions[p.SessionId]; ok == true {
+			s.Preload(p.R, p.DB)
+			s.Minus(p.DB, product_id)
 		}
 	}
 
 	return (&dResponse{IsError: false, Msg: "basket_product_minus", Message: ""}).String()
 }
 
-func (this *Basket) Remove(r *http.Request, host, session_id string, db *sqlw.DB, product_id int) string {
-	if host == "" || session_id == "" {
+func (this *Basket) Remove(p *SBParam, product_id int) string {
+	if p.Host == "" || p.SessionId == "" {
 		return (&dResponse{IsError: true, Msg: "basket_host_or_session_not_set", Message: ""}).String()
 	}
 
 	this.Lock()
 	defer this.Unlock()
 
-	if h, ok := this.hosts[host]; ok == true {
-		if s, ok := h.sessions[session_id]; ok == true {
-			s.Preload(r, db)
-			s.Remove(db, product_id)
+	if h, ok := this.hosts[p.Host]; ok == true {
+		if s, ok := h.sessions[p.SessionId]; ok == true {
+			s.Preload(p.R, p.DB)
+			s.Remove(p.DB, product_id)
 		}
 	}
 
 	return (&dResponse{IsError: false, Msg: "basket_product_remove", Message: ""}).String()
 }
 
-func (this *Basket) ProductsCount(r *http.Request, host, session_id string) int {
-	if host != "" && session_id != "" {
+func (this *Basket) ProductsCount(p *SBParam) int {
+	if p.Host != "" && p.SessionId != "" {
 		this.Lock()
 		defer this.Unlock()
 
-		if h, ok := this.hosts[host]; ok == true {
-			if s, ok := h.sessions[session_id]; ok == true {
+		if h, ok := this.hosts[p.Host]; ok == true {
+			if s, ok := h.sessions[p.SessionId]; ok == true {
 				return s.ProductsCount()
 			}
 		}

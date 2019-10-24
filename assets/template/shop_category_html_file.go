@@ -28,7 +28,7 @@ var VarShopCategoryHtmlFile = []byte(`{{template "header.html" .}}
 						<div class="card-text">{{.Briefly}}</div>
 					</div>
 					<div class="card-footer">
-						<span class="price">{{.PriceFormat "%.2f"}} {{$.Data.Shop.CurrentCurrency.Code}}</span><a href="{{.Permalink}}" class="btn btn-success" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{.Id}});return false;">Buy</a>
+						<span class="price">{{.PriceFormat "%.2f"}} {{$.Data.Shop.CurrentCurrency.Code}}</span><a href="{{.Permalink}}" class="btn btn-success">View</a>
 					</div>
 				</div>
 			{{end}}

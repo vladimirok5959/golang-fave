@@ -13,7 +13,7 @@ var VarFooterHtmlFile = []byte(`						</div>
 		<footer class="bg-light py-4">
 			<div class="container">
 				<p class="m-0 text-center text-black">
-					Copyright © Your Website {{if eq ($.Data.DateTimeFormat "2006") "2019"}}
+					Your Website © {{if eq ($.Data.DateTimeFormat "2006") "2019"}}
 						{{$.Data.DateTimeFormat "2006"}}
 					{{else}}
 						2019-{{$.Data.DateTimeFormat "2006"}}
@@ -29,6 +29,6 @@ var VarFooterHtmlFile = []byte(`						</div>
 		<script src="{{$.System.PathJsLightGallery}}"></script>
 
 		<!-- Template JavaScript file from template folder -->
-		<script src="{{$.System.PathThemeScripts}}?v=3"></script>
+		<script src="{{$.System.PathThemeScripts}}"></script>
 	</body>
 </html>`)

@@ -125,7 +125,7 @@ func ExtractHostPort(host string, https bool) (string, string) {
 }
 
 func GetAssetsUrl(filename string) string {
-	return "/" + filename + "?v=" + consts.AssetsVersion
+	return "/" + filename + "?v=" + consts.ServerVersion
 }
 
 func GetTmplSystemData(cpmod, cpsubmod string) consts.TmplSystem {
@@ -147,8 +147,8 @@ func GetTmplSystemData(cpmod, cpsubmod string) consts.TmplSystem {
 		PathJsLightGallery:   GetAssetsUrl(consts.AssetsLightGalleryJs),
 		PathJsPopper:         GetAssetsUrl(consts.AssetsPopperJs),
 		PathSvgLogo:          GetAssetsUrl(consts.AssetsSysLogoSvg),
-		PathThemeScripts:     "/assets/theme/scripts.js",
-		PathThemeStyles:      "/assets/theme/styles.css",
+		PathThemeScripts:     "/assets/theme/scripts.js?v=" + consts.ServerVersion,
+		PathThemeStyles:      "/assets/theme/styles.css?v=" + consts.ServerVersion,
 		CpModule:             cpmod,
 	}
 }

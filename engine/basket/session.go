@@ -54,19 +54,59 @@ func (this *session) updateProducts(db *sqlw.DB) {
 				shop_currencies.name,
 				shop_currencies.coefficient,
 				shop_currencies.code,
-				shop_currencies.symbol
+				shop_currencies.symbol,
+				IF(image_this.filename IS NULL, shop_products.parent_id, shop_products.id) as imgid,
+				IFNULL(IFNULL(image_this.filename, image_parent.filename), '') as filename
 			FROM
 				shop_products
 				LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+				LEFT JOIN (
+					SELECT
+						m.product_id,
+						m.filename
+					FROM
+						shop_product_images as m
+						LEFT JOIN (
+							SELECT
+								t.product_id,
+								MIN(t.ord) as ordmin
+							FROM
+								shop_product_images as t
+							GROUP BY
+								t.product_id
+						) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
+					WHERE
+						u.product_id IS NOT NULL
+				) as image_this ON image_this.product_id = shop_products.id
+				LEFT JOIN (
+					SELECT
+						m.product_id,
+						m.filename
+					FROM
+						shop_product_images as m
+						LEFT JOIN (
+							SELECT
+								t.product_id,
+								MIN(t.ord) as ordmin
+							FROM
+								shop_product_images as t
+							GROUP BY
+								t.product_id
+						) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
+					WHERE
+						u.product_id IS NOT NULL
+				) as image_parent ON image_parent.product_id = shop_products.parent_id
 			WHERE
 				shop_products.active = 1 AND
 				shop_products.id IN (` + strings.Join(utils.ArrayOfIntToArrayOfString(products_ids), ",") + `)
-			LIMIT 1;`,
+			;`,
 		); err == nil {
 			defer rows.Close()
 			for rows.Next() {
 				row := &utils.MySql_shop_product{}
 				roc := &utils.MySql_shop_currency{}
+				var img_product_id string
+				var img_filename string
 				if err = rows.Scan(
 					&row.A_id,
 					&row.A_name,
@@ -77,10 +117,20 @@ func (this *session) updateProducts(db *sqlw.DB) {
 					&roc.A_coefficient,
 					&roc.A_code,
 					&roc.A_symbol,
+					&img_product_id,
+					&img_filename,
 				); err == nil {
 					if p, ok := this.Products[row.A_id]; ok == true {
+						// Load product image here
+						var product_image string
+						if img_filename == "" {
+							// TODO: Placeholder
+							product_image = ""
+						} else {
+							product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
+						}
 						p.Name = html.EscapeString(row.A_name)
-						p.Image = "/products/images/1/thumb-0-1570673803.jpg"
+						p.Image = product_image
 						p.Link = "/shop/" + row.A_alias + "/"
 						p.price = row.A_price
 						p.currency.Id = roc.A_id
@@ -191,6 +241,8 @@ func (this *session) Plus(db *sqlw.DB, product_id int) {
 	}
 	row := &utils.MySql_shop_product{}
 	roc := &utils.MySql_shop_currency{}
+	var img_product_id string
+	var img_filename string
 	if err := db.QueryRow(`
 		SELECT
 			shop_products.id,
@@ -201,10 +253,48 @@ func (this *session) Plus(db *sqlw.DB, product_id int) {
 			shop_currencies.name,
 			shop_currencies.coefficient,
 			shop_currencies.code,
-			shop_currencies.symbol
+			shop_currencies.symbol,
+			IF(image_this.filename IS NULL, shop_products.parent_id, shop_products.id) as imgid,
+			IFNULL(IFNULL(image_this.filename, image_parent.filename), '') as filename
 		FROM
 			shop_products
 			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+			LEFT JOIN (
+				SELECT
+					m.product_id,
+					m.filename
+				FROM
+					shop_product_images as m
+					LEFT JOIN (
+						SELECT
+							t.product_id,
+							MIN(t.ord) as ordmin
+						FROM
+							shop_product_images as t
+						GROUP BY
+							t.product_id
+					) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
+				WHERE
+					u.product_id IS NOT NULL
+			) as image_this ON image_this.product_id = shop_products.id
+			LEFT JOIN (
+				SELECT
+					m.product_id,
+					m.filename
+				FROM
+					shop_product_images as m
+					LEFT JOIN (
+						SELECT
+							t.product_id,
+							MIN(t.ord) as ordmin
+						FROM
+							shop_product_images as t
+						GROUP BY
+							t.product_id
+					) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
+				WHERE
+					u.product_id IS NOT NULL
+			) as image_parent ON image_parent.product_id = shop_products.parent_id
 		WHERE
 			shop_products.active = 1 AND
 			shop_products.id = ?
@@ -220,14 +310,23 @@ func (this *session) Plus(db *sqlw.DB, product_id int) {
 		&roc.A_coefficient,
 		&roc.A_code,
 		&roc.A_symbol,
+		&img_product_id,
+		&img_filename,
 	); err == nil {
 		// Load product image here
+		var product_image string
+		if img_filename == "" {
+			// TODO: Placeholder
+			product_image = ""
+		} else {
+			product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
+		}
 		this.Products[product_id] = &product{
 			currency: &currency{Id: roc.A_id, Name: roc.A_name, Coefficient: roc.A_coefficient, Code: roc.A_code, Symbol: roc.A_symbol},
 
 			Id:       row.A_id,
 			Name:     html.EscapeString(row.A_name),
-			Image:    "/products/images/1/thumb-0-1570673803.jpg",
+			Image:    product_image,
 			Link:     "/shop/" + row.A_alias + "/",
 			price:    row.A_price,
 			Quantity: 1,

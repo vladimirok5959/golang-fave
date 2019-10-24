@@ -18,7 +18,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 		<link rel="shortcut icon" href="{{$.System.PathIcoFav}}" type="image/x-icon" />
 
 		<!-- Template CSS file from template folder -->
-		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=3">
+		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}">
 	</head>
 	<body id="body" class="fixed-top-bar">
 		<div id="sys-modal-shop-basket-placeholder"></div>
