@@ -20,10 +20,10 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 		<!-- Template CSS file from template folder -->
 		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}?v=3">
 	</head>
-	<body class="fixed-top-bar">
+	<body id="body" class="fixed-top-bar">
 		<div id="sys-modal-shop-basket-placeholder"></div>
 		<div id="wrap">
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<nav id="navbar-top" class="navbar navbar-expand-lg navbar-light bg-light">
 				<div class="container">
 					<a class="navbar-brand" href="/">Fave {{$.System.InfoVersion}}</a>
 					<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">

@@ -195,12 +195,14 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					});
 					$('#sys-modal-shop-basket').on('hidden.bs.modal', function(e) {
 						$('#sys-modal-shop-basket-placeholder').html('');
+						$('#navbar-top').css('margin-right', $('#body').css('padding-right'));
 					});
 
 					ShopBasketAjaxProductsHtml(function(html, total) {
 						$('#sys-modal-shop-basket .modal-body .data').html(html);
 						ShopBasketEnableDisableOrderBtn(total);
 						$("#sys-modal-shop-basket").modal('show');
+						$('#navbar-top').css('margin-right', $('#body').css('padding-right'));
 					}, function(xhr, status, error) {
 						window.location.reload(true);
 					});
