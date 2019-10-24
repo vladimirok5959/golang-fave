@@ -65,15 +65,15 @@ func (this *Config) configDefault() {
 
 	this.Shop.Thumbnails.Thumbnail1[0] = 200
 	this.Shop.Thumbnails.Thumbnail1[1] = 200
-	this.Shop.Thumbnails.Thumbnail1[2] = 0
+	this.Shop.Thumbnails.Thumbnail1[2] = 2
 
 	this.Shop.Thumbnails.Thumbnail2[0] = 250
 	this.Shop.Thumbnails.Thumbnail2[1] = 250
-	this.Shop.Thumbnails.Thumbnail2[2] = 0
+	this.Shop.Thumbnails.Thumbnail2[2] = 2
 
 	this.Shop.Thumbnails.Thumbnail3[0] = 450
 	this.Shop.Thumbnails.Thumbnail3[1] = 450
-	this.Shop.Thumbnails.Thumbnail3[2] = 0
+	this.Shop.Thumbnails.Thumbnail3[2] = 2
 
 	this.Shop.Thumbnails.ThumbnailFull[0] = 1000
 	this.Shop.Thumbnails.ThumbnailFull[1] = 800
