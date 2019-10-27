@@ -237,6 +237,10 @@ func (this *ShopProduct) Price() float64 {
 	}
 }
 
+func (this *ShopProduct) PriceNice() string {
+	return ""
+}
+
 func (this *ShopProduct) PriceFormat(format string) string {
 	return utils.Float64ToStrF(this.Price(), format)
 }

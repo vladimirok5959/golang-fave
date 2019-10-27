@@ -27,6 +27,10 @@ type Config struct {
 			Thumbnail3    [3]int
 			ThumbnailFull [3]int
 		}
+		Price struct {
+			Format int
+			Round  int
+		}
 	}
 	API struct {
 		XML struct {
@@ -78,6 +82,9 @@ func (this *Config) configDefault() {
 	this.Shop.Thumbnails.ThumbnailFull[0] = 1000
 	this.Shop.Thumbnails.ThumbnailFull[1] = 800
 	this.Shop.Thumbnails.ThumbnailFull[2] = 1
+
+	this.Shop.Price.Format = 2
+	this.Shop.Price.Round = 0
 
 	this.API.XML.Enabled = 0
 	this.API.XML.Name = ""
