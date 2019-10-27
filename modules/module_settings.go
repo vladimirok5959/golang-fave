@@ -71,27 +71,27 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						if (*wrap.Config).Shop.Price.Format == 0 {
 							price_format_list += ` selected`
 						}
-						price_format_list += `>100 USD</option>`
+						price_format_list += `>100</option>`
 						price_format_list += `<option value="1"`
 						if (*wrap.Config).Shop.Price.Format == 1 {
 							price_format_list += ` selected`
 						}
-						price_format_list += `>100.0 USD</option>`
+						price_format_list += `>100.0</option>`
 						price_format_list += `<option value="2"`
 						if (*wrap.Config).Shop.Price.Format == 2 {
 							price_format_list += ` selected`
 						}
-						price_format_list += `>100.00 USD</option>`
+						price_format_list += `>100.00</option>`
 						price_format_list += `<option value="3"`
 						if (*wrap.Config).Shop.Price.Format == 3 {
 							price_format_list += ` selected`
 						}
-						price_format_list += `>100.000 USD</option>`
+						price_format_list += `>100.000</option>`
 						price_format_list += `<option value="4"`
 						if (*wrap.Config).Shop.Price.Format == 4 {
 							price_format_list += ` selected`
 						}
-						price_format_list += `>100.0000 USD</option>`
+						price_format_list += `>100.0000</option>`
 						price_format_list += `</select>`
 
 						price_round_list := ``
