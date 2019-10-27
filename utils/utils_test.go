@@ -368,3 +368,28 @@ func TestArrayOfStringToArrayOfInt(t *testing.T) {
 	Expect(t, res[1], 3)
 	Expect(t, res[2], 5)
 }
+
+func TestGetImagePlaceholderSrc(t *testing.T) {
+	Expect(t, GetImagePlaceholderSrc(), "/assets/sys/placeholder.png")
+}
+
+func TestFormatProductPrice(t *testing.T) {
+	Expect(t, FormatProductPrice(123.4567, 0, 0), "123")
+	Expect(t, FormatProductPrice(123.4567, 0, 1), "124")
+	Expect(t, FormatProductPrice(123.4567, 0, 2), "123")
+
+	Expect(t, FormatProductPrice(123.4567, 1, 0), "123.5")
+	Expect(t, FormatProductPrice(123.4567, 2, 0), "123.46")
+	Expect(t, FormatProductPrice(123.4567, 3, 0), "123.457")
+	Expect(t, FormatProductPrice(123.4567, 4, 0), "123.4567")
+
+	Expect(t, FormatProductPrice(123.4567, 1, 1), "124.0")
+	Expect(t, FormatProductPrice(123.4567, 2, 1), "124.00")
+	Expect(t, FormatProductPrice(123.4567, 3, 1), "124.000")
+	Expect(t, FormatProductPrice(123.4567, 4, 1), "124.0000")
+
+	Expect(t, FormatProductPrice(123.4567, 1, 2), "123.0")
+	Expect(t, FormatProductPrice(123.4567, 2, 2), "123.00")
+	Expect(t, FormatProductPrice(123.4567, 3, 2), "123.000")
+	Expect(t, FormatProductPrice(123.4567, 4, 2), "123.0000")
+}
