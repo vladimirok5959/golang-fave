@@ -76,7 +76,7 @@ func (this *session) updateProducts(db *sqlw.DB) {
 				shop_currencies.coefficient,
 				shop_currencies.code,
 				shop_currencies.symbol,
-				IF(image_this.filename IS NULL, shop_products.parent_id, shop_products.id) as imgid,
+				IF(image_this.filename IS NULL, IFNULL(shop_products.parent_id, shop_products.id), shop_products.id) as imgid,
 				IFNULL(IFNULL(image_this.filename, image_parent.filename), '') as filename
 			FROM
 				shop_products
@@ -145,8 +145,7 @@ func (this *session) updateProducts(db *sqlw.DB) {
 						// Load product image here
 						var product_image string
 						if img_filename == "" {
-							// TODO: Placeholder
-							product_image = ""
+							product_image = "/assets/some-placeholder.jpg"
 						} else {
 							product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
 						}
@@ -274,7 +273,7 @@ func (this *session) Plus(p *SBParam, product_id int) {
 			shop_currencies.coefficient,
 			shop_currencies.code,
 			shop_currencies.symbol,
-			IF(image_this.filename IS NULL, shop_products.parent_id, shop_products.id) as imgid,
+			IF(image_this.filename IS NULL, IFNULL(shop_products.parent_id, shop_products.id), shop_products.id) as imgid,
 			IFNULL(IFNULL(image_this.filename, image_parent.filename), '') as filename
 		FROM
 			shop_products
@@ -336,8 +335,7 @@ func (this *session) Plus(p *SBParam, product_id int) {
 		// Load product image here
 		var product_image string
 		if img_filename == "" {
-			// TODO: Placeholder
-			product_image = ""
+			product_image = "/assets/some-placeholder.jpg"
 		} else {
 			product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
 		}
