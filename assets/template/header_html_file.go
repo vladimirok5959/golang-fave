@@ -19,6 +19,19 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 
 		<!-- Template CSS file from template folder -->
 		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}">
+
+		<!-- Shop basket texts -->
+		<script type="text/javascript">
+			var ShopBasketName = 'Basket';
+			var ShopBasketTableProduct = 'Product';
+			var ShopBasketTablePrice = 'Price';
+			var ShopBasketTableQuantity = 'Quantity';
+			var ShopBasketTableSum = 'Sum';
+			var ShopBasketTotal = 'Total sum:';
+			var ShopBasketBtnContinue = 'Continue Shopping';
+			var ShopBasketBtnOrder = 'Make order';
+			var ShopBasketEmpty = 'You basket currently empty...';
+		</script>
 	</head>
 	<body id="body" class="fixed-top-bar">
 		<div id="sys-modal-shop-basket-placeholder"></div>

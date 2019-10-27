@@ -101,7 +101,7 @@
 					if(data.total_count != undefined && data.total_count > 0) {
 						var table = '';
 						table += '<table class="table data-table table-striped table-bordered">';
-						table += '<thead><tr><th class="thc-1">&nbsp;</th><th class="thc-2">Product</th><th class="thc-3">Price</th><th class="thc-4">Quantity</th><th class="thc-5">Sum</th><th class="thc-6">&nbsp;</th></tr></thead>';
+						table += '<thead><tr><th class="thc-1">&nbsp;</th><th class="thc-2">' + ShopBasketTableProduct + '</th><th class="thc-3">' + ShopBasketTablePrice + '</th><th class="thc-4">' + ShopBasketTableQuantity + '</th><th class="thc-5">' + ShopBasketTableSum + '</th><th class="thc-6">&nbsp;</th></tr></thead>';
 						table += '<tbody>';
 						for(var i in data.products) {
 							table += '<tr>';
@@ -115,10 +115,10 @@
 						}
 						table += '</tbody>';
 						table += '</table>';
-						table += '<div class="total"><span class="caption">Total sum:</span><span class="value">' + data.total_sum + ' ' + data.currency.code + '</span></div>';
+						table += '<div class="total"><span class="caption">' + ShopBasketTotal + '</span><span class="value">' + data.total_sum + ' ' + data.currency.code + '</span></div>';
 						if(success) { success(table, data.total_count); }
 					} else {
-						if(success) { success('You basket currently empty...', 0); }
+						if(success) { success(ShopBasketEmpty, 0); }
 					}
 				} else {
 					window.location.reload(true);
@@ -169,7 +169,7 @@
 							<div class="modal-content"> \
 								<input type="hidden" name="action" value="index-user-update-profile"> \
 								<div class="modal-header"> \
-									<h5 class="modal-title" id="sysModalShopBasketLabel">Basket</h5> \
+									<h5 class="modal-title" id="sysModalShopBasketLabel">' + ShopBasketName + '</h5> \
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
 										<span aria-hidden="true">&times;</span> \
 									</button> \
@@ -179,8 +179,8 @@
 									<div class="data"></div> \
 								</div> \
 								<div class="modal-footer"> \
-									<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">Continue Shopping</button> \
-									<button type="button" class="btn btn-order btn-success" disabled>Make order</button> \
+									<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">' + ShopBasketBtnContinue + '</button> \
+									<button type="button" class="btn btn-order btn-success" disabled>' + ShopBasketBtnOrder + '</button> \
 								</div> \
 							</div> \
 						</div> \
