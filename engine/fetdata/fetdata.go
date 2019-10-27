@@ -208,3 +208,7 @@ func (this *FERData) ShopBasketProductsCount() int {
 		SessionId: this.wrap.GetSessionId(),
 	})
 }
+
+func (this *FERData) ImagePlaceholderHref() string {
+	return "/assets/some-placeholder.jpg"
+}
