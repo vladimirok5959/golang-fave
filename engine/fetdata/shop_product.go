@@ -2,7 +2,6 @@ package fetdata
 
 import (
 	"html/template"
-	"math"
 	"strings"
 	"time"
 
@@ -239,24 +238,11 @@ func (this *ShopProduct) Price() float64 {
 }
 
 func (this *ShopProduct) PriceNice() string {
-	price := this.Price()
-	if (*this.wrap.Config).Shop.Price.Round == 1 {
-		price = math.Ceil(price)
-	} else if (*this.wrap.Config).Shop.Price.Round == 2 {
-		price = math.Floor(price)
-	}
-
-	if (*this.wrap.Config).Shop.Price.Format == 1 {
-		return utils.Float64ToStrF(price, "%.1f")
-	} else if (*this.wrap.Config).Shop.Price.Format == 2 {
-		return utils.Float64ToStrF(price, "%.2f")
-	} else if (*this.wrap.Config).Shop.Price.Format == 3 {
-		return utils.Float64ToStrF(price, "%.3f")
-	} else if (*this.wrap.Config).Shop.Price.Format == 4 {
-		return utils.Float64ToStrF(price, "%.4f")
-	}
-
-	return utils.Float64ToStrF(price, "%.0f")
+	return utils.FormatProductPrice(
+		this.Price(),
+		(*this.wrap.Config).Shop.Price.Format,
+		(*this.wrap.Config).Shop.Price.Round,
+	)
 }
 
 func (this *ShopProduct) PriceFormat(format string) string {

@@ -3,7 +3,6 @@ package basket
 import (
 	"encoding/json"
 	"html"
-	"math"
 	"strings"
 
 	"golang-fave/engine/sqlw"
@@ -18,27 +17,6 @@ type session struct {
 	Currency   *currency        `json:"currency"`
 	TotalSum   string           `json:"total_sum"`
 	TotalCount int              `json:"total_count"`
-}
-
-func (this *session) priceFormat(product_price float64, format, round int) string {
-	price := product_price
-	if round == 1 {
-		price = math.Ceil(price)
-	} else if round == 2 {
-		price = math.Floor(price)
-	}
-
-	if format == 1 {
-		return utils.Float64ToStrF(price, "%.1f")
-	} else if format == 2 {
-		return utils.Float64ToStrF(price, "%.2f")
-	} else if format == 3 {
-		return utils.Float64ToStrF(price, "%.3f")
-	} else if format == 4 {
-		return utils.Float64ToStrF(price, "%.4f")
-	}
-
-	return utils.Float64ToStrF(price, "%.0f")
 }
 
 func (this *session) makePrice(product_price float64, product_currency_id int) float64 {
@@ -169,12 +147,12 @@ func (this *session) updateTotals(p *SBParam) {
 	this.totalSum = 0
 	this.TotalCount = 0
 	for _, product := range this.Products {
-		product.Price = this.priceFormat(this.makePrice(product.price, product.currency.Id), (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
-		product.Sum = this.priceFormat(this.makePrice(product.price*float64(product.Quantity), product.currency.Id), (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
+		product.Price = utils.FormatProductPrice(this.makePrice(product.price, product.currency.Id), (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
+		product.Sum = utils.FormatProductPrice(this.makePrice(product.price*float64(product.Quantity), product.currency.Id), (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 		this.totalSum += this.makePrice(product.price, product.currency.Id) * float64(product.Quantity)
 		this.TotalCount += product.Quantity
 	}
-	this.TotalSum = this.priceFormat(this.totalSum, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
+	this.TotalSum = utils.FormatProductPrice(this.totalSum, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 }
 
 // Info, Plus, Minus

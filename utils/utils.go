@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"html/template"
+	"math"
 	"net/http"
 	"os"
 	"regexp"
@@ -458,4 +459,26 @@ func SqlNullStringToString(arr *[]sql.NullString) *[]string {
 
 func GetImagePlaceholderSrc() string {
 	return "/" + consts.AssetsSysPlaceholderPng
+}
+
+func FormatProductPrice(price float64, format, round int) string {
+	p := price
+
+	if round == 1 {
+		p = math.Ceil(p)
+	} else if round == 2 {
+		p = math.Floor(p)
+	}
+
+	if format == 1 {
+		return Float64ToStrF(p, "%.1f")
+	} else if format == 2 {
+		return Float64ToStrF(p, "%.2f")
+	} else if format == 3 {
+		return Float64ToStrF(p, "%.3f")
+	} else if format == 4 {
+		return Float64ToStrF(p, "%.4f")
+	}
+
+	return Float64ToStrF(p, "%.0f")
 }
