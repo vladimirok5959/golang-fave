@@ -51,7 +51,7 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 						{{end}}
 						<div class="card mt-3{{if not $.Data.Shop.Product.HaveVariations}} mt-sm-3 mt-md-0 mt-lg-0{{end}}">
 							<div class="card-body">
-								<h3 class="price mb-0 mr-4">{{$.Data.Shop.Product.PriceFormat "%.2f"}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><a href="" class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;">Buy</a>
+								<h3 class="price mb-0 mr-4">{{$.Data.Shop.Product.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><a href="" class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;">Buy</a>
 							</div>
 						</div>
 						<div class="card mt-3">
@@ -119,7 +119,7 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 							</div>
 							<div class="card mt-3">
 								<div class="card-body">
-									<h3 class="price mb-0 mr-4">{{$.Data.Shop.Product.PriceFormat "%.2f"}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><a href="" class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;">Buy</a>
+									<h3 class="price mb-0 mr-4">{{$.Data.Shop.Product.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><a href="" class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;">Buy</a>
 								</div>
 							</div>
 						</div>
