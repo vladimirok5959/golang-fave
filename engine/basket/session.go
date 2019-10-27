@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"html"
 	"math"
-	"net/http"
 	"strings"
 
 	"golang-fave/engine/sqlw"
@@ -167,23 +166,22 @@ func (this *session) updateProducts(db *sqlw.DB) {
 	}
 }
 
-func (this *session) updateTotals(format, round int) {
+func (this *session) updateTotals(p *SBParam) {
 	this.totalSum = 0
 	this.TotalCount = 0
 	for _, product := range this.Products {
-		product.Price = this.priceFormat(this.makePrice(product.price, product.currency.Id), format, round)
-		product.Sum = this.priceFormat(this.makePrice(product.price*float64(product.Quantity), product.currency.Id), format, round)
+		product.Price = this.priceFormat(this.makePrice(product.price, product.currency.Id), (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
+		product.Sum = this.priceFormat(this.makePrice(product.price*float64(product.Quantity), product.currency.Id), (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 		this.totalSum += this.makePrice(product.price, product.currency.Id) * float64(product.Quantity)
 		this.TotalCount += product.Quantity
 	}
-	this.TotalSum = this.priceFormat(this.totalSum, format, round)
+	this.TotalSum = this.priceFormat(this.totalSum, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 }
 
 // Info, Plus, Minus
-func (this *session) Preload(r *http.Request, db *sqlw.DB) {
+func (this *session) Preload(p *SBParam) {
 	user_currency := 1
-
-	if cookie, err := r.Cookie("currency"); err == nil {
+	if cookie, err := p.R.Cookie("currency"); err == nil {
 		user_currency = utils.StrToInt(cookie.Value)
 	}
 
@@ -191,7 +189,7 @@ func (this *session) Preload(r *http.Request, db *sqlw.DB) {
 	this.listCurrencies = map[int]*currency{}
 
 	// Load currencies from database
-	if rows, err := db.Query(
+	if rows, err := p.DB.Query(
 		`SELECT
 			id,
 			name,
@@ -242,9 +240,9 @@ func (this *session) Preload(r *http.Request, db *sqlw.DB) {
 	}
 }
 
-func (this *session) String(db *sqlw.DB, format, round int) string {
-	this.updateProducts(db)
-	this.updateTotals(format, round)
+func (this *session) String(p *SBParam) string {
+	this.updateProducts(p.DB)
+	this.updateTotals(p)
 
 	json, err := json.Marshal(this)
 	if err != nil {
@@ -254,18 +252,18 @@ func (this *session) String(db *sqlw.DB, format, round int) string {
 	return string(json)
 }
 
-func (this *session) Plus(db *sqlw.DB, product_id, format, round int) {
-	if p, ok := this.Products[product_id]; ok == true {
-		p.Quantity++
-		this.updateProducts(db)
-		this.updateTotals(format, round)
+func (this *session) Plus(p *SBParam, product_id int) {
+	if prod, ok := this.Products[product_id]; ok == true {
+		prod.Quantity++
+		this.updateProducts(p.DB)
+		this.updateTotals(p)
 		return
 	}
 	row := &utils.MySql_shop_product{}
 	roc := &utils.MySql_shop_currency{}
 	var img_product_id string
 	var img_filename string
-	if err := db.QueryRow(`
+	if err := p.DB.QueryRow(`
 		SELECT
 			shop_products.id,
 			shop_products.name,
@@ -353,28 +351,28 @@ func (this *session) Plus(db *sqlw.DB, product_id, format, round int) {
 			price:    row.A_price,
 			Quantity: 1,
 		}
-		this.updateProducts(db)
-		this.updateTotals(format, round)
+		this.updateProducts(p.DB)
+		this.updateTotals(p)
 	}
 }
 
-func (this *session) Minus(db *sqlw.DB, product_id, format, round int) {
-	if p, ok := this.Products[product_id]; ok == true {
-		if p.Quantity > 1 {
-			p.Quantity--
+func (this *session) Minus(p *SBParam, product_id int) {
+	if prod, ok := this.Products[product_id]; ok == true {
+		if prod.Quantity > 1 {
+			prod.Quantity--
 		} else {
 			delete(this.Products, product_id)
 		}
-		this.updateProducts(db)
-		this.updateTotals(format, round)
+		this.updateProducts(p.DB)
+		this.updateTotals(p)
 	}
 }
 
-func (this *session) Remove(db *sqlw.DB, product_id, format, round int) {
+func (this *session) Remove(p *SBParam, product_id int) {
 	if _, ok := this.Products[product_id]; ok == true {
 		delete(this.Products, product_id)
-		this.updateProducts(db)
-		this.updateTotals(format, round)
+		this.updateProducts(p.DB)
+		this.updateTotals(p)
 	}
 }
 
