@@ -210,5 +210,5 @@ func (this *FERData) ShopBasketProductsCount() int {
 }
 
 func (this *FERData) ImagePlaceholderHref() string {
-	return "/" + consts.AssetsSysPlaceholderPng
+	return utils.GetImagePlaceholderSrc()
 }

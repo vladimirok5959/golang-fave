@@ -455,3 +455,7 @@ func SqlNullStringToString(arr *[]sql.NullString) *[]string {
 	}
 	return &values
 }
+
+func GetImagePlaceholderSrc() string {
+	return "/" + consts.AssetsSysPlaceholderPng
+}
