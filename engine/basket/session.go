@@ -6,6 +6,7 @@ import (
 	"math"
 	"strings"
 
+	"golang-fave/consts"
 	"golang-fave/engine/sqlw"
 	"golang-fave/utils"
 )
@@ -145,7 +146,7 @@ func (this *session) updateProducts(db *sqlw.DB) {
 						// Load product image here
 						var product_image string
 						if img_filename == "" {
-							product_image = "/assets/sys/placeholder.png"
+							product_image = "/" + consts.AssetsSysPlaceholderPng
 						} else {
 							product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
 						}
@@ -335,7 +336,7 @@ func (this *session) Plus(p *SBParam, product_id int) {
 		// Load product image here
 		var product_image string
 		if img_filename == "" {
-			product_image = "/assets/sys/placeholder.png"
+			product_image = "/" + consts.AssetsSysPlaceholderPng
 		} else {
 			product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
 		}
