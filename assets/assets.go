@@ -21,4 +21,5 @@ func PopulateResources(res *resource.Resource) {
 	res.Add(consts.AssetsSysLogoSvg, "image/svg+xml", SysLogoSvg)
 	res.Add(consts.AssetsSysStylesCss, "text/css", SysStylesCss)
 	res.Add(consts.AssetsCpScriptsJs, "application/javascript; charset=utf-8", CpScriptsJs)
+	res.Add(consts.AssetsSysPlaceholderPng, "image/png", SysPlaceholderPng)
 }

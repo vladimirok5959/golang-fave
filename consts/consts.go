@@ -22,6 +22,7 @@ const AssetsSysFaveIco = AssetsPath + "/sys/fave.ico"
 const AssetsSysLogoPng = AssetsPath + "/sys/logo.png"
 const AssetsSysLogoSvg = AssetsPath + "/sys/logo.svg"
 const AssetsSysStylesCss = AssetsPath + "/sys/styles.css"
+const AssetsSysPlaceholderPng = AssetsPath + "/sys/placeholder.png"
 
 // Wysiwyg editor
 const AssetsCpWysiwygPellCss = AssetsPath + "/cp/wysiwyg/pell.css"
