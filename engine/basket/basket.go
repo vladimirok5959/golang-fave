@@ -5,12 +5,14 @@ import (
 	"sync"
 
 	"golang-fave/engine/sqlw"
+	"golang-fave/engine/wrapper/config"
 )
 
 type SBParam struct {
 	R         *http.Request
 	DB        *sqlw.DB
 	Host      string
+	Config    *config.Config
 	SessionId string
 }
 
@@ -36,7 +38,7 @@ func (this *Basket) Info(p *SBParam) string {
 	if h, ok := this.hosts[p.Host]; ok == true {
 		if s, ok := h.sessions[p.SessionId]; ok == true {
 			s.Preload(p.R, p.DB)
-			return s.String(p.DB)
+			return s.String(p.DB, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 		} else {
 			return (&dResponse{IsError: false, Msg: "basket_is_empty", Message: ""}).String()
 		}
@@ -56,14 +58,14 @@ func (this *Basket) Plus(p *SBParam, product_id int) string {
 	if h, ok := this.hosts[p.Host]; ok == true {
 		if s, ok := h.sessions[p.SessionId]; ok == true {
 			s.Preload(p.R, p.DB)
-			s.Plus(p.DB, product_id)
+			s.Plus(p.DB, product_id, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 		}
 	} else {
 		s := &session{}
 		s.listCurrencies = map[int]*currency{}
 		s.Products = map[int]*product{}
 		s.Preload(p.R, p.DB)
-		s.Plus(p.DB, product_id)
+		s.Plus(p.DB, product_id, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 		h := &onehost{}
 		h.sessions = map[string]*session{}
 		h.sessions[p.SessionId] = s
@@ -84,7 +86,7 @@ func (this *Basket) Minus(p *SBParam, product_id int) string {
 	if h, ok := this.hosts[p.Host]; ok == true {
 		if s, ok := h.sessions[p.SessionId]; ok == true {
 			s.Preload(p.R, p.DB)
-			s.Minus(p.DB, product_id)
+			s.Minus(p.DB, product_id, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 		}
 	}
 
@@ -102,7 +104,7 @@ func (this *Basket) Remove(p *SBParam, product_id int) string {
 	if h, ok := this.hosts[p.Host]; ok == true {
 		if s, ok := h.sessions[p.SessionId]; ok == true {
 			s.Preload(p.R, p.DB)
-			s.Remove(p.DB, product_id)
+			s.Remove(p.DB, product_id, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 		}
 	}
 

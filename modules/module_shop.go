@@ -451,6 +451,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				R:         wrap.R,
 				DB:        wrap.DB,
 				Host:      wrap.CurrHost,
+				Config:    wrap.Config,
 				SessionId: wrap.GetSessionId(),
 			}
 			if wrap.UrlArgs[2] == "info" {

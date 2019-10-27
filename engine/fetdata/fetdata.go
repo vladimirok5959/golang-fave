@@ -204,6 +204,7 @@ func (this *FERData) ShopBasketProductsCount() int {
 		R:         this.wrap.R,
 		DB:        this.wrap.DB,
 		Host:      this.wrap.CurrHost,
+		Config:    this.wrap.Config,
 		SessionId: this.wrap.GetSessionId(),
 	})
 }

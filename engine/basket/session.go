@@ -3,6 +3,7 @@ package basket
 import (
 	"encoding/json"
 	"html"
+	"math"
 	"net/http"
 	"strings"
 
@@ -18,6 +19,27 @@ type session struct {
 	Currency   *currency        `json:"currency"`
 	TotalSum   string           `json:"total_sum"`
 	TotalCount int              `json:"total_count"`
+}
+
+func (this *session) priceFormat(product_price float64, format, round int) string {
+	price := product_price
+	if round == 1 {
+		price = math.Ceil(price)
+	} else if round == 2 {
+		price = math.Floor(price)
+	}
+
+	if format == 1 {
+		return utils.Float64ToStrF(price, "%.1f")
+	} else if format == 2 {
+		return utils.Float64ToStrF(price, "%.2f")
+	} else if format == 3 {
+		return utils.Float64ToStrF(price, "%.3f")
+	} else if format == 4 {
+		return utils.Float64ToStrF(price, "%.4f")
+	}
+
+	return utils.Float64ToStrF(price, "%.0f")
 }
 
 func (this *session) makePrice(product_price float64, product_currency_id int) float64 {
@@ -145,16 +167,16 @@ func (this *session) updateProducts(db *sqlw.DB) {
 	}
 }
 
-func (this *session) updateTotals() {
+func (this *session) updateTotals(format, round int) {
 	this.totalSum = 0
 	this.TotalCount = 0
 	for _, product := range this.Products {
-		product.Price = utils.Float64ToStrF(this.makePrice(product.price, product.currency.Id), "%.2f")
-		product.Sum = utils.Float64ToStrF(this.makePrice(product.price*float64(product.Quantity), product.currency.Id), "%.2f")
+		product.Price = this.priceFormat(this.makePrice(product.price, product.currency.Id), format, round)
+		product.Sum = this.priceFormat(this.makePrice(product.price*float64(product.Quantity), product.currency.Id), format, round)
 		this.totalSum += this.makePrice(product.price, product.currency.Id) * float64(product.Quantity)
 		this.TotalCount += product.Quantity
 	}
-	this.TotalSum = utils.Float64ToStrF(this.totalSum, "%.2f")
+	this.TotalSum = this.priceFormat(this.totalSum, format, round)
 }
 
 // Info, Plus, Minus
@@ -220,9 +242,9 @@ func (this *session) Preload(r *http.Request, db *sqlw.DB) {
 	}
 }
 
-func (this *session) String(db *sqlw.DB) string {
+func (this *session) String(db *sqlw.DB, format, round int) string {
 	this.updateProducts(db)
-	this.updateTotals()
+	this.updateTotals(format, round)
 
 	json, err := json.Marshal(this)
 	if err != nil {
@@ -232,11 +254,11 @@ func (this *session) String(db *sqlw.DB) string {
 	return string(json)
 }
 
-func (this *session) Plus(db *sqlw.DB, product_id int) {
+func (this *session) Plus(db *sqlw.DB, product_id, format, round int) {
 	if p, ok := this.Products[product_id]; ok == true {
 		p.Quantity++
 		this.updateProducts(db)
-		this.updateTotals()
+		this.updateTotals(format, round)
 		return
 	}
 	row := &utils.MySql_shop_product{}
@@ -332,11 +354,11 @@ func (this *session) Plus(db *sqlw.DB, product_id int) {
 			Quantity: 1,
 		}
 		this.updateProducts(db)
-		this.updateTotals()
+		this.updateTotals(format, round)
 	}
 }
 
-func (this *session) Minus(db *sqlw.DB, product_id int) {
+func (this *session) Minus(db *sqlw.DB, product_id, format, round int) {
 	if p, ok := this.Products[product_id]; ok == true {
 		if p.Quantity > 1 {
 			p.Quantity--
@@ -344,15 +366,15 @@ func (this *session) Minus(db *sqlw.DB, product_id int) {
 			delete(this.Products, product_id)
 		}
 		this.updateProducts(db)
-		this.updateTotals()
+		this.updateTotals(format, round)
 	}
 }
 
-func (this *session) Remove(db *sqlw.DB, product_id int) {
+func (this *session) Remove(db *sqlw.DB, product_id, format, round int) {
 	if _, ok := this.Products[product_id]; ok == true {
 		delete(this.Products, product_id)
 		this.updateProducts(db)
-		this.updateTotals()
+		this.updateTotals(format, round)
 	}
 }
 
