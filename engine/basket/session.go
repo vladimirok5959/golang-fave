@@ -120,7 +120,6 @@ func (this *session) updateProducts(db *sqlw.DB) {
 					&img_filename,
 				); err == nil {
 					if p, ok := this.Products[row.A_id]; ok == true {
-						// Load product image here
 						var product_image string
 						if img_filename == "" {
 							product_image = utils.GetImagePlaceholderSrc()
@@ -155,7 +154,6 @@ func (this *session) updateTotals(p *SBParam) {
 	this.TotalSum = utils.FormatProductPrice(this.totalSum, (*p.Config).Shop.Price.Format, (*p.Config).Shop.Price.Round)
 }
 
-// Info, Plus, Minus
 func (this *session) Preload(p *SBParam) {
 	user_currency := 1
 	if cookie, err := p.R.Cookie("currency"); err == nil {
@@ -205,7 +203,7 @@ func (this *session) Preload(p *SBParam) {
 		user_currency = 1
 	}
 
-	// Save selected currency
+	// Remember selected currency
 	if c, ok := this.listCurrencies[user_currency]; ok == true {
 		this.Currency = &currency{
 			Id:          c.Id,
@@ -310,7 +308,6 @@ func (this *session) Plus(p *SBParam, product_id int) {
 		&img_product_id,
 		&img_filename,
 	); err == nil {
-		// Load product image here
 		var product_image string
 		if img_filename == "" {
 			product_image = utils.GetImagePlaceholderSrc()

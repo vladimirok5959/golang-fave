@@ -34,7 +34,7 @@ func (this *Modules) RegisterAction_SettingsGeneral() *Action {
 		pfi_price_fomat := utils.StrToInt(pf_price_fomat)
 		pfi_price_round := utils.StrToInt(pf_price_round)
 
-		// Correct some values
+		// Correct values
 		if pfi_module_at_home < 0 {
 			pfi_module_at_home = 0
 		}
