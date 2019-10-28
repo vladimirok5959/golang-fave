@@ -59,6 +59,13 @@ func (this *Basket) Plus(p *SBParam, product_id int) string {
 		if s, ok := h.sessions[p.SessionId]; ok == true {
 			s.Preload(p)
 			s.Plus(p, product_id)
+		} else {
+			s := &session{}
+			s.listCurrencies = map[int]*currency{}
+			s.Products = map[int]*product{}
+			s.Preload(p)
+			s.Plus(p, product_id)
+			h.sessions[p.SessionId] = s
 		}
 	} else {
 		s := &session{}
