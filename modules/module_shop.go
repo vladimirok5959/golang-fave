@@ -459,24 +459,28 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
 				wrap.W.Write([]byte(wrap.ShopBasket.Info(&SBParam)))
+				wrap.S.SetString("LastBasketAction", wrap.UrlArgs[2])
 				return
 			} else if wrap.UrlArgs[2] == "plus" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
 				wrap.W.Write([]byte(wrap.ShopBasket.Plus(&SBParam, utils.StrToInt(wrap.UrlArgs[3]))))
+				wrap.S.SetString("LastBasketAction", wrap.UrlArgs[2])
 				return
 			} else if wrap.UrlArgs[2] == "minus" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
 				wrap.W.Write([]byte(wrap.ShopBasket.Minus(&SBParam, utils.StrToInt(wrap.UrlArgs[3]))))
+				wrap.S.SetString("LastBasketAction", wrap.UrlArgs[2])
 				return
 			} else if wrap.UrlArgs[2] == "remove" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
 				wrap.W.WriteHeader(http.StatusOK)
 				wrap.W.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 				wrap.W.Header().Set("Content-Type", "application/json; charset=utf-8")
 				wrap.W.Write([]byte(wrap.ShopBasket.Remove(&SBParam, utils.StrToInt(wrap.UrlArgs[3]))))
+				wrap.S.SetString("LastBasketAction", wrap.UrlArgs[2])
 				return
 			} else if wrap.UrlArgs[2] == "currency" && len(wrap.UrlArgs) == 4 && utils.IsNumeric(wrap.UrlArgs[3]) {
 				http.SetCookie(wrap.W, &http.Cookie{
@@ -491,6 +495,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					redirectUrl = "/"
 				}
 				http.Redirect(wrap.W, wrap.R, redirectUrl, 302)
+				wrap.S.SetString("LastBasketAction", wrap.UrlArgs[2])
 				return
 			}
 		} else if len(wrap.UrlArgs) == 2 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] != "" {
