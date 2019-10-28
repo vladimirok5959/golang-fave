@@ -518,7 +518,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(
 			`INSERT INTO shop_currencies (id, name, coefficient, code, symbol)
 				VALUES
-			(1, 'US Dollar', 1.0000, 'USD', '$');`,
+			(1, 'US Dollar', 1.0000, 'USD', '$'),
+			(2, 'UA Grivna', 25.0000, 'UAH', '₴');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
