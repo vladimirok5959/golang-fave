@@ -136,6 +136,7 @@ func (this *Basket) ProductsCount(p *SBParam) int {
 	return 0
 }
 
+// TODO: run it by go routine time by time
 func (this *Basket) Cleanup(p *SBParam) {
 	this.Lock()
 	defer this.Unlock()
