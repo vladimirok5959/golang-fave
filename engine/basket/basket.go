@@ -2,10 +2,13 @@ package basket
 
 import (
 	"net/http"
+	"os"
 	"sync"
 
+	"golang-fave/consts"
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper/config"
+	"golang-fave/utils"
 )
 
 type SBParam struct {
@@ -131,4 +134,22 @@ func (this *Basket) ProductsCount(p *SBParam) int {
 	}
 
 	return 0
+}
+
+func (this *Basket) Cleanup(p *SBParam) {
+	this.Lock()
+	defer this.Unlock()
+
+	for host_name, host_data := range this.hosts {
+		var remove []string
+		for session_id, _ := range host_data.sessions {
+			session_file := consts.ParamWwwDir + string(os.PathSeparator) + host_name + string(os.PathSeparator) + "tmp" + string(os.PathSeparator) + session_id
+			if !utils.IsFileExists(session_file) {
+				remove = append(remove, session_id)
+			}
+		}
+		for _, session_id := range remove {
+			delete(host_data.sessions, session_id)
+		}
+	}
 }

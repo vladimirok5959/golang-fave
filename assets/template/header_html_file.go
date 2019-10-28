@@ -30,7 +30,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopBasketTotal = 'Total sum:';
 			var ShopBasketBtnContinue = 'Continue Shopping';
 			var ShopBasketBtnOrder = 'Make order';
-			var ShopBasketEmpty = 'You basket currently empty...';
+			var ShopBasketEmpty = 'Your basket currently empty...';
 		</script>
 	</head>
 	<body id="body" class="fixed-top-bar">
