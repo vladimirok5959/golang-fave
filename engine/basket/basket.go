@@ -121,6 +121,22 @@ func (this *Basket) Remove(p *SBParam, product_id int) string {
 	return (&dResponse{IsError: false, Msg: "basket_product_remove", Message: ""}).String()
 }
 
+func (this *Basket) ClearBasket(p *SBParam) {
+	if p.Host == "" || p.SessionId == "" {
+		return
+	}
+
+	this.Lock()
+	defer this.Unlock()
+
+	if h, ok := this.hosts[p.Host]; ok == true {
+		if s, ok := h.sessions[p.SessionId]; ok == true {
+			s.Preload(p)
+			s.ClearBasket(p)
+		}
+	}
+}
+
 func (this *Basket) ProductsCount(p *SBParam) int {
 	if p.Host != "" && p.SessionId != "" {
 		this.Lock()
@@ -136,8 +152,7 @@ func (this *Basket) ProductsCount(p *SBParam) int {
 	return 0
 }
 
-// TODO: run it by go routine time by time
-func (this *Basket) Cleanup(p *SBParam) {
+func (this *Basket) Cleanup() {
 	this.Lock()
 	defer this.Unlock()
 

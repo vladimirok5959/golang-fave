@@ -349,6 +349,10 @@ func (this *session) Remove(p *SBParam, product_id int) {
 	}
 }
 
+func (this *session) ClearBasket(p *SBParam) {
+	this.Products = map[int]*product{}
+}
+
 func (this *session) ProductsCount() int {
 	return this.TotalCount
 }

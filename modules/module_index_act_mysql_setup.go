@@ -256,6 +256,49 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
+		// Table: shop_order_products
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_order_products (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				order_id int(11) NOT NULL COMMENT 'Order ID',
+				product_id int(11) NOT NULL COMMENT 'Product ID',
+				price float(8,2) NOT NULL COMMENT 'Product price',
+				quantity int(11) NOT NULL COMMENT 'Quantity',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
+		// Table: shop_orders
+		if _, err = tx.Exec(
+			`CREATE TABLE shop_orders (
+				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
+				create_datetime datetime NOT NULL COMMENT 'Create date/time',
+				update_datetime datetime NOT NULL COMMENT 'Update date/time',
+				currency_id int(11) NOT NULL COMMENT 'Currency ID',
+				currency_name varchar(255) NOT NULL COMMENT 'Currency name',
+				currency_coefficient float(8,4) NOT NULL DEFAULT '1.0000' COMMENT 'Currency coefficient',
+				currency_code varchar(10) NOT NULL COMMENT 'Currency code',
+				currency_symbol varchar(5) NOT NULL COMMENT 'Currency symbol',
+				client_last_name varchar(64) NOT NULL COMMENT 'Client last name',
+				client_first_name varchar(64) NOT NULL COMMENT 'Client first name',
+				client_second_name varchar(64) NOT NULL DEFAULT '' COMMENT 'Client second name',
+				client_phone varchar(64) NOT NULL DEFAULT '' COMMENT 'Client phone',
+				client_email varchar(20) NOT NULL COMMENT 'Client email',
+				client_delivery_comment text NOT NULL COMMENT 'Client delivery comment',
+				client_order_comment text NOT NULL COMMENT 'Client order comment',
+				status int(1) NOT NULL COMMENT 'new/confirmed/canceled/inprogress/completed',
+				PRIMARY KEY (id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+
 		// Table: shop_product_images
 		if _, err = tx.Exec(
 			`CREATE TABLE shop_product_images (
@@ -488,7 +531,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000014');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000015');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -786,6 +829,26 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			wrap.MsgError(err.Error())
 			return
 		}
+		if _, err = tx.Exec(`ALTER TABLE shop_orders ADD KEY FK_shop_orders_currency_id (currency_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_order_products ADD UNIQUE KEY order_product (order_id,product_id) USING BTREE;`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_order_id (order_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_product_id (product_id);`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
 		if _, err = tx.Exec(`ALTER TABLE shop_product_images ADD UNIQUE KEY product_filename (product_id,filename) USING BTREE;`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -924,6 +987,30 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		if _, err = tx.Exec(`
 			ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
 			FOREIGN KEY (filter_id) REFERENCES shop_filters (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_orders ADD CONSTRAINT FK_shop_orders_currency_id
+			FOREIGN KEY (currency_id) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_order_id
+			FOREIGN KEY (order_id) REFERENCES shop_orders (id) ON DELETE RESTRICT;
+		`); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(`
+			ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_product_id
+			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

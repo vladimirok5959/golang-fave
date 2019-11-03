@@ -111,14 +111,17 @@ func main() {
 	smtp_cl_ch, smtp_cl_stop := smtp_start(consts.ParamWwwDir, mpool)
 	defer smtp_stop(smtp_cl_ch, smtp_cl_stop)
 
+	// Shop basket
+	sb := basket.New()
+	sb_cl_ch, sb_cl_stop := basket_clean_start(sb)
+	defer basket_clean_stop(sb_cl_ch, sb_cl_stop)
+
 	// Init cache blocks
 	cbs := cblocks.New()
 
-	// Shop basket
-	sb := basket.New()
-
 	// Init and start web server
-	bootstrap.Start(lg.Handler, fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort), 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
+	server_address := fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort)
+	bootstrap.Start(lg.Handler, server_address, 9, consts.AssetsPath, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
 	}, func(w http.ResponseWriter, r *http.Request, o interface{}) {
 		// Schema
@@ -205,7 +208,24 @@ func main() {
 
 		// Logic
 		if mp != nil {
-			if engine.Response(mp, sb, lg, mods, w, r, sess, cbs, host, port, curr_host, vhost_dir_config, vhost_dir_htdocs, vhost_dir_logs, vhost_dir_template, vhost_dir_tmp) {
+			if engine.Response(
+				mp,
+				sb,
+				lg,
+				mods,
+				w,
+				r,
+				sess,
+				cbs,
+				host,
+				port,
+				curr_host,
+				vhost_dir_config,
+				vhost_dir_htdocs,
+				vhost_dir_logs,
+				vhost_dir_template,
+				vhost_dir_tmp,
+			) {
 				return
 			}
 		}
