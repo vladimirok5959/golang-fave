@@ -313,6 +313,21 @@ func (this *Modules) shop_GetParentProduct(wrap *wrapper.Wrapper, id int) string
 	return result
 }
 
+func (this *Modules) shop_GetOrderStatus(status int) string {
+	if status == 0 {
+		return `<span style="color:#f0ad4e;">New</span>`
+	} else if status == 1 {
+		return `<span style="color:#28a745;">Confirmed</span>`
+	} else if status == 2 {
+		return `<span style="color:#d9534f;">Canceled</span>`
+	} else if status == 3 {
+		return `<span style="color:#f0ad4e;">In progress</span>`
+	} else if status == 4 {
+		return `<span style="color:#6c757d;">Completed</span>`
+	}
+	return "Unknown"
+}
+
 func (this *Modules) RegisterModule_Shop() *Module {
 	return this.newModule(MInfo{
 		WantDB: true,
@@ -337,6 +352,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			{Mount: "currencies", Name: "List of currencies", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "currencies-add", Name: "Add new currency", Show: true, Icon: assets.SysSvgIconPlus},
 			{Mount: "currencies-modify", Name: "Modify currency", Show: false},
+			{Sep: true, Show: true},
+			{Mount: "orders", Name: "List of orders", Show: true, Icon: assets.SysSvgIconList},
+			{Mount: "orders-modify", Name: "Viewing order", Show: false},
 		},
 	}, func(wrap *wrapper.Wrapper) {
 		if len(wrap.UrlArgs) == 3 && wrap.UrlArgs[0] == "shop" && wrap.UrlArgs[1] == "category" && wrap.UrlArgs[2] != "" {
@@ -907,6 +925,121 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						},
 					})
 				},
+				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
+				nil,
+				nil,
+				true,
+			)
+		} else if wrap.CurrSubModule == "orders" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Orders", Link: "/cp/" + wrap.CurrModule + "/" + wrap.CurrSubModule + "/"},
+				{Name: "List of orders"},
+			})
+			content += builder.DataTable(
+				wrap,
+				"shop_orders",
+				"id",
+				"DESC",
+				&[]builder.DataTableRow{
+					{
+						DBField:     "id",
+						NameInTable: "Order #",
+					},
+					{
+						DBField: "client_phone",
+					},
+					{
+						DBField: "update_datetime",
+					},
+					{
+						DBField: "currency_id",
+					},
+					{
+						DBField: "currency_name",
+					},
+					{
+						DBField: "currency_coefficient",
+					},
+					{
+						DBField: "currency_code",
+					},
+					{
+						DBField: "currency_symbol",
+					},
+					{
+						DBField:     "client_last_name",
+						NameInTable: "Client / Contact",
+						CallBack: func(values *[]string) string {
+							link := "/cp/" + wrap.CurrModule + "/orders-modify/" + (*values)[0] + "/"
+
+							last_name := html.EscapeString((*values)[8])
+							first_name := html.EscapeString((*values)[9])
+							second_name := html.EscapeString((*values)[10])
+
+							phone := html.EscapeString((*values)[1])
+							email := html.EscapeString((*values)[12])
+
+							name := ""
+							if last_name != "" {
+								name += " " + last_name
+							}
+							if first_name != "" {
+								name += " " + first_name
+							}
+							if second_name != "" {
+								name += " " + second_name
+							}
+							name = `<a href="` + link + `">` + strings.TrimSpace(name) + `</a>`
+
+							contact := ""
+							if email != "" {
+								contact += " " + email
+							}
+							if phone != "" {
+								contact += " (" + phone + ")"
+							}
+							contact = `<a href="` + link + `">` + strings.TrimSpace(contact) + `</a>`
+
+							return `<div>` + name + `</div><div><small>` + contact + `</small></div>`
+						},
+					},
+					{
+						DBField: "client_first_name",
+					},
+					{
+						DBField: "client_second_name",
+					},
+					{
+						DBField:     "create_datetime",
+						DBExp:       "UNIX_TIMESTAMP(`create_datetime`)",
+						NameInTable: "Date / Time",
+						Classes:     "d-none d-lg-table-cell",
+						CallBack: func(values *[]string) string {
+							t := int64(utils.StrToInt((*values)[11]))
+							return `<div>` + utils.UnixTimestampToFormat(t, "02.01.2006") + `</div>` +
+								`<div><small>` + utils.UnixTimestampToFormat(t, "15:04:05") + `</small></div>`
+						},
+					},
+					{
+						DBField:     "client_email",
+						NameInTable: "Status / Total",
+						CallBack: func(values *[]string) string {
+							status := this.shop_GetOrderStatus(utils.StrToInt((*values)[15]))
+							total := utils.Float64ToStr(0) + " " + html.EscapeString((*values)[6])
+							return `<div>` + status + `</div><div><small>` + total + `</small></div>`
+						},
+					},
+					{
+						DBField: "client_delivery_comment",
+					},
+					{
+						DBField: "client_order_comment",
+					},
+					{
+						DBField: "status",
+					},
+				},
+				nil,
 				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
 				nil,
 				nil,
