@@ -40,13 +40,13 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderLabelDelivery = 'Delivery';
 			var ShopOrderLabelComment = 'Comment';
 
-			var ShopOrderRequiredLastName = true;
-			var ShopOrderRequiredFirstName = true;
-			var ShopOrderRequiredSecondName = false;
-			var ShopOrderRequiredMobilePhone = false;
-			var ShopOrderRequiredEmailAddress = true;
-			var ShopOrderRequiredDelivery = false;
-			var ShopOrderRequiredComment = false;
+			var ShopOrderRequiredLastName = {{$.Data.ShopOrderRequiredLastName}};
+			var ShopOrderRequiredFirstName = {{$.Data.ShopOrderRequiredFirstName}};
+			var ShopOrderRequiredSecondName = {{$.Data.ShopOrderRequiredSecondName}};
+			var ShopOrderRequiredMobilePhone = {{$.Data.ShopOrderRequiredMobilePhone}};
+			var ShopOrderRequiredEmailAddress = {{$.Data.ShopOrderRequiredEmailAddress}};
+			var ShopOrderRequiredDelivery = {{$.Data.ShopOrderRequiredDelivery}};
+			var ShopOrderRequiredComment = {{$.Data.ShopOrderRequiredComment}};
 
 			var ShopOrderError = 'Error!';
 			var ShopOrderErrorBasketEmpty = 'Your basket is empty';
@@ -58,8 +58,6 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderEmptyDelivery = 'Please enter delivery comment';
 			var ShopOrderEmptyComment = 'Please enter order comment';
 			var ShopOrderSuccess = '<b>Thank you for your order! We will call you shortly!</b>';
-			// var ShopOrderErrorMobilePhone = 'Mobile phone number is invalid';
-			// var ShopOrderErrorEmailAddress = 'Email address is invalid';
 		</script>
 	</head>
 	<body id="body" class="fixed-top-bar">

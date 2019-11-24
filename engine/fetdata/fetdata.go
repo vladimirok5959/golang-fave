@@ -212,3 +212,31 @@ func (this *FERData) ShopBasketProductsCount() int {
 func (this *FERData) ImagePlaceholderHref() string {
 	return utils.GetImagePlaceholderSrc()
 }
+
+func (this *FERData) ShopOrderRequiredLastName() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.LastName != 0
+}
+
+func (this *FERData) ShopOrderRequiredFirstName() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.FirstName != 0
+}
+
+func (this *FERData) ShopOrderRequiredSecondName() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.SecondName != 0
+}
+
+func (this *FERData) ShopOrderRequiredMobilePhone() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.MobilePhone != 0
+}
+
+func (this *FERData) ShopOrderRequiredEmailAddress() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.EmailAddress != 0
+}
+
+func (this *FERData) ShopOrderRequiredDelivery() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.Delivery != 0
+}
+
+func (this *FERData) ShopOrderRequiredComment() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.Comment != 0
+}
