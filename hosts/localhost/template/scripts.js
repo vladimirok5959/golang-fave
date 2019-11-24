@@ -184,7 +184,7 @@
 										<div class="form-group"> \
 											<div class="row"> \
 												<div class="col-md-3"> \
-													<label for="lbl_client_last_name">Last Name</label> \
+													<label for="lbl_client_last_name">' + ShopOrderLabelLastName + '</label> \
 												</div> \
 												<div class="col-md-9"> \
 													<input class="form-control" type="text" id="lbl_client_last_name" name="client_last_name" value="" minlength="1" maxlength="64" autocomplete="off" required> \
@@ -194,7 +194,7 @@
 										<div class="form-group"> \
 											<div class="row"> \
 												<div class="col-md-3"> \
-													<label for="lbl_client_first_name">First Name</label> \
+													<label for="lbl_client_first_name">' + ShopOrderLabelFirstName + '</label> \
 												</div> \
 												<div class="col-md-9"> \
 													<input class="form-control" type="text" id="lbl_client_first_name" name="client_first_name" value="" minlength="1" maxlength="64" autocomplete="off" required> \
@@ -204,7 +204,7 @@
 										<div class="form-group"> \
 											<div class="row"> \
 												<div class="col-md-3"> \
-													<label for="lbl_client_second_name">Second Name</label> \
+													<label for="lbl_client_second_name">' + ShopOrderLabelSecondName + '</label> \
 												</div> \
 												<div class="col-md-9"> \
 													<input class="form-control" type="text" id="lbl_client_second_name" name="client_second_name" value="" minlength="1" maxlength="64" autocomplete="off" required> \
@@ -214,7 +214,7 @@
 										<div class="form-group"> \
 											<div class="row"> \
 												<div class="col-md-3"> \
-													<label for="lbl_client_phone">Mobile phone</label> \
+													<label for="lbl_client_phone">' + ShopOrderLabelMobilePhone + '</label> \
 												</div> \
 												<div class="col-md-9"> \
 													<input class="form-control" type="text" id="lbl_client_phone" name="client_phone" value="" minlength="1" maxlength="20" autocomplete="off" required> \
@@ -224,7 +224,7 @@
 										<div class="form-group"> \
 											<div class="row"> \
 												<div class="col-md-3"> \
-													<label for="lbl_client_email">Email address</label> \
+													<label for="lbl_client_email">' + ShopOrderLabelEmailAddress + '</label> \
 												</div> \
 												<div class="col-md-9"> \
 													<input class="form-control" type="text" id="lbl_client_email" name="client_email" value="" minlength="1" maxlength="64" autocomplete="off" required> \
@@ -234,7 +234,7 @@
 										<div class="form-group"> \
 											<div class="row"> \
 												<div class="col-md-3"> \
-													<label for="lbl_client_delivery_comment">Delivery</label> \
+													<label for="lbl_client_delivery_comment">' + ShopOrderLabelDelivery + '</label> \
 												</div> \
 												<div class="col-md-9"> \
 													<input class="form-control" type="text" id="lbl_client_delivery_comment" name="client_delivery_comment" value="" minlength="1" maxlength="255" autocomplete="off"> \
@@ -244,7 +244,7 @@
 										<div class="form-group"> \
 											<div class="row"> \
 												<div class="col-md-3"> \
-													<label for="lbl_client_order_comment">Comment</label> \
+													<label for="lbl_client_order_comment">' + ShopOrderLabelComment + '</label> \
 												</div> \
 												<div class="col-md-9"> \
 													<textarea class="form-control" id="lbl_client_order_comment" name="client_order_comment" autocomplete="off"></textarea> \
