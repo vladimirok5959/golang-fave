@@ -177,7 +177,8 @@
 								<div class="modal-body text-left" style="position:relative;"> \
 									<div class="blocker" style="position:absolute;left:0px;top:0px;width:100%;height:100%;background:#fff;opacity:0.5;display:none;"></div> \
 									<div class="data"></div> \
-									<div class="order-form mt-4" style="display:none;"> \
+									<div class="order-form mt-3" style="display:none;"> \
+									<hr class="mb-4"> \
 									<form class="data-form" action="/" method="post" autocomplete="off"> \
 										<div class="hidden"><input type="hidden" name="action" value="shop-order"></div> \
 										<div class="form-group"> \
