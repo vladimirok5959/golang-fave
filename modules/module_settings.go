@@ -534,6 +534,55 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					},
 				},
 				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div><hr></div>` +
+							`<div class="pb-2"><h4>Order process require fields</h4></div>`
+					},
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Last Name",
+					Name:    "require-last-name",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.LastName),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "First Name",
+					Name:    "require-first-name",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.FirstName),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Second Name",
+					Name:    "require-second-name",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.SecondName),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Mobile Phone",
+					Name:    "require-mobile-phone",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.MobilePhone),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Email Address",
+					Name:    "require-email-address",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.EmailAddress),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Delivery",
+					Name:    "require-delivery",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.Delivery),
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Comment",
+					Name:    "require-comment",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.Comment),
+				},
+				{
 					Kind:   builder.DFKSubmit,
 					Value:  "Save",
 					Target: "add-edit-button",
