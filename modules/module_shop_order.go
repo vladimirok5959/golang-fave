@@ -13,13 +13,6 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 		Mount:     "shop-order",
 		WantAdmin: false,
 	}, func(wrap *wrapper.Wrapper) {
-		// SBParam := basket.SBParam{
-		// 	R:         wrap.R,
-		// 	DB:        wrap.DB,
-		// 	Host:      wrap.CurrHost,
-		// 	Config:    wrap.Config,
-		// 	SessionId: wrap.GetSessionId(),
-		// }
 		if wrap.ShopBasket.ProductsCount(&basket.SBParam{
 			R:         wrap.R,
 			DB:        wrap.DB,
