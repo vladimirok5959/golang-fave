@@ -31,6 +31,17 @@ type Config struct {
 			Format int
 			Round  int
 		}
+		Orders struct {
+			RequiredFields struct {
+				LastName     int
+				FirstName    int
+				SecondName   int
+				MobilePhone  int
+				EmailAddress int
+				Delivery     int
+				Comment      int
+			}
+		}
 	}
 	API struct {
 		XML struct {
@@ -85,6 +96,14 @@ func (this *Config) configDefault() {
 
 	this.Shop.Price.Format = 2
 	this.Shop.Price.Round = 0
+
+	this.Shop.Orders.RequiredFields.LastName = 1
+	this.Shop.Orders.RequiredFields.FirstName = 1
+	this.Shop.Orders.RequiredFields.SecondName = 0
+	this.Shop.Orders.RequiredFields.MobilePhone = 0
+	this.Shop.Orders.RequiredFields.EmailAddress = 1
+	this.Shop.Orders.RequiredFields.Delivery = 0
+	this.Shop.Orders.RequiredFields.Comment = 0
 
 	this.API.XML.Enabled = 0
 	this.API.XML.Name = ""
