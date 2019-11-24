@@ -32,33 +32,47 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 		pf_client_delivery_comment := wrap.R.FormValue("client_delivery_comment")
 		pf_client_order_comment := wrap.R.FormValue("client_order_comment")
 
-		if strings.TrimSpace(pf_client_last_name) == "" {
-			wrap.Write(`{"error": true, "field": "client_last_name", "variable": "ShopOrderEmptyLastName"}`)
-			return
+		if (*wrap.Config).Shop.Orders.RequiredFields.LastName != 0 {
+			if strings.TrimSpace(pf_client_last_name) == "" {
+				wrap.Write(`{"error": true, "field": "client_last_name", "variable": "ShopOrderEmptyLastName"}`)
+				return
+			}
 		}
-		if strings.TrimSpace(pf_client_first_name) == "" {
-			wrap.Write(`{"error": true, "field": "client_first_name", "variable": "ShopOrderEmptyFirstName"}`)
-			return
+		if (*wrap.Config).Shop.Orders.RequiredFields.FirstName != 0 {
+			if strings.TrimSpace(pf_client_first_name) == "" {
+				wrap.Write(`{"error": true, "field": "client_first_name", "variable": "ShopOrderEmptyFirstName"}`)
+				return
+			}
 		}
-		if strings.TrimSpace(pf_client_second_name) == "" {
-			wrap.Write(`{"error": true, "field": "client_second_name", "variable": "ShopOrderEmptySecondName"}`)
-			return
+		if (*wrap.Config).Shop.Orders.RequiredFields.SecondName != 0 {
+			if strings.TrimSpace(pf_client_second_name) == "" {
+				wrap.Write(`{"error": true, "field": "client_second_name", "variable": "ShopOrderEmptySecondName"}`)
+				return
+			}
 		}
-		if strings.TrimSpace(pf_client_phone) == "" {
-			wrap.Write(`{"error": true, "field": "client_phone", "variable": "ShopOrderEmptyMobilePhone"}`)
-			return
+		if (*wrap.Config).Shop.Orders.RequiredFields.MobilePhone != 0 {
+			if strings.TrimSpace(pf_client_phone) == "" {
+				wrap.Write(`{"error": true, "field": "client_phone", "variable": "ShopOrderEmptyMobilePhone"}`)
+				return
+			}
 		}
-		if strings.TrimSpace(pf_client_email) == "" {
-			wrap.Write(`{"error": true, "field": "client_email", "variable": "ShopOrderEmptyEmailAddress"}`)
-			return
+		if (*wrap.Config).Shop.Orders.RequiredFields.EmailAddress != 0 {
+			if strings.TrimSpace(pf_client_email) == "" {
+				wrap.Write(`{"error": true, "field": "client_email", "variable": "ShopOrderEmptyEmailAddress"}`)
+				return
+			}
 		}
-		if strings.TrimSpace(pf_client_delivery_comment) == "" {
-			wrap.Write(`{"error": true, "field": "client_delivery_comment", "variable": "ShopOrderEmptyDelivery"}`)
-			return
+		if (*wrap.Config).Shop.Orders.RequiredFields.Delivery != 0 {
+			if strings.TrimSpace(pf_client_delivery_comment) == "" {
+				wrap.Write(`{"error": true, "field": "client_delivery_comment", "variable": "ShopOrderEmptyDelivery"}`)
+				return
+			}
 		}
-		if strings.TrimSpace(pf_client_order_comment) == "" {
-			wrap.Write(`{"error": true, "field": "client_order_comment", "variable": "ShopOrderEmptyComment"}`)
-			return
+		if (*wrap.Config).Shop.Orders.RequiredFields.Comment != 0 {
+			if strings.TrimSpace(pf_client_order_comment) == "" {
+				wrap.Write(`{"error": true, "field": "client_order_comment", "variable": "ShopOrderEmptyComment"}`)
+				return
+			}
 		}
 
 		// Clear user basket
