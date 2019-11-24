@@ -31,6 +31,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopBasketBtnContinue = 'Continue Shopping';
 			var ShopBasketBtnOrder = 'Make order';
 			var ShopBasketEmpty = 'Your basket currently empty...';
+
 			var ShopOrderLabelLastName = 'Last Name';
 			var ShopOrderLabelFirstName = 'First Name';
 			var ShopOrderLabelSecondName = 'Second Name';
