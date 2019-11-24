@@ -1,13 +1,16 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/md5"
 	"database/sql"
 	"encoding/hex"
 	"fmt"
 	"html/template"
 	"math"
+	"mime/quotedprintable"
 	"net/http"
+	"net/smtp"
 	"os"
 	"regexp"
 	"strconv"
@@ -486,4 +489,34 @@ func FormatProductPrice(price float64, format, round int) string {
 	}
 
 	return Float64ToStrF(p, "%.0f")
+}
+
+func SMTPSend(host, port, user, pass, subject, msg string, receivers []string) error {
+	header := make(map[string]string)
+	header["From"] = user
+	header["To"] = strings.Join(receivers, ", ")
+	header["Subject"] = subject
+	header["MIME-Version"] = "1.0"
+	header["Content-Type"] = fmt.Sprintf("%s; charset=\"utf-8\"", "text/html")
+	header["Content-Transfer-Encoding"] = "quoted-printable"
+	header["Content-Disposition"] = "inline"
+
+	message := ""
+	for key, value := range header {
+		message += fmt.Sprintf("%s: %s\r\n", key, value)
+	}
+
+	var encodedMessage bytes.Buffer
+	finalMessage := quotedprintable.NewWriter(&encodedMessage)
+	finalMessage.Write([]byte(msg))
+	finalMessage.Close()
+	message += "\r\n" + encodedMessage.String()
+
+	return smtp.SendMail(
+		host+":"+port,
+		smtp.PlainAuth("", user, pass, host),
+		user,
+		receivers,
+		[]byte(message),
+	)
 }
