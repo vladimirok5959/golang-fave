@@ -372,6 +372,9 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					var OrderFormBlock = $('#sys-modal-shop-basket .modal-body .order-form');
 					if(OrderFormBlock.css('display') == 'none') {
 						OrderFormBlock.css('display', 'block');
+						// ---
+						// $('#navbar-top').css('margin-right', $('#body').css('padding-right'));
+						// ---
 						setTimeout(function() { OrderFormBlock.find('input.form-control').first().focus(); }, 500);
 						return;
 					}
