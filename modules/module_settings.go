@@ -26,6 +26,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconPagination},
 			{Mount: "thumbnails", Name: "Thumbnails", Show: true, Icon: assets.SysSvgIconThumbnails},
 			{Mount: "smtp", Name: "SMTP", Show: true, Icon: assets.SysSvgIconEmail},
+			{Mount: "shop", Name: "Shop", Show: true, Icon: assets.SysSvgIconShop},
 			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconApi},
 		},
 	}, nil, func(wrap *wrapper.Wrapper) (string, string, string) {
@@ -65,54 +66,6 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						modules_list += `>Shop</option>`
 						modules_list += `</select>`
 
-						price_format_list := ``
-						price_format_list += `<select class="form-control" id="lbl_price-fomat" name="price-fomat">`
-						price_format_list += `<option value="0"`
-						if (*wrap.Config).Shop.Price.Format == 0 {
-							price_format_list += ` selected`
-						}
-						price_format_list += `>100</option>`
-						price_format_list += `<option value="1"`
-						if (*wrap.Config).Shop.Price.Format == 1 {
-							price_format_list += ` selected`
-						}
-						price_format_list += `>100.0</option>`
-						price_format_list += `<option value="2"`
-						if (*wrap.Config).Shop.Price.Format == 2 {
-							price_format_list += ` selected`
-						}
-						price_format_list += `>100.00</option>`
-						price_format_list += `<option value="3"`
-						if (*wrap.Config).Shop.Price.Format == 3 {
-							price_format_list += ` selected`
-						}
-						price_format_list += `>100.000</option>`
-						price_format_list += `<option value="4"`
-						if (*wrap.Config).Shop.Price.Format == 4 {
-							price_format_list += ` selected`
-						}
-						price_format_list += `>100.0000</option>`
-						price_format_list += `</select>`
-
-						price_round_list := ``
-						price_round_list += `<select class="form-control" id="lbl_price-round" name="price-round">`
-						price_round_list += `<option value="0"`
-						if (*wrap.Config).Shop.Price.Round == 0 {
-							price_round_list += ` selected`
-						}
-						price_round_list += `>Don't round</option>`
-						price_round_list += `<option value="1"`
-						if (*wrap.Config).Shop.Price.Round == 1 {
-							price_round_list += ` selected`
-						}
-						price_round_list += `>Round to ceil</option>`
-						price_round_list += `<option value="2"`
-						if (*wrap.Config).Shop.Price.Round == 2 {
-							price_round_list += ` selected`
-						}
-						price_round_list += `>Round to floor</option>`
-						price_round_list += `</select>`
-
 						return `<div class="form-group n3">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
@@ -121,30 +74,6 @@ func (this *Modules) RegisterModule_Settings() *Module {
 							`<div class="col-md-9">` +
 							`<div>` +
 							modules_list +
-							`</div>` +
-							`</div>` +
-							`</div>` +
-							`</div>` +
-							`<div class="form-group n3">` +
-							`<div class="row">` +
-							`<div class="col-md-3">` +
-							`<label for="lbl_price-fomat">Price format</label>` +
-							`</div>` +
-							`<div class="col-md-9">` +
-							`<div>` +
-							price_format_list +
-							`</div>` +
-							`</div>` +
-							`</div>` +
-							`</div>` +
-							`<div class="form-group n3">` +
-							`<div class="row">` +
-							`<div class="col-md-3">` +
-							`<label for="lbl_price-round">Price round</label>` +
-							`</div>` +
-							`<div class="col-md-9">` +
-							`<div>` +
-							price_round_list +
 							`</div>` +
 							`</div>` +
 							`</div>` +
@@ -507,6 +436,102 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Name:    "smtp-test-email",
 					Value:   "",
 					Hint:    "To this email address will be send test email message if settings are correct",
+				},
+				{
+					Kind:   builder.DFKSubmit,
+					Value:  "Save",
+					Target: "add-edit-button",
+				},
+			})
+
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+		} else if wrap.CurrSubModule == "shop" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Shop"},
+			})
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "settings-shop",
+				},
+				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						price_format_list := ``
+						price_format_list += `<select class="form-control" id="lbl_price-fomat" name="price-fomat">`
+						price_format_list += `<option value="0"`
+						if (*wrap.Config).Shop.Price.Format == 0 {
+							price_format_list += ` selected`
+						}
+						price_format_list += `>100</option>`
+						price_format_list += `<option value="1"`
+						if (*wrap.Config).Shop.Price.Format == 1 {
+							price_format_list += ` selected`
+						}
+						price_format_list += `>100.0</option>`
+						price_format_list += `<option value="2"`
+						if (*wrap.Config).Shop.Price.Format == 2 {
+							price_format_list += ` selected`
+						}
+						price_format_list += `>100.00</option>`
+						price_format_list += `<option value="3"`
+						if (*wrap.Config).Shop.Price.Format == 3 {
+							price_format_list += ` selected`
+						}
+						price_format_list += `>100.000</option>`
+						price_format_list += `<option value="4"`
+						if (*wrap.Config).Shop.Price.Format == 4 {
+							price_format_list += ` selected`
+						}
+						price_format_list += `>100.0000</option>`
+						price_format_list += `</select>`
+
+						price_round_list := ``
+						price_round_list += `<select class="form-control" id="lbl_price-round" name="price-round">`
+						price_round_list += `<option value="0"`
+						if (*wrap.Config).Shop.Price.Round == 0 {
+							price_round_list += ` selected`
+						}
+						price_round_list += `>Don't round</option>`
+						price_round_list += `<option value="1"`
+						if (*wrap.Config).Shop.Price.Round == 1 {
+							price_round_list += ` selected`
+						}
+						price_round_list += `>Round to ceil</option>`
+						price_round_list += `<option value="2"`
+						if (*wrap.Config).Shop.Price.Round == 2 {
+							price_round_list += ` selected`
+						}
+						price_round_list += `>Round to floor</option>`
+						price_round_list += `</select>`
+
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price-fomat">Price format</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							price_format_list +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price-round">Price round</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							price_round_list +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
 				},
 				{
 					Kind:   builder.DFKSubmit,
