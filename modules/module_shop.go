@@ -944,6 +944,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					{
 						DBField:     "id",
 						NameInTable: "Order #",
+						Classes:     "d-none d-lg-table-cell",
 					},
 					{
 						DBField: "client_phone",
@@ -979,6 +980,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							phone := html.EscapeString((*values)[1])
 							email := html.EscapeString((*values)[12])
 
+							order_id := `<span class="d-inline d-sm-none">#` + (*values)[0] + `. </span>`
+
 							name := ""
 							if last_name != "" {
 								name += " " + last_name
@@ -989,7 +992,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							if second_name != "" {
 								name += " " + second_name
 							}
-							name = `<a href="` + link + `">` + strings.TrimSpace(name) + `</a>`
+							name = `<a href="` + link + `">` + order_id + strings.TrimSpace(name) + `</a>`
 
 							contact := ""
 							if email != "" {

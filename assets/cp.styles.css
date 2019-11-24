@@ -881,6 +881,19 @@ ul.pagination {
 	width: 5rem;
 }
 
+/* Admin table: table_shop_orders */
+.data-table.table_shop_orders .col_id {
+	width: 7rem;
+}
+
+.data-table.table_shop_orders .col_create_datetime {
+	width: 8rem;
+}
+
+.data-table.table_shop_orders .col_client_email {
+	width: 8rem;
+}
+
 /* Admin data form */
 .data-form label {
 	font-weight: bold;
