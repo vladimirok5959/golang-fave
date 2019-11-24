@@ -368,15 +368,19 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 				return false;
 			},
 			ShopBasketMakeOrder: function(object) {
-				var OrderFormBlock = $('#sys-modal-shop-basket .modal-body .order-form');
-				if(OrderFormBlock.css('display') == 'none') {
-					OrderFormBlock.css('display', 'block');
-					setTimeout(function() { OrderFormBlock.find('input.form-control').first().focus(); }, 500);
-					return;
+				if(ShopBasketObjectIsNotBlocked(object)) {
+					var OrderFormBlock = $('#sys-modal-shop-basket .modal-body .order-form');
+					if(OrderFormBlock.css('display') == 'none') {
+						OrderFormBlock.css('display', 'block');
+						setTimeout(function() { OrderFormBlock.find('input.form-control').first().focus(); }, 500);
+						return;
+					}
+					// Validate
+					// Send form
+					ShopBasketBlockObject(object);
+					console.log('Order action');
+					// ShopBasketUnBlockObject(object);
 				}
-				// Validate
-				// Send form
-				console.log('Order action');
 			},
 		};
 	}(window, $);

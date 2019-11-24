@@ -346,8 +346,14 @@ footer {
 	display: inline-block;
 }
 
-#sys-modal-shop-basket .data .total span.caption {
-	margin-right: 1rem;
+#sys-modal-shop-basket .data .total span.value {
+	margin-left: 1rem;
+}
+
+#sys-modal-shop-basket .order-form .form-group label {
+	font-weight: 700;
+	margin-top: .45rem;
+	margin-bottom: .45rem;
 }
 
 @media (max-width: 768px) {
