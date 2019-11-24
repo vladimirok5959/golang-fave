@@ -537,7 +537,8 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
 						return `<div><hr></div>` +
-							`<div class="pb-2"><h4>Order process require fields</h4></div>`
+							`<div><h4>Order process require fields</h4></div>` +
+							`<div><hr></div>`
 					},
 				},
 				{
