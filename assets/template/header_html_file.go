@@ -31,6 +31,9 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopBasketBtnContinue = 'Continue Shopping';
 			var ShopBasketBtnOrder = 'Make order';
 			var ShopBasketEmpty = 'Your basket currently empty...';
+			var ShopOrderSuccess = 'Thank you for your order! We will call you shortly';
+			var ShopOrderErrorMobilePhone = 'Mobile phone number is invalid';
+			var ShopOrderErrorEmailAddress = 'Email address is invalid';
 		</script>
 	</head>
 	<body id="body" class="fixed-top-bar">

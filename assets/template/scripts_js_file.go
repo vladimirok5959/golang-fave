@@ -179,7 +179,8 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 								<div class="modal-body text-left" style="position:relative;"> \
 									<div class="blocker" style="position:absolute;left:0px;top:0px;width:100%;height:100%;background:#fff;opacity:0.5;display:none;"></div> \
 									<div class="data"></div> \
-									<div class="order-form mt-4" style="display:none;"> \
+									<div class="order-form mt-3" style="display:none;"> \
+									<hr class="mb-4"> \
 									<form class="data-form" action="/" method="post" autocomplete="off"> \
 										<div class="hidden"><input type="hidden" name="action" value="shop-order"></div> \
 										<div class="form-group"> \
@@ -263,6 +264,61 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 						</div> \
 					</div>';
 					$('#sys-modal-shop-basket-placeholder').html(html);
+
+					// ---
+					// var OrderForm = $('#sys-modal-shop-basket .modal-body .order-form form');
+					// OrderForm.submit(function(e) {
+					// 	if(OrderForm.hasClass('loading')) {
+					// 		e.preventDefault();
+					// 		return;
+					// 	}
+
+					// 	// Block send button
+					// 	OrderForm.addClass('loading').addClass('alert-here');
+					// 	var button = OrderForm.find('button[type=submit]');
+					// 	button.addClass('progress-bar-striped')
+					// 		.addClass('progress-bar-animated');
+
+					// 	// Another button
+					// 	if(button.attr('data-target') != '') {
+					// 		$('#' + button.attr('data-target')).addClass('progress-bar-striped')
+					// 			.addClass('progress-bar-animated');
+					// 	}
+
+					// 	// Clear form messages
+					// 	form.find('.sys-messages').html('');
+
+					// 	$.ajax({
+					// 		type: "POST",
+					// 		url: form.attr('action'),
+					// 		data: form.serialize()
+					// 	}).done(function(data) {
+					// 		FormDataWasChanged = false;
+					// 		if(IsDebugMode()) console.log('done', data);
+					// 		AjaxDone(data)
+					// 	}).fail(function(xhr, status, error) {
+					// 		if(IsDebugMode()) console.log('fail', xhr, status, error);
+					// 		AjaxFail(xhr.responseText, status, error);
+					// 	}).always(function() {
+					// 		// Add delay for one second
+					// 		setTimeout(function() {
+					// 			form.removeClass('loading').removeClass('alert-here');
+					// 			button.removeClass('progress-bar-striped')
+					// 				.removeClass('progress-bar-animated');
+					// 			// Another button
+					// 			if(button.attr('data-target') != '') {
+					// 				$('#' + button.attr('data-target'))
+					// 					.removeClass('progress-bar-striped')
+					// 					.removeClass('progress-bar-animated');
+					// 			}
+					// 		}, 100);
+					// 	});
+
+					// 	// Prevent submit action
+					// 	e.preventDefault();
+					// });
+					// ---
+
 					$("#sys-modal-shop-basket").modal({
 						backdrop: 'static',
 						keyboard: true,
@@ -372,9 +428,6 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					var OrderFormBlock = $('#sys-modal-shop-basket .modal-body .order-form');
 					if(OrderFormBlock.css('display') == 'none') {
 						OrderFormBlock.css('display', 'block');
-						// ---
-						// $('#navbar-top').css('margin-right', $('#body').css('padding-right'));
-						// ---
 						setTimeout(function() { OrderFormBlock.find('input.form-control').first().focus(); }, 500);
 						return;
 					}
@@ -382,7 +435,27 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					// Send form
 					ShopBasketBlockObject(object);
 					console.log('Order action');
-					// ShopBasketUnBlockObject(object);
+					var OrderForm = $('#sys-modal-shop-basket .modal-body .order-form form');
+					$.ajax({
+						type: "POST",
+						url: OrderForm.attr('action'),
+						data: OrderForm.serialize()
+					}).done(function(data) {
+						// FormDataWasChanged = false;
+						// if(IsDebugMode()) console.log('done', data);
+						// AjaxDone(data);
+						// ---
+						// ShopOrderSuccess
+						// ShopOrderErrorMobilePhone
+						// ShopOrderErrorEmailAddress
+						console.log('Order action done', data);
+					}).fail(function(xhr, status, error) {
+						// if(IsDebugMode()) console.log('fail', xhr, status, error);
+						// AjaxFail(xhr.responseText, status, error);
+						console.log('Order action fail', xhr, status, error);
+					}).always(function() {
+						ShopBasketUnBlockObject(object);
+					});
 				}
 			},
 		};

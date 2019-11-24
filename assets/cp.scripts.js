@@ -7073,7 +7073,7 @@
 				}).done(function(data) {
 					FormDataWasChanged = false;
 					if(IsDebugMode()) console.log('done', data);
-					AjaxDone(data)
+					AjaxDone(data);
 				}).fail(function(xhr, status, error) {
 					if(IsDebugMode()) console.log('fail', xhr, status, error);
 					AjaxFail(xhr.responseText, status, error);
