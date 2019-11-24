@@ -182,7 +182,7 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 								</div> \
 								<div class="modal-footer"> \
 									<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">' + ShopBasketBtnContinue + '</button> \
-									<button type="button" class="btn btn-order btn-success" disabled>' + ShopBasketBtnOrder + '</button> \
+									<button type="button" class="btn btn-order btn-success" onclick="frontend.ShopBasketMakeOrder(this);return false;" disabled>' + ShopBasketBtnOrder + '</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -291,6 +291,9 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 					});
 				}
 				return false;
+			},
+			ShopBasketMakeOrder: function(object) {
+				// console.log(object);
 			},
 		};
 	}(window, $);
