@@ -60,6 +60,11 @@ func IsFloat(str string) bool {
 	return false
 }
 
+func IsValidMobile(str string) bool {
+	regexpeChars := regexp.MustCompile(`^\+([1-9]{1})([0-9]{1})([0-9]{3})([0-9]{7})$`)
+	return regexpeChars.MatchString(str)
+}
+
 func IsValidEmail(email string) bool {
 	regexpe := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 	return regexpe.MatchString(email)

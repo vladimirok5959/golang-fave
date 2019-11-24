@@ -5,6 +5,7 @@ import (
 
 	"golang-fave/engine/basket"
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterAction_ShopOrder() *Action {
@@ -51,13 +52,13 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.MobilePhone != 0 {
-			if strings.TrimSpace(pf_client_phone) == "" {
+			if strings.TrimSpace(pf_client_phone) == "" || !utils.IsValidMobile(pf_client_phone) {
 				wrap.Write(`{"error": true, "field": "client_phone", "variable": "ShopOrderEmptyMobilePhone"}`)
 				return
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.EmailAddress != 0 {
-			if strings.TrimSpace(pf_client_email) == "" {
+			if strings.TrimSpace(pf_client_email) == "" || !utils.IsValidEmail(pf_client_email) {
 				wrap.Write(`{"error": true, "field": "client_email", "variable": "ShopOrderEmptyEmailAddress"}`)
 				return
 			}
