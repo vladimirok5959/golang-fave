@@ -107,7 +107,7 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 						table += '<tbody>';
 						for(var i in data.products) {
 							table += '<tr>';
-							table += '<td class="thc-1"><img src="' + data.products[i].image + '" width="50" height="50" /></td>';
+							table += '<td class="thc-1 d-none d-md-table-cell"><img src="' + data.products[i].image + '" width="50" height="50" /></td>';
 							table += '<td class="thc-2"><a href="' + data.products[i].link + '">' + data.products[i].name + '</a></td>';
 							table += '<td class="thc-3">' + data.products[i].price + ' ' + data.currency.code + '</td>';
 							table += '<td class="thc-4"><button type="button" class="btn btn-minus" onclick="frontend.ShopBasketProductMinus(this,' + data.products[i].id + ');"><span>-</span></button><input class="form-control" type="text" value="' + data.products[i].quantity + '" readonly><button type="button" class="btn btn-plus" onclick="frontend.ShopBasketProductPlus(this,' + data.products[i].id + ');"><span>+</span></button></td>';
