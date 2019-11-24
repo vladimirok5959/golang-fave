@@ -356,6 +356,10 @@ footer {
 	margin-bottom: .45rem;
 }
 
+#sys-modal-shop-basket .order-form .form-group .input-error-msg small {
+	color: #721c24;
+}
+
 @media (max-width: 768px) {
 	#sys-modal-shop-basket .data .table td {
 		display: block;

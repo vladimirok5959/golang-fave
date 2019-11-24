@@ -38,6 +38,17 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderLabelEmailAddress = 'Email Address';
 			var ShopOrderLabelDelivery = 'Delivery';
 			var ShopOrderLabelComment = 'Comment';
+
+			var ShopOrderRequiredLastName = true;
+			var ShopOrderRequiredFirstName = true;
+			var ShopOrderRequiredSecondName = false;
+			var ShopOrderRequiredMobilePhone = false;
+			var ShopOrderRequiredEmailAddress = true;
+			var ShopOrderRequiredDelivery = false;
+			var ShopOrderRequiredComment = false;
+
+			var ShopOrderError = 'Error!';
+			var ShopOrderErrorBasketEmpty = 'Your basket is empty';
 			var ShopOrderEmptyLastName = 'Please enter your last name';
 			var ShopOrderEmptyFirstName = 'Please enter your first name';
 			var ShopOrderEmptySecondName = 'Please enter your second name';
@@ -45,9 +56,9 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderEmptyEmailAddress = 'Please enter your email address';
 			var ShopOrderEmptyDelivery = 'Please enter delivery comment';
 			var ShopOrderEmptyComment = 'Please enter order comment';
-			var ShopOrderSuccess = 'Thank you for your order! We will call you shortly';
-			var ShopOrderErrorMobilePhone = 'Mobile phone number is invalid';
-			var ShopOrderErrorEmailAddress = 'Email address is invalid';
+			var ShopOrderSuccess = '<b>Thank you for your order! We will call you shortly!</b>';
+			// var ShopOrderErrorMobilePhone = 'Mobile phone number is invalid';
+			// var ShopOrderErrorEmailAddress = 'Email address is invalid';
 		</script>
 	</head>
 	<body id="body" class="fixed-top-bar">

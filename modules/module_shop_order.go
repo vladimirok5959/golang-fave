@@ -1,8 +1,10 @@
 package modules
 
 import (
+	"strings"
+
+	"golang-fave/engine/basket"
 	"golang-fave/engine/wrapper"
-	// "golang-fave/utils"
 )
 
 func (this *Modules) RegisterAction_ShopOrder() *Action {
@@ -11,17 +13,71 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 		Mount:     "shop-order",
 		WantAdmin: false,
 	}, func(wrap *wrapper.Wrapper) {
-		// pf_id := wrap.R.FormValue("id")
+		// SBParam := basket.SBParam{
+		// 	R:         wrap.R,
+		// 	DB:        wrap.DB,
+		// 	Host:      wrap.CurrHost,
+		// 	Config:    wrap.Config,
+		// 	SessionId: wrap.GetSessionId(),
+		// }
+		if wrap.ShopBasket.ProductsCount(&basket.SBParam{
+			R:         wrap.R,
+			DB:        wrap.DB,
+			Host:      wrap.CurrHost,
+			Config:    wrap.Config,
+			SessionId: wrap.GetSessionId(),
+		}) <= 0 {
+			wrap.Write(`{"error": true, "variable": "ShopOrderErrorBasketEmpty"}`)
+			return
+		}
 
-		// pf_client_last_name := wrap.R.FormValue("client_last_name")
-		// pf_client_first_name := wrap.R.FormValue("client_first_name")
-		// pf_client_second_name := wrap.R.FormValue("client_second_name")
-		// pf_client_phone := wrap.R.FormValue("client_phone")
-		// pf_client_email := wrap.R.FormValue("client_email")
-		// pf_client_delivery_comment := wrap.R.FormValue("client_delivery_comment")
-		// pf_client_order_comment := wrap.R.FormValue("client_order_comment")
+		pf_client_last_name := wrap.R.FormValue("client_last_name")
+		pf_client_first_name := wrap.R.FormValue("client_first_name")
+		pf_client_second_name := wrap.R.FormValue("client_second_name")
+		pf_client_phone := wrap.R.FormValue("client_phone")
+		pf_client_email := wrap.R.FormValue("client_email")
+		pf_client_delivery_comment := wrap.R.FormValue("client_delivery_comment")
+		pf_client_order_comment := wrap.R.FormValue("client_order_comment")
 
-		wrap.MsgError(`OK!`)
+		if strings.TrimSpace(pf_client_last_name) == "" {
+			wrap.Write(`{"error": true, "field": "client_last_name", "variable": "ShopOrderEmptyLastName"}`)
+			return
+		}
+		if strings.TrimSpace(pf_client_first_name) == "" {
+			wrap.Write(`{"error": true, "field": "client_first_name", "variable": "ShopOrderEmptyFirstName"}`)
+			return
+		}
+		if strings.TrimSpace(pf_client_second_name) == "" {
+			wrap.Write(`{"error": true, "field": "client_second_name", "variable": "ShopOrderEmptySecondName"}`)
+			return
+		}
+		if strings.TrimSpace(pf_client_phone) == "" {
+			wrap.Write(`{"error": true, "field": "client_phone", "variable": "ShopOrderEmptyMobilePhone"}`)
+			return
+		}
+		if strings.TrimSpace(pf_client_email) == "" {
+			wrap.Write(`{"error": true, "field": "client_email", "variable": "ShopOrderEmptyEmailAddress"}`)
+			return
+		}
+		if strings.TrimSpace(pf_client_delivery_comment) == "" {
+			wrap.Write(`{"error": true, "field": "client_delivery_comment", "variable": "ShopOrderEmptyDelivery"}`)
+			return
+		}
+		if strings.TrimSpace(pf_client_order_comment) == "" {
+			wrap.Write(`{"error": true, "field": "client_order_comment", "variable": "ShopOrderEmptyComment"}`)
+			return
+		}
+
+		// Clear user basket
+		wrap.ShopBasket.ClearBasket(&basket.SBParam{
+			R:         wrap.R,
+			DB:        wrap.DB,
+			Host:      wrap.CurrHost,
+			Config:    wrap.Config,
+			SessionId: wrap.GetSessionId(),
+		})
+
+		wrap.Write(`{"error": false, "field": "", "variable": "ShopOrderSuccess"}`)
 		return
 
 		// if !utils.IsNumeric(pf_id) {
