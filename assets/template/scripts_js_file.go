@@ -179,6 +179,81 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 								<div class="modal-body text-left" style="position:relative;"> \
 									<div class="blocker" style="position:absolute;left:0px;top:0px;width:100%;height:100%;background:#fff;opacity:0.5;display:none;"></div> \
 									<div class="data"></div> \
+									<div class="order-form mt-4" style="display:none;"> \
+									<form class="data-form" action="/" method="post" autocomplete="off"> \
+										<div class="hidden"><input type="hidden" name="action" value="shop-order"></div> \
+										<div class="form-group"> \
+											<div class="row"> \
+												<div class="col-md-3"> \
+													<label for="lbl_client_last_name">Last Name</label> \
+												</div> \
+												<div class="col-md-9"> \
+													<input class="form-control" type="text" id="lbl_client_last_name" name="client_last_name" value="" minlength="1" maxlength="64" autocomplete="off" required> \
+												</div> \
+											</div> \
+										</div> \
+										<div class="form-group"> \
+											<div class="row"> \
+												<div class="col-md-3"> \
+													<label for="lbl_client_first_name">First Name</label> \
+												</div> \
+												<div class="col-md-9"> \
+													<input class="form-control" type="text" id="lbl_client_first_name" name="client_first_name" value="" minlength="1" maxlength="64" autocomplete="off" required> \
+												</div> \
+											</div> \
+										</div> \
+										<div class="form-group"> \
+											<div class="row"> \
+												<div class="col-md-3"> \
+													<label for="lbl_client_second_name">Second Name</label> \
+												</div> \
+												<div class="col-md-9"> \
+													<input class="form-control" type="text" id="lbl_client_second_name" name="client_second_name" value="" minlength="1" maxlength="64" autocomplete="off" required> \
+												</div> \
+											</div> \
+										</div> \
+										<div class="form-group"> \
+											<div class="row"> \
+												<div class="col-md-3"> \
+													<label for="lbl_client_phone">Mobile phone</label> \
+												</div> \
+												<div class="col-md-9"> \
+													<input class="form-control" type="text" id="lbl_client_phone" name="client_phone" value="" minlength="1" maxlength="20" autocomplete="off" required> \
+												</div> \
+											</div> \
+										</div> \
+										<div class="form-group"> \
+											<div class="row"> \
+												<div class="col-md-3"> \
+													<label for="lbl_client_email">Email address</label> \
+												</div> \
+												<div class="col-md-9"> \
+													<input class="form-control" type="text" id="lbl_client_email" name="client_email" value="" minlength="1" maxlength="64" autocomplete="off" required> \
+												</div> \
+											</div> \
+										</div> \
+										<div class="form-group"> \
+											<div class="row"> \
+												<div class="col-md-3"> \
+													<label for="lbl_client_delivery_comment">Delivery</label> \
+												</div> \
+												<div class="col-md-9"> \
+													<input class="form-control" type="text" id="lbl_client_delivery_comment" name="client_delivery_comment" value="" minlength="1" maxlength="255" autocomplete="off"> \
+												</div> \
+											</div> \
+										</div> \
+										<div class="form-group"> \
+											<div class="row"> \
+												<div class="col-md-3"> \
+													<label for="lbl_client_order_comment">Comment</label> \
+												</div> \
+												<div class="col-md-9"> \
+													<textarea class="form-control" id="lbl_client_order_comment" name="client_order_comment" autocomplete="off"></textarea> \
+												</div> \
+											</div> \
+										</div> \
+									</form> \
+									</div> \
 								</div> \
 								<div class="modal-footer"> \
 									<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">' + ShopBasketBtnContinue + '</button> \
@@ -293,7 +368,15 @@ var VarScriptsJsFile = []byte(`(function(window, $) {
 				return false;
 			},
 			ShopBasketMakeOrder: function(object) {
-				// console.log(object);
+				var OrderFormBlock = $('#sys-modal-shop-basket .modal-body .order-form');
+				if(OrderFormBlock.css('display') == 'none') {
+					OrderFormBlock.css('display', 'block');
+					setTimeout(function() { OrderFormBlock.find('input.form-control').first().focus(); }, 500);
+					return;
+				}
+				// Validate
+				// Send form
+				console.log('Order action');
 			},
 		};
 	}(window, $);
