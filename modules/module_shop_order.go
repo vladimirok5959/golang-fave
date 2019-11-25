@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"fmt"
 	"strings"
 
 	"golang-fave/engine/basket"
@@ -75,6 +76,16 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 				return
 			}
 		}
+
+		bdata := wrap.ShopBasket.GetAll(&basket.SBParam{
+			R:         wrap.R,
+			DB:        wrap.DB,
+			Host:      wrap.CurrHost,
+			Config:    wrap.Config,
+			SessionId: wrap.GetSessionId(),
+		})
+
+		fmt.Printf("bdata: %+v\n", (*bdata))
 
 		// var lastID int64 = 0
 		// if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {

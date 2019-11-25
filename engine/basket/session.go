@@ -358,3 +358,31 @@ func (this *session) ClearBasket(p *SBParam) {
 func (this *session) ProductsCount() int {
 	return this.TotalCount
 }
+
+func (this *session) GetAll(p *SBParam) *utils.MySql_basket {
+	products := []utils.MySql_basket_product{}
+	for _, product := range this.Products {
+		products = append(products, utils.MySql_basket_product{
+			A_product_id: product.Id,
+			A_price:      this.makePrice(product.price, product.currency.Id),
+			A_quantity:   product.Quantity,
+		})
+	}
+
+	currency := utils.MySql_basket_currency{
+		Id:          this.Currency.Id,
+		Name:        this.Currency.Name,
+		Coefficient: this.Currency.Coefficient,
+		Code:        this.Currency.Code,
+		Symbol:      this.Currency.Symbol,
+	}
+
+	all := utils.MySql_basket{
+		Products:   &products,
+		Currency:   &currency,
+		TotalSum:   this.totalSum,
+		TotalCount: this.TotalCount,
+	}
+
+	return &all
+}

@@ -152,8 +152,18 @@ func (this *Basket) ProductsCount(p *SBParam) int {
 	return 0
 }
 
-func (this *Basket) GetAll(p *SBParam) *utils.MySql_basket_order {
-	// TODO: ...
+func (this *Basket) GetAll(p *SBParam) *utils.MySql_basket {
+	if p.Host != "" && p.SessionId != "" {
+		this.Lock()
+		defer this.Unlock()
+
+		if h, ok := this.hosts[p.Host]; ok == true {
+			if s, ok := h.sessions[p.SessionId]; ok == true {
+				return s.GetAll(p)
+			}
+		}
+	}
+
 	return nil
 }
 

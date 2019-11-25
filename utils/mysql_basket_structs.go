@@ -14,7 +14,7 @@ type MySql_basket_product struct {
 	A_quantity   int
 }
 
-type MySql_basket_order struct {
+type MySql_basket struct {
 	Products   *[]MySql_basket_product
 	Currency   *MySql_basket_currency
 	TotalSum   float64
