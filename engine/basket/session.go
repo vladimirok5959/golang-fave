@@ -49,6 +49,7 @@ func (this *session) updateProducts(db *sqlw.DB) {
 				shop_products.name,
 				shop_products.price,
 				shop_products.alias,
+				shop_products.quantity,
 				shop_currencies.id,
 				shop_currencies.name,
 				shop_currencies.coefficient,
@@ -111,6 +112,7 @@ func (this *session) updateProducts(db *sqlw.DB) {
 					&row.A_name,
 					&row.A_price,
 					&row.A_alias,
+					&row.A_quantity,
 					&roc.A_id,
 					&roc.A_name,
 					&roc.A_coefficient,
@@ -119,22 +121,30 @@ func (this *session) updateProducts(db *sqlw.DB) {
 					&img_product_id,
 					&img_filename,
 				); err == nil {
+					removeProductId := 0
 					if p, ok := this.Products[row.A_id]; ok == true {
-						var product_image string
-						if img_filename == "" {
-							product_image = utils.GetImagePlaceholderSrc()
+						if row.A_quantity > 0 {
+							var product_image string
+							if img_filename == "" {
+								product_image = utils.GetImagePlaceholderSrc()
+							} else {
+								product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
+							}
+							p.Name = html.EscapeString(row.A_name)
+							p.Image = product_image
+							p.Link = "/shop/" + row.A_alias + "/"
+							p.price = row.A_price
+							p.currency.Id = roc.A_id
+							p.currency.Name = html.EscapeString(roc.A_name)
+							p.currency.Coefficient = roc.A_coefficient
+							p.currency.Code = html.EscapeString(roc.A_code)
+							p.currency.Symbol = html.EscapeString(roc.A_symbol)
 						} else {
-							product_image = "/products/images/" + img_product_id + "/thumb-0-" + img_filename
+							removeProductId = row.A_id
 						}
-						p.Name = html.EscapeString(row.A_name)
-						p.Image = product_image
-						p.Link = "/shop/" + row.A_alias + "/"
-						p.price = row.A_price
-						p.currency.Id = roc.A_id
-						p.currency.Name = html.EscapeString(roc.A_name)
-						p.currency.Coefficient = roc.A_coefficient
-						p.currency.Code = html.EscapeString(roc.A_code)
-						p.currency.Symbol = html.EscapeString(roc.A_symbol)
+					}
+					if removeProductId != 0 {
+						delete(this.Products, removeProductId)
 					}
 				}
 			}
@@ -292,6 +302,7 @@ func (this *session) Plus(p *SBParam, product_id int) {
 			) as image_parent ON image_parent.product_id = shop_products.parent_id
 		WHERE
 			shop_products.active = 1 AND
+			shop_products.quantity > 0 AND
 			shop_products.id = ?
 		LIMIT 1;`,
 		product_id,
