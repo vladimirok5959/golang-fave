@@ -147,6 +147,7 @@ func (this *Shop) load() *Shop {
 			shop_products.active = 1 AND
 			shop_products.parent_id IS NULL
 		ORDER BY
+			shop_products.quantity DESC,
 			shop_products.id DESC
 		LIMIT ?, ?;
 	`
@@ -303,6 +304,7 @@ func (this *Shop) load() *Shop {
 				shop_products.id,
 				cats.parent_id
 			ORDER BY
+				shop_products.quantity DESC,
 				shop_products.id DESC
 			LIMIT ?, ?;
 		`
