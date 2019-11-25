@@ -196,6 +196,15 @@ footer {
 	float: right;
 }
 
+.grid-products .card-product .card-footer {
+	position: relative;
+}
+
+.grid-products .card-product .card-footer .badge {
+	position: absolute;
+	margin-top: -4px;
+}
+
 .product-full .price {
 	display: inline-block;
 	vertical-align: middle;

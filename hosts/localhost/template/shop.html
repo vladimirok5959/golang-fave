@@ -26,7 +26,9 @@
 						<div class="card-text">{{.Briefly}}</div>
 					</div>
 					<div class="card-footer">
-						<span class="price">{{.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</span><a href="{{.Permalink}}" class="btn btn-success">View</a>
+						<a href="{{.Permalink}}" class="btn btn-success">View</a>
+						<span class="price">{{.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</span>
+						{{if le .Quantity 0}}<br><span class="badge badge-primary">Out of stock</span>{{end}}
 					</div>
 				</div>
 			{{end}}
