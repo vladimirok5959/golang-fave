@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"fmt"
 	"strings"
 
 	"golang-fave/engine/basket"
@@ -85,82 +84,68 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			SessionId: wrap.GetSessionId(),
 		})
 
-		fmt.Printf("bdata: %+v\n", (*bdata))
+		var lastID int64 = 0
+		if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+			// Insert row
+			res, err := tx.Exec(
+				`INSERT INTO shop_orders SET
+					create_datetime = ?,
+					update_datetime = ?,
+					currency_id = ?,
+					currency_name = ?,
+					currency_coefficient = ?,
+					currency_code = ?,
+					currency_symbol = ?,
+					client_last_name = ?,
+					client_first_name = ?,
+					client_second_name = ?,
+					client_phone = ?,
+					client_email = ?,
+					client_delivery_comment = ?,
+					client_order_comment = ?,
+					status = ?
+				;`,
+				utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+				utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+				bdata.Currency.Id,
+				bdata.Currency.Name,
+				bdata.Currency.Coefficient,
+				bdata.Currency.Code,
+				bdata.Currency.Symbol,
+				pf_client_last_name,
+				pf_client_first_name,
+				pf_client_second_name,
+				pf_client_phone,
+				pf_client_email,
+				pf_client_delivery_comment,
+				pf_client_order_comment,
+				0,
+			)
+			if err != nil {
+				return err
+			}
 
-		// var lastID int64 = 0
-		// if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
-		// 	// Insert row
-		// 	res, err := tx.Exec(
-		// 		`INSERT INTO blog_posts SET
-		// 			user = ?,
-		// 			name = ?,
-		// 			alias = ?,
-		// 			category = ?,
-		// 			briefly = ?,
-		// 			content = ?,
-		// 			datetime = ?,
-		// 			active = ?
-		// 		;`,
-		// 		wrap.User.A_id,
-		// 		pf_name,
-		// 		pf_alias,
-		// 		utils.StrToInt(pf_category),
-		// 		pf_briefly,
-		// 		pf_content,
-		// 		utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
-		// 		utils.StrToInt(pf_active),
-		// 	)
-		// 	if err != nil {
-		// 		return err
-		// 	}
+			// Get inserted order id
+			lastID, err = res.LastInsertId()
+			if err != nil {
+				return err
+			}
 
-		// 	// Get inserted post id
-		// 	lastID, err = res.LastInsertId()
-		// 	if err != nil {
-		// 		return err
-		// 	}
+			// Insert order products
+			for _, product := range *(*bdata).Products {
+				if _, err = tx.Exec(
+					`INSERT INTO shop_order_products (id, order_id, product_id, price, quantity) VALUES (NULL, ?, ?, ?, ?);`,
+					lastID, product.A_product_id, product.A_price, product.A_quantity,
+				); err != nil {
+					return err
+				}
+			}
 
-		// 	// Block rows
-		// 	if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", lastID); err != nil {
-		// 		return err
-		// 	}
-
-		// 	// Insert post and categories relations
-		// 	catids := utils.GetPostArrayInt("cats[]", wrap.R)
-		// 	if len(catids) > 0 {
-		// 		var catsCount int
-		// 		err = tx.QueryRow(`
-		// 			SELECT
-		// 				COUNT(*)
-		// 			FROM
-		// 				blog_cats
-		// 			WHERE
-		// 				id IN(` + strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",") + `)
-		// 			FOR UPDATE;`,
-		// 		).Scan(
-		// 			&catsCount,
-		// 		)
-		// 		if *wrap.LogCpError(&err) != nil {
-		// 			return err
-		// 		}
-		// 		if len(catids) != catsCount {
-		// 			return errors.New("Inner system error")
-		// 		}
-		// 		var balkInsertArr []string
-		// 		for _, el := range catids {
-		// 			balkInsertArr = append(balkInsertArr, `(`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
-		// 		}
-		// 		if _, err = tx.Exec(
-		// 			`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
-		// 		); err != nil {
-		// 			return err
-		// 		}
-		// 	}
-		// 	return nil
-		// }); err != nil {
-		// 	wrap.MsgError(err.Error())
-		// 	return
-		// }
+			return nil
+		}); err != nil {
+			wrap.Write(`{"error": true, "variable": "ShopOrderErrorSomethingWrong"}`)
+			return
+		}
 
 		// Clear user basket
 		wrap.ShopBasket.ClearBasket(&basket.SBParam{
@@ -173,35 +158,5 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 
 		wrap.Write(`{"error": false, "field": "", "variable": "ShopOrderSuccess"}`)
 		return
-
-		// if !utils.IsNumeric(pf_id) {
-		// 	wrap.MsgError(`Inner system error`)
-		// 	return
-		// }
-
-		// if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
-		// 	if _, err := tx.Exec(`
-		// 		UPDATE shop_products SET
-		// 			parent_id = NULL,
-		// 			active = 0
-		// 		WHERE
-		// 			id = ?
-		// 		;`,
-		// 		utils.StrToInt(pf_id),
-		// 	); err != nil {
-		// 		return err
-		// 	}
-		// 	return nil
-		// }); err != nil {
-		// 	wrap.MsgError(err.Error())
-		// 	return
-		// }
-
-		// wrap.RecreateProductXmlFile()
-
-		// wrap.ResetCacheBlocks()
-
-		// // Reload current page
-		// wrap.Write(`window.location.reload(false);`)
 	})
 }

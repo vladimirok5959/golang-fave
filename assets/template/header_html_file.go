@@ -50,6 +50,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 
 			var ShopOrderError = 'Error!';
 			var ShopOrderErrorBasketEmpty = 'Your basket is empty';
+			var ShopOrderErrorSomethingWrong = 'We cannot process your order, something is wrong...';
 			var ShopOrderEmptyLastName = 'Please enter your last name';
 			var ShopOrderEmptyFirstName = 'Please enter your first name';
 			var ShopOrderEmptySecondName = 'Please enter your second name';
