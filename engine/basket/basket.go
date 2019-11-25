@@ -152,6 +152,11 @@ func (this *Basket) ProductsCount(p *SBParam) int {
 	return 0
 }
 
+func (this *Basket) GetAll(p *SBParam) *utils.MySql_basket_order {
+	// TODO: ...
+	return nil
+}
+
 func (this *Basket) Cleanup() {
 	this.Lock()
 	defer this.Unlock()

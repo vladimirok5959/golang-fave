@@ -76,6 +76,81 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			}
 		}
 
+		// var lastID int64 = 0
+		// if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+		// 	// Insert row
+		// 	res, err := tx.Exec(
+		// 		`INSERT INTO blog_posts SET
+		// 			user = ?,
+		// 			name = ?,
+		// 			alias = ?,
+		// 			category = ?,
+		// 			briefly = ?,
+		// 			content = ?,
+		// 			datetime = ?,
+		// 			active = ?
+		// 		;`,
+		// 		wrap.User.A_id,
+		// 		pf_name,
+		// 		pf_alias,
+		// 		utils.StrToInt(pf_category),
+		// 		pf_briefly,
+		// 		pf_content,
+		// 		utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+		// 		utils.StrToInt(pf_active),
+		// 	)
+		// 	if err != nil {
+		// 		return err
+		// 	}
+
+		// 	// Get inserted post id
+		// 	lastID, err = res.LastInsertId()
+		// 	if err != nil {
+		// 		return err
+		// 	}
+
+		// 	// Block rows
+		// 	if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", lastID); err != nil {
+		// 		return err
+		// 	}
+
+		// 	// Insert post and categories relations
+		// 	catids := utils.GetPostArrayInt("cats[]", wrap.R)
+		// 	if len(catids) > 0 {
+		// 		var catsCount int
+		// 		err = tx.QueryRow(`
+		// 			SELECT
+		// 				COUNT(*)
+		// 			FROM
+		// 				blog_cats
+		// 			WHERE
+		// 				id IN(` + strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",") + `)
+		// 			FOR UPDATE;`,
+		// 		).Scan(
+		// 			&catsCount,
+		// 		)
+		// 		if *wrap.LogCpError(&err) != nil {
+		// 			return err
+		// 		}
+		// 		if len(catids) != catsCount {
+		// 			return errors.New("Inner system error")
+		// 		}
+		// 		var balkInsertArr []string
+		// 		for _, el := range catids {
+		// 			balkInsertArr = append(balkInsertArr, `(`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
+		// 		}
+		// 		if _, err = tx.Exec(
+		// 			`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
+		// 		); err != nil {
+		// 			return err
+		// 		}
+		// 	}
+		// 	return nil
+		// }); err != nil {
+		// 	wrap.MsgError(err.Error())
+		// 	return
+		// }
+
 		// Clear user basket
 		wrap.ShopBasket.ClearBasket(&basket.SBParam{
 			R:         wrap.R,
