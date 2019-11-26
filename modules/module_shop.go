@@ -1028,7 +1028,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						NameInTable: "Status / Total",
 						CallBack: func(values *[]string) string {
 							status := this.shop_GetOrderStatus(utils.StrToInt((*values)[15]))
-							total := utils.Float64ToStr(0) + " " + html.EscapeString((*values)[6])
+							total := utils.Float64ToStr(utils.StrToFloat64((*values)[16])) + " " + html.EscapeString((*values)[6])
 							return `<div>` + status + `</div><div><small>` + total + `</small></div>`
 						},
 					},
@@ -1041,11 +1041,51 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					{
 						DBField: "status",
 					},
+					{
+						DBField: "total",
+					},
 				},
 				nil,
 				"/cp/"+wrap.CurrModule+"/"+wrap.CurrSubModule+"/",
 				nil,
-				nil,
+				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
+					return wrap.DB.Query(
+						`SELECT
+							shop_orders.id,
+							shop_orders.client_phone,
+							shop_orders.update_datetime,
+							shop_orders.currency_id,
+							shop_orders.currency_name,
+							shop_orders.currency_coefficient,
+							shop_orders.currency_code,
+							shop_orders.currency_symbol,
+							shop_orders.client_last_name,
+							shop_orders.client_first_name,
+							shop_orders.client_middle_name,
+							UNIX_TIMESTAMP(shop_orders.create_datetime) as create_datetime,
+							shop_orders.client_email,
+							shop_orders.client_delivery_comment,
+							shop_orders.client_order_comment,
+							shop_orders.status,
+							shop_order_total.total
+						FROM
+							shop_orders
+							LEFT JOIN (
+								SELECT
+									order_id,
+									SUM(price * quantity) as total
+								FROM
+									shop_order_products
+								GROUP BY
+									order_id
+							) as shop_order_total ON shop_order_total.order_id = shop_orders.id
+						ORDER BY
+							shop_orders.id DESC
+						LIMIT ?, ?;`,
+						limit_offset,
+						pear_page,
+					)
+				},
 				true,
 			)
 		} else if wrap.CurrSubModule == "add" || wrap.CurrSubModule == "modify" {
