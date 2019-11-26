@@ -141,6 +141,17 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 				}
 			}
 
+			// Send notify email
+			if (*wrap.Config).Shop.Orders.NotifyEmail != "" {
+				if err := wrap.SendEmail(
+					(*wrap.Config).Shop.Orders.NotifyEmail,
+					"❤️ New Order ("+wrap.CurrHost+")",
+					"You have new order in shop on host: "+wrap.CurrHost,
+				); err != nil {
+					return err
+				}
+			}
+
 			return nil
 		}); err != nil {
 			wrap.Write(`{"error": true, "variable": "ShopOrderErrorSomethingWrong"}`)
