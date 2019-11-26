@@ -577,6 +577,12 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Hint:    "Example: example@gmail.com",
 				},
 				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Accept orders",
+					Name:    "accept-orders",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.Enabled),
+				},
+				{
 					Kind:   builder.DFKSubmit,
 					Value:  "Save",
 					Target: "add-edit-button",

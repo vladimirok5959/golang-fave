@@ -42,6 +42,7 @@ type Config struct {
 				Comment      int
 			}
 			NotifyEmail string
+			Enabled     int
 		}
 	}
 	API struct {
@@ -107,6 +108,7 @@ func (this *Config) configDefault() {
 	this.Shop.Orders.RequiredFields.Comment = 0
 
 	this.Shop.Orders.NotifyEmail = ""
+	this.Shop.Orders.Enabled = 1
 
 	this.API.XML.Enabled = 0
 	this.API.XML.Name = ""

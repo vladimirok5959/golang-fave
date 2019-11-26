@@ -26,6 +26,8 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 
 		pf_new_order_notify_email := strings.TrimSpace(wrap.R.FormValue("new-order-notify-email"))
 
+		pf_accept_orders := wrap.R.FormValue("accept-orders")
+
 		if !utils.IsNumeric(pf_price_fomat) {
 			wrap.MsgError(`Must be integer number`)
 			return
@@ -76,6 +78,10 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 			pf_require_comment = "0"
 		}
 
+		if pf_accept_orders == "" {
+			pf_accept_orders = "0"
+		}
+
 		(*wrap.Config).Shop.Price.Format = pfi_price_fomat
 		(*wrap.Config).Shop.Price.Round = pfi_price_round
 
@@ -92,6 +98,8 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 				(*wrap.Config).Shop.Orders.NotifyEmail = pf_new_order_notify_email
 			}
 		}
+
+		(*wrap.Config).Shop.Orders.Enabled = utils.StrToInt(pf_accept_orders)
 
 		if err := wrap.ConfigSave(); err != nil {
 			wrap.MsgError(err.Error())
