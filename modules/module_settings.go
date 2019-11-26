@@ -536,52 +536,38 @@ func (this *Modules) RegisterModule_Settings() *Module {
 				{
 					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div><hr></div>` +
-							`<div><h4>Order process require fields</h4></div>` +
-							`<div><hr></div>`
+						make_checkbox := func(name, caption string, value int) string {
+							checked := ""
+							if value > 0 {
+								checked = " checked"
+							}
+							return `<div class="checkbox-clickable"><input class="form-control" type="checkbox" id="lbl_` +
+								name + `" name="` + name + `" value="1" "="" autocomplete="off"` + checked +
+								`><label for="lbl_` + name + `">` + caption + `</label></div>`
+						}
+
+						checkboxes := ""
+						checkboxes += make_checkbox("require-last-name", "Last Name", (*wrap.Config).Shop.Orders.RequiredFields.LastName)
+						checkboxes += make_checkbox("require-first-name", "First Name", (*wrap.Config).Shop.Orders.RequiredFields.FirstName)
+						checkboxes += make_checkbox("require-middle-name", "Middle Name", (*wrap.Config).Shop.Orders.RequiredFields.MiddleName)
+						checkboxes += make_checkbox("require-mobile-phone", "Mobile Phone", (*wrap.Config).Shop.Orders.RequiredFields.MobilePhone)
+						checkboxes += make_checkbox("require-email-address", "Email Address", (*wrap.Config).Shop.Orders.RequiredFields.EmailAddress)
+						checkboxes += make_checkbox("require-delivery", "Delivery", (*wrap.Config).Shop.Orders.RequiredFields.Delivery)
+						checkboxes += make_checkbox("require-comment", "Comment", (*wrap.Config).Shop.Orders.RequiredFields.Comment)
+
+						return `<div class="form-group n3">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price-fomat">Order require fields</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							checkboxes +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
 					},
-				},
-				{
-					Kind:    builder.DFKCheckBox,
-					Caption: "Last Name",
-					Name:    "require-last-name",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.LastName),
-				},
-				{
-					Kind:    builder.DFKCheckBox,
-					Caption: "First Name",
-					Name:    "require-first-name",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.FirstName),
-				},
-				{
-					Kind:    builder.DFKCheckBox,
-					Caption: "Middle Name",
-					Name:    "require-middle-name",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.MiddleName),
-				},
-				{
-					Kind:    builder.DFKCheckBox,
-					Caption: "Mobile Phone",
-					Name:    "require-mobile-phone",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.MobilePhone),
-				},
-				{
-					Kind:    builder.DFKCheckBox,
-					Caption: "Email Address",
-					Name:    "require-email-address",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.EmailAddress),
-				},
-				{
-					Kind:    builder.DFKCheckBox,
-					Caption: "Delivery",
-					Name:    "require-delivery",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.Delivery),
-				},
-				{
-					Kind:    builder.DFKCheckBox,
-					Caption: "Comment",
-					Name:    "require-comment",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.Comment),
 				},
 				{
 					Kind:   builder.DFKSubmit,
