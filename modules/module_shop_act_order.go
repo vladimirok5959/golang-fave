@@ -150,8 +150,8 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			if (*wrap.Config).Shop.Orders.NotifyEmail != "" {
 				if err := wrap.SendEmail(
 					(*wrap.Config).Shop.Orders.NotifyEmail,
-					"❤️ New Order ("+wrap.CurrHost+")",
-					"You have new order in shop on host: "+wrap.CurrHost,
+					"❤️ New Order ("+wrap.Host+":"+wrap.Port+")",
+					"You have new order in shop on host: <a href=\"http://"+wrap.Host+":"+wrap.Port+"/\">http://"+wrap.Host+":"+wrap.Port+"/</a>",
 				); err != nil {
 					return err
 				}
