@@ -34,7 +34,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 
 			var ShopOrderLabelLastName = 'Last Name';
 			var ShopOrderLabelFirstName = 'First Name';
-			var ShopOrderLabelSecondName = 'Second Name';
+			var ShopOrderLabelMiddleName = 'Middle Name';
 			var ShopOrderLabelMobilePhone = 'Mobile Phone';
 			var ShopOrderLabelEmailAddress = 'Email Address';
 			var ShopOrderLabelDelivery = 'Delivery';
@@ -42,7 +42,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 
 			var ShopOrderRequiredLastName = {{$.Data.ShopOrderRequiredLastName}};
 			var ShopOrderRequiredFirstName = {{$.Data.ShopOrderRequiredFirstName}};
-			var ShopOrderRequiredSecondName = {{$.Data.ShopOrderRequiredSecondName}};
+			var ShopOrderRequiredMiddleName = {{$.Data.ShopOrderRequiredMiddleName}};
 			var ShopOrderRequiredMobilePhone = {{$.Data.ShopOrderRequiredMobilePhone}};
 			var ShopOrderRequiredEmailAddress = {{$.Data.ShopOrderRequiredEmailAddress}};
 			var ShopOrderRequiredDelivery = {{$.Data.ShopOrderRequiredDelivery}};
@@ -53,7 +53,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderErrorSomethingWrong = 'We cannot process your order, something is wrong...';
 			var ShopOrderEmptyLastName = 'Please enter your last name';
 			var ShopOrderEmptyFirstName = 'Please enter your first name';
-			var ShopOrderEmptySecondName = 'Please enter your second name';
+			var ShopOrderEmptyMiddleName = 'Please enter your middle name';
 			var ShopOrderEmptyMobilePhone = 'Please enter your mobile phone';
 			var ShopOrderEmptyEmailAddress = 'Please enter your email address';
 			var ShopOrderEmptyDelivery = 'Please enter delivery comment';

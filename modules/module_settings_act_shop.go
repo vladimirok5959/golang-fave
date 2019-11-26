@@ -16,7 +16,7 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 
 		pf_require_last_name := wrap.R.FormValue("require-last-name")
 		pf_require_first_name := wrap.R.FormValue("require-first-name")
-		pf_require_second_name := wrap.R.FormValue("require-second-name")
+		pf_require_middle_name := wrap.R.FormValue("require-middle-name")
 		pf_require_mobile_phone := wrap.R.FormValue("require-mobile-phone")
 		pf_require_email_address := wrap.R.FormValue("require-email-address")
 		pf_require_delivery := wrap.R.FormValue("require-delivery")
@@ -56,8 +56,8 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 		if pf_require_first_name == "" {
 			pf_require_first_name = "0"
 		}
-		if pf_require_second_name == "" {
-			pf_require_second_name = "0"
+		if pf_require_middle_name == "" {
+			pf_require_middle_name = "0"
 		}
 		if pf_require_mobile_phone == "" {
 			pf_require_mobile_phone = "0"
@@ -77,7 +77,7 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 
 		(*wrap.Config).Shop.Orders.RequiredFields.LastName = utils.StrToInt(pf_require_last_name)
 		(*wrap.Config).Shop.Orders.RequiredFields.FirstName = utils.StrToInt(pf_require_first_name)
-		(*wrap.Config).Shop.Orders.RequiredFields.SecondName = utils.StrToInt(pf_require_second_name)
+		(*wrap.Config).Shop.Orders.RequiredFields.MiddleName = utils.StrToInt(pf_require_middle_name)
 		(*wrap.Config).Shop.Orders.RequiredFields.MobilePhone = utils.StrToInt(pf_require_mobile_phone)
 		(*wrap.Config).Shop.Orders.RequiredFields.EmailAddress = utils.StrToInt(pf_require_email_address)
 		(*wrap.Config).Shop.Orders.RequiredFields.Delivery = utils.StrToInt(pf_require_delivery)

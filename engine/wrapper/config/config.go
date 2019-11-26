@@ -35,7 +35,7 @@ type Config struct {
 			RequiredFields struct {
 				LastName     int
 				FirstName    int
-				SecondName   int
+				MiddleName   int
 				MobilePhone  int
 				EmailAddress int
 				Delivery     int
@@ -99,7 +99,7 @@ func (this *Config) configDefault() {
 
 	this.Shop.Orders.RequiredFields.LastName = 1
 	this.Shop.Orders.RequiredFields.FirstName = 1
-	this.Shop.Orders.RequiredFields.SecondName = 0
+	this.Shop.Orders.RequiredFields.MiddleName = 0
 	this.Shop.Orders.RequiredFields.MobilePhone = 0
 	this.Shop.Orders.RequiredFields.EmailAddress = 1
 	this.Shop.Orders.RequiredFields.Delivery = 0

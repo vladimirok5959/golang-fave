@@ -555,9 +555,9 @@ func (this *Modules) RegisterModule_Settings() *Module {
 				},
 				{
 					Kind:    builder.DFKCheckBox,
-					Caption: "Second Name",
-					Name:    "require-second-name",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.SecondName),
+					Caption: "Middle Name",
+					Name:    "require-middle-name",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.RequiredFields.MiddleName),
 				},
 				{
 					Kind:    builder.DFKCheckBox,

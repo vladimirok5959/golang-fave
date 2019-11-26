@@ -18,7 +18,7 @@ func Migrate_000000015(db *sqlw.DB, host string) error {
 			currency_symbol varchar(5) NOT NULL COMMENT 'Currency symbol',
 			client_last_name varchar(64) NOT NULL COMMENT 'Client last name',
 			client_first_name varchar(64) NOT NULL COMMENT 'Client first name',
-			client_second_name varchar(64) NOT NULL DEFAULT '' COMMENT 'Client second name',
+			client_middle_name varchar(64) NOT NULL DEFAULT '' COMMENT 'Client middle name',
 			client_phone varchar(20) NOT NULL DEFAULT '' COMMENT 'Client phone',
 			client_email varchar(64) NOT NULL COMMENT 'Client email',
 			client_delivery_comment text NOT NULL COMMENT 'Client delivery comment',

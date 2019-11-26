@@ -975,7 +975,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 
 							last_name := html.EscapeString((*values)[8])
 							first_name := html.EscapeString((*values)[9])
-							second_name := html.EscapeString((*values)[10])
+							middle_name := html.EscapeString((*values)[10])
 
 							phone := html.EscapeString((*values)[1])
 							email := html.EscapeString((*values)[12])
@@ -989,8 +989,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							if first_name != "" {
 								name += " " + first_name
 							}
-							if second_name != "" {
-								name += " " + second_name
+							if middle_name != "" {
+								name += " " + middle_name
 							}
 							name = `<a href="` + link + `">` + order_id + strings.TrimSpace(name) + `</a>`
 
@@ -1010,7 +1010,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						DBField: "client_first_name",
 					},
 					{
-						DBField: "client_second_name",
+						DBField: "client_middle_name",
 					},
 					{
 						DBField:     "create_datetime",

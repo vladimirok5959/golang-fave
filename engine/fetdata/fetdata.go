@@ -221,8 +221,8 @@ func (this *FERData) ShopOrderRequiredFirstName() bool {
 	return (*this.wrap.Config).Shop.Orders.RequiredFields.FirstName != 0
 }
 
-func (this *FERData) ShopOrderRequiredSecondName() bool {
-	return (*this.wrap.Config).Shop.Orders.RequiredFields.SecondName != 0
+func (this *FERData) ShopOrderRequiredMiddleName() bool {
+	return (*this.wrap.Config).Shop.Orders.RequiredFields.MiddleName != 0
 }
 
 func (this *FERData) ShopOrderRequiredMobilePhone() bool {

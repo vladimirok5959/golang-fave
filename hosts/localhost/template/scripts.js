@@ -225,14 +225,14 @@
 													<div class="form-group"> \
 														<div class="row"> \
 															<div class="col-md-4"> \
-																<label for="lbl_client_second_name">' + ShopOrderLabelSecondName + '</label> \
+																<label for="lbl_client_middle_name">' + ShopOrderLabelMiddleName + '</label> \
 															</div> \
 															<div class="col-md-8"> \
 																<div> \
-																	<input class="form-control" type="text" id="lbl_client_second_name" name="client_second_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+																	<input class="form-control" type="text" id="lbl_client_middle_name" name="client_middle_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
 																</div> \
 																<div class="input-error-msg" style="display:none;"> \
-																	<small>' + ShopOrderEmptySecondName + '</small> \
+																	<small>' + ShopOrderEmptyMiddleName + '</small> \
 																</div> \
 															</div> \
 														</div> \
@@ -448,10 +448,10 @@
 						}
 						ValidateError = true;
 					}
-					if(ShopOrderRequiredSecondName && $.trim(OrderForm.find('input[name=client_second_name]').val()) == '') {
-						OrderForm.find('input[name=client_second_name]').parent().parent().find('.input-error-msg').css('display', 'inline');
+					if(ShopOrderRequiredMiddleName && $.trim(OrderForm.find('input[name=client_middle_name]').val()) == '') {
+						OrderForm.find('input[name=client_middle_name]').parent().parent().find('.input-error-msg').css('display', 'inline');
 						if(!ValidateError) {
-							setTimeout(function() { OrderForm.find('input[name=client_second_name]').first().focus(); }, 200);
+							setTimeout(function() { OrderForm.find('input[name=client_middle_name]').first().focus(); }, 200);
 						}
 						ValidateError = true;
 					}

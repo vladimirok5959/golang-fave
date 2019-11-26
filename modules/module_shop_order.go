@@ -27,7 +27,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 
 		pf_client_last_name := wrap.R.FormValue("client_last_name")
 		pf_client_first_name := wrap.R.FormValue("client_first_name")
-		pf_client_second_name := wrap.R.FormValue("client_second_name")
+		pf_client_middle_name := wrap.R.FormValue("client_middle_name")
 		pf_client_phone := wrap.R.FormValue("client_phone")
 		pf_client_email := wrap.R.FormValue("client_email")
 		pf_client_delivery_comment := wrap.R.FormValue("client_delivery_comment")
@@ -45,9 +45,9 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 				return
 			}
 		}
-		if (*wrap.Config).Shop.Orders.RequiredFields.SecondName != 0 {
-			if strings.TrimSpace(pf_client_second_name) == "" {
-				wrap.Write(`{"error": true, "field": "client_second_name", "variable": "ShopOrderEmptySecondName"}`)
+		if (*wrap.Config).Shop.Orders.RequiredFields.MiddleName != 0 {
+			if strings.TrimSpace(pf_client_middle_name) == "" {
+				wrap.Write(`{"error": true, "field": "client_middle_name", "variable": "ShopOrderEmptyMiddleName"}`)
 				return
 			}
 		}
@@ -98,7 +98,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 					currency_symbol = ?,
 					client_last_name = ?,
 					client_first_name = ?,
-					client_second_name = ?,
+					client_middle_name = ?,
 					client_phone = ?,
 					client_email = ?,
 					client_delivery_comment = ?,
@@ -114,7 +114,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 				bdata.Currency.Symbol,
 				pf_client_last_name,
 				pf_client_first_name,
-				pf_client_second_name,
+				pf_client_middle_name,
 				pf_client_phone,
 				pf_client_email,
 				pf_client_delivery_comment,
