@@ -59,6 +59,8 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderEmptyEmailAddress = 'Please enter your email address';
 			var ShopOrderEmptyDelivery = 'Please enter delivery comment';
 			var ShopOrderEmptyComment = 'Please enter order comment';
+			var ShopOrderNotCorrectMobilePhone = 'For example: +15417543010';
+			var ShopOrderNotCorrectEmailAddress = 'For example: example@gmail.com';
 			var ShopOrderSuccess = '<b>Thank you for your order! We will call you shortly</b>';
 		</script>
 	</head>
