@@ -14,6 +14,11 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 		Mount:     "shop-order",
 		WantAdmin: false,
 	}, func(wrap *wrapper.Wrapper) {
+		if (*wrap.Config).Shop.Orders.Enabled <= 0 {
+			wrap.Write(`{"error": true, "variable": "ShopOrderErrorDisabled"}`)
+			return
+		}
+
 		if wrap.ShopBasket.ProductsCount(&basket.SBParam{
 			R:         wrap.R,
 			DB:        wrap.DB,

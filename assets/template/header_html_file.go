@@ -49,6 +49,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderRequiredComment = {{$.Data.ShopOrderRequiredComment}};
 
 			var ShopOrderError = 'Error!';
+			var ShopOrderErrorDisabled = 'Sorry, we are currently not accept new orders, please try little later';
 			var ShopOrderErrorBasketEmpty = 'Your basket is empty';
 			var ShopOrderErrorSomethingWrong = 'We cannot process your order, something is wrong...';
 			var ShopOrderEmptyLastName = 'Please enter your last name';
@@ -58,7 +59,7 @@ var VarHeaderHtmlFile = []byte(`<!doctype html>
 			var ShopOrderEmptyEmailAddress = 'Please enter your email address';
 			var ShopOrderEmptyDelivery = 'Please enter delivery comment';
 			var ShopOrderEmptyComment = 'Please enter order comment';
-			var ShopOrderSuccess = '<b>Thank you for your order! We will call you shortly!</b>';
+			var ShopOrderSuccess = '<b>Thank you for your order! We will call you shortly</b>';
 		</script>
 	</head>
 	<body id="body" class="fixed-top-bar">
