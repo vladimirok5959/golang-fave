@@ -570,6 +570,13 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					},
 				},
 				{
+					Kind:    builder.DFKText,
+					Caption: "New order notify email",
+					Name:    "new-order-notify-email",
+					Value:   (*wrap.Config).Shop.Orders.NotifyEmail,
+					Hint:    "Example: example@gmail.com",
+				},
+				{
 					Kind:   builder.DFKSubmit,
 					Value:  "Save",
 					Target: "add-edit-button",

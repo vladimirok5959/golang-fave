@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"strings"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -21,6 +23,8 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 		pf_require_email_address := wrap.R.FormValue("require-email-address")
 		pf_require_delivery := wrap.R.FormValue("require-delivery")
 		pf_require_comment := wrap.R.FormValue("require-comment")
+
+		pf_new_order_notify_email := strings.TrimSpace(wrap.R.FormValue("new-order-notify-email"))
 
 		if !utils.IsNumeric(pf_price_fomat) {
 			wrap.MsgError(`Must be integer number`)
@@ -82,6 +86,12 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 		(*wrap.Config).Shop.Orders.RequiredFields.EmailAddress = utils.StrToInt(pf_require_email_address)
 		(*wrap.Config).Shop.Orders.RequiredFields.Delivery = utils.StrToInt(pf_require_delivery)
 		(*wrap.Config).Shop.Orders.RequiredFields.Comment = utils.StrToInt(pf_require_comment)
+
+		if pf_new_order_notify_email != "" {
+			if utils.IsValidEmail(pf_new_order_notify_email) {
+				(*wrap.Config).Shop.Orders.NotifyEmail = pf_new_order_notify_email
+			}
+		}
 
 		if err := wrap.ConfigSave(); err != nil {
 			wrap.MsgError(err.Error())
