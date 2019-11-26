@@ -507,7 +507,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						price_round_list += `>Round to floor</option>`
 						price_round_list += `</select>`
 
-						return `<div class="form-group n3">` +
+						return `<div class="form-group n2">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label for="lbl_price-fomat">Price format</label>` +
@@ -555,7 +555,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 						checkboxes += make_checkbox("require-delivery", "Delivery", (*wrap.Config).Shop.Orders.RequiredFields.Delivery)
 						checkboxes += make_checkbox("require-comment", "Comment", (*wrap.Config).Shop.Orders.RequiredFields.Comment)
 
-						return `<div class="form-group n3">` +
+						return `<div class="form-group n4">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
 							`<label for="lbl_price-fomat">Order require fields</label>` +
