@@ -190,102 +190,108 @@
 										<hr class="mb-4"> \
 										<form class="data-form" action="/" method="post" autocomplete="off"> \
 											<div class="hidden"><input type="hidden" name="action" value="shop-order"></div> \
-											<div class="form-group"> \
-												<div class="row"> \
-													<div class="col-md-3"> \
-														<label for="lbl_client_last_name">' + ShopOrderLabelLastName + '</label> \
-													</div> \
-													<div class="col-md-9"> \
-														<div> \
-															<input class="form-control" type="text" id="lbl_client_last_name" name="client_last_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+											<div class="row"> \
+												<div class="col-md-6"> \
+													<div class="form-group"> \
+														<div class="row"> \
+															<div class="col-md-4"> \
+																<label for="lbl_client_last_name">' + ShopOrderLabelLastName + '</label> \
+															</div> \
+															<div class="col-md-8"> \
+																<div> \
+																	<input class="form-control" type="text" id="lbl_client_last_name" name="client_last_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+																</div> \
+																<div class="input-error-msg" style="display:none;"> \
+																	<small>' + ShopOrderEmptyLastName + '</small> \
+																</div> \
+															</div> \
 														</div> \
-														<div class="input-error-msg" style="display:none;"> \
-															<small>' + ShopOrderEmptyLastName + '</small> \
+													</div> \
+													<div class="form-group"> \
+														<div class="row"> \
+															<div class="col-md-4"> \
+																<label for="lbl_client_first_name">' + ShopOrderLabelFirstName + '</label> \
+															</div> \
+															<div class="col-md-8"> \
+																<div> \
+																	<input class="form-control" type="text" id="lbl_client_first_name" name="client_first_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+																</div> \
+																<div class="input-error-msg" style="display:none;"> \
+																	<small>' + ShopOrderEmptyFirstName + '</small> \
+																</div> \
+															</div> \
+														</div> \
+													</div> \
+													<div class="form-group"> \
+														<div class="row"> \
+															<div class="col-md-4"> \
+																<label for="lbl_client_second_name">' + ShopOrderLabelSecondName + '</label> \
+															</div> \
+															<div class="col-md-8"> \
+																<div> \
+																	<input class="form-control" type="text" id="lbl_client_second_name" name="client_second_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+																</div> \
+																<div class="input-error-msg" style="display:none;"> \
+																	<small>' + ShopOrderEmptySecondName + '</small> \
+																</div> \
+															</div> \
+														</div> \
+													</div> \
+												</div> \
+												<div class="col-md-6"> \
+													<div class="form-group"> \
+														<div class="row"> \
+															<div class="col-md-4"> \
+																<label for="lbl_client_phone">' + ShopOrderLabelMobilePhone + '</label> \
+															</div> \
+															<div class="col-md-8"> \
+																<div> \
+																	<input class="form-control" type="text" id="lbl_client_phone" name="client_phone" minlength="1" maxlength="20" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+																</div> \
+																<div class="input-error-msg" style="display:none;"> \
+																	<small>' + ShopOrderEmptyMobilePhone + '</small> \
+																</div> \
+															</div> \
+														</div> \
+													</div> \
+													<div class="form-group"> \
+														<div class="row"> \
+															<div class="col-md-4"> \
+																<label for="lbl_client_email">' + ShopOrderLabelEmailAddress + '</label> \
+															</div> \
+															<div class="col-md-8"> \
+																<div> \
+																	<input class="form-control" type="text" id="lbl_client_email" name="client_email" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+																</div> \
+																<div class="input-error-msg" style="display:none;"> \
+																	<small>' + ShopOrderEmptyEmailAddress + '</small> \
+																</div> \
+															</div> \
+														</div> \
+													</div> \
+													<div class="form-group"> \
+														<div class="row"> \
+															<div class="col-md-4"> \
+																<label for="lbl_client_delivery_comment">' + ShopOrderLabelDelivery + '</label> \
+															</div> \
+															<div class="col-md-8"> \
+																<div> \
+																	<input class="form-control" type="text" id="lbl_client_delivery_comment" name="client_delivery_comment" minlength="1" maxlength="255" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
+																</div> \
+																<div class="input-error-msg" style="display:none;"> \
+																	<small>' + ShopOrderEmptyDelivery + '</small> \
+																</div> \
+															</div> \
 														</div> \
 													</div> \
 												</div> \
 											</div> \
 											<div class="form-group"> \
 												<div class="row"> \
-													<div class="col-md-3"> \
-														<label for="lbl_client_first_name">' + ShopOrderLabelFirstName + '</label> \
-													</div> \
-													<div class="col-md-9"> \
-														<div> \
-															<input class="form-control" type="text" id="lbl_client_first_name" name="client_first_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
-														</div> \
-														<div class="input-error-msg" style="display:none;"> \
-															<small>' + ShopOrderEmptyFirstName + '</small> \
-														</div> \
-													</div> \
-												</div> \
-											</div> \
-											<div class="form-group"> \
-												<div class="row"> \
-													<div class="col-md-3"> \
-														<label for="lbl_client_second_name">' + ShopOrderLabelSecondName + '</label> \
-													</div> \
-													<div class="col-md-9"> \
-														<div> \
-															<input class="form-control" type="text" id="lbl_client_second_name" name="client_second_name" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
-														</div> \
-														<div class="input-error-msg" style="display:none;"> \
-															<small>' + ShopOrderEmptySecondName + '</small> \
-														</div> \
-													</div> \
-												</div> \
-											</div> \
-											<div class="form-group"> \
-												<div class="row"> \
-													<div class="col-md-3"> \
-														<label for="lbl_client_phone">' + ShopOrderLabelMobilePhone + '</label> \
-													</div> \
-													<div class="col-md-9"> \
-														<div> \
-															<input class="form-control" type="text" id="lbl_client_phone" name="client_phone" minlength="1" maxlength="20" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
-														</div> \
-														<div class="input-error-msg" style="display:none;"> \
-															<small>' + ShopOrderEmptyMobilePhone + '</small> \
-														</div> \
-													</div> \
-												</div> \
-											</div> \
-											<div class="form-group"> \
-												<div class="row"> \
-													<div class="col-md-3"> \
-														<label for="lbl_client_email">' + ShopOrderLabelEmailAddress + '</label> \
-													</div> \
-													<div class="col-md-9"> \
-														<div> \
-															<input class="form-control" type="text" id="lbl_client_email" name="client_email" minlength="1" maxlength="64" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
-														</div> \
-														<div class="input-error-msg" style="display:none;"> \
-															<small>' + ShopOrderEmptyEmailAddress + '</small> \
-														</div> \
-													</div> \
-												</div> \
-											</div> \
-											<div class="form-group"> \
-												<div class="row"> \
-													<div class="col-md-3"> \
-														<label for="lbl_client_delivery_comment">' + ShopOrderLabelDelivery + '</label> \
-													</div> \
-													<div class="col-md-9"> \
-														<div> \
-															<input class="form-control" type="text" id="lbl_client_delivery_comment" name="client_delivery_comment" minlength="1" maxlength="255" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"> \
-														</div> \
-														<div class="input-error-msg" style="display:none;"> \
-															<small>' + ShopOrderEmptyDelivery + '</small> \
-														</div> \
-													</div> \
-												</div> \
-											</div> \
-											<div class="form-group"> \
-												<div class="row"> \
-													<div class="col-md-3"> \
+													<div class="col-md-12 d-table-cell d-md-none"> \
 														<label for="lbl_client_order_comment">' + ShopOrderLabelComment + '</label> \
 													</div> \
-													<div class="col-md-9"> \
+													<div class="col-md-12"> \
 														<div> \
 															<textarea class="form-control" id="lbl_client_order_comment" name="client_order_comment" autocomplete="off" onkeydown="$(this).parent().parent().find(\'.input-error-msg\').css(\'display\', \'none\');"></textarea> \
 														</div> \
