@@ -2001,6 +2001,75 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				</tbody>
 			</table>`
 
+			content += `<table id="cp-table-shop_products" class="table data-table table-striped table-bordered table-hover mt-3 table_shop_products">
+				<thead>
+					<tr>
+						<th scope="col" class="col_name">Product</th>
+						<th scope="col" class="col_price">Price</th>
+						<th scope="col" class="col_quantity">Quantity</th>
+						<th scope="col" class="col_total">Total</th>
+					</tr>
+				</thead>
+				<tbody>
+			`
+			rows, err := wrap.DB.Query(
+				`SELECT
+					shop_order_products.product_id,
+					shop_products.name,
+					shop_products.alias,
+					shop_order_products.price,
+					shop_order_products.quantity,
+					(shop_order_products.price * shop_order_products.quantity) as total
+				FROM
+					shop_order_products
+					LEFT JOIN shop_products ON shop_products.id = shop_order_products.product_id
+				WHERE
+					shop_order_products.order_id = ?
+				;`,
+				curr_order_id,
+			)
+			if err == nil {
+				defer rows.Close()
+				var curr_product_id int
+				var curr_product_name string
+				var curr_product_alias string
+				var curr_product_price float64
+				var curr_product_quantity int
+				var curr_product_total float64
+
+				for rows.Next() {
+					err = rows.Scan(
+						&curr_product_id,
+						&curr_product_name,
+						&curr_product_alias,
+						&curr_product_price,
+						&curr_product_quantity,
+						&curr_product_total,
+					)
+					if *wrap.LogCpError(&err) == nil {
+						content += `<tr>
+							<td class="col_name">
+								<div><a href="/cp/shop/modify/` + utils.IntToStr(curr_product_id) + `/">` + html.EscapeString(curr_product_name) + ` ` + utils.IntToStr(curr_product_id) + `</a></div>
+								<div><small><a href="/shop/` + html.EscapeString(curr_product_alias) + `/" target="_blank">/shop/` + html.EscapeString(curr_product_alias) + `/</a></small></div>
+							</td>
+							<td class="col_price">
+								<div>` + utils.Float64ToStr(curr_product_price) + `</div>
+								<div><small>` + html.EscapeString(curr_order_currency_code) + `</small></div>
+							</td>
+							<td class="col_quantity">
+								` + utils.IntToStr(curr_product_quantity) + `
+							</td>
+							<td class="col_total">
+								<div>` + utils.Float64ToStr(curr_product_total) + `</div>
+								<div><small>` + html.EscapeString(curr_order_currency_code) + `</small></div>
+							</td>
+						</tr>`
+					}
+				}
+			}
+			content += `</tbody>
+			</table>`
+
 			// sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
 		}
 		return this.getSidebarModules(wrap), content, sidebar
