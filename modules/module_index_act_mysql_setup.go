@@ -290,7 +290,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				client_email varchar(64) NOT NULL COMMENT 'Client email',
 				client_delivery_comment text NOT NULL COMMENT 'Client delivery comment',
 				client_order_comment text NOT NULL COMMENT 'Client order comment',
-				status int(1) NOT NULL COMMENT 'new/confirmed/canceled/inprogress/completed',
+				status int(1) NOT NULL COMMENT 'new/confirmed/inprogress/canceled/completed',
 				PRIMARY KEY (id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 		); err != nil {

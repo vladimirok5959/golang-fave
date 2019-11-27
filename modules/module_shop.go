@@ -319,9 +319,9 @@ func (this *Modules) shop_GetOrderStatus(status int) string {
 	} else if status == 1 {
 		return `<span style="color:#28a745;">Confirmed</span>`
 	} else if status == 2 {
-		return `<span style="color:#d9534f;">Canceled</span>`
-	} else if status == 3 {
 		return `<span style="color:#f0ad4e;">In progress</span>`
+	} else if status == 3 {
+		return `<span style="color:#d9534f;">Canceled</span>`
 	} else if status == 4 {
 		return `<span style="color:#6c757d;">Completed</span>`
 	}
