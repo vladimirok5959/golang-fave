@@ -2070,7 +2070,33 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			content += `</tbody>
 			</table>`
 
-			// sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+			// Delivery
+			content += `<div class="card mt-3">
+				<div class="card-header"><b>Delivery</b></div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">`
+			if strings.TrimSpace(curr_order_client_delivery_comment) != "" {
+				content += html.EscapeString(curr_order_client_delivery_comment)
+			} else {
+				content += `NO SET`
+			}
+			content += `</li>
+				</ul>
+			</div>`
+
+			// Comment
+			content += `<div class="card mt-3">
+				<div class="card-header"><b>Comment</b></div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">`
+			if strings.TrimSpace(curr_order_client_order_comment) != "" {
+				content += html.EscapeString(curr_order_client_order_comment)
+			} else {
+				content += `NO SET`
+			}
+			content += `</li>
+				</ul>
+			</div>`
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})
