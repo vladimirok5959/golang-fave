@@ -1080,6 +1080,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 									order_id
 							) as shop_order_total ON shop_order_total.order_id = shop_orders.id
 						ORDER BY
+							shop_orders.status ASC,
 							shop_orders.id DESC
 						LIMIT ?, ?;`,
 						limit_offset,
