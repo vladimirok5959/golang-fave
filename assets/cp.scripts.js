@@ -7747,7 +7747,7 @@
 						url: '/cp/',
 						data: {
 							action: 'shop-order-set-status',
-							order_id: id,
+							id: id,
 							status: status,
 						}
 					}).done(function(data) {
