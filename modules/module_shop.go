@@ -2005,9 +2005,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				<thead>
 					<tr>
 						<th scope="col" class="col_name">Product</th>
-						<th scope="col" class="col_price">Price</th>
+						<th scope="col" class="col_price d-none d-md-table-cell">Price</th>
 						<th scope="col" class="col_quantity">Quantity</th>
-						<th scope="col" class="col_total">Total</th>
+						<th scope="col" class="col_total d-none d-md-table-cell">Total</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -2052,14 +2052,14 @@ func (this *Modules) RegisterModule_Shop() *Module {
 								<div><a href="/cp/shop/modify/` + utils.IntToStr(curr_product_id) + `/">` + html.EscapeString(curr_product_name) + ` ` + utils.IntToStr(curr_product_id) + `</a></div>
 								<div><small><a href="/shop/` + html.EscapeString(curr_product_alias) + `/" target="_blank">/shop/` + html.EscapeString(curr_product_alias) + `/</a></small></div>
 							</td>
-							<td class="col_price">
+							<td class="col_price d-none d-md-table-cell">
 								<div>` + utils.Float64ToStr(curr_product_price) + `</div>
 								<div><small>` + html.EscapeString(curr_order_currency_code) + `</small></div>
 							</td>
 							<td class="col_quantity">
 								` + utils.IntToStr(curr_product_quantity) + `
 							</td>
-							<td class="col_total">
+							<td class="col_total d-none d-md-table-cell">
 								<div>` + utils.Float64ToStr(curr_product_total) + `</div>
 								<div><small>` + html.EscapeString(curr_order_currency_code) + `</small></div>
 							</td>

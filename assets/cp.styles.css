@@ -839,6 +839,14 @@ ul.pagination {
 	text-align: right;
 }
 
+.data-table.table_shop_products .col_quantity {
+	width: 8rem;
+}
+
+.data-table.table_shop_products .col_total {
+	width: 8rem;
+}
+
 /* Admin table: table_shop_cats */
 .data-table.table_shop_cats .col_action {
 	width: 6rem;
