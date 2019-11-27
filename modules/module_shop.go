@@ -1855,6 +1855,153 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			} else {
 				sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
 			}
+		} else if wrap.CurrSubModule == "orders-modify" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Orders", Link: "/cp/" + wrap.CurrModule + "/orders/"},
+				{Name: "Modify order"},
+			})
+
+			if len(wrap.UrlArgs) != 3 {
+				return "", "", ""
+			}
+			if !utils.IsNumeric(wrap.UrlArgs[2]) {
+				return "", "", ""
+			}
+
+			var curr_order_id int
+			var curr_order_client_phone string
+			var curr_order_update_datetime string
+			var curr_order_currency_id int
+			var curr_order_currency_name string
+			var curr_order_currency_coefficient float64
+			var curr_order_currency_code string
+			var curr_order_currency_symbol string
+			var curr_order_client_last_name string
+			var curr_order_client_first_name string
+			var curr_order_client_middle_name string
+			var curr_order_create_datetime int
+			var curr_order_client_email string
+			var curr_order_client_delivery_comment string
+			var curr_order_client_order_comment string
+			var curr_order_status int
+			var curr_order_total float64
+
+			err := wrap.DB.QueryRow(`
+				SELECT
+					shop_orders.id,
+					shop_orders.client_phone,
+					shop_orders.update_datetime,
+					shop_orders.currency_id,
+					shop_orders.currency_name,
+					shop_orders.currency_coefficient,
+					shop_orders.currency_code,
+					shop_orders.currency_symbol,
+					shop_orders.client_last_name,
+					shop_orders.client_first_name,
+					shop_orders.client_middle_name,
+					UNIX_TIMESTAMP(shop_orders.create_datetime) as create_datetime,
+					shop_orders.client_email,
+					shop_orders.client_delivery_comment,
+					shop_orders.client_order_comment,
+					shop_orders.status,
+					shop_order_total.total
+				FROM
+					shop_orders
+					LEFT JOIN (
+						SELECT
+							order_id,
+							SUM(price * quantity) as total
+						FROM
+							shop_order_products
+						GROUP BY
+							order_id
+					) as shop_order_total ON shop_order_total.order_id = shop_orders.id
+				WHERE
+					shop_orders.id = ?
+				LIMIT 1;`,
+				utils.StrToInt(wrap.UrlArgs[2]),
+			).Scan(
+				&curr_order_id,
+				&curr_order_client_phone,
+				&curr_order_update_datetime,
+				&curr_order_currency_id,
+				&curr_order_currency_name,
+				&curr_order_currency_coefficient,
+				&curr_order_currency_code,
+				&curr_order_currency_symbol,
+				&curr_order_client_last_name,
+				&curr_order_client_first_name,
+				&curr_order_client_middle_name,
+				&curr_order_create_datetime,
+				&curr_order_client_email,
+				&curr_order_client_delivery_comment,
+				&curr_order_client_order_comment,
+				&curr_order_status,
+				&curr_order_total,
+			)
+			if *wrap.LogCpError(&err) != nil {
+				return "", "", ""
+			}
+
+			last_name := html.EscapeString(curr_order_client_last_name)
+			first_name := html.EscapeString(curr_order_client_first_name)
+			middle_name := html.EscapeString(curr_order_client_middle_name)
+
+			phone := html.EscapeString(curr_order_client_phone)
+			email := html.EscapeString(curr_order_client_email)
+
+			order_id := `<span class="d-inline d-sm-none">#` + utils.IntToStr(curr_order_id) + `. </span>`
+
+			name := ""
+			if last_name != "" {
+				name += " " + last_name
+			}
+			if first_name != "" {
+				name += " " + first_name
+			}
+			if middle_name != "" {
+				name += " " + middle_name
+			}
+			name = order_id + strings.TrimSpace(name)
+
+			contact := ""
+			if email != "" {
+				contact += " " + email
+			}
+			if phone != "" {
+				contact += " (" + phone + ")"
+			}
+			contact = strings.TrimSpace(contact)
+
+			content += `<table id="cp-table-shop_orders" class="table data-table table-striped table-bordered table-hover table_shop_orders">
+				<thead>
+					<tr>
+						<th scope="col" class="col_id d-none d-lg-table-cell">Order #</th>
+						<th scope="col" class="col_client_last_name">Client / Contact</th>
+						<th scope="col" class="col_create_datetime d-none d-lg-table-cell">Date / Time</th>
+						<th scope="col" class="col_client_email">Status / Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="col_id d-none d-lg-table-cell">` + utils.IntToStr(curr_order_id) + `</td>
+						<td class="col_client_last_name">
+							<div>` + name + `</div>
+							<div><small>` + contact + `</small></div>
+						</td>
+						<td class="col_create_datetime d-none d-lg-table-cell">
+							<div>` + utils.UnixTimestampToFormat(int64(curr_order_create_datetime), "02.01.2006") + `</div>
+							<div><small>` + utils.UnixTimestampToFormat(int64(curr_order_create_datetime), "15:04:05") + `</small></div>
+						</td>
+						<td class="col_client_email">
+							<div>` + this.shop_GetOrderStatus(curr_order_status) + `</div>
+							<div><small>` + utils.Float64ToStr(curr_order_total) + " " + html.EscapeString(curr_order_currency_code) + `</small></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>`
+
+			// sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})
