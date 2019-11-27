@@ -64,7 +64,7 @@ func IsFloat(str string) bool {
 }
 
 func IsValidMobile(str string) bool {
-	regexpeChars := regexp.MustCompile(`^\+([1-9]{1})([0-9]{1})([0-9]{3})([0-9]{7})$`)
+	regexpeChars := regexp.MustCompile(`^\+([0-9]{7,18})$`)
 	return regexpeChars.MatchString(str)
 }
 
