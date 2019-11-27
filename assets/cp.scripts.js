@@ -7739,6 +7739,26 @@
 					AjaxFail(xhr.responseText, status, error);
 				});
 			},
+
+			ShopSetOrderStatus: function(object, id, status, message) {
+				if(confirm(message)) {
+					$.ajax({
+						type: "POST",
+						url: '/cp/',
+						data: {
+							action: 'shop-order-set-status',
+							order_id: id,
+							status: status,
+						}
+					}).done(function(data) {
+						if(IsDebugMode()) console.log('done', data);
+						AjaxDone(data);
+					}).fail(function(xhr, status, error) {
+						if(IsDebugMode()) console.log('fail', xhr, status, error);
+						AjaxFail(xhr.responseText, status, error);
+					});
+				}
+			},
 		};
 	}(window, $);
 

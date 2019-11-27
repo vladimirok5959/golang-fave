@@ -1988,6 +1988,11 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						<td class="col_client_last_name">
 							<div>` + name + `</div>
 							<div><small>` + contact + `</small></div>
+							<div>
+								<small>
+									<a href="javascript:fave.ShopSetOrderStatus(this,'` + utils.IntToStr(curr_order_id) + `','0','Are you sure want to change order status?');">` + this.shop_GetOrderStatus(0) + `</a> | <a href="javascript:fave.ShopSetOrderStatus(this,'` + utils.IntToStr(curr_order_id) + `','1','Are you sure want to change order status?');">` + this.shop_GetOrderStatus(1) + `</a> | <a href="javascript:fave.ShopSetOrderStatus(this,'` + utils.IntToStr(curr_order_id) + `','2','Are you sure want to change order status?');">` + this.shop_GetOrderStatus(2) + `</a> | <a href="javascript:fave.ShopSetOrderStatus(this,'` + utils.IntToStr(curr_order_id) + `','3','Are you sure want to change order status?');">` + this.shop_GetOrderStatus(3) + `</a> | <a href="javascript:fave.ShopSetOrderStatus(this,'` + utils.IntToStr(curr_order_id) + `','4','Are you sure want to change order status?');">` + this.shop_GetOrderStatus(4) + `</a>
+								</small>
+							</div>
 						</td>
 						<td class="col_create_datetime d-none d-lg-table-cell">
 							<div>` + utils.UnixTimestampToFormat(int64(curr_order_create_datetime), "02.01.2006") + `</div>
