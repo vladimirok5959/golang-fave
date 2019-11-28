@@ -642,10 +642,14 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + ` ` + html.EscapeString((*values)[0]) + `</a>`
 							alias := html.EscapeString((*values)[2])
 							parent := ``
+							outofstock := ``
 							if (*values)[7] != "" {
 								parent = `<div class="parent">&uarr;<small><a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[7] + `/">` + html.EscapeString((*values)[8]) + ` ` + (*values)[7] + `</a></small></div>`
 							}
-							return `<div>` + name + `</div><div><small>/shop/` + alias + `/</small></div>` + parent
+							if utils.StrToInt((*values)[10]) <= 0 {
+								outofstock = `<div><span class="badge badge-primary">Out of stock</span></div>`
+							}
+							return `<div>` + name + `</div><div><small>/shop/` + alias + `/</small></div>` + parent + outofstock
 						},
 					},
 					{
@@ -660,10 +664,12 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						Classes:     "d-none d-md-table-cell",
 						CallBack: func(values *[]string) string {
 							price_old := ""
+							peice_styles := ""
 							if utils.StrToFloat64((*values)[9]) > 0 {
 								price_old = `<div><strike>` + utils.Float64ToStr(utils.StrToFloat64((*values)[9])) + `</strike></div>`
+								peice_styles = ` style="color:#fb3f4c;"`
 							}
-							return price_old + `<div>` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
+							return price_old + `<div` + peice_styles + `>` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
 								`<div><small>` + currencies[utils.StrToInt((*values)[3])] + `</small></div>`
 						},
 					},
@@ -695,6 +701,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					},
 					{
 						DBField: "price_old",
+					},
+					{
+						DBField: "quantity",
 					},
 				},
 				func(values *[]string) string {
@@ -738,7 +747,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							shop_products.active,
 							shop_products.parent_id,
 							spp.name AS pname,
-							shop_products.price_old
+							shop_products.price_old,
+							shop_products.quantity
 						FROM
 							shop_products
 							LEFT JOIN shop_products AS spp ON spp.id = shop_products.parent_id

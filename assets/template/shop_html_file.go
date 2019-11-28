@@ -28,9 +28,10 @@ var VarShopHtmlFile = []byte(`{{template "header.html" .}}
 						<div class="card-text">{{.Briefly}}</div>
 					</div>
 					<div class="card-footer">
+						{{if le .Quantity 0}}<span class="badge badge-primary">Out of stock</span>{{end}}
 						<a href="{{.Permalink}}" class="btn btn-success">View</a>
-						<span class="price">{{.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</span>
-						{{if le .Quantity 0}}<br><span class="badge badge-primary">Out of stock</span>{{end}}
+						<span class="price{{if gt .PriceOld 0.00}} price_red{{end}}">{{.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</span>
+						{{if gt .PriceOld 0.00}}<span class="price price_old"><strike>{{.PriceOldNice}} {{$.Data.Shop.CurrentCurrency.Code}}</strike></span>{{end}}
 					</div>
 				</div>
 			{{end}}

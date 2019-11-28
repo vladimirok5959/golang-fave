@@ -26,6 +26,9 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 
 		pf_new_order_notify_email := strings.TrimSpace(wrap.R.FormValue("new-order-notify-email"))
 
+		pf_new_order_email_theme_cp := strings.TrimSpace(wrap.R.FormValue("new-order-email-theme-cp"))
+		pf_new_order_email_theme_user := strings.TrimSpace(wrap.R.FormValue("new-order-email-theme-user"))
+
 		pf_accept_orders := wrap.R.FormValue("accept-orders")
 
 		if !utils.IsNumeric(pf_price_fomat) {
@@ -97,7 +100,12 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 			if utils.IsValidEmail(pf_new_order_notify_email) {
 				(*wrap.Config).Shop.Orders.NotifyEmail = pf_new_order_notify_email
 			}
+		} else {
+			(*wrap.Config).Shop.Orders.NotifyEmail = ""
 		}
+
+		(*wrap.Config).Shop.Orders.NewOrderEmailThemeCp = pf_new_order_email_theme_cp
+		(*wrap.Config).Shop.Orders.NewOrderEmailThemeUser = pf_new_order_email_theme_user
 
 		(*wrap.Config).Shop.Orders.Enabled = utils.StrToInt(pf_accept_orders)
 

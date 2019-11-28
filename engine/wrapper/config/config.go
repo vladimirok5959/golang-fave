@@ -41,8 +41,10 @@ type Config struct {
 				Delivery     int
 				Comment      int
 			}
-			NotifyEmail string
-			Enabled     int
+			NotifyEmail            string
+			Enabled                int
+			NewOrderEmailThemeCp   string
+			NewOrderEmailThemeUser string
 		}
 	}
 	API struct {
@@ -109,6 +111,9 @@ func (this *Config) configDefault() {
 
 	this.Shop.Orders.NotifyEmail = ""
 	this.Shop.Orders.Enabled = 1
+
+	this.Shop.Orders.NewOrderEmailThemeCp = "❤️ New order"
+	this.Shop.Orders.NewOrderEmailThemeUser = "❤️ Thanks for your order"
 
 	this.API.XML.Enabled = 0
 	this.API.XML.Name = ""

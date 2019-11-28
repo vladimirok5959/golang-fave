@@ -1,4 +1,4 @@
-VERSION="1.4.9"
+VERSION="1.5.1"
 
 default: debug test run
 
@@ -66,7 +66,10 @@ dockerfile:
 	@echo "ADD https://github.com/vladimirok5959/golang-fave/releases/download/v${VERSION}/fave.linux-amd64.tar.gz /app/fave.linux-amd64.tar.gz" >> Dockerfile
 	@echo "ADD https://github.com/vladimirok5959/golang-fave/releases/download/v${VERSION}/localhost.tar.gz /app/hosts/localhost.tar.gz" >> Dockerfile
 	@echo "" >> Dockerfile
-	@echo "RUN tar -zxf /app/fave.linux-amd64.tar.gz -C /app && \\" >> Dockerfile
+	@echo "RUN apt-get -y update && apt-get -y upgrade && \\" >> Dockerfile
+	@echo " apt-get install -y ca-certificates && \\" >> Dockerfile
+	@echo " dpkg-reconfigure -p critical ca-certificates && \\" >> Dockerfile
+	@echo " tar -zxf /app/fave.linux-amd64.tar.gz -C /app && \\" >> Dockerfile
 	@echo " tar -zxf /app/hosts/localhost.tar.gz -C /app/hosts && \\" >> Dockerfile
 	@echo " rm /app/fave.linux-amd64.tar.gz && \\" >> Dockerfile
 	@echo " rm /app/hosts/localhost.tar.gz && \\" >> Dockerfile
@@ -83,7 +86,8 @@ docker-test: dockerfile
 	@-docker rm fave-test
 	@-docker rmi fave
 	docker build --rm=false --force-rm=true -t fave:latest .
-	docker run -d --name fave-test --cpus=".2" -m 200m -p 8080:8080 -t -i fave:latest /app/fave.linux-amd64
+	docker run --rm --name fave-test --cpus=".2" -m 200m -p 8080:8080 -t -i fave:latest /app/fave.linux-amd64
+	@-docker rmi fave:latest
 
 docker-img: dockerfile
 	docker build -t fave:latest .

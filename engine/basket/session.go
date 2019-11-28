@@ -377,6 +377,12 @@ func (this *session) GetAll(p *SBParam) *utils.MySql_basket {
 			A_product_id: product.Id,
 			A_price:      this.makePrice(product.price, product.currency.Id),
 			A_quantity:   product.Quantity,
+
+			RenderName:     product.Name,
+			RenderLink:     product.Link,
+			RenderPrice:    product.Price,
+			RenderQuantity: product.Quantity,
+			RenderSum:      product.Sum,
 		})
 	}
 
@@ -393,6 +399,8 @@ func (this *session) GetAll(p *SBParam) *utils.MySql_basket {
 		Currency:   &currency,
 		TotalSum:   this.totalSum,
 		TotalCount: this.TotalCount,
+
+		RenderTotalSum: this.TotalSum,
 	}
 
 	return &all

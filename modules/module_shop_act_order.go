@@ -3,6 +3,7 @@ package modules
 import (
 	"strings"
 
+	"golang-fave/consts"
 	"golang-fave/engine/basket"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
@@ -30,34 +31,34 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			return
 		}
 
-		pf_client_last_name := wrap.R.FormValue("client_last_name")
-		pf_client_first_name := wrap.R.FormValue("client_first_name")
-		pf_client_middle_name := wrap.R.FormValue("client_middle_name")
-		pf_client_phone := wrap.R.FormValue("client_phone")
-		pf_client_email := wrap.R.FormValue("client_email")
-		pf_client_delivery_comment := wrap.R.FormValue("client_delivery_comment")
-		pf_client_order_comment := wrap.R.FormValue("client_order_comment")
+		pf_client_last_name := strings.TrimSpace(wrap.R.FormValue("client_last_name"))
+		pf_client_first_name := strings.TrimSpace(wrap.R.FormValue("client_first_name"))
+		pf_client_middle_name := strings.TrimSpace(wrap.R.FormValue("client_middle_name"))
+		pf_client_phone := strings.TrimSpace(wrap.R.FormValue("client_phone"))
+		pf_client_email := strings.TrimSpace(wrap.R.FormValue("client_email"))
+		pf_client_delivery_comment := strings.TrimSpace(wrap.R.FormValue("client_delivery_comment"))
+		pf_client_order_comment := strings.TrimSpace(wrap.R.FormValue("client_order_comment"))
 
 		if (*wrap.Config).Shop.Orders.RequiredFields.LastName != 0 {
-			if strings.TrimSpace(pf_client_last_name) == "" {
+			if pf_client_last_name == "" {
 				wrap.Write(`{"error": true, "field": "client_last_name", "variable": "ShopOrderEmptyLastName"}`)
 				return
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.FirstName != 0 {
-			if strings.TrimSpace(pf_client_first_name) == "" {
+			if pf_client_first_name == "" {
 				wrap.Write(`{"error": true, "field": "client_first_name", "variable": "ShopOrderEmptyFirstName"}`)
 				return
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.MiddleName != 0 {
-			if strings.TrimSpace(pf_client_middle_name) == "" {
+			if pf_client_middle_name == "" {
 				wrap.Write(`{"error": true, "field": "client_middle_name", "variable": "ShopOrderEmptyMiddleName"}`)
 				return
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.MobilePhone != 0 {
-			if strings.TrimSpace(pf_client_phone) == "" {
+			if pf_client_phone == "" {
 				wrap.Write(`{"error": true, "field": "client_phone", "variable": "ShopOrderEmptyMobilePhone"}`)
 				return
 			}
@@ -67,7 +68,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.EmailAddress != 0 {
-			if strings.TrimSpace(pf_client_email) == "" {
+			if pf_client_email == "" {
 				wrap.Write(`{"error": true, "field": "client_email", "variable": "ShopOrderEmptyEmailAddress"}`)
 				return
 			}
@@ -77,13 +78,13 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.Delivery != 0 {
-			if strings.TrimSpace(pf_client_delivery_comment) == "" {
+			if pf_client_delivery_comment == "" {
 				wrap.Write(`{"error": true, "field": "client_delivery_comment", "variable": "ShopOrderEmptyDelivery"}`)
 				return
 			}
 		}
 		if (*wrap.Config).Shop.Orders.RequiredFields.Comment != 0 {
-			if strings.TrimSpace(pf_client_order_comment) == "" {
+			if pf_client_order_comment == "" {
 				wrap.Write(`{"error": true, "field": "client_order_comment", "variable": "ShopOrderEmptyComment"}`)
 				return
 			}
@@ -154,12 +155,57 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 				}
 			}
 
-			// Send notify email
+			// Send notify email to owner
 			if (*wrap.Config).Shop.Orders.NotifyEmail != "" {
-				if err := wrap.SendEmail(
+				if err := wrap.SendEmailTemplated(
 					(*wrap.Config).Shop.Orders.NotifyEmail,
-					"❤️ New Order ("+wrap.Host+":"+wrap.Port+")",
-					"You have new order in shop on host: <a href=\"http://"+wrap.Host+":"+wrap.Port+"/\">http://"+wrap.Host+":"+wrap.Port+"/</a>",
+					(*wrap.Config).Shop.Orders.NewOrderEmailThemeCp+" #"+utils.Int64ToStr(lastID)+" ("+wrap.Host+":"+wrap.Port+")",
+					"email-new-order-admin",
+					consts.TmplEmailOrder{
+						Basket: bdata,
+						Client: consts.TmplOrderClient{
+							LastName:        pf_client_last_name,
+							FirstName:       pf_client_first_name,
+							MiddleName:      pf_client_middle_name,
+							Phone:           pf_client_phone,
+							Email:           pf_client_email,
+							DeliveryComment: pf_client_delivery_comment,
+							OrderComment:    pf_client_order_comment,
+						},
+						Else: consts.TmplOrderElse{
+							OrderId:     lastID,
+							Subject:     (*wrap.Config).Shop.Orders.NewOrderEmailThemeCp + " #" + utils.Int64ToStr(lastID) + " (" + wrap.Host + ":" + wrap.Port + ")",
+							CpOrderLink: "http://" + wrap.Host + ":" + wrap.Port + "/cp/shop/orders-modify/" + utils.Int64ToStr(lastID) + "/",
+						},
+					},
+				); err != nil {
+					return err
+				}
+			}
+
+			// Send notify email to client
+			if pf_client_email != "" {
+				if err := wrap.SendEmailTemplated(
+					pf_client_email,
+					(*wrap.Config).Shop.Orders.NewOrderEmailThemeUser+" #"+utils.Int64ToStr(lastID),
+					"email-new-order-user",
+					consts.TmplEmailOrder{
+						Basket: bdata,
+						Client: consts.TmplOrderClient{
+							LastName:        pf_client_last_name,
+							FirstName:       pf_client_first_name,
+							MiddleName:      pf_client_middle_name,
+							Phone:           pf_client_phone,
+							Email:           pf_client_email,
+							DeliveryComment: pf_client_delivery_comment,
+							OrderComment:    pf_client_order_comment,
+						},
+						Else: consts.TmplOrderElse{
+							OrderId:     lastID,
+							Subject:     (*wrap.Config).Shop.Orders.NewOrderEmailThemeUser + " #" + utils.Int64ToStr(lastID),
+							CpOrderLink: "http://" + wrap.Host + ":" + wrap.Port + "/cp/shop/orders-modify/" + utils.Int64ToStr(lastID) + "/",
+						},
+					},
 				); err != nil {
 					return err
 				}

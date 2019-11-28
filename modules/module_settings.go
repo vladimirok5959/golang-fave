@@ -577,6 +577,18 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Hint:    "Example: example@gmail.com",
 				},
 				{
+					Kind:    builder.DFKText,
+					Caption: "New order email theme (CP)",
+					Name:    "new-order-email-theme-cp",
+					Value:   (*wrap.Config).Shop.Orders.NewOrderEmailThemeCp,
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "New order email theme (User)",
+					Name:    "new-order-email-theme-user",
+					Value:   (*wrap.Config).Shop.Orders.NewOrderEmailThemeUser,
+				},
+				{
 					Kind:    builder.DFKCheckBox,
 					Caption: "Accept orders",
 					Name:    "accept-orders",

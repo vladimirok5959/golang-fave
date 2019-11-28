@@ -22,4 +22,5 @@ var Migrations = map[string]func(*sqlw.DB, string) error{
 	"000000014": Migrate_000000014,
 	"000000015": Migrate_000000015,
 	"000000016": Migrate_000000016,
+	"000000017": Migrate_000000017,
 }

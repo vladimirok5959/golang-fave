@@ -532,7 +532,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000016');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000017');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -574,14 +574,19 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				VALUES
 			(1, 3),
 			(1, 7),
-			(1, 9),
 			(1, 10),
 			(1, 11),
+			(1, 12),
 			(2, 3),
 			(2, 8),
-			(2, 9),
 			(2, 10),
-			(2, 11);`,
+			(2, 11),
+			(2, 12),
+			(3, 3),
+			(3, 9),
+			(3, 10),
+			(3, 11),
+			(3, 12);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -609,9 +614,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			(6, 2, '64 Gb'),
 			(7, 2, '128 Gb'),
 			(8, 2, '256 Gb'),
-			(9, 3, '4G'),
-			(10, 3, '2G'),
-			(11, 3, '3G');`,
+			(9, 2, '512 Gb'),
+			(10, 3, '4G'),
+			(11, 3, '2G'),
+			(12, 3, '3G');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -623,6 +629,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				user = ?,
 				currency = ?,
 				price = ?,
+				price_old = ?,
 				gname = ?,
 				name = ?,
 				alias = ?,
@@ -637,7 +644,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			1,
 			1,
 			1,
-			1000.00,
+			999.00,
+			1100.00,
 			"Samsung Galaxy S10",
 			"Samsung Galaxy S10 (128 Gb)",
 			"samsung-galaxy-s10-128-gb",
@@ -660,6 +668,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				user = ?,
 				currency = ?,
 				price = ?,
+				price_old = ?,
 				gname = ?,
 				name = ?,
 				alias = ?,
@@ -675,12 +684,53 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			1,
 			1,
 			1,
-			1200.00,
+			1999.00,
+			1300.00,
 			"",
 			"Samsung Galaxy S10 (256 Gb)",
 			"samsung-galaxy-s10-256-gb",
 			"Samsung",
 			"1",
+			"3",
+			"<p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent.</p>",
+			"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Et malesuada fames ac turpis egestas sed tempus urna et. Euismod elementum nisi quis eleifend. Nisi porta lorem mollis aliquam ut porttitor. Ac turpis egestas maecenas pharetra convallis posuere. Nunc non blandit massa enim nec dui. Commodo elit at imperdiet dui accumsan sit amet nulla. Viverra accumsan in nisl nisi scelerisque. Dui nunc mattis enim ut tellus. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Faucibus ornare suspendisse sed nisi lacus. Nulla facilisi morbi tempus iaculis. Ut eu sem integer vitae justo eget magna fermentum iaculis. Ullamcorper sit amet risus nullam eget felis eget nunc. Volutpat sed cras ornare arcu dui vivamus. Eget magna fermentum iaculis eu non diam.</p><p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent. Interdum velit euismod in pellentesque massa placerat duis. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt. Nisl rhoncus mattis rhoncus urna neque viverra justo. Odio ut enim blandit volutpat. Ac auctor augue mauris augue neque gravida. Ut lectus arcu bibendum at varius vel. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Dolor sit amet consectetur adipiscing elit duis tristique. Semper quis lectus nulla at volutpat diam ut. Sapien eget mi proin sed.</p>",
+			utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+			1,
+		); err != nil {
+			tx.Rollback()
+			wrap.MsgError(err.Error())
+			return
+		}
+		if _, err = tx.Exec(
+			`INSERT INTO shop_products SET
+				id = ?,
+				parent_id = ?,
+				user = ?,
+				currency = ?,
+				price = ?,
+				price_old = ?,
+				gname = ?,
+				name = ?,
+				alias = ?,
+				vendor = ?,
+				quantity = ?,
+				category = ?,
+				briefly = ?,
+				content = ?,
+				datetime = ?,
+				active = ?
+			;`,
+			3,
+			1,
+			1,
+			1,
+			2999.00,
+			2300.00,
+			"",
+			"Samsung Galaxy S10 (512 Gb)",
+			"samsung-galaxy-s10-512-gb",
+			"Samsung",
+			"0",
 			"3",
 			"<p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent.</p>",
 			"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Et malesuada fames ac turpis egestas sed tempus urna et. Euismod elementum nisi quis eleifend. Nisi porta lorem mollis aliquam ut porttitor. Ac turpis egestas maecenas pharetra convallis posuere. Nunc non blandit massa enim nec dui. Commodo elit at imperdiet dui accumsan sit amet nulla. Viverra accumsan in nisl nisi scelerisque. Dui nunc mattis enim ut tellus. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Faucibus ornare suspendisse sed nisi lacus. Nulla facilisi morbi tempus iaculis. Ut eu sem integer vitae justo eget magna fermentum iaculis. Ullamcorper sit amet risus nullam eget felis eget nunc. Volutpat sed cras ornare arcu dui vivamus. Eget magna fermentum iaculis eu non diam.</p><p>Arcu ac tortor dignissim convallis aenean et tortor. Vitae auctor eu augue ut lectus arcu. Ac turpis egestas integer eget aliquet nibh praesent. Interdum velit euismod in pellentesque massa placerat duis. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt. Nisl rhoncus mattis rhoncus urna neque viverra justo. Odio ut enim blandit volutpat. Ac auctor augue mauris augue neque gravida. Ut lectus arcu bibendum at varius vel. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Dolor sit amet consectetur adipiscing elit duis tristique. Semper quis lectus nulla at volutpat diam ut. Sapien eget mi proin sed.</p>",

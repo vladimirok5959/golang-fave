@@ -269,6 +269,14 @@ func (this *ShopProduct) PriceNice() string {
 	)
 }
 
+func (this *ShopProduct) PriceOldNice() string {
+	return utils.FormatProductPrice(
+		this.PriceOld(),
+		(*this.wrap.Config).Shop.Price.Format,
+		(*this.wrap.Config).Shop.Price.Round,
+	)
+}
+
 func (this *ShopProduct) PriceFormat(format string) string {
 	return utils.Float64ToStrF(this.Price(), format)
 }

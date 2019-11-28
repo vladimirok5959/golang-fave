@@ -1,6 +1,11 @@
 {{template "header.html" .}}
 <div class="card mb-4">
 	<div class="card-body">
+		{{if $.Data.IsUserLoggedIn}}
+			{{if $.Data.CurrentUser.IsAdmin}}
+				<a href="/cp/blog/modify/{{$.Data.Blog.Post.Id}}/" target="_blank" style="float:right;">Edit</a>
+			{{end}}
+		{{end}}
 		<h2 class="card-title">{{$.Data.Blog.Post.Name}}</h2>
 		<div class="page-content">
 			{{$.Data.Blog.Post.Briefly}}

@@ -97,6 +97,21 @@ func (this *FERData) RequestGET() string {
 	return utils.ExtractGetParams(this.wrap.R.RequestURI)
 }
 
+func (this *FERData) IsUserLoggedIn() bool {
+	if this.wrap.User == nil {
+		this.wrap.LoadSessionUser()
+	}
+	return this.wrap.User != nil && this.wrap.User.A_id > 0
+}
+
+func (this *FERData) CurrentUser() *User {
+	if this.wrap.User == nil {
+		return &User{wrap: this.wrap}
+	} else {
+		return &User{wrap: this.wrap, object: this.wrap.User}
+	}
+}
+
 func (this *FERData) Module() string {
 	if this.is404 {
 		return "404"

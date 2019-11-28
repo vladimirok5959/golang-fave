@@ -3,7 +3,12 @@ package template
 var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 <div class="card mb-4">
 	<div class="card-body product-full">
-		<h2 class="card-title">{{$.Data.Shop.Product.Name}} {{$.Data.Shop.Product.Id}}{{if le $.Data.Shop.Product.Quantity 0}} <span class="badge badge-primary">Out of stock</span>{{end}}</h2>
+		{{if $.Data.IsUserLoggedIn}}
+			{{if $.Data.CurrentUser.IsAdmin}}
+				<a href="/cp/shop/modify/{{$.Data.Shop.Product.Id}}/" target="_blank" style="float:right;">Edit</a>
+			{{end}}
+		{{end}}
+		<h2 class="card-title">{{$.Data.Shop.Product.Name}} {{$.Data.Shop.Product.Id}}</h2>
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 			<li class="nav-item">
 				<a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All about product</a>
@@ -51,7 +56,9 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 						{{end}}
 						<div class="card mt-3{{if not $.Data.Shop.Product.HaveVariations}} mt-sm-3 mt-md-0 mt-lg-0{{end}}">
 							<div class="card-body">
-								<h3 class="price mb-0 mr-4">{{$.Data.Shop.Product.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><button class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;"{{if le $.Data.Shop.Product.Quantity 0}} disabled{{end}}>Buy</button>
+								<h3>{{if le $.Data.Shop.Product.Quantity 0}}<span class="badge badge-primary">Out of stock</span>{{end}}</h3>
+								{{if gt $.Data.Shop.Product.PriceOld 0.00}}<h3 class="price_old mb-0 mr-4"><strike>{{$.Data.Shop.Product.PriceOldNice}} {{$.Data.Shop.CurrentCurrency.Code}}</strike></h3>{{end}}
+								<h3 class="price{{if gt $.Data.Shop.Product.PriceOld 0.00}} price_red{{end}} mb-0 mr-4">{{$.Data.Shop.Product.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><button class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;"{{if le $.Data.Shop.Product.Quantity 0}} disabled{{end}}>Buy</button>
 							</div>
 						</div>
 						<div class="card mt-3">
@@ -119,7 +126,9 @@ var VarShopProductHtmlFile = []byte(`{{template "header.html" .}}
 							</div>
 							<div class="card mt-3">
 								<div class="card-body">
-									<h3 class="price mb-0 mr-4">{{$.Data.Shop.Product.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><button class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;"{{if le $.Data.Shop.Product.Quantity 0}} disabled{{end}}>Buy</button>
+									<h3>{{if le $.Data.Shop.Product.Quantity 0}}<span class="badge badge-primary">Out of stock</span>{{end}}</h3>
+									{{if gt $.Data.Shop.Product.PriceOld 0.00}}<h3 class="price_old mb-0 mr-4"><strike>{{$.Data.Shop.Product.PriceOldNice}} {{$.Data.Shop.CurrentCurrency.Code}}</strike></h3>{{end}}
+									<h3 class="price{{if gt $.Data.Shop.Product.PriceOld 0.00}} price_red{{end}} mb-0 mr-4">{{$.Data.Shop.Product.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</h3><button class="btn btn-success btn-buy" onclick="window&&window.frontend&&frontend.ShopBasketProductAdd(this, {{$.Data.Shop.Product.Id}});return false;"{{if le $.Data.Shop.Product.Quantity 0}} disabled{{end}}>Buy</button>
 								</div>
 							</div>
 						</div>

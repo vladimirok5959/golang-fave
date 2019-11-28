@@ -191,7 +191,13 @@ footer {
 }
 
 .grid-products .card-product .price {
+	display: block;
 	font-weight: bold;
+}
+
+.grid-products .card-product .price_old {
+	color: #6c757d;
+	font-size: 0.6rem;
 }
 
 .grid-products .card-product .btn {
@@ -204,12 +210,18 @@ footer {
 
 .grid-products .card-product .card-footer .badge {
 	position: absolute;
-	margin-top: -4px;
+	top: 0px;
+	margin-top: -23px;
 }
 
 .product-full .price {
 	display: inline-block;
 	vertical-align: middle;
+}
+
+.product-full .price_old {
+	color: #6c757d;
+	font-size: 1.25rem;
 }
 
 .product-full .btn-buy {
@@ -241,6 +253,10 @@ footer {
 .product-full .thumbnails .thumbnail img {
 	width: 100%;
 	border-radius: 4px;
+}
+
+.price_red {
+	color: #fb3f4c;
 }
 
 .table-specifications .tcol-1,

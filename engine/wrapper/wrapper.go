@@ -286,7 +286,52 @@ func (this *Wrapper) ConfigSave() error {
 	return this.Config.ConfigWrite(this.DConfig + string(os.PathSeparator) + "config.json")
 }
 
-func (this *Wrapper) SendEmail(email, subject, message string) error {
+func (this *Wrapper) SendEmailUsual(email, subject, message string) error {
+	if !((*this.Config).SMTP.Host != "" && (*this.Config).SMTP.Login != "" && (*this.Config).SMTP.Password != "") {
+		return errors.New("SMTP server is not configured")
+	}
+
+	err := utils.SMTPSend(
+		(*this.Config).SMTP.Host,
+		utils.IntToStr((*this.Config).SMTP.Port),
+		(*this.Config).SMTP.Login,
+		(*this.Config).SMTP.Password,
+		subject,
+		message,
+		[]string{email},
+	)
+
+	status := 1
+	emessage := ""
+	if err != nil {
+		status = 0
+		emessage = err.Error()
+	}
+
+	if _, err := this.DB.Exec(
+		`INSERT INTO notify_mail SET
+			id = NULL,
+			email = ?,
+			subject = ?,
+			message = ?,
+			error = ?,
+			datetime = ?,
+			status = ?
+		;`,
+		email,
+		subject,
+		message,
+		emessage,
+		utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+		status,
+	); err != nil {
+		this.LogCpError(&err)
+	}
+
+	return err
+}
+
+func (this *Wrapper) SendEmailFast(email, subject, message string) error {
 	if _, err := this.DB.Exec(
 		`INSERT INTO notify_mail SET
 			id = NULL,
@@ -305,6 +350,23 @@ func (this *Wrapper) SendEmail(email, subject, message string) error {
 		return err
 	}
 	return nil
+}
+
+func (this *Wrapper) SendEmailTemplated(email, subject, tname string, data interface{}) error {
+	tmpl, err := template.New(tname + ".html").Funcs(utils.TemplateAdditionalFuncs()).ParseFiles(
+		this.DTemplate + string(os.PathSeparator) + tname + ".html",
+	)
+	if err != nil {
+		return err
+	}
+
+	var tpl bytes.Buffer
+	err = tmpl.Execute(&tpl, data)
+	if err != nil {
+		return err
+	}
+
+	return this.SendEmailFast(email, subject, string(tpl.Bytes()))
 }
 
 func (this *Wrapper) GetSessionId() string {

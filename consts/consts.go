@@ -99,3 +99,25 @@ type TmplDataCpBase struct {
 	UserPassword       string
 	BodyClasses        string
 }
+
+type TmplOrderClient struct {
+	LastName        string
+	FirstName       string
+	MiddleName      string
+	Phone           string
+	Email           string
+	DeliveryComment string
+	OrderComment    string
+}
+
+type TmplOrderElse struct {
+	OrderId     int64
+	Subject     string
+	CpOrderLink string
+}
+
+type TmplEmailOrder struct {
+	Basket interface{}
+	Client TmplOrderClient
+	Else   TmplOrderElse
+}
