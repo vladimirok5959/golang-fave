@@ -93,7 +93,7 @@ func smtp_process(dir, host string, mp *mysqlpool.MySqlPool) {
 	if db != nil {
 		conf := config.ConfigNew()
 		if err := conf.ConfigRead(strings.Join([]string{dir, "config", "config.json"}, string(os.PathSeparator))); err == nil {
-			if (*conf).SMTP.Host != "" && (*conf).SMTP.Login != "" && (*conf).SMTP.Password != "" {
+			if !((*conf).SMTP.Host == "" || (*conf).SMTP.Login == "" && (*conf).SMTP.Password == "") {
 				if err := db.Ping(); err == nil {
 					smtp_prepare(db, conf)
 				}

@@ -287,7 +287,7 @@ func (this *Wrapper) ConfigSave() error {
 }
 
 func (this *Wrapper) SendEmailUsual(email, subject, message string) error {
-	if !((*this.Config).SMTP.Host != "" && (*this.Config).SMTP.Login != "" && (*this.Config).SMTP.Password != "") {
+	if (*this.Config).SMTP.Host == "" || (*this.Config).SMTP.Login == "" || (*this.Config).SMTP.Password == "" {
 		return errors.New("SMTP server is not configured")
 	}
 
@@ -332,20 +332,30 @@ func (this *Wrapper) SendEmailUsual(email, subject, message string) error {
 }
 
 func (this *Wrapper) SendEmailFast(email, subject, message string) error {
+	status := 2
+	emessage := ""
+
+	if (*this.Config).SMTP.Host == "" || (*this.Config).SMTP.Login == "" || (*this.Config).SMTP.Password == "" {
+		status = 0
+		emessage = "SMTP server is not configured"
+	}
+
 	if _, err := this.DB.Exec(
 		`INSERT INTO notify_mail SET
 			id = NULL,
 			email = ?,
 			subject = ?,
 			message = ?,
-			error = '',
+			error = ?,
 			datetime = ?,
-			status = 2
+			status = ?
 		;`,
 		email,
 		subject,
 		message,
+		emessage,
 		utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
+		status,
 	); err != nil {
 		return err
 	}
