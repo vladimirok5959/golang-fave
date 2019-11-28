@@ -128,6 +128,7 @@ CREATE TABLE shop_products (
 	user int(11) NOT NULL COMMENT 'User id',
 	currency int(11) NOT NULL COMMENT 'Currency id',
 	price float(8,2) NOT NULL COMMENT 'Product price',
+	price_old float(8,2) NOT NULL DEFAULT '0.00',
 	gname varchar(255) NOT NULL,
 	name varchar(255) NOT NULL COMMENT 'Product name',
 	alias varchar(255) NOT NULL COMMENT 'Product alias',

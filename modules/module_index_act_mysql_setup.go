@@ -322,6 +322,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				user int(11) NOT NULL COMMENT 'User id',
 				currency int(11) NOT NULL COMMENT 'Currency id',
 				price float(8,2) NOT NULL COMMENT 'Product price',
+				price_old float(8,2) NOT NULL DEFAULT '0.00',
 				gname varchar(255) NOT NULL,
 				name varchar(255) NOT NULL COMMENT 'Product name',
 				alias varchar(255) NOT NULL COMMENT 'Product alias',
@@ -531,7 +532,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000015');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000016');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
