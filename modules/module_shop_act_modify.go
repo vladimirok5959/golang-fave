@@ -18,6 +18,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		pf_gname := wrap.R.FormValue("gname")
 		pf_name := wrap.R.FormValue("name")
 		pf_price := wrap.R.FormValue("price")
+		pf_price_old := wrap.R.FormValue("price_old")
 		pf_currency := wrap.R.FormValue("currency")
 		pf_alias := wrap.R.FormValue("alias")
 		pf_vendor := wrap.R.FormValue("vendor")
@@ -37,6 +38,11 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		}
 
 		if !utils.IsFloat(pf_price) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		if !utils.IsFloat(pf_price_old) {
 			wrap.MsgError(`Inner system error`)
 			return
 		}
@@ -96,6 +102,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						user = ?,
 						currency = ?,
 						price = ?,
+						price_old = ?,
 						gname = ?,
 						name = ?,
 						alias = ?,
@@ -110,6 +117,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					wrap.User.A_id,
 					utils.StrToInt(pf_currency),
 					utils.StrToFloat64(pf_price),
+					utils.StrToFloat64(pf_price_old),
 					pf_gname,
 					pf_name,
 					pf_alias,
@@ -213,6 +221,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					`UPDATE shop_products SET
 						currency = ?,
 						price = ?,
+						price_old = ?,
 						gname = ?,
 						name = ?,
 						alias = ?,
@@ -227,6 +236,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					;`,
 					utils.StrToInt(pf_currency),
 					utils.StrToFloat64(pf_price),
+					utils.StrToFloat64(pf_price_old),
 					pf_gname,
 					pf_name,
 					pf_alias,

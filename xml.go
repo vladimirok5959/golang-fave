@@ -223,7 +223,8 @@ func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
 			shop_products.quantity,
 			shop_products.category,
 			shop_products.content,
-			IFNULL(shop_products.parent_id, 0)
+			IFNULL(shop_products.parent_id, 0),
+			shop_products.price_old
 		FROM
 			shop_products
 			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
@@ -236,7 +237,7 @@ func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
 	)
 	if err == nil {
 		defer rows.Close()
-		values := make([]string, 10)
+		values := make([]string, 11)
 		scan := make([]interface{}, len(values))
 		for i := range values {
 			scan[i] = &values[i]
@@ -247,6 +248,9 @@ func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
 				result += `<offer id="` + html.EscapeString(string(values[0])) + `" available="true">`
 				result += `<url>` + html.EscapeString((*conf).API.XML.Url) + `shop/` + html.EscapeString(string(values[4])) + `/</url>`
 				result += `<price>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[2])), "%.2f") + `</price>`
+				if utils.StrToFloat64(string(values[10])) > 0 {
+					result += `<price_old>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[10])), "%.2f") + `</price_old>`
+				}
 				result += `<currencyId>` + html.EscapeString(string(values[1])) + `</currencyId>`
 				result += `<categoryId>` + html.EscapeString(string(values[7])) + `</categoryId>`
 				result += xml_gen_offer_pictures(db, conf, utils.StrToInt(string(values[0])), utils.StrToInt(string(values[9])))

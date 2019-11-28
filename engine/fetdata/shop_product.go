@@ -237,6 +237,30 @@ func (this *ShopProduct) Price() float64 {
 	}
 }
 
+func (this *ShopProduct) PriceOld() float64 {
+	if this == nil {
+		return 0
+	}
+	if this.Currency() == nil {
+		return this.object.A_price_old
+	}
+	if this.wrap.ShopGetCurrentCurrency() == nil {
+		return this.object.A_price_old
+	}
+	if this.wrap.ShopGetCurrentCurrency().A_id == this.Currency().Id() {
+		return this.object.A_price_old
+	}
+	if this.Currency().Id() == 1 {
+		return this.object.A_price_old * this.wrap.ShopGetCurrentCurrency().A_coefficient
+	} else {
+		if c, ok := (*this.wrap.ShopGetAllCurrencies())[this.Currency().Id()]; ok == true {
+			return this.object.A_price_old / c.A_coefficient
+		} else {
+			return this.object.A_price_old
+		}
+	}
+}
+
 func (this *ShopProduct) PriceNice() string {
 	return utils.FormatProductPrice(
 		this.Price(),

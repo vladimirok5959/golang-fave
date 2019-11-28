@@ -527,6 +527,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					shop_products.user,
 					shop_products.currency,
 					shop_products.price,
+					shop_products.price_old,
 					shop_products.name,
 					shop_products.alias,
 					shop_products.vendor,
@@ -556,6 +557,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				&row.A_user,
 				&row.A_currency,
 				&row.A_price,
+				&row.A_price_old,
 				&row.A_name,
 				&row.A_alias,
 				&row.A_vendor,
@@ -657,7 +659,11 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						NameInTable: "Price",
 						Classes:     "d-none d-md-table-cell",
 						CallBack: func(values *[]string) string {
-							return `<div>` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
+							price_old := ""
+							if utils.StrToFloat64((*values)[9]) > 0 {
+								price_old = `<div><strike>` + utils.Float64ToStr(utils.StrToFloat64((*values)[9])) + `</strike></div>`
+							}
+							return price_old + `<div>` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
 								`<div><small>` + currencies[utils.StrToInt((*values)[3])] + `</small></div>`
 						},
 					},
@@ -686,6 +692,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					{
 						DBField: "pname",
 						DBExp:   "spp.name",
+					},
+					{
+						DBField: "price_old",
 					},
 				},
 				func(values *[]string) string {
@@ -728,7 +737,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							UNIX_TIMESTAMP(`+"`shop_products`.`datetime`"+`) AS datetime,
 							shop_products.active,
 							shop_products.parent_id,
-							spp.name AS pname
+							spp.name AS pname,
+							shop_products.price_old
 						FROM
 							shop_products
 							LEFT JOIN shop_products AS spp ON spp.id = shop_products.parent_id
@@ -1105,20 +1115,21 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			}
 
 			data := utils.MySql_shop_product{
-				A_id:       0,
-				A_user:     0,
-				A_currency: 0,
-				A_price:    0,
-				A_gname:    "",
-				A_name:     "",
-				A_alias:    "",
-				A_vendor:   "",
-				A_quantity: 0,
-				A_category: 0,
-				A_briefly:  "",
-				A_content:  "",
-				A_datetime: 0,
-				A_active:   0,
+				A_id:        0,
+				A_user:      0,
+				A_currency:  0,
+				A_price:     0,
+				A_price_old: 0,
+				A_gname:     "",
+				A_name:      "",
+				A_alias:     "",
+				A_vendor:    "",
+				A_quantity:  0,
+				A_category:  0,
+				A_briefly:   "",
+				A_content:   "",
+				A_datetime:  0,
+				A_active:    0,
 			}
 
 			if wrap.CurrSubModule == "modify" {
@@ -1135,6 +1146,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						user,
 						currency,
 						price,
+						price_old,
 						gname,
 						name,
 						alias,
@@ -1156,6 +1168,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_user,
 					&data.A_currency,
 					&data.A_price,
+					&data.A_price_old,
 					&data.A_gname,
 					&data.A_name,
 					&data.A_alias,
@@ -1300,7 +1313,14 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<div>` +
 							`<div class="row">` +
 							`<div class="col-md-8">` +
+							`<div class="row">` +
+							`<div class="col-md-6">` +
 							`<div><input class="form-control" type="number" step="0.01" id="lbl_price" name="price" value="` + utils.Float64ToStr(data.A_price) + `" placeholder="" autocomplete="off" required></div>` +
+							`</div>` +
+							`<div class="col-md-6">` +
+							`<div><input class="form-control" type="number" id="lbl_price_old" name="price_old" value="` + utils.Float64ToStr(data.A_price_old) + `" placeholder="" autocomplete="off"></div>` +
+							`</div>` +
+							`</div>` +
 							`<div class="d-md-none mb-3"></div>` +
 							`</div>` +
 							`<div class="col-md-4">` +
