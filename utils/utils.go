@@ -22,6 +22,10 @@ import (
 	"golang-fave/consts"
 )
 
+func Trim(str string) string {
+	return strings.TrimSpace(str)
+}
+
 func IsFileExists(filename string) bool {
 	if _, err := os.Stat(filename); !os.IsNotExist(err) {
 		if err == nil {
