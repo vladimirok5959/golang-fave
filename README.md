@@ -76,6 +76,7 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * Pages | ready for use | done 100%
 * Blog  | ready for use | done 100%
 * Shop  | ready for use | done 100%
+* Files | in progress   | done 0%
 ```
 
 ## Used resources
