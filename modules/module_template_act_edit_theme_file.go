@@ -14,7 +14,7 @@ func (this *Modules) RegisterAction_TemplateEditThemeFile() *Action {
 		Mount:     "template-edit-theme-file",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_file := wrap.R.FormValue("file")
+		pf_file := utils.Trim(wrap.R.FormValue("file"))
 		pf_content := wrap.R.FormValue("content")
 
 		if pf_file == "" {

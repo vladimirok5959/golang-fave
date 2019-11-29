@@ -13,9 +13,9 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 		Mount:     "shop-attributes-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_name := wrap.R.FormValue("name")
-		pf_filter := wrap.R.FormValue("filter")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_name := utils.Trim(wrap.R.FormValue("name"))
+		pf_filter := utils.Trim(wrap.R.FormValue("filter"))
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)

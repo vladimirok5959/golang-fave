@@ -11,7 +11,7 @@ func (this *Modules) RegisterAction_ShopDetach() *Action {
 		Mount:     "shop-detach",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)

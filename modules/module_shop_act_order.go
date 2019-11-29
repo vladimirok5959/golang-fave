@@ -1,8 +1,6 @@
 package modules
 
 import (
-	"strings"
-
 	"golang-fave/consts"
 	"golang-fave/engine/basket"
 	"golang-fave/engine/wrapper"
@@ -31,13 +29,13 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			return
 		}
 
-		pf_client_last_name := strings.TrimSpace(wrap.R.FormValue("client_last_name"))
-		pf_client_first_name := strings.TrimSpace(wrap.R.FormValue("client_first_name"))
-		pf_client_middle_name := strings.TrimSpace(wrap.R.FormValue("client_middle_name"))
-		pf_client_phone := strings.TrimSpace(wrap.R.FormValue("client_phone"))
-		pf_client_email := strings.TrimSpace(wrap.R.FormValue("client_email"))
-		pf_client_delivery_comment := strings.TrimSpace(wrap.R.FormValue("client_delivery_comment"))
-		pf_client_order_comment := strings.TrimSpace(wrap.R.FormValue("client_order_comment"))
+		pf_client_last_name := utils.Trim(wrap.R.FormValue("client_last_name"))
+		pf_client_first_name := utils.Trim(wrap.R.FormValue("client_first_name"))
+		pf_client_middle_name := utils.Trim(wrap.R.FormValue("client_middle_name"))
+		pf_client_phone := utils.Trim(wrap.R.FormValue("client_phone"))
+		pf_client_email := utils.Trim(wrap.R.FormValue("client_email"))
+		pf_client_delivery_comment := utils.Trim(wrap.R.FormValue("client_delivery_comment"))
+		pf_client_order_comment := utils.Trim(wrap.R.FormValue("client_order_comment"))
 
 		if (*wrap.Config).Shop.Orders.RequiredFields.LastName != 0 {
 			if pf_client_last_name == "" {

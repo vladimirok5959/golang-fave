@@ -14,19 +14,19 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		Mount:     "shop-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_gname := wrap.R.FormValue("gname")
-		pf_name := wrap.R.FormValue("name")
-		pf_price := wrap.R.FormValue("price")
-		pf_price_old := wrap.R.FormValue("price_old")
-		pf_currency := wrap.R.FormValue("currency")
-		pf_alias := wrap.R.FormValue("alias")
-		pf_vendor := wrap.R.FormValue("vendor")
-		pf_quantity := wrap.R.FormValue("quantity")
-		pf_category := wrap.R.FormValue("category")
-		pf_briefly := wrap.R.FormValue("briefly")
-		pf_content := wrap.R.FormValue("content")
-		pf_active := wrap.R.FormValue("active")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_gname := utils.Trim(wrap.R.FormValue("gname"))
+		pf_name := utils.Trim(wrap.R.FormValue("name"))
+		pf_price := utils.Trim(wrap.R.FormValue("price"))
+		pf_price_old := utils.Trim(wrap.R.FormValue("price_old"))
+		pf_currency := utils.Trim(wrap.R.FormValue("currency"))
+		pf_alias := utils.Trim(wrap.R.FormValue("alias"))
+		pf_vendor := utils.Trim(wrap.R.FormValue("vendor"))
+		pf_quantity := utils.Trim(wrap.R.FormValue("quantity"))
+		pf_category := utils.Trim(wrap.R.FormValue("category"))
+		pf_briefly := utils.Trim(wrap.R.FormValue("briefly"))
+		pf_content := utils.Trim(wrap.R.FormValue("content"))
+		pf_active := utils.Trim(wrap.R.FormValue("active"))
 
 		if pf_active == "" {
 			pf_active = "0"

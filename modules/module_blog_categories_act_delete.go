@@ -11,7 +11,7 @@ func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 		Mount:     "blog-categories-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
 
 		if !utils.IsNumeric(pf_id) || utils.StrToInt(pf_id) <= 1 {
 			wrap.MsgError(`Inner system error`)

@@ -11,8 +11,8 @@ func (this *Modules) RegisterAction_ShopOrderSetStatus() *Action {
 		Mount:     "shop-order-set-status",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_status := wrap.R.FormValue("status")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_status := utils.Trim(wrap.R.FormValue("status"))
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)

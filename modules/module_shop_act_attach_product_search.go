@@ -14,7 +14,7 @@ func (this *Modules) shop_GetProductsListForAttaching(wrap *wrapper.Wrapper, nam
 	words := strings.Split(name, " ")
 	filtered := []string{}
 	for _, value := range words {
-		word := strings.TrimSpace(value)
+		word := utils.Trim(value)
 		if word != "" {
 			filtered = append(filtered, "%"+word+"%")
 		}
@@ -69,8 +69,8 @@ func (this *Modules) RegisterAction_ShopAttachProductSearch() *Action {
 		Mount:     "shop-attach-product-search",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_words := wrap.R.FormValue("words")
-		pf_id := wrap.R.FormValue("id")
+		pf_words := utils.Trim(wrap.R.FormValue("words"))
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
 		if !utils.IsNumeric(pf_id) {
 			wrap.Write(`$('#sys-modal-shop-product-attach .products-list').html('<b>Inner system error</b>');`)
 			return

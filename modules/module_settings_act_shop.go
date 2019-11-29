@@ -1,8 +1,6 @@
 package modules
 
 import (
-	"strings"
-
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -13,23 +11,23 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 		Mount:     "settings-shop",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_price_fomat := wrap.R.FormValue("price-fomat")
-		pf_price_round := wrap.R.FormValue("price-round")
+		pf_price_fomat := utils.Trim(wrap.R.FormValue("price-fomat"))
+		pf_price_round := utils.Trim(wrap.R.FormValue("price-round"))
 
-		pf_require_last_name := wrap.R.FormValue("require-last-name")
-		pf_require_first_name := wrap.R.FormValue("require-first-name")
-		pf_require_middle_name := wrap.R.FormValue("require-middle-name")
-		pf_require_mobile_phone := wrap.R.FormValue("require-mobile-phone")
-		pf_require_email_address := wrap.R.FormValue("require-email-address")
-		pf_require_delivery := wrap.R.FormValue("require-delivery")
-		pf_require_comment := wrap.R.FormValue("require-comment")
+		pf_require_last_name := utils.Trim(wrap.R.FormValue("require-last-name"))
+		pf_require_first_name := utils.Trim(wrap.R.FormValue("require-first-name"))
+		pf_require_middle_name := utils.Trim(wrap.R.FormValue("require-middle-name"))
+		pf_require_mobile_phone := utils.Trim(wrap.R.FormValue("require-mobile-phone"))
+		pf_require_email_address := utils.Trim(wrap.R.FormValue("require-email-address"))
+		pf_require_delivery := utils.Trim(wrap.R.FormValue("require-delivery"))
+		pf_require_comment := utils.Trim(wrap.R.FormValue("require-comment"))
 
-		pf_new_order_notify_email := strings.TrimSpace(wrap.R.FormValue("new-order-notify-email"))
+		pf_new_order_notify_email := utils.Trim(wrap.R.FormValue("new-order-notify-email"))
 
-		pf_new_order_email_theme_cp := strings.TrimSpace(wrap.R.FormValue("new-order-email-theme-cp"))
-		pf_new_order_email_theme_user := strings.TrimSpace(wrap.R.FormValue("new-order-email-theme-user"))
+		pf_new_order_email_theme_cp := utils.Trim(wrap.R.FormValue("new-order-email-theme-cp"))
+		pf_new_order_email_theme_user := utils.Trim(wrap.R.FormValue("new-order-email-theme-user"))
 
-		pf_accept_orders := wrap.R.FormValue("accept-orders")
+		pf_accept_orders := utils.Trim(wrap.R.FormValue("accept-orders"))
 
 		if !utils.IsNumeric(pf_price_fomat) {
 			wrap.MsgError(`Must be integer number`)

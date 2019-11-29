@@ -13,21 +13,21 @@ func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 		Mount:     "settings-thumbnails",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_shop_thumbnail_w_1 := wrap.R.FormValue("shop-thumbnail-w-1")
-		pf_shop_thumbnail_h_1 := wrap.R.FormValue("shop-thumbnail-h-1")
-		pf_shop_thumbnail_r_1 := wrap.R.FormValue("shop-thumbnail-r-1")
+		pf_shop_thumbnail_w_1 := utils.Trim(wrap.R.FormValue("shop-thumbnail-w-1"))
+		pf_shop_thumbnail_h_1 := utils.Trim(wrap.R.FormValue("shop-thumbnail-h-1"))
+		pf_shop_thumbnail_r_1 := utils.Trim(wrap.R.FormValue("shop-thumbnail-r-1"))
 
-		pf_shop_thumbnail_w_2 := wrap.R.FormValue("shop-thumbnail-w-2")
-		pf_shop_thumbnail_h_2 := wrap.R.FormValue("shop-thumbnail-h-2")
-		pf_shop_thumbnail_r_2 := wrap.R.FormValue("shop-thumbnail-r-2")
+		pf_shop_thumbnail_w_2 := utils.Trim(wrap.R.FormValue("shop-thumbnail-w-2"))
+		pf_shop_thumbnail_h_2 := utils.Trim(wrap.R.FormValue("shop-thumbnail-h-2"))
+		pf_shop_thumbnail_r_2 := utils.Trim(wrap.R.FormValue("shop-thumbnail-r-2"))
 
-		pf_shop_thumbnail_w_3 := wrap.R.FormValue("shop-thumbnail-w-3")
-		pf_shop_thumbnail_h_3 := wrap.R.FormValue("shop-thumbnail-h-3")
-		pf_shop_thumbnail_r_3 := wrap.R.FormValue("shop-thumbnail-r-3")
+		pf_shop_thumbnail_w_3 := utils.Trim(wrap.R.FormValue("shop-thumbnail-w-3"))
+		pf_shop_thumbnail_h_3 := utils.Trim(wrap.R.FormValue("shop-thumbnail-h-3"))
+		pf_shop_thumbnail_r_3 := utils.Trim(wrap.R.FormValue("shop-thumbnail-r-3"))
 
-		pf_shop_thumbnail_w_full := wrap.R.FormValue("shop-thumbnail-w-full")
-		pf_shop_thumbnail_h_full := wrap.R.FormValue("shop-thumbnail-h-full")
-		pf_shop_thumbnail_r_full := wrap.R.FormValue("shop-thumbnail-r-full")
+		pf_shop_thumbnail_w_full := utils.Trim(wrap.R.FormValue("shop-thumbnail-w-full"))
+		pf_shop_thumbnail_h_full := utils.Trim(wrap.R.FormValue("shop-thumbnail-h-full"))
+		pf_shop_thumbnail_r_full := utils.Trim(wrap.R.FormValue("shop-thumbnail-r-full"))
 
 		if _, err := strconv.Atoi(pf_shop_thumbnail_w_1); err != nil {
 			wrap.MsgError(`Must be integer number`)

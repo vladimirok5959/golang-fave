@@ -6,6 +6,7 @@ import (
 
 	ThemeFiles "golang-fave/assets/template"
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterAction_TemplateRestoreFileAll() *Action {
@@ -14,7 +15,7 @@ func (this *Modules) RegisterAction_TemplateRestoreFileAll() *Action {
 		Mount:     "template-restore-file-all",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_file := wrap.R.FormValue("file")
+		pf_file := utils.Trim(wrap.R.FormValue("file"))
 
 		if pf_file != "all" {
 			wrap.MsgError(`Inner system error`)

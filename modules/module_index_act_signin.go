@@ -11,8 +11,8 @@ func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 		WantDB: true,
 		Mount:  "index-user-sign-in",
 	}, func(wrap *wrapper.Wrapper) {
-		pf_email := wrap.R.FormValue("email")
-		pf_password := wrap.R.FormValue("password")
+		pf_email := utils.Trim(wrap.R.FormValue("email"))
+		pf_password := utils.Trim(wrap.R.FormValue("password"))
 
 		if pf_email == "" {
 			wrap.MsgError(`Please specify user email`)

@@ -6,6 +6,7 @@ import (
 
 	ThemeFiles "golang-fave/assets/template"
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterAction_TemplateRestoreFile() *Action {
@@ -14,7 +15,7 @@ func (this *Modules) RegisterAction_TemplateRestoreFile() *Action {
 		Mount:     "template-restore-file",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_file := wrap.R.FormValue("file")
+		pf_file := utils.Trim(wrap.R.FormValue("file"))
 
 		if pf_file == "" {
 			wrap.MsgError(`Please specify file name`)

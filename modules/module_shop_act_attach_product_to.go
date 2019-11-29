@@ -13,8 +13,8 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 		Mount:     "shop-attach-product-to",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_parent_id := wrap.R.FormValue("parent_id")
-		pf_product_id := wrap.R.FormValue("product_id")
+		pf_parent_id := utils.Trim(wrap.R.FormValue("parent_id"))
+		pf_product_id := utils.Trim(wrap.R.FormValue("product_id"))
 
 		if !utils.IsNumeric(pf_parent_id) || !utils.IsNumeric(pf_product_id) {
 			wrap.MsgError(`Inner system error`)

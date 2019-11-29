@@ -22,8 +22,8 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 		Mount:     "shop-upload-image",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_count := wrap.R.FormValue("count")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_count := utils.Trim(wrap.R.FormValue("count"))
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)

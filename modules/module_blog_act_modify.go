@@ -14,13 +14,13 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		Mount:     "blog-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_name := wrap.R.FormValue("name")
-		pf_alias := wrap.R.FormValue("alias")
-		pf_category := wrap.R.FormValue("category")
-		pf_briefly := wrap.R.FormValue("briefly")
-		pf_content := wrap.R.FormValue("content")
-		pf_active := wrap.R.FormValue("active")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_name := utils.Trim(wrap.R.FormValue("name"))
+		pf_alias := utils.Trim(wrap.R.FormValue("alias"))
+		pf_category := utils.Trim(wrap.R.FormValue("category"))
+		pf_briefly := utils.Trim(wrap.R.FormValue("briefly"))
+		pf_content := utils.Trim(wrap.R.FormValue("content"))
+		pf_active := utils.Trim(wrap.R.FormValue("active"))
 
 		if pf_active == "" {
 			pf_active = "0"

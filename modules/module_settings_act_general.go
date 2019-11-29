@@ -11,7 +11,7 @@ func (this *Modules) RegisterAction_SettingsGeneral() *Action {
 		Mount:     "settings-general",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_module_at_home := wrap.R.FormValue("module-at-home")
+		pf_module_at_home := utils.Trim(wrap.R.FormValue("module-at-home"))
 
 		if !utils.IsNumeric(pf_module_at_home) {
 			wrap.MsgError(`Must be integer number`)

@@ -13,10 +13,10 @@ func (this *Modules) RegisterAction_SettingsPagination() *Action {
 		Mount:     "settings-pagination",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_blog_index := wrap.R.FormValue("blog-index")
-		pf_blog_category := wrap.R.FormValue("blog-category")
-		pf_shop_index := wrap.R.FormValue("shop-index")
-		pf_shop_category := wrap.R.FormValue("shop-category")
+		pf_blog_index := utils.Trim(wrap.R.FormValue("blog-index"))
+		pf_blog_category := utils.Trim(wrap.R.FormValue("blog-category"))
+		pf_shop_index := utils.Trim(wrap.R.FormValue("shop-index"))
+		pf_shop_category := utils.Trim(wrap.R.FormValue("shop-category"))
 
 		if _, err := strconv.Atoi(pf_blog_index); err != nil {
 			wrap.MsgError(`Blog posts count per page on main page must be integer number`)

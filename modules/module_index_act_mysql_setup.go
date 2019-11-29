@@ -14,11 +14,11 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		WantDB: false,
 		Mount:  "index-mysql-setup",
 	}, func(wrap *wrapper.Wrapper) {
-		pf_host := wrap.R.FormValue("host")
-		pf_port := wrap.R.FormValue("port")
-		pf_name := wrap.R.FormValue("name")
-		pf_user := wrap.R.FormValue("user")
-		pf_password := wrap.R.FormValue("password")
+		pf_host := utils.Trim(wrap.R.FormValue("host"))
+		pf_port := utils.Trim(wrap.R.FormValue("port"))
+		pf_name := utils.Trim(wrap.R.FormValue("name"))
+		pf_user := utils.Trim(wrap.R.FormValue("user"))
+		pf_password := utils.Trim(wrap.R.FormValue("password"))
 
 		if pf_host == "" {
 			wrap.MsgError(`Please specify host for MySQL connection`)

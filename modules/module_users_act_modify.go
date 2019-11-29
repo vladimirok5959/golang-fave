@@ -11,13 +11,13 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 		Mount:     "users-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_first_name := wrap.R.FormValue("first_name")
-		pf_last_name := wrap.R.FormValue("last_name")
-		pf_email := wrap.R.FormValue("email")
-		pf_password := wrap.R.FormValue("password")
-		pf_admin := wrap.R.FormValue("admin")
-		pf_active := wrap.R.FormValue("active")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_first_name := utils.Trim(wrap.R.FormValue("first_name"))
+		pf_last_name := utils.Trim(wrap.R.FormValue("last_name"))
+		pf_email := utils.Trim(wrap.R.FormValue("email"))
+		pf_password := utils.Trim(wrap.R.FormValue("password"))
+		pf_admin := utils.Trim(wrap.R.FormValue("admin"))
+		pf_active := utils.Trim(wrap.R.FormValue("active"))
 
 		if pf_admin == "" {
 			pf_admin = "0"

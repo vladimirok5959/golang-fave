@@ -10,10 +10,10 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 		WantDB: true,
 		Mount:  "index-first-user",
 	}, func(wrap *wrapper.Wrapper) {
-		pf_first_name := wrap.R.FormValue("first_name")
-		pf_last_name := wrap.R.FormValue("last_name")
-		pf_email := wrap.R.FormValue("email")
-		pf_password := wrap.R.FormValue("password")
+		pf_first_name := utils.Trim(wrap.R.FormValue("first_name"))
+		pf_last_name := utils.Trim(wrap.R.FormValue("last_name"))
+		pf_email := utils.Trim(wrap.R.FormValue("email"))
+		pf_password := utils.Trim(wrap.R.FormValue("password"))
 
 		if pf_email == "" {
 			wrap.MsgError(`Please specify user email`)

@@ -169,10 +169,10 @@ func (this *Modules) RegisterAction_ShopCategoriesModify() *Action {
 		Mount:     "shop-categories-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_name := wrap.R.FormValue("name")
-		pf_alias := wrap.R.FormValue("alias")
-		pf_parent := wrap.R.FormValue("parent")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_name := utils.Trim(wrap.R.FormValue("name"))
+		pf_alias := utils.Trim(wrap.R.FormValue("alias"))
+		pf_parent := utils.Trim(wrap.R.FormValue("parent"))
 
 		if !utils.IsNumeric(pf_id) || !utils.IsNumeric(pf_parent) {
 			wrap.MsgError(`Inner system error`)

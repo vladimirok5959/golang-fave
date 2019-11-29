@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"golang-fave/engine/wrapper"
+	"golang-fave/utils"
 )
 
 type OrderItem struct {
@@ -21,7 +22,7 @@ func (this *Modules) RegisterAction_ShopImagesReorder() *Action {
 		Mount:     "shop-images-reorder",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_data := wrap.R.FormValue("data")
+		pf_data := utils.Trim(wrap.R.FormValue("data"))
 
 		var orders Orders
 		if err := json.Unmarshal([]byte(pf_data), &orders); err != nil {

@@ -11,10 +11,10 @@ func (this *Modules) RegisterAction_SettingsApi() *Action {
 		Mount:     "settings-api",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_xml_enabled := wrap.R.FormValue("xml-enabled")
-		pf_xml_name := wrap.R.FormValue("xml-name")
-		pf_xml_company := wrap.R.FormValue("xml-company")
-		pf_xml_url := wrap.R.FormValue("xml-url")
+		pf_xml_enabled := utils.Trim(wrap.R.FormValue("xml-enabled"))
+		pf_xml_name := utils.Trim(wrap.R.FormValue("xml-name"))
+		pf_xml_company := utils.Trim(wrap.R.FormValue("xml-company"))
+		pf_xml_url := utils.Trim(wrap.R.FormValue("xml-url"))
 
 		if pf_xml_enabled == "" {
 			pf_xml_enabled = "0"

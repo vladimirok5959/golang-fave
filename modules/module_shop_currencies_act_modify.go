@@ -11,11 +11,11 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 		Mount:     "shop-currencies-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_name := wrap.R.FormValue("name")
-		pf_coefficient := wrap.R.FormValue("coefficient")
-		pf_code := wrap.R.FormValue("code")
-		pf_symbol := wrap.R.FormValue("symbol")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_name := utils.Trim(wrap.R.FormValue("name"))
+		pf_coefficient := utils.Trim(wrap.R.FormValue("coefficient"))
+		pf_code := utils.Trim(wrap.R.FormValue("code"))
+		pf_symbol := utils.Trim(wrap.R.FormValue("symbol"))
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)

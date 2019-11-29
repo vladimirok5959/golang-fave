@@ -11,14 +11,14 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 		Mount:     "index-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_name := wrap.R.FormValue("name")
-		pf_alias := wrap.R.FormValue("alias")
-		pf_content := wrap.R.FormValue("content")
-		pf_meta_title := wrap.R.FormValue("meta_title")
-		pf_meta_keywords := wrap.R.FormValue("meta_keywords")
-		pf_meta_description := wrap.R.FormValue("meta_description")
-		pf_active := wrap.R.FormValue("active")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_name := utils.Trim(wrap.R.FormValue("name"))
+		pf_alias := utils.Trim(wrap.R.FormValue("alias"))
+		pf_content := utils.Trim(wrap.R.FormValue("content"))
+		pf_meta_title := utils.Trim(wrap.R.FormValue("meta_title"))
+		pf_meta_keywords := utils.Trim(wrap.R.FormValue("meta_keywords"))
+		pf_meta_description := utils.Trim(wrap.R.FormValue("meta_description"))
+		pf_active := utils.Trim(wrap.R.FormValue("active"))
 
 		if pf_active == "" {
 			pf_active = "0"

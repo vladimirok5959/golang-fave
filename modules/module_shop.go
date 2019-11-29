@@ -1012,7 +1012,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							if middle_name != "" {
 								name += " " + middle_name
 							}
-							name = `<a href="` + link + `">` + order_id + strings.TrimSpace(name) + `</a>`
+							name = `<a href="` + link + `">` + order_id + utils.Trim(name) + `</a>`
 
 							contact := ""
 							if email != "" {
@@ -1021,7 +1021,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							if phone != "" {
 								contact += " (" + phone + ")"
 							}
-							contact = `<a href="` + link + `">` + strings.TrimSpace(contact) + `</a>`
+							contact = `<a href="` + link + `">` + utils.Trim(contact) + `</a>`
 
 							return `<div>` + name + `</div><div><small>` + contact + `</small></div>`
 						},
@@ -1993,7 +1993,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			if middle_name != "" {
 				name += " " + middle_name
 			}
-			name = order_id + strings.TrimSpace(name)
+			name = order_id + utils.Trim(name)
 
 			contact := ""
 			if email != "" {
@@ -2002,7 +2002,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			if phone != "" {
 				contact += " (" + phone + ")"
 			}
-			contact = strings.TrimSpace(contact)
+			contact = utils.Trim(contact)
 
 			content += `<table id="cp-table-shop_orders" class="table data-table table-striped table-bordered table-hover table_shop_orders">
 				<thead>
@@ -2111,7 +2111,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				<div class="card-header"><b>Delivery</b></div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">`
-			if strings.TrimSpace(curr_order_client_delivery_comment) != "" {
+			if utils.Trim(curr_order_client_delivery_comment) != "" {
 				content += html.EscapeString(curr_order_client_delivery_comment)
 			} else {
 				content += `NO SET`
@@ -2125,7 +2125,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				<div class="card-header"><b>Comment</b></div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">`
-			if strings.TrimSpace(curr_order_client_order_comment) != "" {
+			if utils.Trim(curr_order_client_order_comment) != "" {
 				content += html.EscapeString(curr_order_client_order_comment)
 			} else {
 				content += `NO SET`

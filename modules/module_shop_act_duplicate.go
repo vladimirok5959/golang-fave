@@ -13,8 +13,8 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 		Mount:     "shop-duplicate",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_attach := wrap.R.FormValue("attach")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_attach := utils.Trim(wrap.R.FormValue("attach"))
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)

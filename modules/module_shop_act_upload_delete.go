@@ -13,8 +13,8 @@ func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 		Mount:     "shop-upload-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
-		pf_id := wrap.R.FormValue("id")
-		pf_file := wrap.R.FormValue("file")
+		pf_id := utils.Trim(wrap.R.FormValue("id"))
+		pf_file := utils.Trim(wrap.R.FormValue("file"))
 
 		if !utils.IsNumeric(pf_id) {
 			wrap.MsgError(`Inner system error`)
