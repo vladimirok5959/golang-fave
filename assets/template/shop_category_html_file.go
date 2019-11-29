@@ -31,7 +31,7 @@ var VarShopCategoryHtmlFile = []byte(`{{template "header.html" .}}
 						{{if le .Quantity 0}}<span class="badge badge-primary">Out of stock</span>{{end}}
 						<a href="{{.Permalink}}" class="btn btn-success">View</a>
 						<span class="price{{if gt .PriceOld 0.00}} price_red{{end}}">{{.PriceNice}} {{$.Data.Shop.CurrentCurrency.Code}}</span>
-						{{if gt .PriceOld 0.00}}<span class="price price_old"><strike>{{.PriceOldNice}} {{$.Data.Shop.CurrentCurrency.Code}}</strike></span>{{end}}
+						{{if gt .PriceOld 0.00}}<span class="price price_old"><strike>{{.PriceOldNice}} {{$.Data.Shop.CurrentCurrency.Code}}</strike></span>{{else}}<span class="price price_old">&nbsp;</span>{{end}}
 					</div>
 				</div>
 			{{end}}
