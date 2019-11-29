@@ -542,7 +542,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			`INSERT INTO shop_cat_product_rel (product_id, category_id)
 				VALUES
 			(1, 3),
-			(2, 3);`,
+			(2, 3),
+			(3, 3);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
