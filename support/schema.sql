@@ -139,6 +139,8 @@ CREATE TABLE shop_products (
 	content text NOT NULL COMMENT 'Product content',
 	datetime datetime NOT NULL COMMENT 'Creation date/time',
 	active int(1) NOT NULL COMMENT 'Is active product or not',
+	custom1 varchar(2048) NOT NULL DEFAULT '',
+	custom2 varchar(2048) NOT NULL DEFAULT '',
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE users (

@@ -333,6 +333,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 				content text NOT NULL COMMENT 'Product content',
 				datetime datetime NOT NULL COMMENT 'Creation date/time',
 				active int(1) NOT NULL COMMENT 'Is active product or not',
+				custom1 varchar(2048) NOT NULL DEFAULT '',
+				custom2 varchar(2048) NOT NULL DEFAULT '',
 				PRIMARY KEY (id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
 		); err != nil {
@@ -532,7 +534,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000018');`,
+			`INSERT INTO settings (name, value) VALUES ('database_version', '000000019');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
