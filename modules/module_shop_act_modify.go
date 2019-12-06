@@ -27,6 +27,8 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		pf_briefly := utils.Trim(wrap.R.FormValue("briefly"))
 		pf_content := utils.Trim(wrap.R.FormValue("content"))
 		pf_active := utils.Trim(wrap.R.FormValue("active"))
+		pf_custom1 := utils.Trim(wrap.R.FormValue("custom1"))
+		pf_custom2 := utils.Trim(wrap.R.FormValue("custom2"))
 
 		if pf_active == "" {
 			pf_active = "0"
@@ -112,7 +114,9 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						briefly = ?,
 						content = ?,
 						datetime = ?,
-						active = ?
+						active = ?,
+						custom1 = ?,
+						custom2 = ?
 					;`,
 					wrap.User.A_id,
 					utils.StrToInt(pf_currency),
@@ -128,6 +132,8 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					pf_content,
 					utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp()),
 					utils.StrToInt(pf_active),
+					pf_custom1,
+					pf_custom2,
 				)
 				if err != nil {
 					return err
@@ -230,7 +236,9 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						category = ?,
 						briefly = ?,
 						content = ?,
-						active = ?
+						active = ?,
+						custom1 = ?,
+						custom2 = ?
 					WHERE
 						id = ?
 					;`,
@@ -246,6 +254,8 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					pf_briefly,
 					pf_content,
 					utils.StrToInt(pf_active),
+					pf_custom1,
+					pf_custom2,
 					utils.StrToInt(pf_id),
 				); err != nil {
 					return err

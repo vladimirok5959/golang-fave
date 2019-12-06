@@ -1518,7 +1518,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 									<label for="lbl_custom1">` + (*wrap.Config).Shop.CustomFields.Field1.Caption + `</label>
 								</div>
 								<div class="col-md-9">
-									<div><input class="form-control" type="text" id="lbl_custom1" name="custom1" value="" maxlength="2048" autocomplete="off"></div>
+									<div><input class="form-control" type="text" id="lbl_custom1" name="custom1" value="` + html.EscapeString(data.A_custom1) + `" maxlength="2048" autocomplete="off"></div>
 								</div>
 							</div>
 						</div>`
@@ -1539,7 +1539,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 									<label for="lbl_custom2">` + (*wrap.Config).Shop.CustomFields.Field2.Caption + `</label>
 								</div>
 								<div class="col-md-9">
-									<div><input class="form-control" type="text" id="lbl_custom2" name="custom2" value="" maxlength="2048" autocomplete="off"></div>
+									<div><input class="form-control" type="text" id="lbl_custom2" name="custom2" value="` + html.EscapeString(data.A_custom2) + `" maxlength="2048" autocomplete="off"></div>
 								</div>
 							</div>
 						</div>`
