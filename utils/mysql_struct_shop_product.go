@@ -21,6 +21,8 @@ type MySql_shop_product struct {
 	A_content   string
 	A_datetime  int
 	A_active    int
+	A_custom1   string
+	A_custom2   string
 }
 
 func (this *MySql_shop_product) A_parent_id() int {

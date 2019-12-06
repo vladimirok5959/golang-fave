@@ -1140,6 +1140,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				A_content:   "",
 				A_datetime:  0,
 				A_active:    0,
+				A_custom1:   "",
+				A_custom2:   "",
 			}
 
 			if wrap.CurrSubModule == "modify" {
@@ -1165,7 +1167,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						category,
 						briefly,
 						content,
-						active
+						active,
+						custom1,
+						custom2
 					FROM
 						shop_products
 					WHERE
@@ -1188,6 +1192,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_briefly,
 					&data.A_content,
 					&data.A_active,
+					&data.A_custom1,
+					&data.A_custom2,
 				)
 				if *wrap.LogCpError(&err) != nil {
 					return "", "", ""
@@ -1495,6 +1501,48 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`</div>` +
 							`</div>` +
 							`<script>WaitForFave(function(){Sortable.create(document.getElementById('list-images'),{animation:0,onEnd:function(evt){var orderData=[];$('#list-images div.attached-img').each(function(i,v){orderData.push({Id:$(v).data('id'),Order:i+1});});$('#list-images').addClass('loading');fave.ShopProductsImageReorder('shop-images-reorder',{Items:orderData});},});});</script>`
+					},
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Custom field 1",
+					Name:    "",
+					Value:   "",
+					CallBack: func(field *builder.DataFormField) string {
+						if (*wrap.Config).Shop.CustomFields.Field1.Enabled <= 0 {
+							return ``
+						}
+						return `<div class="form-group nf">
+							<div class="row">
+								<div class="col-md-3">
+									<label for="lbl_custom1">` + (*wrap.Config).Shop.CustomFields.Field1.Caption + `</label>
+								</div>
+								<div class="col-md-9">
+									<div><input class="form-control" type="text" id="lbl_custom1" name="custom1" value="" maxlength="2048" autocomplete="off"></div>
+								</div>
+							</div>
+						</div>`
+					},
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Custom field 2",
+					Name:    "",
+					Value:   "",
+					CallBack: func(field *builder.DataFormField) string {
+						if (*wrap.Config).Shop.CustomFields.Field2.Enabled <= 0 {
+							return ``
+						}
+						return `<div class="form-group nf">
+							<div class="row">
+								<div class="col-md-3">
+									<label for="lbl_custom2">` + (*wrap.Config).Shop.CustomFields.Field2.Caption + `</label>
+								</div>
+								<div class="col-md-9">
+									<div><input class="form-control" type="text" id="lbl_custom2" name="custom2" value="" maxlength="2048" autocomplete="off"></div>
+								</div>
+							</div>
+						</div>`
 					},
 				},
 				{
