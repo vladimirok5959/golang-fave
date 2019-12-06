@@ -236,9 +236,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						category = ?,
 						briefly = ?,
 						content = ?,
-						active = ?,
-						custom1 = ?,
-						custom2 = ?
+						active = ?
 					WHERE
 						id = ?
 					;`,
@@ -254,11 +252,39 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					pf_briefly,
 					pf_content,
 					utils.StrToInt(pf_active),
-					pf_custom1,
-					pf_custom2,
 					utils.StrToInt(pf_id),
 				); err != nil {
 					return err
+				}
+
+				// Update custom field 1
+				if _, ok := wrap.R.Form["custom1"]; ok {
+					if _, err := tx.Exec(
+						`UPDATE shop_products SET
+							custom1 = ?
+						WHERE
+							id = ?
+						;`,
+						pf_custom1,
+						utils.StrToInt(pf_id),
+					); err != nil {
+						return err
+					}
+				}
+
+				// Update custom field 2
+				if _, ok := wrap.R.Form["custom2"]; ok {
+					if _, err := tx.Exec(
+						`UPDATE shop_products SET
+							custom2 = ?
+						WHERE
+							id = ?
+						;`,
+						pf_custom2,
+						utils.StrToInt(pf_id),
+					); err != nil {
+						return err
+					}
 				}
 
 				// Delete product and categories relations
