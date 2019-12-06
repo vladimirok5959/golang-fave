@@ -29,6 +29,12 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 
 		pf_accept_orders := utils.Trim(wrap.R.FormValue("accept-orders"))
 
+		pf_custom_field_1_enabled := utils.Trim(wrap.R.FormValue("custom-field-1-enabled"))
+		pf_custom_field_1_caption := utils.Trim(wrap.R.FormValue("custom-field-1-caption"))
+
+		pf_custom_field_2_enabled := utils.Trim(wrap.R.FormValue("custom-field-2-enabled"))
+		pf_custom_field_2_caption := utils.Trim(wrap.R.FormValue("custom-field-2-caption"))
+
 		if !utils.IsNumeric(pf_price_fomat) {
 			wrap.MsgError(`Must be integer number`)
 			return
@@ -106,6 +112,12 @@ func (this *Modules) RegisterAction_SettingsShop() *Action {
 		(*wrap.Config).Shop.Orders.NewOrderEmailThemeUser = pf_new_order_email_theme_user
 
 		(*wrap.Config).Shop.Orders.Enabled = utils.StrToInt(pf_accept_orders)
+
+		(*wrap.Config).Shop.CustomFields.Field1.Enabled = utils.StrToInt(pf_custom_field_1_enabled)
+		(*wrap.Config).Shop.CustomFields.Field1.Caption = pf_custom_field_1_caption
+
+		(*wrap.Config).Shop.CustomFields.Field2.Enabled = utils.StrToInt(pf_custom_field_2_enabled)
+		(*wrap.Config).Shop.CustomFields.Field2.Caption = pf_custom_field_2_caption
 
 		if err := wrap.ConfigSave(); err != nil {
 			wrap.MsgError(err.Error())
