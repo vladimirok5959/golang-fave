@@ -46,6 +46,16 @@ type Config struct {
 			NewOrderEmailThemeCp   string
 			NewOrderEmailThemeUser string
 		}
+		CustomFields struct {
+			Field1 struct {
+				Enabled int
+				Caption string
+			}
+			Field2 struct {
+				Enabled int
+				Caption string
+			}
+		}
 	}
 	API struct {
 		XML struct {
@@ -114,6 +124,12 @@ func (this *Config) configDefault() {
 
 	this.Shop.Orders.NewOrderEmailThemeCp = "❤️ New order"
 	this.Shop.Orders.NewOrderEmailThemeUser = "❤️ Thanks for your order"
+
+	this.Shop.CustomFields.Field1.Enabled = 0
+	this.Shop.CustomFields.Field1.Caption = "Custom Field 1"
+
+	this.Shop.CustomFields.Field2.Enabled = 0
+	this.Shop.CustomFields.Field2.Caption = "Custom Field 2"
 
 	this.API.XML.Enabled = 0
 	this.API.XML.Name = ""
