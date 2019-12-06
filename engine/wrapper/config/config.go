@@ -126,10 +126,10 @@ func (this *Config) configDefault() {
 	this.Shop.Orders.NewOrderEmailThemeUser = "❤️ Thanks for your order"
 
 	this.Shop.CustomFields.Field1.Enabled = 0
-	this.Shop.CustomFields.Field1.Caption = "Custom Field 1"
+	this.Shop.CustomFields.Field1.Caption = "Custom field 1"
 
 	this.Shop.CustomFields.Field2.Enabled = 0
-	this.Shop.CustomFields.Field2.Caption = "Custom Field 2"
+	this.Shop.CustomFields.Field2.Caption = "Custom field 2"
 
 	this.API.XML.Enabled = 0
 	this.API.XML.Name = ""

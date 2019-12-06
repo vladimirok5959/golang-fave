@@ -570,6 +570,12 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					},
 				},
 				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Accept orders",
+					Name:    "accept-orders",
+					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.Enabled),
+				},
+				{
 					Kind:    builder.DFKText,
 					Caption: "New order notify email",
 					Name:    "new-order-notify-email",
@@ -590,9 +596,29 @@ func (this *Modules) RegisterModule_Settings() *Module {
 				},
 				{
 					Kind:    builder.DFKCheckBox,
-					Caption: "Accept orders",
-					Name:    "accept-orders",
-					Value:   utils.IntToStr((*wrap.Config).Shop.Orders.Enabled),
+					Caption: "Custom field 1 enabled",
+					Name:    "custom-field-1-enabled",
+					Value:   utils.IntToStr((*wrap.Config).Shop.CustomFields.Field1.Enabled),
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Custom field 1 caption",
+					Name:    "custom-field-1-caption",
+					Value:   (*wrap.Config).Shop.CustomFields.Field1.Caption,
+					Hint:    "Caption for product custom field",
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Custom field 2 enabled",
+					Name:    "custom-field-2-enabled",
+					Value:   utils.IntToStr((*wrap.Config).Shop.CustomFields.Field2.Enabled),
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Custom field 2 caption",
+					Name:    "custom-field-2-caption",
+					Value:   (*wrap.Config).Shop.CustomFields.Field2.Caption,
+					Hint:    "Caption for product custom field",
 				},
 				{
 					Kind:   builder.DFKSubmit,
