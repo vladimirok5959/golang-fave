@@ -6,6 +6,8 @@ ENV FAVE_HOST=0.0.0.0 FAVE_PORT=8080 FAVE_DIR=/app/hosts FAVE_DEBUG=false FAVE_K
 ADD https://github.com/vladimirok5959/golang-fave/releases/download/v1.5.4/fave.linux-amd64.tar.gz /app/fave.linux-amd64.tar.gz
 ADD https://github.com/vladimirok5959/golang-fave/releases/download/v1.5.4/localhost.tar.gz /app/hosts/localhost.tar.gz
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get -y update && apt-get -y upgrade && \
  apt-get install -y ca-certificates && \
  dpkg-reconfigure -p critical ca-certificates && \

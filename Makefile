@@ -66,6 +66,8 @@ dockerfile:
 	@echo "ADD https://github.com/vladimirok5959/golang-fave/releases/download/v${VERSION}/fave.linux-amd64.tar.gz /app/fave.linux-amd64.tar.gz" >> Dockerfile
 	@echo "ADD https://github.com/vladimirok5959/golang-fave/releases/download/v${VERSION}/localhost.tar.gz /app/hosts/localhost.tar.gz" >> Dockerfile
 	@echo "" >> Dockerfile
+	@echo "ARG DEBIAN_FRONTEND=noninteractive" >> Dockerfile
+	@echo "" >> Dockerfile
 	@echo "RUN apt-get -y update && apt-get -y upgrade && \\" >> Dockerfile
 	@echo " apt-get install -y ca-certificates && \\" >> Dockerfile
 	@echo " dpkg-reconfigure -p critical ca-certificates && \\" >> Dockerfile
