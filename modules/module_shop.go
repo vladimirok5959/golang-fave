@@ -664,12 +664,16 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						Classes:     "d-none d-md-table-cell",
 						CallBack: func(values *[]string) string {
 							price_old := ""
+							price_promo := ""
 							price_styles := ""
 							if utils.StrToFloat64((*values)[9]) > 0 {
-								price_old = `<div><strike>` + utils.Float64ToStr(utils.StrToFloat64((*values)[9])) + `</strike></div>`
+								price_old = `<div title="Old price"><strike>` + utils.Float64ToStr(utils.StrToFloat64((*values)[9])) + `</strike></div>`
 								price_styles = ` style="color:#fb3f4c;"`
 							}
-							return price_old + `<div` + price_styles + `>` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
+							if utils.StrToFloat64((*values)[11]) > 0 {
+								price_promo = `<div style="color:#ffc107;" title="Promo price">` + utils.Float64ToStr(utils.StrToFloat64((*values)[11])) + `</div>`
+							}
+							return price_promo + price_old + `<div` + price_styles + `title="Current price">` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
 								`<div><small>` + currencies[utils.StrToInt((*values)[3])] + `</small></div>`
 						},
 					},
@@ -704,6 +708,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					},
 					{
 						DBField: "quantity",
+					},
+					{
+						DBField: "price_promo",
 					},
 				},
 				func(values *[]string) string {
@@ -748,7 +755,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							shop_products.parent_id,
 							spp.name AS pname,
 							shop_products.price_old,
-							shop_products.quantity
+							shop_products.quantity,
+							shop_products.price_promo
 						FROM
 							shop_products
 							LEFT JOIN shop_products AS spp ON spp.id = shop_products.parent_id
@@ -1352,14 +1360,14 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				},
 				{
 					Kind:    builder.DFKText,
-					Caption: "Price Old/Promo",
+					Caption: "Old/Promo price",
 					Name:    "price_old",
 					Value:   "0",
 					CallBack: func(field *builder.DataFormField) string {
 						return `<div class="form-group n6">` +
 							`<div class="row">` +
 							`<div class="col-md-3">` +
-							`<label for="lbl_price_old">Price Old/Promo</label>` +
+							`<label for="lbl_price_old">Old/Promo price</label>` +
 							`</div>` +
 							`<div class="col-md-9">` +
 							`<div>` +
@@ -1368,12 +1376,12 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<div class="row">` +
 							`<div class="col-md-6">` +
 							`<div><input class="form-control" type="number" id="lbl_price_old" name="price_old" value="` + utils.Float64ToStr(data.A_price_old) + `" placeholder="" autocomplete="off"></div>` +
+							`<div class="d-md-none mb-3"></div>` +
 							`</div>` +
 							`<div class="col-md-6">` +
 							`<div><input class="form-control" type="number" id="lbl_price_promo" name="price_promo" value="` + utils.Float64ToStr(data.A_price_promo) + `" placeholder="" autocomplete="off"></div>` +
 							`</div>` +
 							`</div>` +
-							`<div class="d-md-none mb-3"></div>` +
 							`</div>` +
 							`</div>` +
 							`</div>` +
