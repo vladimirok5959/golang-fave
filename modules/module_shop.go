@@ -1159,6 +1159,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						currency,
 						price,
 						price_old,
+						price_promo,
 						gname,
 						name,
 						alias,
@@ -1183,6 +1184,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					&data.A_currency,
 					&data.A_price,
 					&data.A_price_old,
+					&data.A_price_promo,
 					&data.A_gname,
 					&data.A_name,
 					&data.A_alias,
@@ -1330,11 +1332,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<div class="row">` +
 							`<div class="col-md-8">` +
 							`<div class="row">` +
-							`<div class="col-md-6">` +
+							`<div class="col-md-12">` +
 							`<div><input class="form-control" type="number" step="0.01" id="lbl_price" name="price" value="` + utils.Float64ToStr(data.A_price) + `" placeholder="" autocomplete="off" required></div>` +
-							`</div>` +
-							`<div class="col-md-6">` +
-							`<div><input class="form-control" type="number" id="lbl_price_old" name="price_old" value="` + utils.Float64ToStr(data.A_price_old) + `" placeholder="" autocomplete="off"></div>` +
 							`</div>` +
 							`</div>` +
 							`<div class="d-md-none mb-3"></div>` +
@@ -1343,6 +1342,38 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							`<select class="selectpicker form-control" id="lbl_currency" name="currency" data-live-search="true">` +
 							this.shop_GetCurrencySelectOptions(wrap, data.A_currency) +
 							`</select>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Price Old/Promo",
+					Name:    "price_old",
+					Value:   "0",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group n6">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_price_old">Price Old/Promo</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<div class="row">` +
+							`<div class="col-md-12">` +
+							`<div class="row">` +
+							`<div class="col-md-6">` +
+							`<div><input class="form-control" type="number" id="lbl_price_old" name="price_old" value="` + utils.Float64ToStr(data.A_price_old) + `" placeholder="" autocomplete="off"></div>` +
+							`</div>` +
+							`<div class="col-md-6">` +
+							`<div><input class="form-control" type="number" id="lbl_price_promo" name="price_promo" value="` + utils.Float64ToStr(data.A_price_promo) + `" placeholder="" autocomplete="off"></div>` +
+							`</div>` +
+							`</div>` +
+							`<div class="d-md-none mb-3"></div>` +
 							`</div>` +
 							`</div>` +
 							`</div>` +
