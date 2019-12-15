@@ -1,14 +1,16 @@
-# github.com/disintegration/imaging v1.6.0
+# github.com/disintegration/imaging v1.6.1
 github.com/disintegration/imaging
 # github.com/go-sql-driver/mysql v1.4.1
 github.com/go-sql-driver/mysql
-# github.com/vladimirok5959/golang-server-bootstrap v1.0.5
+# github.com/vladimirok5959/golang-ctrlc v1.0.1
+github.com/vladimirok5959/golang-ctrlc/ctrlc
+# github.com/vladimirok5959/golang-server-bootstrap v1.0.8
 github.com/vladimirok5959/golang-server-bootstrap/bootstrap
-# github.com/vladimirok5959/golang-server-resources v1.0.3
+# github.com/vladimirok5959/golang-server-resources v1.0.4
 github.com/vladimirok5959/golang-server-resources/resource
-# github.com/vladimirok5959/golang-server-sessions v1.0.5
+# github.com/vladimirok5959/golang-server-sessions v1.0.6
 github.com/vladimirok5959/golang-server-sessions/session
-# github.com/vladimirok5959/golang-server-static v1.0.0
+# github.com/vladimirok5959/golang-server-static v1.0.2
 github.com/vladimirok5959/golang-server-static/static
 # golang.org/x/image v0.0.0-20180708004352-c73c2afc3b81
 golang.org/x/image/bmp
