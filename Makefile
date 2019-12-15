@@ -12,7 +12,7 @@ test:
 	go test ./...
 
 run:
-	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true -keepalive true
+	@./fave -host 0.0.0.0 -port 8080 -dir ./hosts -debug true -keepalive true --color=always
 
 build: clean version template dockerfile
 	@-mkdir ./bin
