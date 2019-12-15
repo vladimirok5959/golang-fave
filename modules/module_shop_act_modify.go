@@ -19,6 +19,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		pf_name := utils.Trim(wrap.R.FormValue("name"))
 		pf_price := utils.Trim(wrap.R.FormValue("price"))
 		pf_price_old := utils.Trim(wrap.R.FormValue("price_old"))
+		pf_price_promo := utils.Trim(wrap.R.FormValue("price_promo"))
 		pf_currency := utils.Trim(wrap.R.FormValue("currency"))
 		pf_alias := utils.Trim(wrap.R.FormValue("alias"))
 		pf_vendor := utils.Trim(wrap.R.FormValue("vendor"))
@@ -45,6 +46,11 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		}
 
 		if !utils.IsFloat(pf_price_old) {
+			wrap.MsgError(`Inner system error`)
+			return
+		}
+
+		if !utils.IsFloat(pf_price_promo) {
 			wrap.MsgError(`Inner system error`)
 			return
 		}
@@ -105,6 +111,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						currency = ?,
 						price = ?,
 						price_old = ?,
+						price_promo = ?,
 						gname = ?,
 						name = ?,
 						alias = ?,
@@ -122,6 +129,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					utils.StrToInt(pf_currency),
 					utils.StrToFloat64(pf_price),
 					utils.StrToFloat64(pf_price_old),
+					utils.StrToFloat64(pf_price_promo),
 					pf_gname,
 					pf_name,
 					pf_alias,
@@ -228,6 +236,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						currency = ?,
 						price = ?,
 						price_old = ?,
+						price_promo = ?,
 						gname = ?,
 						name = ?,
 						alias = ?,
@@ -243,6 +252,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 					utils.StrToInt(pf_currency),
 					utils.StrToFloat64(pf_price),
 					utils.StrToFloat64(pf_price_old),
+					utils.StrToFloat64(pf_price_promo),
 					pf_gname,
 					pf_name,
 					pf_alias,
