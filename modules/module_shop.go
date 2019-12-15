@@ -664,12 +664,12 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						Classes:     "d-none d-md-table-cell",
 						CallBack: func(values *[]string) string {
 							price_old := ""
-							peice_styles := ""
+							price_styles := ""
 							if utils.StrToFloat64((*values)[9]) > 0 {
 								price_old = `<div><strike>` + utils.Float64ToStr(utils.StrToFloat64((*values)[9])) + `</strike></div>`
-								peice_styles = ` style="color:#fb3f4c;"`
+								price_styles = ` style="color:#fb3f4c;"`
 							}
-							return price_old + `<div` + peice_styles + `>` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
+							return price_old + `<div` + price_styles + `>` + utils.Float64ToStr(utils.StrToFloat64((*values)[4])) + `</div>` +
 								`<div><small>` + currencies[utils.StrToInt((*values)[3])] + `</small></div>`
 						},
 					},
