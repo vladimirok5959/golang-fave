@@ -1,6 +1,8 @@
 package mysqlpool
 
 import (
+	"errors"
+	"strings"
 	"sync"
 
 	"golang-fave/engine/sqlw"
@@ -18,6 +20,7 @@ func New() *MySqlPool {
 }
 
 func (this *MySqlPool) Get(key string) *sqlw.DB {
+	// TODO: return nil if context canceled!
 	this.Lock()
 	defer this.Unlock()
 	if value, ok := this.connections[key]; ok == true {
@@ -32,12 +35,19 @@ func (this *MySqlPool) Set(key string, value *sqlw.DB) {
 	this.connections[key] = value
 }
 
-func (this *MySqlPool) CloseAll() {
+func (this *MySqlPool) Close() error {
 	this.Lock()
 	defer this.Unlock()
+	var errs []string
 	for _, c := range this.connections {
 		if c != nil {
-			c.Close()
+			if err := c.Close(); err != nil {
+				errs = append(errs, err.Error())
+			}
 		}
 	}
+	if len(errs) > 0 {
+		return errors.New(strings.Join(errs, ", "))
+	}
+	return nil
 }

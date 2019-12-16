@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"golang-fave/assets"
@@ -37,32 +38,8 @@ func init() {
 }
 
 func main() {
-	// Universal, params by env vars
-	if consts.ParamHost == "0.0.0.0" {
-		if os.Getenv("FAVE_HOST") != "" {
-			consts.ParamHost = os.Getenv("FAVE_HOST")
-		}
-	}
-	if consts.ParamPort == 8080 {
-		if os.Getenv("FAVE_PORT") != "" {
-			consts.ParamPort = utils.StrToInt(os.Getenv("FAVE_PORT"))
-		}
-	}
-	if consts.ParamWwwDir == "" {
-		if os.Getenv("FAVE_DIR") != "" {
-			consts.ParamWwwDir = os.Getenv("FAVE_DIR")
-		}
-	}
-	if consts.ParamDebug == false {
-		if os.Getenv("FAVE_DEBUG") == "true" {
-			consts.ParamDebug = true
-		}
-	}
-	if consts.ParamKeepAlive == false {
-		if os.Getenv("FAVE_KEEPALIVE") == "true" {
-			consts.ParamKeepAlive = true
-		}
-	}
+	// Params from env vars
+	read_env_params()
 
 	// Check www dir
 	consts.ParamWwwDir = utils.FixPath(consts.ParamWwwDir)
@@ -79,7 +56,6 @@ func main() {
 
 	// Init logger
 	lg := logger.New()
-	defer lg.Close()
 
 	// Attach www dir to logger
 	lg.SetWwwDir(consts.ParamWwwDir)
@@ -124,137 +100,220 @@ func main() {
 	// Init and start web server
 	server_address := fmt.Sprintf("%s:%d", consts.ParamHost, consts.ParamPort)
 
+	// Server params
+	server_params := func(s *http.Server) {
+		s.SetKeepAlivesEnabled(consts.ParamKeepAlive)
+	}
+
+	// Before callback
+	before := func(
+		ctx context.Context,
+		w http.ResponseWriter,
+		r *http.Request,
+		o *[]bootstrap.Iface,
+	) {
+		w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
+	}
+
+	// After callback
+	after := func(
+		ctx context.Context,
+		w http.ResponseWriter,
+		r *http.Request,
+		o *[]bootstrap.Iface,
+	) {
+		// Schema
+		r.URL.Scheme = "http"
+
+		// Mounted assets
+		if res.Response(
+			w,
+			r,
+			func(
+				w http.ResponseWriter,
+				r *http.Request,
+				i *resource.OneResource,
+			) {
+				w.Header().Set("Cache-Control", "public, max-age=31536000")
+				if consts.ParamDebug && i.Path == "assets/cp/scripts.js" {
+					w.Write([]byte("window.fave_debug=true;"))
+				}
+			},
+			nil,
+		) {
+			return
+		}
+
+		// Host and port
+		host, port := utils.ExtractHostPort(r.Host, false)
+		curr_host := host
+
+		// Domain bindings
+		doms := domains.New(consts.ParamWwwDir)
+		if mhost := doms.GetHost(host); mhost != "" {
+			curr_host = mhost
+		}
+
+		vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + curr_host
+		if !utils.IsDirExists(vhost_dir) {
+			curr_host = "localhost"
+			vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
+		}
+
+		// Check for minimal dirs structure
+		vhost_dir_config := vhost_dir + string(os.PathSeparator) + "config"
+		vhost_dir_htdocs := vhost_dir + string(os.PathSeparator) + "htdocs"
+		vhost_dir_logs := vhost_dir + string(os.PathSeparator) + "logs"
+		vhost_dir_template := vhost_dir + string(os.PathSeparator) + "template"
+		vhost_dir_tmp := vhost_dir + string(os.PathSeparator) + "tmp"
+		if !utils.IsDirExists(vhost_dir_config) {
+			utils.SystemErrorPageEngine(
+				w,
+				errors.New("Folder "+vhost_dir_config+" is not found"),
+			)
+			return
+		}
+		if !utils.IsDirExists(vhost_dir_htdocs) {
+			utils.SystemErrorPageEngine(
+				w,
+				errors.New("Folder "+vhost_dir_htdocs+" is not found"),
+			)
+			return
+		}
+		if !utils.IsDirExists(vhost_dir_logs) {
+			utils.SystemErrorPageEngine(
+				w,
+				errors.New("Folder "+vhost_dir_logs+" is not found"),
+			)
+			return
+		}
+		if !utils.IsDirExists(vhost_dir_template) {
+			utils.SystemErrorPageEngine(
+				w,
+				errors.New("Folder "+vhost_dir_template+" is not found"),
+			)
+			return
+		}
+		if !utils.IsDirExists(vhost_dir_tmp) {
+			utils.SystemErrorPageEngine(
+				w,
+				errors.New("Folder "+vhost_dir_tmp+" is not found"),
+			)
+			return
+		}
+
+		// Static files
+		if stat.Response(vhost_dir_htdocs, w, r, nil, nil) {
+			return
+		}
+
+		// Robots.txt and styles.css from template dir
+		if ServeTemplateFile(w, r, "robots.txt", "", vhost_dir_template) {
+			return
+		}
+		if ServeTemplateFile(w, r, "styles.css", "assets/theme/", vhost_dir_template) {
+			return
+		}
+		if ServeTemplateFile(w, r, "scripts.js", "assets/theme/", vhost_dir_template) {
+			return
+		}
+
+		// Session
+		sess := session.New(w, r, vhost_dir_tmp)
+		defer sess.Close()
+
+		// Convert
+		var lg *logger.Logger
+		if v, ok := (*o)[0].(*logger.Logger); ok {
+			lg = v
+		}
+
+		var mpool *mysqlpool.MySqlPool
+		if v, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
+			mpool = v
+		}
+		// ---
+
+		// Logic
+		if mpool != nil {
+			if engine.Response(
+				mpool,
+				sb,
+				lg,
+				mods,
+				w,
+				r,
+				sess,
+				cbs,
+				host,
+				port,
+				curr_host,
+				vhost_dir_config,
+				vhost_dir_htdocs,
+				vhost_dir_logs,
+				vhost_dir_template,
+				vhost_dir_tmp,
+			) {
+				return
+			}
+		}
+
+		// Error 404
+		utils.SystemErrorPage404(w)
+	}
+
+	// Shutdown callback
+	shutdown := func(
+		ctx context.Context,
+		o *[]bootstrap.Iface,
+	) error {
+		var errs []string
+
+		// ---
+		if mpool, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
+			if err := mpool.Close(); err != nil {
+				errs = append(errs, err.Error())
+			}
+		}
+
+		if lg, ok := (*o)[0].(*logger.Logger); ok {
+			lg.Close()
+		}
+		// ---
+
+		if len(errs) > 0 {
+			return errors.New("Shutdown callback: " + strings.Join(errs, ", "))
+		}
+
+		return nil
+	}
+
+	// Start server
 	bootstrap.Start(
 		&bootstrap.Opts{
-			Timeout: 8 * time.Second,
-			Handle:  lg.Handler,
-			Host:    server_address,
-			Path:    consts.AssetsPath,
-			Object:  mpool,
-			Cbserv: func(s *http.Server) {
-				s.SetKeepAlivesEnabled(consts.ParamKeepAlive)
-			},
-			Before: func(ctx context.Context, w http.ResponseWriter, r *http.Request, o interface{}) {
-				w.Header().Set("Server", "fave.pro/"+consts.ServerVersion)
-			},
-			After: func(ctx context.Context, w http.ResponseWriter, r *http.Request, o interface{}) {
-				// Schema
-				r.URL.Scheme = "http"
-
-				// Mounted assets
-				if res.Response(w, r, func(w http.ResponseWriter, r *http.Request, i *resource.OneResource) {
-					w.Header().Set("Cache-Control", "public, max-age=31536000")
-					if consts.ParamDebug && i.Path == "assets/cp/scripts.js" {
-						w.Write([]byte("window.fave_debug=true;"))
-					}
-				}, nil) {
-					return
-				}
-
-				// Host and port
-				host, port := utils.ExtractHostPort(r.Host, false)
-				curr_host := host
-
-				// Domain bindings
-				doms := domains.New(consts.ParamWwwDir)
-				if mhost := doms.GetHost(host); mhost != "" {
-					curr_host = mhost
-				}
-
-				vhost_dir := consts.ParamWwwDir + string(os.PathSeparator) + curr_host
-				if !utils.IsDirExists(vhost_dir) {
-					curr_host = "localhost"
-					vhost_dir = consts.ParamWwwDir + string(os.PathSeparator) + "localhost"
-				}
-
-				// Check for minimal dir structure
-				vhost_dir_config := vhost_dir + string(os.PathSeparator) + "config"
-				vhost_dir_htdocs := vhost_dir + string(os.PathSeparator) + "htdocs"
-				vhost_dir_logs := vhost_dir + string(os.PathSeparator) + "logs"
-				vhost_dir_template := vhost_dir + string(os.PathSeparator) + "template"
-				vhost_dir_tmp := vhost_dir + string(os.PathSeparator) + "tmp"
-				if !utils.IsDirExists(vhost_dir_config) {
-					utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_config+" is not found"))
-					return
-				}
-				if !utils.IsDirExists(vhost_dir_htdocs) {
-					utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_htdocs+" is not found"))
-					return
-				}
-				if !utils.IsDirExists(vhost_dir_logs) {
-					utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_logs+" is not found"))
-					return
-				}
-				if !utils.IsDirExists(vhost_dir_template) {
-					utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_template+" is not found"))
-					return
-				}
-				if !utils.IsDirExists(vhost_dir_tmp) {
-					utils.SystemErrorPageEngine(w, errors.New("Folder "+vhost_dir_tmp+" is not found"))
-					return
-				}
-
-				// Static files
-				if stat.Response(vhost_dir_htdocs, w, r, nil, nil) {
-					return
-				}
-
-				// Robots.txt and styles.css from template dir
-				if ServeTemplateFile(w, r, "robots.txt", "", vhost_dir_template) {
-					return
-				}
-				if ServeTemplateFile(w, r, "styles.css", "assets/theme/", vhost_dir_template) {
-					return
-				}
-				if ServeTemplateFile(w, r, "scripts.js", "assets/theme/", vhost_dir_template) {
-					return
-				}
-
-				// Session
-				sess := session.New(w, r, vhost_dir_tmp)
-				defer sess.Close()
-
-				// Convert
-				var mp *mysqlpool.MySqlPool
-				if mpool, ok := o.(*mysqlpool.MySqlPool); ok {
-					mp = mpool
-				}
-
-				// Logic
-				if mp != nil {
-					if engine.Response(
-						mp,
-						sb,
-						lg,
-						mods,
-						w,
-						r,
-						sess,
-						cbs,
-						host,
-						port,
-						curr_host,
-						vhost_dir_config,
-						vhost_dir_htdocs,
-						vhost_dir_logs,
-						vhost_dir_template,
-						vhost_dir_tmp,
-					) {
-						return
-					}
-				}
-
-				// Error 404
-				utils.SystemErrorPage404(w)
+			Handle:   lg.Handler,
+			Host:     server_address,
+			Path:     consts.AssetsPath,
+			Cbserv:   server_params,
+			Before:   before,
+			After:    after,
+			Timeout:  8 * time.Second,
+			Shutdown: shutdown,
+			Objects: &[]bootstrap.Iface{
+				lg,
+				mpool,
 			},
 		},
 	)
-
-	// Close MySQL
-	mpool.CloseAll()
 }
 
-func ServeTemplateFile(w http.ResponseWriter, r *http.Request, file string, path string, dir string) bool {
+func ServeTemplateFile(
+	w http.ResponseWriter,
+	r *http.Request,
+	file string,
+	path string,
+	dir string,
+) bool {
 	if r.URL.Path == "/"+path+file {
 		f, err := os.Open(dir + string(os.PathSeparator) + file)
 		if err == nil {

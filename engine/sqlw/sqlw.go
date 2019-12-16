@@ -1,5 +1,8 @@
 package sqlw
 
+// TODO: rework all with context from request
+// https://golang.org/pkg/database/sql/
+
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"

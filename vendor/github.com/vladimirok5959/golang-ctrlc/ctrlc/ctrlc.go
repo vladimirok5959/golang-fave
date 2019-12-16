@@ -2,10 +2,10 @@ package ctrlc
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -23,20 +23,14 @@ type Iface interface {
 type CallbackFunc func(ctx context.Context, shutdown context.CancelFunc) *[]Iface
 
 func App(t time.Duration, f CallbackFunc) {
-	var ParamColor string
-	flag.StringVar(&ParamColor, "color", "auto", "color output (auto/always/never)")
-	flag.Parse()
-
-	useColors := !IS_WIN_PLATFORM && ParamColor == "always"
-
 	stop := make(chan os.Signal)
 	signal.Notify(stop, syscall.SIGTERM)
 	signal.Notify(stop, syscall.SIGINT)
 
 	fmt.Printf(
-		icon_start(useColors)+"%s\n",
+		icon_start(UseColors())+"%s\n",
 		cly(
-			useColors,
+			UseColors(),
 			fmt.Sprintf(
 				"Application started (%d sec)",
 				t/time.Second,
@@ -50,9 +44,9 @@ func App(t time.Duration, f CallbackFunc) {
 	select {
 	case <-sctx.Done():
 		fmt.Printf(
-			"\r"+icon_warn(useColors)+"%s\n",
+			"\r"+icon_warn(UseColors())+"%s\n",
 			cly(
-				useColors,
+				UseColors(),
 				fmt.Sprintf(
 					"Shutting down (application) (%d sec)",
 					t/time.Second,
@@ -63,9 +57,9 @@ func App(t time.Duration, f CallbackFunc) {
 		switch val {
 		case syscall.SIGINT:
 			fmt.Printf(
-				"\r"+icon_warn(useColors)+"%s\n",
+				"\r"+icon_warn(UseColors())+"%s\n",
 				cly(
-					useColors,
+					UseColors(),
 					fmt.Sprintf(
 						"Shutting down (interrupt) (%d sec)",
 						t/time.Second,
@@ -74,9 +68,9 @@ func App(t time.Duration, f CallbackFunc) {
 			)
 		case syscall.SIGTERM:
 			fmt.Printf(
-				icon_warn(useColors)+"%s\n",
+				icon_warn(UseColors())+"%s\n",
 				cly(
-					useColors,
+					UseColors(),
 					fmt.Sprintf(
 						"Shutting down (terminate) (%d sec)",
 						t/time.Second,
@@ -85,9 +79,9 @@ func App(t time.Duration, f CallbackFunc) {
 			)
 		default:
 			fmt.Printf(
-				icon_warn(useColors)+"%s\n",
+				icon_warn(UseColors())+"%s\n",
 				cly(
-					useColors,
+					UseColors(),
 					fmt.Sprintf(
 						"Shutting down (%d sec)",
 						t/time.Second,
@@ -105,9 +99,9 @@ func App(t time.Duration, f CallbackFunc) {
 		if err := iface.Shutdown(ctx); err != nil {
 			errors = true
 			fmt.Printf(
-				icon_hot(useColors)+"%s\n",
+				icon_hot(UseColors())+"%s\n",
 				clr(
-					useColors,
+					UseColors(),
 					fmt.Sprintf(
 						"Shutdown error (%T): %s",
 						iface,
@@ -121,9 +115,9 @@ func App(t time.Duration, f CallbackFunc) {
 
 	if errors {
 		fmt.Printf(
-			icon_mag(useColors)+"%s\n",
+			icon_mag(UseColors())+"%s\n",
 			cly(
-				useColors,
+				UseColors(),
 				fmt.Sprintf(
 					"Application exited with errors (%d sec)",
 					t/time.Second,
@@ -133,9 +127,9 @@ func App(t time.Duration, f CallbackFunc) {
 		os.Exit(1)
 	} else {
 		fmt.Printf(
-			icon_sc(useColors)+"%s\n",
+			icon_sc(UseColors())+"%s\n",
 			clg(
-				useColors,
+				UseColors(),
 				fmt.Sprintf(
 					"Application exited successfully (%d sec)",
 					t/time.Second,
@@ -143,4 +137,42 @@ func App(t time.Duration, f CallbackFunc) {
 			),
 		)
 	}
+}
+
+func UseColors() bool {
+	useColors := strings.Contains(
+		fmt.Sprintf("%s", os.Args),
+		"--color=always",
+	)
+	if !useColors {
+		useColors = strings.Contains(
+			fmt.Sprintf("%s", os.Args),
+			"-color=always",
+		)
+	}
+	if !useColors {
+		useColors = strings.Contains(
+			fmt.Sprintf("%s", os.Args),
+			"color=always",
+		)
+	}
+	if !useColors {
+		useColors = strings.Contains(
+			fmt.Sprintf("%s", os.Args),
+			"--color always",
+		)
+	}
+	if !useColors {
+		useColors = strings.Contains(
+			fmt.Sprintf("%s", os.Args),
+			"-color always",
+		)
+	}
+	if !useColors {
+		useColors = strings.Contains(
+			fmt.Sprintf("%s", os.Args),
+			"color always",
+		)
+	}
+	return !IS_WIN_PLATFORM && useColors
 }
