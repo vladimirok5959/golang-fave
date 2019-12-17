@@ -134,7 +134,6 @@ func main() {
 				r *http.Request,
 				i *resource.OneResource,
 			) {
-				w.Header().Set("Cache-Control", "public, max-age=31536000")
 				if consts.ParamDebug && i.Path == "assets/cp/scripts.js" {
 					w.Write([]byte("window.fave_debug=true;"))
 				}
@@ -315,16 +314,9 @@ func ServeTemplateFile(
 	dir string,
 ) bool {
 	if r.URL.Path == "/"+path+file {
-		f, err := os.Open(dir + string(os.PathSeparator) + file)
-		if err == nil {
-			defer f.Close()
-			st, err := os.Stat(dir + string(os.PathSeparator) + file)
-			if err == nil {
-				if !st.Mode().IsDir() {
-					http.ServeFile(w, r, dir+string(os.PathSeparator)+file)
-					return true
-				}
-			}
+		if utils.IsRegularFileExists(dir + string(os.PathSeparator) + file) {
+			http.ServeFile(w, r, dir+string(os.PathSeparator)+file)
+			return true
 		}
 	}
 	return false

@@ -20,8 +20,15 @@ func Expect(t *testing.T, actual, expect interface{}) {
 }
 
 func TestIsFileExists(t *testing.T) {
+	Expect(t, IsFileExists("./../support"), true)
 	Expect(t, IsFileExists("./../support/some-file.txt"), true)
 	Expect(t, IsFileExists("./../support/no-existed-file"), false)
+}
+
+func TestIsRegularFileExists(t *testing.T) {
+	Expect(t, IsRegularFileExists("./../support/some-file.txt"), true)
+	Expect(t, IsRegularFileExists("./../support/no-existed-file"), false)
+	Expect(t, IsRegularFileExists("./../support"), false)
 }
 
 func TestIsDir(t *testing.T) {

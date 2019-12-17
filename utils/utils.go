@@ -35,6 +35,17 @@ func IsFileExists(filename string) bool {
 	return false
 }
 
+func IsRegularFileExists(filename string) bool {
+	if st, err := os.Stat(filename); !os.IsNotExist(err) {
+		if err == nil {
+			if !st.Mode().IsDir() {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func IsDir(filename string) bool {
 	if st, err := os.Stat(filename); !os.IsNotExist(err) {
 		if err == nil {

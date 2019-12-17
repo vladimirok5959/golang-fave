@@ -5,10 +5,10 @@ github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/vladimirok5959/golang-ctrlc v1.0.2 h1:TVMWJv0WSdJqIzfnQ/Lhr9HmQ+i6H6kD6kIn8X+BNFs=
 github.com/vladimirok5959/golang-ctrlc v1.0.2/go.mod h1:fIz52p0IMNedUfGBoT82xKAuFGfFMeQhYp+ne0FIKwU=
-github.com/vladimirok5959/golang-server-bootstrap v1.1.1 h1:wELSsO0Jr7g/31qXCtLK2EM9pAa4FiKOgDBpUWL5d/Y=
-github.com/vladimirok5959/golang-server-bootstrap v1.1.1/go.mod h1:xDrCyDXa5+xdzptoPSfn7JOhLO1+Q95xTPlrdovyBSg=
-github.com/vladimirok5959/golang-server-resources v1.0.4 h1:myqowOUgF7DPdXWbNGBqxVsn9MfAi+FTHr8DvWkJFgM=
-github.com/vladimirok5959/golang-server-resources v1.0.4/go.mod h1:TQ9jCCEpRE2ThB/JgxVE8k4yu3PY43qq339vsWLohSQ=
+github.com/vladimirok5959/golang-server-bootstrap v1.1.2 h1:ctGpPR3+hKehMPOL45kiM211G0rivAnoThJQs/nvwis=
+github.com/vladimirok5959/golang-server-bootstrap v1.1.2/go.mod h1:xDrCyDXa5+xdzptoPSfn7JOhLO1+Q95xTPlrdovyBSg=
+github.com/vladimirok5959/golang-server-resources v1.0.6 h1:VFbnyo32RRL/ZNOvLpWgRHyFzW6bMX2baASJ3ssUqJw=
+github.com/vladimirok5959/golang-server-resources v1.0.6/go.mod h1:TQ9jCCEpRE2ThB/JgxVE8k4yu3PY43qq339vsWLohSQ=
 github.com/vladimirok5959/golang-server-sessions v1.0.6 h1:i5W1hnWZ63B6x3mTvPK8gsy74E5maQ81142ZlmpKbE4=
 github.com/vladimirok5959/golang-server-sessions v1.0.6/go.mod h1:H99PB5Va7fw+Iljgne/f4ISsjg+V18Gq+9cNp+R6gaQ=
 github.com/vladimirok5959/golang-server-static v1.0.2 h1:pNR+vy+z2g73ETyx+50WxM4x2vqku3J1QCcRp7DnORo=
