@@ -60,6 +60,9 @@ func main() {
 	// Attach www dir to logger
 	lg.SetWwwDir(consts.ParamWwwDir)
 
+	// MySQL connections pool
+	mpool := mysqlpool.New()
+
 	// Session cleaner
 	sess_cl_ch, sess_cl_stop := session_clean_start(consts.ParamWwwDir)
 	defer session_clean_stop(sess_cl_ch, sess_cl_stop)
@@ -77,9 +80,6 @@ func main() {
 
 	// Init modules
 	mods := modules.New()
-
-	// MySQL connections pool
-	mpool := mysqlpool.New()
 
 	// Xml generation
 	xml_cl_ch, xml_cl_stop := xml_start(consts.ParamWwwDir, mpool)
@@ -124,6 +124,33 @@ func main() {
 	) {
 		// Schema
 		r.URL.Scheme = "http"
+
+		// Convert
+		var lg *logger.Logger
+		if v, ok := (*o)[0].(*logger.Logger); ok {
+			lg = v
+		}
+
+		var mpool *mysqlpool.MySqlPool
+		if v, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
+			mpool = v
+		}
+
+		var res *resource.Resource
+		if v, ok := (*o)[2].(*resource.Resource); ok {
+			res = v
+		}
+
+		var stat *static.Static
+		if v, ok := (*o)[3].(*static.Static); ok {
+			stat = v
+		}
+
+		var mods *modules.Modules
+		if v, ok := (*o)[4].(*modules.Modules); ok {
+			mods = v
+		}
+		// ---
 
 		// Mounted assets
 		if res.Response(
@@ -221,18 +248,6 @@ func main() {
 		sess := session.New(w, r, vhost_dir_tmp)
 		defer sess.Close()
 
-		// Convert
-		var lg *logger.Logger
-		if v, ok := (*o)[0].(*logger.Logger); ok {
-			lg = v
-		}
-
-		var mpool *mysqlpool.MySqlPool
-		if v, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
-			mpool = v
-		}
-		// ---
-
 		// Logic
 		if mpool != nil {
 			if engine.Response(
@@ -301,6 +316,9 @@ func main() {
 			Objects: &[]bootstrap.Iface{
 				lg,
 				mpool,
+				res,
+				stat,
+				mods,
 			},
 		},
 	)
