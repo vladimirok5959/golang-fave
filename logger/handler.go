@@ -42,6 +42,8 @@ func (this handler) log(w *writer, r *http.Request) {
 	}, " "))
 
 	select {
+	case <-r.Context().Done():
+		return
 	case this.c <- logMsg{r.Host, msg, w.status >= 400}:
 		return
 	case <-time.After(1 * time.Second):

@@ -33,6 +33,7 @@ func (this *ShopProduct) load() *ShopProduct {
 		return this
 	}
 	if rows, err := this.wrap.DB.Query(
+		this.wrap.R.Context(),
 		`SELECT
 			shop_product_images.product_id,
 			shop_product_images.filename
@@ -60,6 +61,7 @@ func (this *ShopProduct) load() *ShopProduct {
 	// Get images from parent
 	if len(this.images) <= 0 && this.object.A_parent_id() > 0 {
 		if rows, err := this.wrap.DB.Query(
+			this.wrap.R.Context(),
 			`SELECT
 				shop_product_images.product_id,
 				shop_product_images.filename
@@ -89,6 +91,7 @@ func (this *ShopProduct) load() *ShopProduct {
 	filter_names := map[int]string{}
 	filter_values := map[int][]string{}
 	if rows, err := this.wrap.DB.Query(
+		this.wrap.R.Context(),
 		`SELECT
 			shop_filters.id,
 			shop_filters.filter,
@@ -133,6 +136,7 @@ func (this *ShopProduct) load() *ShopProduct {
 
 	// Variations
 	if rows, err := this.wrap.DB.Query(
+		this.wrap.R.Context(),
 		`SELECT
 			shop_products.id,
 			shop_products.name,

@@ -25,8 +25,9 @@ func (this *ShopCategory) load(cache *map[int]*utils.MySql_shop_category) *ShopC
 	if this.bufferCats == nil {
 		this.bufferCats = map[int]*utils.MySql_shop_category{}
 	}
-	if rows, err := this.wrap.DB.Query(`
-		SELECT
+	if rows, err := this.wrap.DB.Query(
+		this.wrap.R.Context(),
+		`SELECT
 			main.id,
 			main.user,
 			main.name,

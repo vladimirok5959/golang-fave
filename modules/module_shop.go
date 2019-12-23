@@ -19,6 +19,7 @@ import (
 func (this *Modules) shop_GetCurrencySelectOptions(wrap *wrapper.Wrapper, id int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			code
@@ -53,6 +54,7 @@ func (this *Modules) shop_GetCurrencySelectOptions(wrap *wrapper.Wrapper, id int
 func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_id int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			shop_filters.id,
 			shop_filters.name,
@@ -64,7 +66,7 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 			LEFT JOIN shop_filters ON shop_filters.id = shop_filters_values.filter_id
 			LEFT JOIN shop_filter_product_values ON
 				shop_filter_product_values.filter_value_id = shop_filters_values.id AND
-				shop_filter_product_values.product_id = ` + utils.IntToStr(product_id) + `
+				shop_filter_product_values.product_id = `+utils.IntToStr(product_id)+`
 			LEFT JOIN (
 				SELECT
 					shop_filters_values.filter_id,
@@ -73,7 +75,7 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 					shop_filter_product_values
 					LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id 
 				WHERE
-					shop_filter_product_values.product_id = ` + utils.IntToStr(product_id) + `
+					shop_filter_product_values.product_id = `+utils.IntToStr(product_id)+`
 				GROUP BY
 					shop_filters_values.filter_id
 			) as filter_used ON filter_used.filter_id = shop_filters.id
@@ -129,6 +131,7 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 func (this *Modules) shop_GetFilterValuesInputs(wrap *wrapper.Wrapper, filter_id int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			name
@@ -161,6 +164,7 @@ func (this *Modules) shop_GetFilterValuesInputs(wrap *wrapper.Wrapper, filter_id
 func (this *Modules) shop_GetAllAttributesSelectOptions(wrap *wrapper.Wrapper) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			name,
@@ -192,6 +196,7 @@ func (this *Modules) shop_GetAllAttributesSelectOptions(wrap *wrapper.Wrapper) s
 func (this *Modules) shop_GetAllCurrencies(wrap *wrapper.Wrapper) map[int]string {
 	result := map[int]string{}
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			code
@@ -221,6 +226,7 @@ func (this *Modules) shop_GetAllCurrencies(wrap *wrapper.Wrapper) map[int]string
 func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			product_id,
@@ -254,6 +260,7 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 func (this *Modules) shop_GetSubProducts(wrap *wrapper.Wrapper, id int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			name
@@ -286,6 +293,7 @@ func (this *Modules) shop_GetSubProducts(wrap *wrapper.Wrapper, id int) string {
 func (this *Modules) shop_GetParentProduct(wrap *wrapper.Wrapper, id int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			name
@@ -747,6 +755,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				},
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
+						wrap.R.Context(),
 						`SELECT
 							shop_products.id,
 							shop_products.name,
@@ -835,6 +844,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				nil,
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
+						wrap.R.Context(),
 						`SELECT
 							node.id,
 							node.user,
@@ -1081,6 +1091,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				nil,
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
+						wrap.R.Context(),
 						`SELECT
 							shop_orders.id,
 							shop_orders.client_phone,
@@ -1221,7 +1232,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			// All product current categories
 			var selids []int
 			if data.A_id > 0 {
-				rows, err := wrap.DB.Query("SELECT category_id FROM shop_cat_product_rel WHERE product_id = ?;", data.A_id)
+				rows, err := wrap.DB.Query(wrap.R.Context(), "SELECT category_id FROM shop_cat_product_rel WHERE product_id = ?;", data.A_id)
 				if err == nil {
 					defer rows.Close()
 					values := make([]int, 1)
@@ -2144,6 +2155,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				<tbody>
 			`
 			rows, err := wrap.DB.Query(
+				wrap.R.Context(),
 				`SELECT
 					shop_order_products.product_id,
 					shop_products.name,

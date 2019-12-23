@@ -22,6 +22,7 @@ func (this *Modules) RegisterAction_ShopGetAttributeValues() *Action {
 
 		options := ``
 		rows, err := wrap.DB.Query(
+			wrap.R.Context(),
 			`SELECT
 				id,
 				name

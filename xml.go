@@ -124,6 +124,7 @@ func xml_generate(ctx context.Context, db *sqlw.DB, conf *config.Config) (string
 func xml_gen_currencies(ctx context.Context, db *sqlw.DB, conf *config.Config) (string, error) {
 	result := ``
 	rows, err := db.Query(
+		ctx,
 		`SELECT
 			code,
 			coefficient
@@ -153,6 +154,7 @@ func xml_gen_currencies(ctx context.Context, db *sqlw.DB, conf *config.Config) (
 func xml_gen_categories(ctx context.Context, db *sqlw.DB, conf *config.Config) (string, error) {
 	result := ``
 	rows, err := db.Query(
+		ctx,
 		`SELECT
 			data.id,
 			data.user,
@@ -212,6 +214,7 @@ func xml_gen_categories(ctx context.Context, db *sqlw.DB, conf *config.Config) (
 func xml_gen_offers(ctx context.Context, db *sqlw.DB, conf *config.Config) (string, error) {
 	result := ``
 	rows, err := db.Query(
+		ctx,
 		`SELECT
 			shop_products.id,
 			shop_currencies.code,
@@ -272,6 +275,7 @@ func xml_gen_offers(ctx context.Context, db *sqlw.DB, conf *config.Config) (stri
 func xml_gen_offer_pictures(ctx context.Context, db *sqlw.DB, conf *config.Config, product_id, parent_id int) string {
 	result := ``
 	if rows, err := db.Query(
+		ctx,
 		`SELECT
 			shop_product_images.product_id,
 			shop_product_images.filename
@@ -301,6 +305,7 @@ func xml_gen_offer_pictures(ctx context.Context, db *sqlw.DB, conf *config.Confi
 	// Get images from parent
 	if result == "" && parent_id > 0 {
 		if rows, err := db.Query(
+			ctx,
 			`SELECT
 				shop_product_images.product_id,
 				shop_product_images.filename
@@ -337,6 +342,7 @@ func xml_gen_offer_attributes(ctx context.Context, db *sqlw.DB, conf *config.Con
 	filter_names := map[int]string{}
 	filter_values := map[int][]string{}
 	rows, err := db.Query(
+		ctx,
 		`SELECT
 			shop_filters.id,
 			shop_filters.filter,

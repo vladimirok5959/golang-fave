@@ -366,6 +366,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				nil,
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
+						wrap.R.Context(),
 						`SELECT
 							node.id,
 							node.user,
@@ -451,7 +452,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			// All post current categories
 			var selids []int
 			if data.A_id > 0 {
-				rows, err := wrap.DB.Query("SELECT category_id FROM blog_cat_post_rel WHERE post_id = ?;", data.A_id)
+				rows, err := wrap.DB.Query(wrap.R.Context(), "SELECT category_id FROM blog_cat_post_rel WHERE post_id = ?;", data.A_id)
 				if err == nil {
 					defer rows.Close()
 					values := make([]int, 1)

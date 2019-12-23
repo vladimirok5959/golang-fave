@@ -147,6 +147,8 @@ func (this *Logger) Log(msg string, r *http.Request, isError bool, vars ...inter
 	}
 
 	select {
+	case <-r.Context().Done():
+		return
 	case this.cdata <- logMsg{host, msg, isError}:
 		return
 	case <-time.After(1 * time.Second):

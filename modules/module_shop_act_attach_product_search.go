@@ -29,6 +29,7 @@ func (this *Modules) shop_GetProductsListForAttaching(wrap *wrapper.Wrapper, nam
 	}
 
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			id,
 			name

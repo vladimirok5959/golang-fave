@@ -142,6 +142,7 @@ func (this *Blog) load() *Blog {
 	if this.category != nil {
 		var cat_ids []string
 		if rows, err := this.wrap.DB.Query(
+			this.wrap.R.Context(),
 			`SELECT
 				node.id
 			FROM
@@ -291,7 +292,7 @@ func (this *Blog) load() *Blog {
 		this.postsMaxPage = int(math.Ceil(float64(this.postsCount) / float64(this.postsPerPage)))
 		this.postsCurrPage = this.wrap.GetCurrentPage(this.postsMaxPage)
 		offset := this.postsCurrPage*this.postsPerPage - this.postsPerPage
-		if rows, err := this.wrap.DB.Query(sql_rows, offset, this.postsPerPage); err == nil {
+		if rows, err := this.wrap.DB.Query(this.wrap.R.Context(), sql_rows, offset, this.postsPerPage); err == nil {
 			defer rows.Close()
 			for rows.Next() {
 				rp := utils.MySql_blog_post{}
@@ -428,8 +429,9 @@ func (this *Blog) load() *Blog {
 func (this *Blog) preload_cats() {
 	if this.bufferCats == nil {
 		this.bufferCats = map[int]*utils.MySql_blog_category{}
-		if rows, err := this.wrap.DB.Query(`
-			SELECT
+		if rows, err := this.wrap.DB.Query(
+			this.wrap.R.Context(),
+			`SELECT
 				main.id,
 				main.user,
 				main.name,

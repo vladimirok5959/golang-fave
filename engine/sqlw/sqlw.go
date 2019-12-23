@@ -92,12 +92,10 @@ func (this *DB) Begin() (*Tx, error) {
 	return &Tx{tx, time.Now()}, err
 }
 
-// TODO: func (db *DB) QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)
-// https://golang.org/pkg/database/sql/
-func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
+func (this *DB) Query(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
 	if consts.ParamDebug {
 		s := time.Now()
-		r, e := this.db.Query(query, args...)
+		r, e := this.db.QueryContext(ctx, query, args...)
 		log(query, s, e, false)
 		return r, e
 	}

@@ -111,6 +111,7 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 				},
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
+						wrap.R.Context(),
 						`SELECT
 							notify_mail.id,
 							notify_mail.email,

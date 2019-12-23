@@ -11,6 +11,7 @@ import (
 func (this *Modules) shop_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int, parentId int, selids []int) string {
 	result := ``
 	rows, err := wrap.DB.Query(
+		wrap.R.Context(),
 		`SELECT
 			node.id,
 			node.user,

@@ -72,6 +72,7 @@ func smtp_process(ctx context.Context, dir, host string, mp *mysqlpool.MySqlPool
 
 func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 	rows, err := db.Query(
+		ctx,
 		`SELECT
 			id,
 			email,

@@ -157,6 +157,7 @@ func (this *Shop) load() *Shop {
 	if this.category != nil {
 		var cat_ids []string
 		if rows, err := this.wrap.DB.Query(
+			this.wrap.R.Context(),
 			`SELECT
 				node.id
 			FROM
@@ -323,7 +324,7 @@ func (this *Shop) load() *Shop {
 		this.productsMaxPage = int(math.Ceil(float64(this.productsCount) / float64(this.productsPerPage)))
 		this.productsCurrPage = this.wrap.GetCurrentPage(this.productsMaxPage)
 		offset := this.productsCurrPage*this.productsPerPage - this.productsPerPage
-		if rows, err := this.wrap.DB.Query(sql_rows, offset, this.productsPerPage); err == nil {
+		if rows, err := this.wrap.DB.Query(this.wrap.R.Context(), sql_rows, offset, this.productsPerPage); err == nil {
 			defer rows.Close()
 			for rows.Next() {
 				rp := utils.MySql_shop_product{}
@@ -383,13 +384,14 @@ func (this *Shop) load() *Shop {
 	product_images := map[int][]*ShopProductImage{}
 	if len(product_ids) > 0 {
 		if rows, err := this.wrap.DB.Query(
+			this.wrap.R.Context(),
 			`SELECT
 				shop_product_images.product_id,
 				shop_product_images.filename
 			FROM
 				shop_product_images
 			WHERE
-				shop_product_images.product_id IN (` + strings.Join(product_ids, ", ") + `)
+				shop_product_images.product_id IN (`+strings.Join(product_ids, ", ")+`)
 			ORDER BY
 				shop_product_images.ord ASC
 			;`,
@@ -507,8 +509,9 @@ func (this *Shop) load() *Shop {
 func (this *Shop) preload_cats() {
 	if this.bufferCats == nil {
 		this.bufferCats = map[int]*utils.MySql_shop_category{}
-		if rows, err := this.wrap.DB.Query(`
-			SELECT
+		if rows, err := this.wrap.DB.Query(
+			this.wrap.R.Context(),
+			`SELECT
 				main.id,
 				main.user,
 				main.name,

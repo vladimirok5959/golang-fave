@@ -125,4 +125,4 @@ ab:
 	ab -kc 10 -t 60 http://localhost:8080/blog/the-best-juices-for-a-child/
 	ab -kc 10 -t 60 http://localhost:8080/shop/
 	ab -kc 10 -t 60 http://localhost:8080/shop/category/electronics/
-	ab -kc 10 -t 60 http://localhost:8080/shop/samsung-galaxy-s10/
+	ab -kc 10 -t 60 http://localhost:8080/shop/samsung-galaxy-s10-128-gb/

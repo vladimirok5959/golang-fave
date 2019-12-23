@@ -108,7 +108,7 @@ func DataTable(
 		var rows *sqlw.Rows
 		var err error
 		if custom_sql_data == nil {
-			rows, err = wrap.DB.Query(qsql, limit_offset, pear_page)
+			rows, err = wrap.DB.Query(wrap.R.Context(), qsql, limit_offset, pear_page)
 		} else {
 			rows, err = custom_sql_data(limit_offset, pear_page)
 		}

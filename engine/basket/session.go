@@ -1,6 +1,7 @@
 package basket
 
 import (
+	"context"
 	"encoding/json"
 	"html"
 	"strings"
@@ -37,13 +38,14 @@ func (this *session) makePrice(product_price float64, product_currency_id int) f
 	}
 }
 
-func (this *session) updateProducts(db *sqlw.DB) {
+func (this *session) updateProducts(ctx context.Context, db *sqlw.DB) {
 	products_ids := []int{}
 	for _, product := range this.Products {
 		products_ids = append(products_ids, product.Id)
 	}
 	if len(products_ids) > 0 {
 		if rows, err := db.Query(
+			ctx,
 			`SELECT
 				shop_products.id,
 				shop_products.name,
@@ -98,7 +100,7 @@ func (this *session) updateProducts(db *sqlw.DB) {
 				) as image_parent ON image_parent.product_id = shop_products.parent_id
 			WHERE
 				shop_products.active = 1 AND
-				shop_products.id IN (` + strings.Join(utils.ArrayOfIntToArrayOfString(products_ids), ",") + `)
+				shop_products.id IN (`+strings.Join(utils.ArrayOfIntToArrayOfString(products_ids), ",")+`)
 			;`,
 		); err == nil {
 			defer rows.Close()
@@ -175,6 +177,7 @@ func (this *session) Preload(p *SBParam) {
 
 	// Load currencies from database
 	if rows, err := p.DB.Query(
+		p.R.Context(),
 		`SELECT
 			id,
 			name,
@@ -226,7 +229,7 @@ func (this *session) Preload(p *SBParam) {
 }
 
 func (this *session) String(p *SBParam) string {
-	this.updateProducts(p.DB)
+	this.updateProducts(p.R.Context(), p.DB)
 	this.updateTotals(p)
 
 	json, err := json.Marshal(this)
@@ -240,7 +243,7 @@ func (this *session) String(p *SBParam) string {
 func (this *session) Plus(p *SBParam, product_id int) {
 	if prod, ok := this.Products[product_id]; ok == true {
 		prod.Quantity++
-		this.updateProducts(p.DB)
+		this.updateProducts(p.R.Context(), p.DB)
 		this.updateTotals(p)
 		return
 	}
@@ -337,7 +340,7 @@ func (this *session) Plus(p *SBParam, product_id int) {
 			price:    row.A_price,
 			Quantity: 1,
 		}
-		this.updateProducts(p.DB)
+		this.updateProducts(p.R.Context(), p.DB)
 		this.updateTotals(p)
 	}
 }
@@ -349,7 +352,7 @@ func (this *session) Minus(p *SBParam, product_id int) {
 		} else {
 			delete(this.Products, product_id)
 		}
-		this.updateProducts(p.DB)
+		this.updateProducts(p.R.Context(), p.DB)
 		this.updateTotals(p)
 	}
 }
@@ -357,14 +360,14 @@ func (this *session) Minus(p *SBParam, product_id int) {
 func (this *session) Remove(p *SBParam, product_id int) {
 	if _, ok := this.Products[product_id]; ok == true {
 		delete(this.Products, product_id)
-		this.updateProducts(p.DB)
+		this.updateProducts(p.R.Context(), p.DB)
 		this.updateTotals(p)
 	}
 }
 
 func (this *session) ClearBasket(p *SBParam) {
 	this.Products = map[int]*product{}
-	this.updateProducts(p.DB)
+	this.updateProducts(p.R.Context(), p.DB)
 	this.updateTotals(p)
 }
 

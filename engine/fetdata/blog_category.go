@@ -25,8 +25,9 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 	if this.bufferCats == nil {
 		this.bufferCats = map[int]*utils.MySql_blog_category{}
 	}
-	if rows, err := this.wrap.DB.Query(`
-		SELECT
+	if rows, err := this.wrap.DB.Query(
+		this.wrap.R.Context(),
+		`SELECT
 			main.id,
 			main.user,
 			main.name,

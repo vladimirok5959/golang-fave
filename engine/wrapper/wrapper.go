@@ -429,6 +429,7 @@ func (this *Wrapper) ShopGetAllCurrencies() *map[int]utils.MySql_shop_currency {
 	if this.ShopAllCurrencies == nil {
 		this.ShopAllCurrencies = &map[int]utils.MySql_shop_currency{}
 		if rows, err := this.DB.Query(
+			this.R.Context(),
 			`SELECT
 				id,
 				name,
