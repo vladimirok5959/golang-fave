@@ -40,7 +40,7 @@ func DataTable(
 			num, err = custom_sql_count()
 			wrap.LogCpError(&err)
 		} else {
-			err = wrap.DB.QueryRow("SELECT COUNT(*) FROM `" + table + "`;").Scan(&num)
+			err = wrap.DB.QueryRow(wrap.R.Context(), "SELECT COUNT(*) FROM `"+table+"`;").Scan(&num)
 			if *wrap.LogCpError(&err) != nil {
 				return ""
 			}

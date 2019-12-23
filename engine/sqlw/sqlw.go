@@ -66,10 +66,10 @@ func (this *DB) SetMaxOpenConns(n int) {
 	this.db.SetMaxOpenConns(n)
 }
 
-func (this *DB) QueryRow(query string, args ...interface{}) *sql.Row {
+func (this *DB) QueryRow(ctx context.Context, query string, args ...interface{}) *sql.Row {
 	if consts.ParamDebug {
 		s := time.Now()
-		r := this.db.QueryRow(query, args...)
+		r := this.db.QueryRowContext(ctx, query, args...)
 		log(query, s, nil, false)
 		return r
 	}

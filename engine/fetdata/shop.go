@@ -314,7 +314,7 @@ func (this *Shop) load() *Shop {
 
 	product_ids := []string{}
 
-	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.productsCount); *this.wrap.LogCpError(&err) == nil {
+	if err := this.wrap.DB.QueryRow(this.wrap.R.Context(), sql_nums).Scan(&this.productsCount); *this.wrap.LogCpError(&err) == nil {
 		if this.category == nil {
 			this.productsPerPage = (*this.wrap.Config).Shop.Pagination.Index
 		} else {

@@ -282,7 +282,7 @@ func (this *Blog) load() *Blog {
 		`
 	}
 
-	if err := this.wrap.DB.QueryRow(sql_nums).Scan(&this.postsCount); *this.wrap.LogCpError(&err) == nil {
+	if err := this.wrap.DB.QueryRow(this.wrap.R.Context(), sql_nums).Scan(&this.postsCount); *this.wrap.LogCpError(&err) == nil {
 		if this.category == nil {
 			this.postsPerPage = (*this.wrap.Config).Blog.Pagination.Index
 		} else {

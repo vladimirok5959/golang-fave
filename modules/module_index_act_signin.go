@@ -36,6 +36,7 @@ func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 
 		var user_id int
 		err := wrap.DB.QueryRow(
+			wrap.R.Context(),
 			`SELECT
 				id
 			FROM

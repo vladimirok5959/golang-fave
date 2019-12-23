@@ -32,8 +32,9 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 
 		// Security, check if still need to run this action
 		var count int
-		err := wrap.DB.QueryRow(`
-			SELECT
+		err := wrap.DB.QueryRow(
+			wrap.R.Context(),
+			`SELECT
 				COUNT(*)
 			FROM
 				users

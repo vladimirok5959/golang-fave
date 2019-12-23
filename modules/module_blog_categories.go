@@ -66,8 +66,9 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 
 func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int {
 	var parentId int
-	err := wrap.DB.QueryRow(`
-		SELECT
+	err := wrap.DB.QueryRow(
+		wrap.R.Context(),
+		`SELECT
 			parent.id
 		FROM
 			blog_cats AS node,

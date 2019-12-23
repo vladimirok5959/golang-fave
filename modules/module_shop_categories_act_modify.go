@@ -199,8 +199,9 @@ func (this *Modules) RegisterAction_ShopCategoriesModify() *Action {
 		} else {
 			// Check if parent category exists
 			var parentId int
-			err := wrap.DB.QueryRow(`
-				SELECT
+			err := wrap.DB.QueryRow(
+				wrap.R.Context(),
+				`SELECT
 					id
 				FROM
 					shop_cats

@@ -22,8 +22,9 @@ func (this *User) loadById(id int) {
 		return
 	}
 	this.object = &utils.MySql_user{}
-	if err := this.wrap.DB.QueryRow(`
-		SELECT
+	if err := this.wrap.DB.QueryRow(
+		this.wrap.R.Context(),
+		`SELECT
 			id,
 			first_name,
 			last_name,

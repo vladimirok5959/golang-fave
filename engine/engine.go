@@ -69,7 +69,7 @@ func (this *Engine) Process() bool {
 	}
 
 	// Backend must use MySQL anyway, so, check and connect
-	err := this.Wrap.UseDatabase(this.Wrap.R.Context())
+	err := this.Wrap.UseDatabase()
 	if err != nil {
 		utils.SystemErrorPageEngine(this.Wrap.W, err)
 		return true

@@ -22,8 +22,9 @@ func (this *ShopCurrency) loadById(id int) {
 		return
 	}
 	this.object = &utils.MySql_shop_currency{}
-	if err := this.wrap.DB.QueryRow(`
-		SELECT
+	if err := this.wrap.DB.QueryRow(
+		this.wrap.R.Context(),
+		`SELECT
 			id,
 			name,
 			coefficient,

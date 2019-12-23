@@ -63,7 +63,7 @@ func (this *Support) Migrate(ctx context.Context, host string) error {
 		}
 		defer db.Close()
 		var version string
-		if err := db.QueryRow(`SELECT value FROM settings WHERE name = 'database_version' LIMIT 1;`).Scan(&version); err != nil {
+		if err := db.QueryRow(ctx, `SELECT value FROM settings WHERE name = 'database_version' LIMIT 1;`).Scan(&version); err != nil {
 			if this.isSettingsTableDoesntExist(err) {
 				if _, err := db.Exec(
 					`CREATE TABLE settings (

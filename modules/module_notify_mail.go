@@ -105,7 +105,8 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 				func() (int, error) {
 					var count int
 					return count, wrap.DB.QueryRow(
-						"SELECT COUNT(*) FROM `notify_mail`" + ModuleSqlWhere + ";",
+						wrap.R.Context(),
+						"SELECT COUNT(*) FROM `notify_mail`"+ModuleSqlWhere+";",
 					).Scan(&count)
 				},
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {

@@ -361,8 +361,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			// Shop category
 			row := &utils.MySql_shop_category{}
 			rou := &utils.MySql_user{}
-			err := wrap.DB.QueryRow(`
-				SELECT
+			err := wrap.DB.QueryRow(
+				wrap.R.Context(),
+				`SELECT
 					main.id,
 					main.user,
 					main.name,
@@ -520,8 +521,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			// Shop product
 			row := &utils.MySql_shop_product{}
 			rou := &utils.MySql_user{}
-			err := wrap.DB.QueryRow(`
-				SELECT
+			err := wrap.DB.QueryRow(
+				wrap.R.Context(),
+				`SELECT
 					shop_products.id,
 					shop_products.parent_id,
 					shop_products.user,
@@ -739,6 +741,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				func() (int, error) {
 					var count int
 					return count, wrap.DB.QueryRow(
+						wrap.R.Context(),
 						"SELECT COUNT(*) FROM `shop_products`;",
 					).Scan(&count)
 				},
@@ -1159,8 +1162,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						parent_id,
 						user,
@@ -1631,8 +1635,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						user,
 						name,
@@ -1757,8 +1762,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						name,
 						filter
@@ -1875,8 +1881,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						name,
 						coefficient,
@@ -2004,8 +2011,9 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			var curr_order_status int
 			var curr_order_total float64
 
-			err := wrap.DB.QueryRow(`
-				SELECT
+			err := wrap.DB.QueryRow(
+				wrap.R.Context(),
+				`SELECT
 					shop_orders.id,
 					shop_orders.client_phone,
 					shop_orders.update_datetime,

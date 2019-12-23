@@ -125,8 +125,9 @@ func (this *Modules) RegisterModule_Users() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						first_name,
 						last_name,

@@ -114,8 +114,9 @@ func (this *BlogCategory) loadById(id int) {
 		return
 	}
 	this.object = &utils.MySql_blog_category{}
-	if err := this.wrap.DB.QueryRow(`
-		SELECT
+	if err := this.wrap.DB.QueryRow(
+		this.wrap.R.Context(),
+		`SELECT
 			main.id,
 			main.user,
 			main.name,

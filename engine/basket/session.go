@@ -248,7 +248,9 @@ func (this *session) Plus(p *SBParam, product_id int) {
 	roc := &utils.MySql_shop_currency{}
 	var img_product_id string
 	var img_filename string
-	if err := p.DB.QueryRow(`
+	if err := p.DB.QueryRow(
+		p.R.Context(),
+		`
 		SELECT
 			shop_products.id,
 			shop_products.name,

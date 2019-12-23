@@ -36,8 +36,9 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			// Blog category
 			row := &utils.MySql_blog_category{}
 			rou := &utils.MySql_user{}
-			err := wrap.DB.QueryRow(`
-				SELECT
+			err := wrap.DB.QueryRow(
+				wrap.R.Context(),
+				`SELECT
 					main.id,
 					main.user,
 					main.name,
@@ -143,8 +144,9 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			// Blog post
 			row := &utils.MySql_blog_post{}
 			rou := &utils.MySql_user{}
-			err := wrap.DB.QueryRow(`
-				SELECT
+			err := wrap.DB.QueryRow(
+				wrap.R.Context(),
+				`SELECT
 					blog_posts.id,
 					blog_posts.user,
 					blog_posts.name,
@@ -414,8 +416,9 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						user,
 						name,
@@ -604,8 +607,9 @@ func (this *Modules) RegisterModule_Blog() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						user,
 						name,

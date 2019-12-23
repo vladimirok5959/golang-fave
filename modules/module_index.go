@@ -28,8 +28,9 @@ func (this *Modules) RegisterModule_Index() *Module {
 		// Front-end
 		row := &utils.MySql_page{}
 		rou := &utils.MySql_user{}
-		err := wrap.DB.QueryRow(`
-			SELECT
+		err := wrap.DB.QueryRow(
+			wrap.R.Context(),
+			`SELECT
 				pages.id,
 				pages.user,
 				pages.name,
@@ -197,8 +198,9 @@ func (this *Modules) RegisterModule_Index() *Module {
 				if !utils.IsNumeric(wrap.UrlArgs[2]) {
 					return "", "", ""
 				}
-				err := wrap.DB.QueryRow(`
-					SELECT
+				err := wrap.DB.QueryRow(
+					wrap.R.Context(),
+					`SELECT
 						id,
 						user,
 						name,
