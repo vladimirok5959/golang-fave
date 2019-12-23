@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html"
 	"io/ioutil"
@@ -12,9 +13,92 @@ import (
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper/config"
 	"golang-fave/utils"
+
+	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func xml_gen_currencies(db *sqlw.DB, conf *config.Config) string {
+func xml_generator(www_dir string, mp *mysqlpool.MySqlPool) *worker.Worker {
+	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
+		if www_dir, ok := (*o)[0].(string); ok {
+			if mp, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
+				xml_loop(ctx, www_dir, mp)
+			}
+		}
+		select {
+		case <-ctx.Done():
+		case <-time.After(5 * time.Second):
+			return
+		}
+	}, &[]worker.Iface{
+		www_dir,
+		mp,
+	})
+}
+
+func xml_loop(ctx context.Context, www_dir string, mp *mysqlpool.MySqlPool) {
+	dirs, err := ioutil.ReadDir(www_dir)
+	if err == nil {
+		for _, dir := range dirs {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				if mp != nil {
+					target_dir := strings.Join([]string{www_dir, dir.Name()}, string(os.PathSeparator))
+					if utils.IsDirExists(target_dir) {
+						xml_detect(ctx, target_dir, dir.Name(), mp)
+					}
+				}
+			}
+		}
+	}
+}
+
+func xml_detect(ctx context.Context, dir, host string, mp *mysqlpool.MySqlPool) {
+	db := mp.Get(host)
+	if db != nil {
+		trigger := strings.Join([]string{dir, "tmp", "trigger.xml.run"}, string(os.PathSeparator))
+		if utils.IsFileExists(trigger) {
+			if err := db.Ping(); err == nil {
+				xml_create(ctx, dir, host, db)
+				os.Remove(trigger)
+			}
+		}
+	}
+}
+
+func xml_create(ctx context.Context, dir, host string, db *sqlw.DB) {
+	conf := config.ConfigNew()
+	if err := conf.ConfigRead(strings.Join([]string{dir, "config", "config.json"}, string(os.PathSeparator))); err == nil {
+		if (*conf).API.XML.Enabled == 1 {
+			if file, err := os.Create(strings.Join([]string{dir, "htdocs", "products.xml"}, string(os.PathSeparator))); err == nil {
+				file.Write([]byte(xml_generate(ctx, db, conf)))
+				file.Close()
+			} else {
+				fmt.Printf("Xml generation error (file): %v\n", err)
+			}
+		}
+	} else {
+		fmt.Printf("Xml generation error (config): %v\n", err)
+	}
+}
+
+func xml_generate(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
+	return `<?xml version="1.0" encoding="UTF-8"?>` +
+		`<!DOCTYPE yml_catalog SYSTEM "shops.dtd">` +
+		`<yml_catalog date="` + time.Unix(int64(time.Now().Unix()), 0).Format("2006-01-02 15:04") + `">` +
+		`<shop>` +
+		`<name>` + html.EscapeString((*conf).API.XML.Name) + `</name>` +
+		`<company>` + html.EscapeString((*conf).API.XML.Company) + `</company>` +
+		`<url>` + html.EscapeString((*conf).API.XML.Url) + `</url>` +
+		`<currencies>` + xml_gen_currencies(ctx, db, conf) + `</currencies>` +
+		`<categories>` + xml_gen_categories(ctx, db, conf) + `</categories>` +
+		`<offers>` + xml_gen_offers(ctx, db, conf) + `</offers>` +
+		`</shop>` +
+		`</yml_catalog>`
+}
+
+func xml_gen_currencies(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
 	result := ``
 	rows, err := db.Query(
 		`SELECT
@@ -43,7 +127,7 @@ func xml_gen_currencies(db *sqlw.DB, conf *config.Config) string {
 	return result
 }
 
-func xml_gen_categories(db *sqlw.DB, conf *config.Config) string {
+func xml_gen_categories(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
 	result := ``
 	rows, err := db.Query(
 		`SELECT
@@ -102,7 +186,67 @@ func xml_gen_categories(db *sqlw.DB, conf *config.Config) string {
 	return result
 }
 
-func xml_gen_offer_pictures(db *sqlw.DB, conf *config.Config, product_id, parent_id int) string {
+func xml_gen_offers(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
+	result := ``
+	rows, err := db.Query(
+		`SELECT
+			shop_products.id,
+			shop_currencies.code,
+			shop_products.price,
+			shop_products.name,
+			shop_products.alias,
+			shop_products.vendor,
+			shop_products.quantity,
+			shop_products.category,
+			shop_products.content,
+			IFNULL(shop_products.parent_id, 0),
+			shop_products.price_old,
+			shop_products.price_promo
+		FROM
+			shop_products
+			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+		WHERE
+			shop_products.active = 1 AND
+			shop_products.category > 1
+		ORDER BY
+			shop_products.id
+		;`,
+	)
+	if err == nil {
+		defer rows.Close()
+		values := make([]string, 12)
+		scan := make([]interface{}, len(values))
+		for i := range values {
+			scan[i] = &values[i]
+		}
+		for rows.Next() {
+			err = rows.Scan(scan...)
+			if err == nil {
+				result += `<offer id="` + html.EscapeString(string(values[0])) + `" available="true">`
+				result += `<url>` + html.EscapeString((*conf).API.XML.Url) + `shop/` + html.EscapeString(string(values[4])) + `/</url>`
+				result += `<price>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[2])), "%.2f") + `</price>`
+				if utils.StrToFloat64(string(values[10])) > 0 {
+					result += `<price_old>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[10])), "%.2f") + `</price_old>`
+				}
+				if utils.StrToFloat64(string(values[11])) > 0 {
+					result += `<price_promo>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[11])), "%.2f") + `</price_promo>`
+				}
+				result += `<currencyId>` + html.EscapeString(string(values[1])) + `</currencyId>`
+				result += `<categoryId>` + html.EscapeString(string(values[7])) + `</categoryId>`
+				result += xml_gen_offer_pictures(ctx, db, conf, utils.StrToInt(string(values[0])), utils.StrToInt(string(values[9])))
+				result += `<vendor>` + html.EscapeString(string(values[5])) + `</vendor>`
+				result += `<stock_quantity>` + html.EscapeString(string(values[6])) + `</stock_quantity>`
+				result += `<name>` + html.EscapeString(string(values[3])) + ` ` + html.EscapeString(string(values[0])) + `</name>`
+				result += `<description><![CDATA[` + string(values[8]) + `]]></description>`
+				result += xml_gen_offer_attributes(ctx, db, conf, utils.StrToInt(string(values[0])))
+				result += `</offer>`
+			}
+		}
+	}
+	return result
+}
+
+func xml_gen_offer_pictures(ctx context.Context, db *sqlw.DB, conf *config.Config, product_id, parent_id int) string {
 	result := ``
 	if rows, err := db.Query(
 		`SELECT
@@ -164,7 +308,7 @@ func xml_gen_offer_pictures(db *sqlw.DB, conf *config.Config, product_id, parent
 	return result
 }
 
-func xml_gen_offer_attributes(db *sqlw.DB, conf *config.Config, product_id int) string {
+func xml_gen_offer_attributes(ctx context.Context, db *sqlw.DB, conf *config.Config, product_id int) string {
 	result := ``
 	filter_ids := []int{}
 	filter_names := map[int]string{}
@@ -208,159 +352,4 @@ func xml_gen_offer_attributes(db *sqlw.DB, conf *config.Config, product_id int) 
 		result += `<param name="` + html.EscapeString(filter_names[filter_id]) + `">` + html.EscapeString(strings.Join(filter_values[filter_id], ", ")) + `</param>`
 	}
 	return result
-}
-
-func xml_gen_offers(db *sqlw.DB, conf *config.Config) string {
-	result := ``
-	rows, err := db.Query(
-		`SELECT
-			shop_products.id,
-			shop_currencies.code,
-			shop_products.price,
-			shop_products.name,
-			shop_products.alias,
-			shop_products.vendor,
-			shop_products.quantity,
-			shop_products.category,
-			shop_products.content,
-			IFNULL(shop_products.parent_id, 0),
-			shop_products.price_old,
-			shop_products.price_promo
-		FROM
-			shop_products
-			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
-		WHERE
-			shop_products.active = 1 AND
-			shop_products.category > 1
-		ORDER BY
-			shop_products.id
-		;`,
-	)
-	if err == nil {
-		defer rows.Close()
-		values := make([]string, 12)
-		scan := make([]interface{}, len(values))
-		for i := range values {
-			scan[i] = &values[i]
-		}
-		for rows.Next() {
-			err = rows.Scan(scan...)
-			if err == nil {
-				result += `<offer id="` + html.EscapeString(string(values[0])) + `" available="true">`
-				result += `<url>` + html.EscapeString((*conf).API.XML.Url) + `shop/` + html.EscapeString(string(values[4])) + `/</url>`
-				result += `<price>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[2])), "%.2f") + `</price>`
-				if utils.StrToFloat64(string(values[10])) > 0 {
-					result += `<price_old>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[10])), "%.2f") + `</price_old>`
-				}
-				if utils.StrToFloat64(string(values[11])) > 0 {
-					result += `<price_promo>` + utils.Float64ToStrF(utils.StrToFloat64(string(values[11])), "%.2f") + `</price_promo>`
-				}
-				result += `<currencyId>` + html.EscapeString(string(values[1])) + `</currencyId>`
-				result += `<categoryId>` + html.EscapeString(string(values[7])) + `</categoryId>`
-				result += xml_gen_offer_pictures(db, conf, utils.StrToInt(string(values[0])), utils.StrToInt(string(values[9])))
-				result += `<vendor>` + html.EscapeString(string(values[5])) + `</vendor>`
-				result += `<stock_quantity>` + html.EscapeString(string(values[6])) + `</stock_quantity>`
-				result += `<name>` + html.EscapeString(string(values[3])) + ` ` + html.EscapeString(string(values[0])) + `</name>`
-				result += `<description><![CDATA[` + string(values[8]) + `]]></description>`
-				result += xml_gen_offer_attributes(db, conf, utils.StrToInt(string(values[0])))
-				result += `</offer>`
-			}
-		}
-	}
-	return result
-}
-
-func xml_generate(db *sqlw.DB, conf *config.Config) string {
-	return `<?xml version="1.0" encoding="UTF-8"?>` +
-		`<!DOCTYPE yml_catalog SYSTEM "shops.dtd">` +
-		`<yml_catalog date="` + time.Unix(int64(time.Now().Unix()), 0).Format("2006-01-02 15:04") + `">` +
-		`<shop>` +
-		`<name>` + html.EscapeString((*conf).API.XML.Name) + `</name>` +
-		`<company>` + html.EscapeString((*conf).API.XML.Company) + `</company>` +
-		`<url>` + html.EscapeString((*conf).API.XML.Url) + `</url>` +
-		`<currencies>` + xml_gen_currencies(db, conf) + `</currencies>` +
-		`<categories>` + xml_gen_categories(db, conf) + `</categories>` +
-		`<offers>` + xml_gen_offers(db, conf) + `</offers>` +
-		`</shop>` +
-		`</yml_catalog>`
-}
-
-func xml_create(dir, host string, db *sqlw.DB) {
-	conf := config.ConfigNew()
-	if err := conf.ConfigRead(strings.Join([]string{dir, "config", "config.json"}, string(os.PathSeparator))); err == nil {
-		if (*conf).API.XML.Enabled == 1 {
-			if file, err := os.Create(strings.Join([]string{dir, "htdocs", "products.xml"}, string(os.PathSeparator))); err == nil {
-				file.Write([]byte(xml_generate(db, conf)))
-				file.Close()
-			} else {
-				fmt.Printf("Xml generation error (file): %v\n", err)
-			}
-		}
-	} else {
-		fmt.Printf("Xml generation error (config): %v\n", err)
-	}
-}
-
-func xml_detect(dir, host string, mp *mysqlpool.MySqlPool) {
-	db := mp.Get(host)
-	if db != nil {
-		trigger := strings.Join([]string{dir, "tmp", "trigger.xml.run"}, string(os.PathSeparator))
-		if utils.IsFileExists(trigger) {
-			if err := db.Ping(); err == nil {
-				xml_create(dir, host, db)
-				os.Remove(trigger)
-			}
-		}
-	}
-}
-
-func xml_loop(www_dir string, stop chan bool, mp *mysqlpool.MySqlPool) {
-	dirs, err := ioutil.ReadDir(www_dir)
-	if err == nil {
-		for _, dir := range dirs {
-			select {
-			case <-stop:
-				break
-			default:
-				if mp != nil {
-					target_dir := strings.Join([]string{www_dir, dir.Name()}, string(os.PathSeparator))
-					if utils.IsDirExists(target_dir) {
-						xml_detect(target_dir, dir.Name(), mp)
-					}
-				}
-			}
-		}
-	}
-}
-
-func xml_start(www_dir string, mp *mysqlpool.MySqlPool) (chan bool, chan bool) {
-	ch := make(chan bool)
-	stop := make(chan bool)
-	go func() {
-		for {
-			select {
-			case <-time.After(5 * time.Second):
-				// Run every 5 seconds
-				xml_loop(www_dir, stop, mp)
-			case <-ch:
-				ch <- true
-				return
-			}
-		}
-	}()
-	return ch, stop
-}
-
-func xml_stop(ch, stop chan bool) {
-	for {
-		select {
-		case stop <- true:
-		case ch <- true:
-			<-ch
-			return
-		case <-time.After(3 * time.Second):
-			fmt.Println("Xml error: force exit by timeout after 3 seconds")
-			return
-		}
-	}
 }

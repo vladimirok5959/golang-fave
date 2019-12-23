@@ -71,8 +71,7 @@ func main() {
 	wImageGen := image_generator(consts.ParamWwwDir)
 
 	// Xml generation
-	xml_cl_ch, xml_cl_stop := xml_start(consts.ParamWwwDir, mpool)
-	defer xml_stop(xml_cl_ch, xml_cl_stop)
+	wXmlGen := xml_generator(consts.ParamWwwDir, mpool)
 
 	// Init mounted resources
 	res := resource.New()
@@ -283,6 +282,12 @@ func main() {
 		var errs []string
 
 		// ---
+		if wXmlGen, ok := (*o)[4].(*worker.Worker); ok {
+			if err := wXmlGen.Shutdown(ctx); err != nil {
+				errs = append(errs, fmt.Sprintf("(%T): %s", wXmlGen, err.Error()))
+			}
+		}
+
 		if wImageGen, ok := (*o)[3].(*worker.Worker); ok {
 			if err := wImageGen.Shutdown(ctx); err != nil {
 				errs = append(errs, fmt.Sprintf("(%T): %s", wImageGen, err.Error()))
@@ -329,6 +334,7 @@ func main() {
 				mpool,
 				wSessCl,
 				wImageGen,
+				wXmlGen,
 				res,
 				stat,
 				mods,
