@@ -18,7 +18,7 @@ func (this *Modules) RegisterAction_ShopAttributesDelete() *Action {
 			return
 		}
 
-		err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+		err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 			// Block rows
 			if _, err := tx.Exec("SELECT id FROM shop_filters WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err

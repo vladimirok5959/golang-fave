@@ -18,7 +18,7 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 			return
 		}
 
-		if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+		if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 			// Block rows
 			if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err

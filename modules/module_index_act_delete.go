@@ -18,7 +18,7 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 			return
 		}
 
-		err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+		err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 			// Process
 			if _, err := tx.Exec("DELETE FROM pages WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err

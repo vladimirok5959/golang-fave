@@ -9,7 +9,7 @@ import (
 
 func (this *Modules) shop_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_name, pf_alias, pf_parent string) (error, int64) {
 	var lastID int64 = 0
-	return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+	return wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 		// Block rows
 		if _, err := tx.Exec("SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
 			return err
@@ -45,7 +45,7 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 	if utils.StrToInt(pf_parent) == parentId {
 		// If parent not changed, just update category data
-		return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+		return wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 			// Process
 			if _, err := tx.Exec(`
 				UPDATE shop_cats SET
@@ -68,7 +68,7 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 	// TODO: Fix parent change
 
 	// Parent is changed, move category to new parent
-	return wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+	return wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 		// Block all rows
 		if _, err := tx.Exec("SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
 			return err

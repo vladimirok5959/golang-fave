@@ -65,7 +65,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 
 		// Start transaction
-		tx, err := db.Begin()
+		tx, err := db.Begin(wrap.R.Context())
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return

@@ -18,7 +18,7 @@ func (this *Modules) RegisterAction_ShopDetach() *Action {
 			return
 		}
 
-		if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+		if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 			if _, err := tx.Exec(`
 				UPDATE shop_products SET
 					parent_id = NULL,

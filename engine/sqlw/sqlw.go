@@ -1,8 +1,5 @@
 package sqlw
 
-// TODO: rework all with context from request
-// https://golang.org/pkg/database/sql/
-
 import (
 	"context"
 	"database/sql"
@@ -76,8 +73,10 @@ func (this *DB) QueryRow(ctx context.Context, query string, args ...interface{})
 	return this.db.QueryRow(query, args...)
 }
 
-func (this *DB) Begin() (*Tx, error) {
-	tx, err := this.db.Begin()
+func (this *DB) Begin(ctx context.Context) (*Tx, error) {
+	tx, err := this.db.BeginTx(ctx, &sql.TxOptions{
+		Isolation: sql.LevelDefault,
+	})
 	if err != nil {
 		if consts.ParamDebug {
 			log("[TX] TRANSACTION START", time.Now(), err, true)
@@ -112,13 +111,11 @@ func (this *DB) Exec(ctx context.Context, query string, args ...interface{}) (sq
 	return this.db.ExecContext(ctx, query, args...)
 }
 
-// TODO: review
-// https://golang.org/pkg/database/sql/
-func (this *DB) Transaction(queries func(tx *Tx) error) error {
+func (this *DB) Transaction(ctx context.Context, queries func(tx *Tx) error) error {
 	if queries == nil {
 		return errors.New("queries is not set for transaction")
 	}
-	tx, err := this.Begin()
+	tx, err := this.Begin(ctx)
 	if err != nil {
 		return err
 	}

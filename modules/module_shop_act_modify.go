@@ -103,7 +103,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 
 		if pf_id == "0" {
 			var lastID int64 = 0
-			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+			if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 				// Insert row
 				res, err := tx.Exec(
 					`INSERT INTO shop_products SET
@@ -215,7 +215,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 
 			wrap.Write(`window.location='/cp/shop/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
-			if err := wrap.DB.Transaction(func(tx *wrapper.Tx) error {
+			if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
 				// Block rows
 				if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
