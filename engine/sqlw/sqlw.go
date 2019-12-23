@@ -92,6 +92,7 @@ func (this *DB) Begin() (*Tx, error) {
 	return &Tx{tx, time.Now()}, err
 }
 
+// TODO: func (db *DB) QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)
 func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	if consts.ParamDebug {
 		s := time.Now()
@@ -102,6 +103,7 @@ func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	return this.db.Query(query, args...)
 }
 
+// TODO: func (db *DB) ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)
 func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	if consts.ParamDebug {
 		s := time.Now()
@@ -112,6 +114,7 @@ func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	return this.db.Exec(query, args...)
 }
 
+// TODO: review
 func (this *DB) Transaction(queries func(tx *Tx) error) error {
 	if queries == nil {
 		return errors.New("queries is not set for transaction")
