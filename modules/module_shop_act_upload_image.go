@@ -2,6 +2,7 @@ package modules
 
 import (
 	"bytes"
+	"context"
 	"image"
 	"io/ioutil"
 	"os"
@@ -52,7 +53,7 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 								target_file_name := utils.Int64ToStr(time.Now().Unix()+int64(i-1)) + filepath.Ext(handler.Filename)
 								target_file_full := wrap.DHtdocs + string(os.PathSeparator) + "products" + string(os.PathSeparator) + "images" + string(os.PathSeparator) + pf_id + string(os.PathSeparator) + target_file_name
 								var lastID int64 = 0
-								if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+								if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 									// Block rows
 									if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 										return err

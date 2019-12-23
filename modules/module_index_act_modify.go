@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"context"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -46,7 +48,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 		if pf_id == "0" {
 			// Add new page
 			var lastID int64 = 0
-			if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				res, err := tx.Exec(
 					`INSERT INTO pages SET
 						user = ?,
@@ -86,7 +88,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 			wrap.Write(`window.location='/cp/index/modify/` + utils.Int64ToStr(lastID) + `/';`)
 		} else {
 			// Update page
-			if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				_, err := tx.Exec(
 					`UPDATE pages SET
 						name = ?,

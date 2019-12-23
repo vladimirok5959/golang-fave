@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"context"
 	"errors"
 
 	"golang-fave/engine/wrapper"
@@ -21,7 +22,7 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 			return
 		}
 
-		if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Check parent
 			var count int
 			if err := tx.QueryRow(

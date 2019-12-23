@@ -111,7 +111,7 @@ func (this *DB) Exec(ctx context.Context, query string, args ...interface{}) (sq
 	return this.db.ExecContext(ctx, query, args...)
 }
 
-func (this *DB) Transaction(ctx context.Context, queries func(tx *Tx) error) error {
+func (this *DB) Transaction(ctx context.Context, queries func(ctx context.Context, tx *Tx) error) error {
 	if queries == nil {
 		return errors.New("queries is not set for transaction")
 	}
@@ -119,7 +119,7 @@ func (this *DB) Transaction(ctx context.Context, queries func(tx *Tx) error) err
 	if err != nil {
 		return err
 	}
-	if err := queries(tx); err != nil {
+	if err := queries(ctx, tx); err != nil {
 		tx.Rollback()
 		return err
 	}

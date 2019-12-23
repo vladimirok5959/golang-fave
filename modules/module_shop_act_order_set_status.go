@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"context"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -29,7 +31,7 @@ func (this *Modules) RegisterAction_ShopOrderSetStatus() *Action {
 			return
 		}
 
-		if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			if _, err := tx.Exec(
 				`UPDATE shop_orders SET
 					status = ?

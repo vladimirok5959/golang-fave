@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"context"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -18,7 +20,7 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 			return
 		}
 
-		err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+		err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Process
 			if _, err := tx.Exec("DELETE FROM pages WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err

@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"context"
+
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )
@@ -57,7 +59,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 			}
 
 			var lastID int64 = 0
-			if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				res, err := tx.Exec(
 					`INSERT INTO users SET
 						first_name = ?,
@@ -92,7 +94,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 		} else {
 			// Update user
 			if pf_password == "" {
-				if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+				if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 					_, err := tx.Exec(
 						`UPDATE users SET
 							first_name = ?,
@@ -119,7 +121,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 					return
 				}
 			} else {
-				if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+				if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 					_, err := tx.Exec(
 						`UPDATE users SET
 							first_name = ?,

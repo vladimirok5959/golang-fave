@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"context"
+
 	"golang-fave/consts"
 	"golang-fave/engine/basket"
 	"golang-fave/engine/wrapper"
@@ -97,7 +99,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 		})
 
 		var lastID int64 = 0
-		if err := wrap.DB.Transaction(wrap.R.Context(), func(tx *wrapper.Tx) error {
+		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Insert row
 			res, err := tx.Exec(
 				`INSERT INTO shop_orders SET
