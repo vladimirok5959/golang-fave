@@ -191,16 +191,19 @@ func (this *Wrapper) LoadSessionUser() bool {
 }
 
 func (this *Wrapper) Write(data string) {
+	// TODO: select context and don't write
 	this.W.Write([]byte(data))
 }
 
 func (this *Wrapper) MsgSuccess(msg string) {
+	// TODO: select context and don't write
 	this.Write(fmt.Sprintf(
 		`fave.ShowMsgSuccess('Success!', '%s', false);`,
 		utils.JavaScriptVarValue(msg)))
 }
 
 func (this *Wrapper) MsgError(msg string) {
+	// TODO: select context and don't write
 	this.Write(fmt.Sprintf(
 		`fave.ShowMsgError('Error!', '%s', true);`,
 		utils.JavaScriptVarValue(msg)))
