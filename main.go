@@ -68,8 +68,7 @@ func main() {
 	wSessCl := session_cleaner(consts.ParamWwwDir)
 
 	// Image processing
-	imgs_cl_ch, imgs_cl_stop := image_start(consts.ParamWwwDir)
-	defer image_stop(imgs_cl_ch, imgs_cl_stop)
+	wImageGen := image_generator(consts.ParamWwwDir)
 
 	// Init mounted resources
 	res := resource.New()
@@ -284,6 +283,12 @@ func main() {
 		var errs []string
 
 		// ---
+		if wImageGen, ok := (*o)[3].(*worker.Worker); ok {
+			if err := wImageGen.Shutdown(ctx); err != nil {
+				errs = append(errs, fmt.Sprintf("(%T): %s", wImageGen, err.Error()))
+			}
+		}
+
 		if wSessCl, ok := (*o)[2].(*worker.Worker); ok {
 			if err := wSessCl.Shutdown(ctx); err != nil {
 				errs = append(errs, fmt.Sprintf("(%T): %s", wSessCl, err.Error()))
@@ -323,6 +328,7 @@ func main() {
 				lg,
 				mpool,
 				wSessCl,
+				wImageGen,
 				res,
 				stat,
 				mods,
