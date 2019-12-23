@@ -415,6 +415,7 @@ func (this *Wrapper) RemoveProductImageThumbnails(product_id, filename string) e
 	if files, err := filepath.Glob(pattern); err != nil {
 		return err
 	} else {
+		// TODO: select context and don't do that
 		for _, file := range files {
 			if err := os.Remove(file); err != nil {
 				return errors.New(fmt.Sprintf("[upload delete] Thumbnail file (%s) delete error: %s", file, err.Error()))
