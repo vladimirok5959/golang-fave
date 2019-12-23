@@ -58,7 +58,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		defer db.Close()
-		err = db.Ping()
+		err = db.Ping(wrap.R.Context())
 		if err != nil {
 			wrap.MsgError(err.Error())
 			return

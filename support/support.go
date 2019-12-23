@@ -1,6 +1,7 @@
 package support
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -31,14 +32,14 @@ func (this *Support) isSettingsTableDoesntExist(err error) bool {
 	return false
 }
 
-func (this *Support) Migration(dir string) error {
+func (this *Support) Migration(ctx context.Context, dir string) error {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return err
 	}
 	for _, file := range files {
 		if utils.IsDir(dir + string(os.PathSeparator) + file.Name()) {
-			if err := this.Migrate(dir + string(os.PathSeparator) + file.Name()); err != nil {
+			if err := this.Migrate(ctx, dir+string(os.PathSeparator)+file.Name()); err != nil {
 				return err
 			}
 		}
@@ -46,7 +47,7 @@ func (this *Support) Migration(dir string) error {
 	return nil
 }
 
-func (this *Support) Migrate(host string) error {
+func (this *Support) Migrate(ctx context.Context, host string) error {
 	mysql_config_file := host + string(os.PathSeparator) + "config" + string(os.PathSeparator) + "mysql.json"
 	if utils.IsMySqlConfigExists(mysql_config_file) {
 		mc, err := utils.MySqlConfigRead(mysql_config_file)
@@ -57,7 +58,7 @@ func (this *Support) Migrate(host string) error {
 		if err != nil {
 			return err
 		}
-		if err := db.Ping(); err != nil {
+		if err := db.Ping(ctx); err != nil {
 			return err
 		}
 		defer db.Close()

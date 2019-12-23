@@ -2,6 +2,7 @@ package wrapper
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"html/template"
@@ -120,7 +121,7 @@ func (this *Wrapper) dbReconnect() error {
 	return nil
 }
 
-func (this *Wrapper) UseDatabase() error {
+func (this *Wrapper) UseDatabase(ctx context.Context) error {
 	this.DB = this.MSPool.Get(this.CurrHost)
 	if this.DB == nil {
 		if err := this.dbReconnect(); err != nil {
@@ -128,12 +129,12 @@ func (this *Wrapper) UseDatabase() error {
 		}
 	}
 
-	if err := this.DB.Ping(); err != nil {
+	if err := this.DB.Ping(ctx); err != nil {
 		this.DB.Close()
 		if err := this.dbReconnect(); err != nil {
 			return err
 		}
-		if err := this.DB.Ping(); err != nil {
+		if err := this.DB.Ping(ctx); err != nil {
 			this.DB.Close()
 			return err
 		}

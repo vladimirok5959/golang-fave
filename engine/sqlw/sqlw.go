@@ -4,6 +4,7 @@ package sqlw
 // https://golang.org/pkg/database/sql/
 
 import (
+	"context"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 
@@ -44,13 +45,13 @@ func (this *DB) Close() error {
 	return this.db.Close()
 }
 
-func (this *DB) Ping() error {
+func (this *DB) Ping(ctx context.Context) error {
 	if consts.ParamDebug {
-		err := this.db.Ping()
+		err := this.db.PingContext(ctx)
 		log("[CM] PING", time.Now(), err, true)
 		return err
 	}
-	return this.db.Ping()
+	return this.db.PingContext(ctx)
 }
 
 func (this *DB) SetConnMaxLifetime(d time.Duration) {

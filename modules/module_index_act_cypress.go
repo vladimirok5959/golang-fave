@@ -24,7 +24,7 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 			return
 		}
 		defer db.Close()
-		err = db.Ping()
+		err = db.Ping(wrap.R.Context())
 		if err != nil {
 			wrap.Write(err.Error())
 			return

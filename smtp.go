@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html"
 	"io/ioutil"
@@ -12,13 +13,64 @@ import (
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper/config"
 	"golang-fave/utils"
+
+	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func smtp_send(host, port, user, pass, subject, msg string, receivers []string) error {
-	return utils.SMTPSend(host, port, user, pass, subject, msg, receivers)
+func smtp_sender(www_dir string, mp *mysqlpool.MySqlPool) *worker.Worker {
+	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
+		if www_dir, ok := (*o)[0].(string); ok {
+			if mp, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
+				smtp_loop(ctx, www_dir, mp)
+			}
+		}
+		select {
+		case <-ctx.Done():
+		case <-time.After(5 * time.Second):
+			return
+		}
+	}, &[]worker.Iface{
+		www_dir,
+		mp,
+	})
 }
 
-func smtp_prepare(db *sqlw.DB, conf *config.Config) {
+func smtp_loop(ctx context.Context, www_dir string, mp *mysqlpool.MySqlPool) {
+	dirs, err := ioutil.ReadDir(www_dir)
+	if err == nil {
+		for _, dir := range dirs {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				if mp != nil {
+					target_dir := strings.Join([]string{www_dir, dir.Name()}, string(os.PathSeparator))
+					if utils.IsDirExists(target_dir) {
+						smtp_process(ctx, target_dir, dir.Name(), mp)
+					}
+				}
+			}
+		}
+	}
+}
+
+func smtp_process(ctx context.Context, dir, host string, mp *mysqlpool.MySqlPool) {
+	db := mp.Get(host)
+	if db != nil {
+		conf := config.ConfigNew()
+		if err := conf.ConfigRead(strings.Join([]string{dir, "config", "config.json"}, string(os.PathSeparator))); err == nil {
+			if !((*conf).SMTP.Host == "" || (*conf).SMTP.Login == "" && (*conf).SMTP.Password == "") {
+				if err := db.Ping(ctx); err == nil {
+					smtp_prepare(ctx, db, conf)
+				}
+			}
+		} else {
+			fmt.Printf("Smtp error (config): %v\n", err)
+		}
+	}
+}
+
+func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 	rows, err := db.Query(
 		`SELECT
 			id,
@@ -49,6 +101,7 @@ func smtp_prepare(db *sqlw.DB, conf *config.Config) {
 				); err == nil {
 					go func(db *sqlw.DB, conf *config.Config, id int, subject, msg string, receivers []string) {
 						if err := smtp_send(
+							ctx,
 							(*conf).SMTP.Host,
 							utils.IntToStr((*conf).SMTP.Port),
 							(*conf).SMTP.Login,
@@ -88,69 +141,6 @@ func smtp_prepare(db *sqlw.DB, conf *config.Config) {
 	}
 }
 
-func smtp_process(dir, host string, mp *mysqlpool.MySqlPool) {
-	db := mp.Get(host)
-	if db != nil {
-		conf := config.ConfigNew()
-		if err := conf.ConfigRead(strings.Join([]string{dir, "config", "config.json"}, string(os.PathSeparator))); err == nil {
-			if !((*conf).SMTP.Host == "" || (*conf).SMTP.Login == "" && (*conf).SMTP.Password == "") {
-				if err := db.Ping(); err == nil {
-					smtp_prepare(db, conf)
-				}
-			}
-		} else {
-			fmt.Printf("Smtp error (config): %v\n", err)
-		}
-	}
-}
-
-func smtp_loop(www_dir string, stop chan bool, mp *mysqlpool.MySqlPool) {
-	dirs, err := ioutil.ReadDir(www_dir)
-	if err == nil {
-		for _, dir := range dirs {
-			select {
-			case <-stop:
-				break
-			default:
-				if mp != nil {
-					target_dir := strings.Join([]string{www_dir, dir.Name()}, string(os.PathSeparator))
-					if utils.IsDirExists(target_dir) {
-						smtp_process(target_dir, dir.Name(), mp)
-					}
-				}
-			}
-		}
-	}
-}
-
-func smtp_start(www_dir string, mp *mysqlpool.MySqlPool) (chan bool, chan bool) {
-	ch := make(chan bool)
-	stop := make(chan bool)
-	go func() {
-		for {
-			select {
-			case <-time.After(5 * time.Second):
-				// Run every 5 seconds
-				smtp_loop(www_dir, stop, mp)
-			case <-ch:
-				ch <- true
-				return
-			}
-		}
-	}()
-	return ch, stop
-}
-
-func smtp_stop(ch, stop chan bool) {
-	for {
-		select {
-		case stop <- true:
-		case ch <- true:
-			<-ch
-			return
-		case <-time.After(3 * time.Second):
-			fmt.Println("Smtp error: force exit by timeout after 3 seconds")
-			return
-		}
-	}
+func smtp_send(ctx context.Context, host, port, user, pass, subject, msg string, receivers []string) error {
+	return utils.SMTPSend(host, port, user, pass, subject, msg, receivers)
 }

@@ -59,7 +59,7 @@ func xml_detect(ctx context.Context, dir, host string, mp *mysqlpool.MySqlPool) 
 	if db != nil {
 		trigger := strings.Join([]string{dir, "tmp", "trigger.xml.run"}, string(os.PathSeparator))
 		if utils.IsFileExists(trigger) {
-			if err := db.Ping(); err == nil {
+			if err := db.Ping(ctx); err == nil {
 				xml_create(ctx, dir, host, trigger, db)
 			}
 		}

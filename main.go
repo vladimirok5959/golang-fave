@@ -51,7 +51,9 @@ func main() {
 	}
 
 	// Run database migration
-	if err := support.New().Migration(consts.ParamWwwDir); err != nil {
+	// TODO: something need here for migration
+	ctx := context.Background()
+	if err := support.New().Migration(ctx, consts.ParamWwwDir); err != nil {
 		fmt.Printf("[ERROR] MIGRATION FAILED: %s\n", err)
 	}
 
@@ -73,6 +75,9 @@ func main() {
 	// Xml generation
 	wXmlGen := xml_generator(consts.ParamWwwDir, mpool)
 
+	// SMTP sender
+	wSmtpSnd := smtp_sender(consts.ParamWwwDir, mpool)
+
 	// Init mounted resources
 	res := resource.New()
 	assets.PopulateResources(res)
@@ -82,10 +87,6 @@ func main() {
 
 	// Init modules
 	mods := modules.New()
-
-	// SMTP sender
-	smtp_cl_ch, smtp_cl_stop := smtp_start(consts.ParamWwwDir, mpool)
-	defer smtp_stop(smtp_cl_ch, smtp_cl_stop)
 
 	// Shop basket
 	sb := basket.New()
@@ -135,17 +136,17 @@ func main() {
 		}
 
 		var res *resource.Resource
-		if v, ok := (*o)[2].(*resource.Resource); ok {
+		if v, ok := (*o)[6].(*resource.Resource); ok {
 			res = v
 		}
 
 		var stat *static.Static
-		if v, ok := (*o)[3].(*static.Static); ok {
+		if v, ok := (*o)[7].(*static.Static); ok {
 			stat = v
 		}
 
 		var mods *modules.Modules
-		if v, ok := (*o)[4].(*modules.Modules); ok {
+		if v, ok := (*o)[8].(*modules.Modules); ok {
 			mods = v
 		}
 		// ---
@@ -282,6 +283,12 @@ func main() {
 		var errs []string
 
 		// ---
+		if wSmtpSnd, ok := (*o)[5].(*worker.Worker); ok {
+			if err := wSmtpSnd.Shutdown(ctx); err != nil {
+				errs = append(errs, fmt.Sprintf("(%T): %s", wSmtpSnd, err.Error()))
+			}
+		}
+
 		if wXmlGen, ok := (*o)[4].(*worker.Worker); ok {
 			if err := wXmlGen.Shutdown(ctx); err != nil {
 				errs = append(errs, fmt.Sprintf("(%T): %s", wXmlGen, err.Error()))
@@ -335,6 +342,7 @@ func main() {
 				wSessCl,
 				wImageGen,
 				wXmlGen,
+				wSmtpSnd,
 				res,
 				stat,
 				mods,

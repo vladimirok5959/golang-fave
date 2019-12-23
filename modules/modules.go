@@ -297,7 +297,7 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 			if name != "" {
 				if act, ok := this.acts[name]; ok {
 					if act.Info.WantDB {
-						err := wrap.UseDatabase()
+						err := wrap.UseDatabase(wrap.R.Context())
 						if err != nil {
 							this.XXXActionHeaders(wrap, http.StatusNotFound)
 							wrap.MsgError(err.Error())
@@ -345,7 +345,7 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 		wrap.CurrModule = cm
 		if mod.Front != nil {
 			if mod.Info.WantDB {
-				err := wrap.UseDatabase()
+				err := wrap.UseDatabase(wrap.R.Context())
 				if err != nil {
 					utils.SystemErrorPageEngine(wrap.W, err)
 					return true
