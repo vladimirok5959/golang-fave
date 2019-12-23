@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"io/ioutil"
 	"os"
 	"time"
@@ -9,57 +9,37 @@ import (
 	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-sessions/session"
+	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func session_clean_do(www_dir string, stop chan bool) {
+func session_cleaner(www_dir string) *worker.Worker {
+	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
+		if www_dir, ok := (*o)[0].(string); ok {
+			session_clean(ctx, www_dir)
+		}
+		select {
+		case <-ctx.Done():
+		case <-time.After(1 * time.Hour):
+			return
+		}
+	}, &[]worker.Iface{
+		www_dir,
+	})
+}
+
+func session_clean(ctx context.Context, www_dir string) {
 	files, err := ioutil.ReadDir(www_dir)
 	if err == nil {
 		for _, file := range files {
 			select {
-			case <-stop:
-				break
+			case <-ctx.Done():
+				return
 			default:
 				tmpdir := www_dir + string(os.PathSeparator) + file.Name() + string(os.PathSeparator) + "tmp"
 				if utils.IsDirExists(tmpdir) {
 					session.Clean(tmpdir)
 				}
 			}
-		}
-	}
-}
-
-func session_clean_start(www_dir string) (chan bool, chan bool) {
-	ch := make(chan bool)
-	stop := make(chan bool)
-
-	// Cleanup at start
-	session_clean_do(www_dir, stop)
-
-	go func() {
-		for {
-			select {
-			case <-time.After(1 * time.Hour):
-				// Cleanup every one hour
-				session_clean_do(www_dir, stop)
-			case <-ch:
-				ch <- true
-				return
-			}
-		}
-	}()
-	return ch, stop
-}
-
-func session_clean_stop(ch, stop chan bool) {
-	for {
-		select {
-		case stop <- true:
-		case ch <- true:
-			<-ch
-			return
-		case <-time.After(3 * time.Second):
-			fmt.Println("Session error: force exit by timeout after 3 seconds")
-			return
 		}
 	}
 }

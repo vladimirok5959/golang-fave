@@ -7,6 +7,7 @@ require (
 	github.com/vladimirok5959/golang-server-resources v1.0.6
 	github.com/vladimirok5959/golang-server-sessions v1.0.6
 	github.com/vladimirok5959/golang-server-static v1.0.2
+	github.com/vladimirok5959/golang-worker v1.0.0
 	google.golang.org/appengine v1.4.0 // indirect
 )
 

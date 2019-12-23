@@ -12,6 +12,8 @@ github.com/vladimirok5959/golang-server-resources/resource
 github.com/vladimirok5959/golang-server-sessions/session
 # github.com/vladimirok5959/golang-server-static v1.0.2
 github.com/vladimirok5959/golang-server-static/static
+# github.com/vladimirok5959/golang-worker v1.0.0
+github.com/vladimirok5959/golang-worker/worker
 # golang.org/x/image v0.0.0-20180708004352-c73c2afc3b81
 golang.org/x/image/bmp
 golang.org/x/image/tiff

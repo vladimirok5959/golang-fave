@@ -26,6 +26,7 @@ import (
 	"github.com/vladimirok5959/golang-server-resources/resource"
 	"github.com/vladimirok5959/golang-server-sessions/session"
 	"github.com/vladimirok5959/golang-server-static/static"
+	"github.com/vladimirok5959/golang-worker/worker"
 )
 
 func init() {
@@ -64,8 +65,7 @@ func main() {
 	mpool := mysqlpool.New()
 
 	// Session cleaner
-	sess_cl_ch, sess_cl_stop := session_clean_start(consts.ParamWwwDir)
-	defer session_clean_stop(sess_cl_ch, sess_cl_stop)
+	wSessCl := session_cleaner(consts.ParamWwwDir)
 
 	// Image processing
 	imgs_cl_ch, imgs_cl_stop := image_start(consts.ParamWwwDir)
@@ -284,9 +284,15 @@ func main() {
 		var errs []string
 
 		// ---
+		if wSessCl, ok := (*o)[2].(*worker.Worker); ok {
+			if err := wSessCl.Shutdown(ctx); err != nil {
+				errs = append(errs, fmt.Sprintf("(%T): %s", wSessCl, err.Error()))
+			}
+		}
+
 		if mpool, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
 			if err := mpool.Close(); err != nil {
-				errs = append(errs, err.Error())
+				errs = append(errs, fmt.Sprintf("(%T): %s", mpool, err.Error()))
 			}
 		}
 
@@ -316,6 +322,7 @@ func main() {
 			Objects: &[]bootstrap.Iface{
 				lg,
 				mpool,
+				wSessCl,
 				res,
 				stat,
 				mods,
