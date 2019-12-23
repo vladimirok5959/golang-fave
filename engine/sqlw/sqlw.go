@@ -119,8 +119,7 @@ func (this *DB) Transaction(ctx context.Context, queries func(tx *Tx) error) err
 	if err != nil {
 		return err
 	}
-	err = queries(tx)
-	if err != nil {
+	if err := queries(tx); err != nil {
 		tx.Rollback()
 		return err
 	}
