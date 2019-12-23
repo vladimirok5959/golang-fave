@@ -93,6 +93,7 @@ func (this *DB) Begin() (*Tx, error) {
 }
 
 // TODO: func (db *DB) QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)
+// https://golang.org/pkg/database/sql/
 func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	if consts.ParamDebug {
 		s := time.Now()
@@ -104,6 +105,7 @@ func (this *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
 }
 
 // TODO: func (db *DB) ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)
+// https://golang.org/pkg/database/sql/
 func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	if consts.ParamDebug {
 		s := time.Now()
@@ -115,6 +117,7 @@ func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 }
 
 // TODO: review
+// https://golang.org/pkg/database/sql/
 func (this *DB) Transaction(queries func(tx *Tx) error) error {
 	if queries == nil {
 		return errors.New("queries is not set for transaction")
