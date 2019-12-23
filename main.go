@@ -70,6 +70,10 @@ func main() {
 	// Image processing
 	wImageGen := image_generator(consts.ParamWwwDir)
 
+	// Xml generation
+	xml_cl_ch, xml_cl_stop := xml_start(consts.ParamWwwDir, mpool)
+	defer xml_stop(xml_cl_ch, xml_cl_stop)
+
 	// Init mounted resources
 	res := resource.New()
 	assets.PopulateResources(res)
@@ -79,10 +83,6 @@ func main() {
 
 	// Init modules
 	mods := modules.New()
-
-	// Xml generation
-	xml_cl_ch, xml_cl_stop := xml_start(consts.ParamWwwDir, mpool)
-	defer xml_stop(xml_cl_ch, xml_cl_stop)
 
 	// SMTP sender
 	smtp_cl_ch, smtp_cl_stop := smtp_start(consts.ParamWwwDir, mpool)
