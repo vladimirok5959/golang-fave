@@ -60,19 +60,22 @@ func xml_detect(ctx context.Context, dir, host string, mp *mysqlpool.MySqlPool) 
 		trigger := strings.Join([]string{dir, "tmp", "trigger.xml.run"}, string(os.PathSeparator))
 		if utils.IsFileExists(trigger) {
 			if err := db.Ping(); err == nil {
-				xml_create(ctx, dir, host, db)
-				os.Remove(trigger)
+				xml_create(ctx, dir, host, trigger, db)
 			}
 		}
 	}
 }
 
-func xml_create(ctx context.Context, dir, host string, db *sqlw.DB) {
+func xml_create(ctx context.Context, dir, host, trigger string, db *sqlw.DB) {
 	conf := config.ConfigNew()
 	if err := conf.ConfigRead(strings.Join([]string{dir, "config", "config.json"}, string(os.PathSeparator))); err == nil {
 		if (*conf).API.XML.Enabled == 1 {
 			if file, err := os.Create(strings.Join([]string{dir, "htdocs", "products.xml"}, string(os.PathSeparator))); err == nil {
-				file.Write([]byte(xml_generate(ctx, db, conf)))
+				if content, err := xml_generate(ctx, db, conf); err == nil {
+					if _, err := file.Write([]byte(content)); err == nil {
+						os.Remove(trigger)
+					}
+				}
 				file.Close()
 			} else {
 				fmt.Printf("Xml generation error (file): %v\n", err)
@@ -83,22 +86,42 @@ func xml_create(ctx context.Context, dir, host string, db *sqlw.DB) {
 	}
 }
 
-func xml_generate(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
+func xml_generate(ctx context.Context, db *sqlw.DB, conf *config.Config) (string, error) {
+	content := ""
+
+	var currencies string
+	var categories string
+	var offers string
+	var err error
+
+	if currencies, err = xml_gen_currencies(ctx, db, conf); err != nil {
+		return content, err
+	}
+
+	if categories, err = xml_gen_categories(ctx, db, conf); err != nil {
+		return content, err
+	}
+
+	if offers, err = xml_gen_offers(ctx, db, conf); err != nil {
+		return content, err
+	}
+
 	return `<?xml version="1.0" encoding="UTF-8"?>` +
-		`<!DOCTYPE yml_catalog SYSTEM "shops.dtd">` +
-		`<yml_catalog date="` + time.Unix(int64(time.Now().Unix()), 0).Format("2006-01-02 15:04") + `">` +
-		`<shop>` +
-		`<name>` + html.EscapeString((*conf).API.XML.Name) + `</name>` +
-		`<company>` + html.EscapeString((*conf).API.XML.Company) + `</company>` +
-		`<url>` + html.EscapeString((*conf).API.XML.Url) + `</url>` +
-		`<currencies>` + xml_gen_currencies(ctx, db, conf) + `</currencies>` +
-		`<categories>` + xml_gen_categories(ctx, db, conf) + `</categories>` +
-		`<offers>` + xml_gen_offers(ctx, db, conf) + `</offers>` +
-		`</shop>` +
-		`</yml_catalog>`
+			`<!DOCTYPE yml_catalog SYSTEM "shops.dtd">` +
+			`<yml_catalog date="` + time.Unix(int64(time.Now().Unix()), 0).Format("2006-01-02 15:04") + `">` +
+			`<shop>` +
+			`<name>` + html.EscapeString((*conf).API.XML.Name) + `</name>` +
+			`<company>` + html.EscapeString((*conf).API.XML.Company) + `</company>` +
+			`<url>` + html.EscapeString((*conf).API.XML.Url) + `</url>` +
+			`<currencies>` + currencies + `</currencies>` +
+			`<categories>` + categories + `</categories>` +
+			`<offers>` + offers + `</offers>` +
+			`</shop>` +
+			`</yml_catalog>`,
+		nil
 }
 
-func xml_gen_currencies(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
+func xml_gen_currencies(ctx context.Context, db *sqlw.DB, conf *config.Config) (string, error) {
 	result := ``
 	rows, err := db.Query(
 		`SELECT
@@ -124,10 +147,10 @@ func xml_gen_currencies(ctx context.Context, db *sqlw.DB, conf *config.Config) s
 			}
 		}
 	}
-	return result
+	return result, nil
 }
 
-func xml_gen_categories(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
+func xml_gen_categories(ctx context.Context, db *sqlw.DB, conf *config.Config) (string, error) {
 	result := ``
 	rows, err := db.Query(
 		`SELECT
@@ -183,10 +206,10 @@ func xml_gen_categories(ctx context.Context, db *sqlw.DB, conf *config.Config) s
 			}
 		}
 	}
-	return result
+	return result, nil
 }
 
-func xml_gen_offers(ctx context.Context, db *sqlw.DB, conf *config.Config) string {
+func xml_gen_offers(ctx context.Context, db *sqlw.DB, conf *config.Config) (string, error) {
 	result := ``
 	rows, err := db.Query(
 		`SELECT
@@ -243,7 +266,7 @@ func xml_gen_offers(ctx context.Context, db *sqlw.DB, conf *config.Config) strin
 			}
 		}
 	}
-	return result
+	return result, nil
 }
 
 func xml_gen_offer_pictures(ctx context.Context, db *sqlw.DB, conf *config.Config, product_id, parent_id int) string {
