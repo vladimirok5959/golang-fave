@@ -35,6 +35,7 @@ func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 		wrap.RemoveProductImageThumbnails("*", "*")
 
 		_, _ = db.Exec(
+			wrap.R.Context(),
 			`DROP TABLE
 				blog_cat_post_rel,
 				blog_cats,

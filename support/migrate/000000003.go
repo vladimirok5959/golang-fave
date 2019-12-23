@@ -1,21 +1,24 @@
 package migrate
 
 import (
+	"context"
+
 	"golang-fave/engine/sqlw"
 	"golang-fave/utils"
 )
 
-func Migrate_000000003(db *sqlw.DB, host string) error {
+func Migrate_000000003(ctx context.Context, db *sqlw.DB, host string) error {
 	// Remove blog indexes
-	if _, err := db.Exec(`DROP INDEX post_id ON blog_cat_post_rel`); err != nil {
+	if _, err := db.Exec(ctx, `DROP INDEX post_id ON blog_cat_post_rel`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`DROP INDEX category_id ON blog_cat_post_rel`); err != nil {
+	if _, err := db.Exec(ctx, `DROP INDEX category_id ON blog_cat_post_rel`); err != nil {
 		return err
 	}
 
 	// Table: shop_cat_product_rel
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_cat_product_rel (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			product_id int(11) NOT NULL COMMENT 'Product id',
@@ -28,6 +31,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 
 	// Table: shop_cats
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_cats (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			user int(11) NOT NULL COMMENT 'User id',
@@ -43,6 +47,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 
 	// Table: shop_currencies
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_currencies (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			name varchar(255) NOT NULL COMMENT 'Currency name',
@@ -57,6 +62,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 
 	// Table: shop_filter_product_values
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_filter_product_values (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			product_id int(11) NOT NULL COMMENT 'Product id',
@@ -69,6 +75,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 
 	// Table: shop_filters
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_filters (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			name varchar(255) NOT NULL COMMENT 'Filter name in CP',
@@ -81,6 +88,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 
 	// Table: shop_filters_values
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_filters_values (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			filter_id int(11) NOT NULL COMMENT 'Filter id',
@@ -93,6 +101,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 
 	// Table: shop_products
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_products (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			user int(11) NOT NULL COMMENT 'User id',
@@ -112,6 +121,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 
 	// Demo datas
 	if _, err := db.Exec(
+		ctx,
 		`INSERT INTO shop_cat_product_rel (id, product_id, category_id)
 			VALUES
 		(1, 1, 3);`,
@@ -119,6 +129,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 		return err
 	}
 	if _, err := db.Exec(
+		ctx,
 		`INSERT INTO shop_cats (id, user, name, alias, lft, rgt)
 			VALUES
 		(1, 1, 'ROOT', 'ROOT', 1, 6),
@@ -128,6 +139,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 		return err
 	}
 	if _, err := db.Exec(
+		ctx,
 		`INSERT INTO shop_currencies (id, name, coefficient, code, symbol)
 			VALUES
 		(1, 'US Dollar', 1.0000, 'USD', '$');`,
@@ -135,6 +147,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 		return err
 	}
 	if _, err := db.Exec(
+		ctx,
 		`INSERT INTO shop_filter_product_values (id, product_id, filter_value_id)
 			VALUES
 		(1, 1, 3),
@@ -146,6 +159,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 		return err
 	}
 	if _, err := db.Exec(
+		ctx,
 		`INSERT INTO shop_filters (id, name, filter)
 			VALUES
 		(1, 'Mobile phones manufacturer', 'Manufacturer'),
@@ -155,6 +169,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 		return err
 	}
 	if _, err := db.Exec(
+		ctx,
 		`INSERT INTO shop_filters_values (id, filter_id, name)
 			VALUES
 		(1, 1, 'Apple'),
@@ -172,6 +187,7 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 		return err
 	}
 	if _, err := db.Exec(
+		ctx,
 		`INSERT INTO shop_products SET
 			id = ?,
 			user = ?,
@@ -199,97 +215,105 @@ func Migrate_000000003(db *sqlw.DB, host string) error {
 	}
 
 	// Indexes
-	if _, err := db.Exec(`ALTER TABLE shop_cat_product_rel ADD UNIQUE KEY product_category (product_id,category_id) USING BTREE;`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_cat_product_rel ADD UNIQUE KEY product_category (product_id,category_id) USING BTREE;`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_product_id (product_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_product_id (product_id);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_category_id (category_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_category_id (category_id);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_cats ADD UNIQUE KEY alias (alias);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_cats ADD UNIQUE KEY alias (alias);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_cats ADD KEY FK_shop_cats_user (user);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_cats ADD KEY FK_shop_cats_user (user);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_filter_product_values ADD UNIQUE KEY product_filter_value (product_id,filter_value_id) USING BTREE;`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_filter_product_values ADD UNIQUE KEY product_filter_value (product_id,filter_value_id) USING BTREE;`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_product_id (product_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_product_id (product_id);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_filters ADD KEY name (name);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_filters ADD KEY name (name);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_filters_values ADD KEY name (name);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_filters_values ADD KEY name (name);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);`); err != nil {
 		return err
 	}
 
 	// References
-	if _, err := db.Exec(`
-		ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id
 		FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id
 		FOREIGN KEY (category_id) REFERENCES shop_cats (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_cats ADD CONSTRAINT FK_shop_cats_user
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_cats ADD CONSTRAINT FK_shop_cats_user
 		FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id
 		FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id
 		FOREIGN KEY (filter_value_id) REFERENCES shop_filters_values (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
 		FOREIGN KEY (filter_id) REFERENCES shop_filters (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user
 		FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency
 		FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err

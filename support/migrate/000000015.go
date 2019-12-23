@@ -1,12 +1,15 @@
 package migrate
 
 import (
+	"context"
+
 	"golang-fave/engine/sqlw"
 )
 
-func Migrate_000000015(db *sqlw.DB, host string) error {
+func Migrate_000000015(ctx context.Context, db *sqlw.DB, host string) error {
 	// Table: shop_orders
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_orders (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			create_datetime datetime NOT NULL COMMENT 'Create date/time',
@@ -32,6 +35,7 @@ func Migrate_000000015(db *sqlw.DB, host string) error {
 
 	// Table: shop_order_products
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE shop_order_products (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			order_id int(11) NOT NULL COMMENT 'Order ID',
@@ -45,34 +49,37 @@ func Migrate_000000015(db *sqlw.DB, host string) error {
 	}
 
 	// Indexes
-	if _, err := db.Exec(`ALTER TABLE shop_orders ADD KEY FK_shop_orders_currency_id (currency_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_orders ADD KEY FK_shop_orders_currency_id (currency_id);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_order_products ADD UNIQUE KEY order_product (order_id,product_id) USING BTREE;`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_order_products ADD UNIQUE KEY order_product (order_id,product_id) USING BTREE;`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_order_id (order_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_order_id (order_id);`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_product_id (product_id);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_product_id (product_id);`); err != nil {
 		return err
 	}
 
 	// References
-	if _, err := db.Exec(`
-		ALTER TABLE shop_orders ADD CONSTRAINT FK_shop_orders_currency_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_orders ADD CONSTRAINT FK_shop_orders_currency_id
 		FOREIGN KEY (currency_id) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_order_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_order_id
 		FOREIGN KEY (order_id) REFERENCES shop_orders (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err
 	}
-	if _, err := db.Exec(`
-		ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_product_id
+	if _, err := db.Exec(
+		ctx,
+		`ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_product_id
 		FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 	`); err != nil {
 		return err

@@ -11,10 +11,12 @@ TARGET_FILE="./support/migrate/${NEXT_NUM_STR}.go"
 echo "package migrate" > $TARGET_FILE
 echo "" >> $TARGET_FILE
 echo "import (" >> $TARGET_FILE
+echo "	\"context\"" >> $TARGET_FILE
+echo "" >> $TARGET_FILE
 echo "	\"golang-fave/engine/sqlw\"" >> $TARGET_FILE
 echo ")" >> $TARGET_FILE
 echo "" >> $TARGET_FILE
-echo "func Migrate_${NEXT_NUM_STR}(db *sqlw.DB, host string) error {" >> $TARGET_FILE
+echo "func Migrate_${NEXT_NUM_STR}(ctx context.Context, db *sqlw.DB, host string) error {" >> $TARGET_FILE
 echo "	return nil" >> $TARGET_FILE
 echo "}" >> $TARGET_FILE
 
@@ -23,10 +25,12 @@ LIST_FILE="./support/migrate/000000001.go"
 echo "package migrate" > $LIST_FILE
 echo "" >> $LIST_FILE
 echo "import (" >> $LIST_FILE
+echo "	\"context\"" >> $LIST_FILE
+echo "" >> $LIST_FILE
 echo "	\"golang-fave/engine/sqlw\"" >> $LIST_FILE
 echo ")" >> $LIST_FILE
 echo "" >> $LIST_FILE
-echo "var Migrations = map[string]func(*sqlw.DB, string) error{" >> $LIST_FILE
+echo "var Migrations = map[string]func(context.Context, *sqlw.DB, string) error{" >> $LIST_FILE
 echo "	\"000000000\": nil," >> $LIST_FILE
 echo "	\"000000001\": nil," >> $LIST_FILE
 for i in `ls ./support/migrate/*.go | sort -V`; do

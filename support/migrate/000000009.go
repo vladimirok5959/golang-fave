@@ -1,6 +1,7 @@
 package migrate
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 
@@ -8,7 +9,7 @@ import (
 	"golang-fave/engine/sqlw"
 )
 
-func Migrate_000000009(db *sqlw.DB, host string) error {
+func Migrate_000000009(ctx context.Context, db *sqlw.DB, host string) error {
 	if err := ioutil.WriteFile(host+string(os.PathSeparator)+"/template/cached-block-1.html", ThemeFiles.AllData["cached-block-1.html"], 0664); err != nil {
 		return err
 	}

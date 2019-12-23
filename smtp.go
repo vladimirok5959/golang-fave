@@ -97,6 +97,7 @@ func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 			err = rows.Scan(scan...)
 			if err == nil {
 				if _, err := db.Exec(
+					ctx,
 					`UPDATE notify_mail SET status = 3 WHERE id = ?;`,
 					utils.StrToInt(string(values[0])),
 				); err == nil {
@@ -112,6 +113,7 @@ func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 							receivers,
 						); err == nil {
 							if _, err := db.Exec(
+								ctx,
 								`UPDATE notify_mail SET status = 1 WHERE id = ?;`,
 								id,
 							); err != nil {
@@ -119,6 +121,7 @@ func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 							}
 						} else {
 							if _, err := db.Exec(
+								ctx,
 								`UPDATE notify_mail SET error = ?, status = 0 WHERE id = ?;`,
 								err.Error(),
 								id,

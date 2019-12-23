@@ -312,6 +312,7 @@ func (this *Wrapper) SendEmailUsual(email, subject, message string) error {
 	}
 
 	if _, err := this.DB.Exec(
+		this.R.Context(),
 		`INSERT INTO notify_mail SET
 			id = NULL,
 			email = ?,
@@ -344,6 +345,7 @@ func (this *Wrapper) SendEmailFast(email, subject, message string) error {
 	}
 
 	if _, err := this.DB.Exec(
+		this.R.Context(),
 		`INSERT INTO notify_mail SET
 			id = NULL,
 			email = ?,

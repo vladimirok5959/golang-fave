@@ -102,16 +102,14 @@ func (this *DB) Query(ctx context.Context, query string, args ...interface{}) (*
 	return this.db.Query(query, args...)
 }
 
-// TODO: func (db *DB) ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)
-// https://golang.org/pkg/database/sql/
-func (this *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
+func (this *DB) Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
 	if consts.ParamDebug {
 		s := time.Now()
-		r, e := this.db.Exec(query, args...)
+		r, e := this.db.ExecContext(ctx, query, args...)
 		log(query, s, e, false)
 		return r, e
 	}
-	return this.db.Exec(query, args...)
+	return this.db.ExecContext(ctx, query, args...)
 }
 
 // TODO: review

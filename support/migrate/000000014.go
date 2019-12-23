@@ -1,12 +1,15 @@
 package migrate
 
 import (
+	"context"
+
 	"golang-fave/engine/sqlw"
 )
 
-func Migrate_000000014(db *sqlw.DB, host string) error {
+func Migrate_000000014(ctx context.Context, db *sqlw.DB, host string) error {
 	// Table: notify_mail
 	if _, err := db.Exec(
+		ctx,
 		`CREATE TABLE notify_mail (
 			id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 			email varchar(255) NOT NULL COMMENT 'Email address',
@@ -22,7 +25,7 @@ func Migrate_000000014(db *sqlw.DB, host string) error {
 	}
 
 	// Indexes
-	if _, err := db.Exec(`ALTER TABLE notify_mail ADD KEY status (status);`); err != nil {
+	if _, err := db.Exec(ctx, `ALTER TABLE notify_mail ADD KEY status (status);`); err != nil {
 		return err
 	}
 

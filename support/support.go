@@ -66,6 +66,7 @@ func (this *Support) Migrate(ctx context.Context, host string) error {
 		if err := db.QueryRow(ctx, `SELECT value FROM settings WHERE name = 'database_version' LIMIT 1;`).Scan(&version); err != nil {
 			if this.isSettingsTableDoesntExist(err) {
 				if _, err := db.Exec(
+					ctx,
 					`CREATE TABLE settings (
 						name varchar(255) NOT NULL COMMENT 'Setting name',
 						value text NOT NULL COMMENT 'Setting value'
@@ -74,6 +75,7 @@ func (this *Support) Migrate(ctx context.Context, host string) error {
 					return err
 				}
 				if _, err := db.Exec(
+					ctx,
 					`INSERT INTO settings (name, value) VALUES ('database_version', '000000002');`,
 				); err != nil {
 					return err
@@ -83,11 +85,11 @@ func (this *Support) Migrate(ctx context.Context, host string) error {
 			}
 			return err
 		}
-		return this.Process(db, version, host)
+		return this.Process(ctx, db, version, host)
 	}
 	return nil
 }
 
-func (this *Support) Process(db *sqlw.DB, version string, host string) error {
-	return migrate.Run(db, utils.StrToInt(version), host)
+func (this *Support) Process(ctx context.Context, db *sqlw.DB, version string, host string) error {
+	return migrate.Run(ctx, db, utils.StrToInt(version), host)
 }

@@ -52,6 +52,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 		}
 
 		_, err = wrap.DB.Exec(
+			wrap.R.Context(),
 			`INSERT INTO users SET
 				id = 1,
 				first_name = ?,
