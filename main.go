@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"golang-fave/assets"
+	"golang-fave/engine/assets"
 	"golang-fave/cblocks"
 	"golang-fave/domains"
 	"golang-fave/engine"

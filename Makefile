@@ -55,7 +55,7 @@ version:
 
 template:
 	@./support/template.sh
-	@gofmt -w ./assets/template/
+	@gofmt -w ./engine/assets/template/
 
 dockerfile:
 	@echo "FROM debian:latest" > Dockerfile

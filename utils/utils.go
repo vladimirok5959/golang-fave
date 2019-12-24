@@ -18,7 +18,7 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"golang-fave/assets"
+	"golang-fave/engine/assets"
 	"golang-fave/engine/consts"
 )
 

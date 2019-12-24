@@ -1,7 +1,7 @@
 package builder
 
 import (
-	"golang-fave/assets"
+	"golang-fave/engine/assets"
 )
 
 func CheckBox(value int) string {

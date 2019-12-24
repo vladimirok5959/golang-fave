@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"golang-fave/assets"
+	"golang-fave/engine/assets"
 	"golang-fave/engine/builder"
 	"golang-fave/engine/consts"
 	"golang-fave/engine/wrapper"

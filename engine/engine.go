@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"golang-fave/assets"
+	"golang-fave/engine/assets"
 	"golang-fave/cblocks"
 	"golang-fave/engine/basket"
 	"golang-fave/engine/mysqlpool"

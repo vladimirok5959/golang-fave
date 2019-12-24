@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"golang-fave/assets"
+	"golang-fave/engine/assets"
 	"golang-fave/engine/fetdata"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"golang-fave/assets"
+	"golang-fave/engine/assets"
 	"golang-fave/engine/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"

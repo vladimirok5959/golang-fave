@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	ThemeFiles "golang-fave/assets/template"
+	ThemeFiles "golang-fave/engine/assets/template"
 	"golang-fave/engine/sqlw"
 )
 
