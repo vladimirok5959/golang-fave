@@ -17,9 +17,9 @@ import (
 	"golang-fave/engine/consts"
 	"golang-fave/engine/domains"
 	"golang-fave/engine/logger"
+	"golang-fave/engine/modules"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/utils"
-	"golang-fave/modules"
 	"golang-fave/support"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
