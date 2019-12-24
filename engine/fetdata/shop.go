@@ -70,11 +70,11 @@ func (this *Shop) load() *Shop {
 			fave_users.email,
 			fave_users.admin,
 			fave_users.active,
-			shop_currencies.id,
-			shop_currencies.name,
-			shop_currencies.coefficient,
-			shop_currencies.code,
-			shop_currencies.symbol,
+			fave_shop_currencies.id,
+			fave_shop_currencies.name,
+			fave_shop_currencies.coefficient,
+			fave_shop_currencies.code,
+			fave_shop_currencies.symbol,
 			cats.id,
 			cats.user,
 			cats.name,
@@ -86,7 +86,7 @@ func (this *Shop) load() *Shop {
 		FROM
 			fave_shop_products
 			LEFT JOIN fave_users ON fave_users.id = fave_shop_products.user
-			LEFT JOIN shop_currencies ON shop_currencies.id = fave_shop_products.currency
+			LEFT JOIN fave_shop_currencies ON fave_shop_currencies.id = fave_shop_products.currency
 			LEFT JOIN (
 				SELECT
 					main.id,
@@ -108,8 +108,8 @@ func (this *Shop) load() *Shop {
 							node.rgt,
 							(COUNT(parent.id) - 1) AS depth
 						FROM
-							shop_cats AS node,
-							shop_cats AS parent
+							fave_shop_cats AS node,
+							fave_shop_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -127,8 +127,8 @@ func (this *Shop) load() *Shop {
 							node.rgt,
 							(COUNT(parent.id) - 0) AS depth
 						FROM
-							shop_cats AS node,
-							shop_cats AS parent
+							fave_shop_cats AS node,
+							fave_shop_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -161,8 +161,8 @@ func (this *Shop) load() *Shop {
 			`SELECT
 				node.id
 			FROM
-				shop_cats AS node,
-				shop_cats AS parent
+				fave_shop_cats AS node,
+				fave_shop_cats AS parent
 			WHERE
 				node.lft BETWEEN parent.lft AND parent.rgt AND
 				node.id > 1 AND
@@ -224,11 +224,11 @@ func (this *Shop) load() *Shop {
 				fave_users.email,
 				fave_users.admin,
 				fave_users.active,
-				shop_currencies.id,
-				shop_currencies.name,
-				shop_currencies.coefficient,
-				shop_currencies.code,
-				shop_currencies.symbol,
+				fave_shop_currencies.id,
+				fave_shop_currencies.name,
+				fave_shop_currencies.coefficient,
+				fave_shop_currencies.code,
+				fave_shop_currencies.symbol,
 				cats.id,
 				cats.user,
 				cats.name,
@@ -241,7 +241,7 @@ func (this *Shop) load() *Shop {
 				fave_shop_products
 				LEFT JOIN fave_shop_cat_product_rel ON fave_shop_cat_product_rel.product_id = fave_shop_products.id
 				LEFT JOIN fave_users ON fave_users.id = fave_shop_products.user
-				LEFT JOIN shop_currencies ON shop_currencies.id = fave_shop_products.currency
+				LEFT JOIN fave_shop_currencies ON fave_shop_currencies.id = fave_shop_products.currency
 				LEFT JOIN (
 					SELECT
 						main.id,
@@ -263,8 +263,8 @@ func (this *Shop) load() *Shop {
 								node.rgt,
 								(COUNT(parent.id) - 1) AS depth
 							FROM
-								shop_cats AS node,
-								shop_cats AS parent
+								fave_shop_cats AS node,
+								fave_shop_cats AS parent
 							WHERE
 								node.lft BETWEEN parent.lft AND parent.rgt
 							GROUP BY
@@ -282,8 +282,8 @@ func (this *Shop) load() *Shop {
 								node.rgt,
 								(COUNT(parent.id) - 0) AS depth
 							FROM
-								shop_cats AS node,
-								shop_cats AS parent
+								fave_shop_cats AS node,
+								fave_shop_cats AS parent
 							WHERE
 								node.lft BETWEEN parent.lft AND parent.rgt
 							GROUP BY
@@ -531,8 +531,8 @@ func (this *Shop) preload_cats() {
 						node.rgt,
 						(COUNT(parent.id) - 1) AS depth
 					FROM
-						shop_cats AS node,
-						shop_cats AS parent
+						fave_shop_cats AS node,
+						fave_shop_cats AS parent
 					WHERE
 						node.lft BETWEEN parent.lft AND parent.rgt
 					GROUP BY
@@ -550,8 +550,8 @@ func (this *Shop) preload_cats() {
 						node.rgt,
 						(COUNT(parent.id) - 0) AS depth
 					FROM
-						shop_cats AS node,
-						shop_cats AS parent
+						fave_shop_cats AS node,
+						fave_shop_cats AS parent
 					WHERE
 						node.lft BETWEEN parent.lft AND parent.rgt
 					GROUP BY

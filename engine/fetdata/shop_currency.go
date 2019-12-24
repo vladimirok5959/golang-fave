@@ -31,7 +31,7 @@ func (this *ShopCurrency) loadById(id int) {
 			code,
 			symbol
 		FROM
-			shop_currencies
+			fave_shop_currencies
 		WHERE
 			id = ?
 		LIMIT 1;`,

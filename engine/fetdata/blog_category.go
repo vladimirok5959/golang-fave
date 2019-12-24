@@ -47,8 +47,8 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 					node.rgt,
 					(COUNT(parent.id) - 1) AS depth
 				FROM
-					blog_cats AS node,
-					blog_cats AS parent
+					fave_blog_cats AS node,
+					fave_blog_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY
@@ -66,8 +66,8 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 					node.rgt,
 					(COUNT(parent.id) - 0) AS depth
 				FROM
-					blog_cats AS node,
-					blog_cats AS parent
+					fave_blog_cats AS node,
+					fave_blog_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY
@@ -137,8 +137,8 @@ func (this *BlogCategory) loadById(id int) {
 					node.rgt,
 					(COUNT(parent.id) - 1) AS depth
 				FROM
-					blog_cats AS node,
-					blog_cats AS parent
+					fave_blog_cats AS node,
+					fave_blog_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY
@@ -156,8 +156,8 @@ func (this *BlogCategory) loadById(id int) {
 					node.rgt,
 					(COUNT(parent.id) - 0) AS depth
 				FROM
-					blog_cats AS node,
-					blog_cats AS parent
+					fave_blog_cats AS node,
+					fave_blog_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY

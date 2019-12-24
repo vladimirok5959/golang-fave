@@ -129,7 +129,7 @@ func xml_gen_currencies(ctx context.Context, db *sqlw.DB, conf *config.Config) (
 			code,
 			coefficient
 		FROM
-			shop_currencies
+			fave_shop_currencies
 		ORDER BY
 			id ASC
 		;`,
@@ -174,8 +174,8 @@ func xml_gen_categories(ctx context.Context, db *sqlw.DB, conf *config.Config) (
 					node.rgt,
 					parent.id AS parent_id
 				FROM
-					shop_cats AS node,
-					shop_cats AS parent
+					fave_shop_cats AS node,
+					fave_shop_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt AND
 					node.id > 1
@@ -216,26 +216,26 @@ func xml_gen_offers(ctx context.Context, db *sqlw.DB, conf *config.Config) (stri
 	rows, err := db.Query(
 		ctx,
 		`SELECT
-			shop_products.id,
-			shop_currencies.code,
-			shop_products.price,
-			shop_products.name,
-			shop_products.alias,
-			shop_products.vendor,
-			shop_products.quantity,
-			shop_products.category,
-			shop_products.content,
-			IFNULL(shop_products.parent_id, 0),
-			shop_products.price_old,
-			shop_products.price_promo
+			fave_shop_products.id,
+			fave_shop_currencies.code,
+			fave_shop_products.price,
+			fave_shop_products.name,
+			fave_shop_products.alias,
+			fave_shop_products.vendor,
+			fave_shop_products.quantity,
+			fave_shop_products.category,
+			fave_shop_products.content,
+			IFNULL(fave_shop_products.parent_id, 0),
+			fave_shop_products.price_old,
+			fave_shop_products.price_promo
 		FROM
-			shop_products
-			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+			fave_shop_products
+			LEFT JOIN fave_shop_currencies ON fave_shop_currencies.id = fave_shop_products.currency
 		WHERE
-			shop_products.active = 1 AND
-			shop_products.category > 1
+			fave_shop_products.active = 1 AND
+			fave_shop_products.category > 1
 		ORDER BY
-			shop_products.id
+			fave_shop_products.id
 		;`,
 	)
 	if err == nil {
@@ -277,14 +277,14 @@ func xml_gen_offer_pictures(ctx context.Context, db *sqlw.DB, conf *config.Confi
 	if rows, err := db.Query(
 		ctx,
 		`SELECT
-			shop_product_images.product_id,
-			shop_product_images.filename
+			fave_shop_product_images.product_id,
+			fave_shop_product_images.filename
 		FROM
-			shop_product_images
+			fave_shop_product_images
 		WHERE
-			shop_product_images.product_id = ?
+			fave_shop_product_images.product_id = ?
 		ORDER BY
-			shop_product_images.ord ASC
+			fave_shop_product_images.ord ASC
 		;`,
 		product_id,
 	); err == nil {
@@ -307,14 +307,14 @@ func xml_gen_offer_pictures(ctx context.Context, db *sqlw.DB, conf *config.Confi
 		if rows, err := db.Query(
 			ctx,
 			`SELECT
-				shop_product_images.product_id,
-				shop_product_images.filename
+				fave_shop_product_images.product_id,
+				fave_shop_product_images.filename
 			FROM
-				shop_product_images
+				fave_shop_product_images
 			WHERE
-				shop_product_images.product_id = ?
+				fave_shop_product_images.product_id = ?
 			ORDER BY
-				shop_product_images.ord ASC
+				fave_shop_product_images.ord ASC
 			;`,
 			parent_id,
 		); err == nil {
@@ -344,18 +344,18 @@ func xml_gen_offer_attributes(ctx context.Context, db *sqlw.DB, conf *config.Con
 	rows, err := db.Query(
 		ctx,
 		`SELECT
-			shop_filters.id,
-			shop_filters.filter,
-			shop_filters_values.name
+			fave_shop_filters.id,
+			fave_shop_filters.filter,
+			fave_shop_filters_values.name
 		FROM
-			shop_filter_product_values
-			LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
-			LEFT JOIN shop_filters ON shop_filters.id = shop_filters_values.filter_id
+			fave_shop_filter_product_values
+			LEFT JOIN fave_shop_filters_values ON fave_shop_filters_values.id = fave_shop_filter_product_values.filter_value_id
+			LEFT JOIN fave_shop_filters ON fave_shop_filters.id = fave_shop_filters_values.filter_id
 		WHERE
-			shop_filter_product_values.product_id = ?
+			fave_shop_filter_product_values.product_id = ?
 		ORDER BY
-			shop_filters.filter ASC,
-			shop_filters_values.name ASC
+			fave_shop_filters.filter ASC,
+			fave_shop_filters_values.name ASC
 		;`,
 		product_id,
 	)

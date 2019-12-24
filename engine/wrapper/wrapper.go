@@ -439,7 +439,7 @@ func (this *Wrapper) ShopGetAllCurrencies() *map[int]utils.MySql_shop_currency {
 				code,
 				symbol
 			FROM
-				shop_currencies
+				fave_shop_currencies
 			ORDER BY
 				id ASC
 			;`,
