@@ -23,6 +23,7 @@ func (this *Modules) RegisterAction_ShopCurrenciesDelete() *Action {
 		err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Process
 			if _, err := tx.Exec(
+				ctx,
 				`DELETE FROM shop_currencies WHERE id = ?;`,
 				utils.StrToInt(pf_id),
 			); err != nil {

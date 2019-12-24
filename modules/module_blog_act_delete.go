@@ -22,18 +22,18 @@ func (this *Modules) RegisterAction_BlogDelete() *Action {
 
 		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT post_id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT post_id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Delete target post with category connection data
-			if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE post_id = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM blog_cat_post_rel WHERE post_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("DELETE FROM blog_posts WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM blog_posts WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			return nil

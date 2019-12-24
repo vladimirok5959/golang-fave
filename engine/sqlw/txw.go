@@ -1,6 +1,7 @@
 package sqlw
 
 import (
+	"context"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 
@@ -23,14 +24,14 @@ func (this *Tx) Commit() error {
 	return this.tx.Commit()
 }
 
-func (this *Tx) Exec(query string, args ...interface{}) (sql.Result, error) {
+func (this *Tx) Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
 	if consts.ParamDebug {
 		s := time.Now()
-		r, e := this.tx.Exec(query, args...)
+		r, e := this.tx.ExecContext(ctx, query, args...)
 		log("[TX] "+query, s, e, true)
 		return r, e
 	}
-	return this.tx.Exec(query, args...)
+	return this.tx.ExecContext(ctx, query, args...)
 }
 
 func (this *Tx) Query(query string, args ...interface{}) (*sql.Rows, error) {

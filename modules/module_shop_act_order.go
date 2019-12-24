@@ -102,6 +102,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Insert row
 			res, err := tx.Exec(
+				ctx,
 				`INSERT INTO shop_orders SET
 					create_datetime = ?,
 					update_datetime = ?,
@@ -148,6 +149,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			// Insert order products
 			for _, product := range *(*bdata).Products {
 				if _, err = tx.Exec(
+					ctx,
 					`INSERT INTO shop_order_products (id, order_id, product_id, price, quantity) VALUES (NULL, ?, ?, ?, ?);`,
 					lastID, product.A_product_id, product.A_price, product.A_quantity,
 				); err != nil {

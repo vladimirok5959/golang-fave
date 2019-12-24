@@ -25,13 +25,13 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 		var lastID int64 = 0
 		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
@@ -42,6 +42,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 
 			// Duplicate product
 			res, err := tx.Exec(
+				ctx,
 				`INSERT INTO shop_products (
 					parent_id,
 					user,
@@ -90,7 +91,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 			}
 
 			// Block new product row
-			if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", lastID); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", lastID); err != nil {
 				return err
 			}
 
@@ -122,7 +123,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 				}
 			}
 			for _, sql_query := range cat_sqls {
-				tx.Exec(sql_query)
+				tx.Exec(ctx, sql_query)
 			}
 
 			// Duplicate attributes
@@ -153,7 +154,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 				}
 			}
 			for _, sql_query := range attributes_sqls {
-				tx.Exec(sql_query)
+				tx.Exec(ctx, sql_query)
 			}
 
 			return nil

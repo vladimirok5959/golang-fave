@@ -22,13 +22,14 @@ func (this *Modules) RegisterAction_ShopAttributesDelete() *Action {
 
 		err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec("SELECT id FROM shop_filters WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM shop_filters WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("SELECT id FROM shop_filters_values WHERE filter_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM shop_filters_values WHERE filter_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			if _, err := tx.Exec(
+				ctx,
 				`SELECT
 					shop_filter_product_values.product_id
 				FROM
@@ -45,6 +46,7 @@ func (this *Modules) RegisterAction_ShopAttributesDelete() *Action {
 
 			// Process
 			if _, err := tx.Exec(
+				ctx,
 				`DELETE
 					shop_filter_product_values
 				FROM
@@ -59,12 +61,14 @@ func (this *Modules) RegisterAction_ShopAttributesDelete() *Action {
 				return err
 			}
 			if _, err := tx.Exec(
+				ctx,
 				`DELETE FROM shop_filters_values WHERE filter_id = ?;`,
 				utils.StrToInt(pf_id),
 			); err != nil {
 				return err
 			}
 			if _, err := tx.Exec(
+				ctx,
 				`DELETE FROM shop_filters WHERE id = ?;`,
 				utils.StrToInt(pf_id),
 			); err != nil {

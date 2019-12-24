@@ -61,6 +61,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				// Insert row
 				res, err := tx.Exec(
+					ctx,
 					`INSERT INTO blog_posts SET
 						user = ?,
 						name = ?,
@@ -91,7 +92,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				}
 
 				// Block rows
-				if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", lastID); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", lastID); err != nil {
 					return err
 				}
 
@@ -121,7 +122,8 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 						balkInsertArr = append(balkInsertArr, `(`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err = tx.Exec(
-						`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
+						ctx,
+						`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES `+strings.Join(balkInsertArr, ",")+`;`,
 					); err != nil {
 						return err
 					}
@@ -136,15 +138,16 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 		} else {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				// Block rows
-				if _, err := tx.Exec("SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM blog_posts WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("SELECT post_id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT post_id FROM blog_cat_post_rel WHERE post_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 
 				// Update row
 				if _, err := tx.Exec(
+					ctx,
 					`UPDATE blog_posts SET
 						name = ?,
 						alias = ?,
@@ -167,7 +170,7 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				}
 
 				// Delete post and categories relations
-				if _, err := tx.Exec("DELETE FROM blog_cat_post_rel WHERE post_id = ?;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "DELETE FROM blog_cat_post_rel WHERE post_id = ?;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 
@@ -197,7 +200,8 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 						balkInsertArr = append(balkInsertArr, `(`+pf_id+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err := tx.Exec(
-						`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES ` + strings.Join(balkInsertArr, ",") + `;`,
+						ctx,
+						`INSERT INTO blog_cat_post_rel (post_id,category_id) VALUES `+strings.Join(balkInsertArr, ",")+`;`,
 					); err != nil {
 						return err
 					}

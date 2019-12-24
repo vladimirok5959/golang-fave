@@ -47,8 +47,9 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 			}
 
 			// Attach
-			if _, err := tx.Exec(`
-				UPDATE shop_products SET
+			if _, err := tx.Exec(
+				ctx,
+				`UPDATE shop_products SET
 					parent_id = ?
 				WHERE
 					id = ? AND

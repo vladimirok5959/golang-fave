@@ -107,6 +107,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				// Insert row
 				res, err := tx.Exec(
+					ctx,
 					`INSERT INTO shop_products SET
 						user = ?,
 						currency = ?,
@@ -155,7 +156,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				}
 
 				// Block rows
-				if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", lastID); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", lastID); err != nil {
 					return err
 				}
 
@@ -185,7 +186,8 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						bulkInsertArr = append(bulkInsertArr, `(`+utils.Int64ToStr(lastID)+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err = tx.Exec(
-						`INSERT INTO shop_cat_product_rel (product_id,category_id) VALUES ` + strings.Join(bulkInsertArr, ",") + `;`,
+						ctx,
+						`INSERT INTO shop_cat_product_rel (product_id,category_id) VALUES `+strings.Join(bulkInsertArr, ",")+`;`,
 					); err != nil {
 						return err
 					}
@@ -194,6 +196,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				// Insert product and filter values relations
 				for vid, _ := range filter_values {
 					if _, err = tx.Exec(
+						ctx,
 						`INSERT INTO shop_filter_product_values SET
 							product_id = ?,
 							filter_value_id = ?
@@ -218,21 +221,22 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 		} else {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				// Block rows
-				if _, err := tx.Exec("SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("SELECT id FROM shop_currencies WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_currency)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM shop_currencies WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_currency)); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 
 				// Update row
 				if _, err := tx.Exec(
+					ctx,
 					`UPDATE shop_products SET
 						currency = ?,
 						price = ?,
@@ -271,6 +275,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				// Update custom field 1
 				if _, ok := wrap.R.Form["custom1"]; ok {
 					if _, err := tx.Exec(
+						ctx,
 						`UPDATE shop_products SET
 							custom1 = ?
 						WHERE
@@ -286,6 +291,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				// Update custom field 2
 				if _, ok := wrap.R.Form["custom2"]; ok {
 					if _, err := tx.Exec(
+						ctx,
 						`UPDATE shop_products SET
 							custom2 = ?
 						WHERE
@@ -299,7 +305,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				}
 
 				// Delete product and categories relations
-				if _, err := tx.Exec("DELETE FROM shop_cat_product_rel WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "DELETE FROM shop_cat_product_rel WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 
@@ -329,7 +335,8 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 						bulkInsertArr = append(bulkInsertArr, `(`+pf_id+`,`+utils.IntToStr(el)+`)`)
 					}
 					if _, err := tx.Exec(
-						`INSERT INTO shop_cat_product_rel (product_id,category_id) VALUES ` + strings.Join(bulkInsertArr, ",") + `;`,
+						ctx,
+						`INSERT INTO shop_cat_product_rel (product_id,category_id) VALUES `+strings.Join(bulkInsertArr, ",")+`;`,
 					); err != nil {
 						return err
 					}
@@ -337,6 +344,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 
 				// Delete product and filter values relations
 				if _, err := tx.Exec(
+					ctx,
 					`DELETE FROM shop_filter_product_values WHERE product_id = ?;`,
 					utils.StrToInt(pf_id),
 				); err != nil {
@@ -346,6 +354,7 @@ func (this *Modules) RegisterAction_ShopModify() *Action {
 				// Insert product and filter values relations
 				for vid, _ := range filter_values {
 					if _, err := tx.Exec(
+						ctx,
 						`INSERT INTO shop_filter_product_values SET
 							product_id = ?,
 							filter_value_id = ?

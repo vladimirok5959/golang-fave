@@ -12,24 +12,24 @@ func (this *Modules) shop_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 	var lastID int64 = 0
 	return wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 		// Block rows
-		if _, err := tx.Exec("SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
+		if _, err := tx.Exec(ctx, "SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
 			return err
 		}
 
 		// Process
-		if _, err := tx.Exec("SELECT @mr := rgt FROM shop_cats WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
+		if _, err := tx.Exec(ctx, "SELECT @mr := rgt FROM shop_cats WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
 			return err
 		}
-		if _, err := tx.Exec("UPDATE shop_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE shop_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
 			return err
 		}
-		if _, err := tx.Exec("UPDATE shop_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE shop_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
 			return err
 		}
-		if _, err := tx.Exec("UPDATE shop_cats SET rgt = rgt + 2 WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE shop_cats SET rgt = rgt + 2 WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
 			return err
 		}
-		res, err := tx.Exec("INSERT INTO shop_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias)
+		res, err := tx.Exec(ctx, "INSERT INTO shop_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias)
 		if err != nil {
 			return err
 		}
@@ -48,8 +48,9 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		// If parent not changed, just update category data
 		return wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Process
-			if _, err := tx.Exec(`
-				UPDATE shop_cats SET
+			if _, err := tx.Exec(
+				ctx,
+				`UPDATE shop_cats SET
 					name = ?,
 					alias = ?
 				WHERE
@@ -71,7 +72,7 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 	// Parent is changed, move category to new parent
 	return wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 		// Block all rows
-		if _, err := tx.Exec("SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
+		if _, err := tx.Exec(ctx, "SELECT id FROM shop_cats FOR UPDATE;"); err != nil {
 			return err
 		}
 
@@ -112,13 +113,13 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				// From right to left
 				// Shift
 				step := targetR - targetL + 1
-				if _, err := tx.Exec("UPDATE shop_cats SET lft = lft + ? WHERE lft > ? and lft < ?;", step, parentR, targetL); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE shop_cats SET lft = lft + ? WHERE lft > ? and lft < ?;", step, parentR, targetL); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("UPDATE shop_cats SET rgt = rgt + ? WHERE rgt > ? and rgt < ?;", step, parentR, targetL); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE shop_cats SET rgt = rgt + ? WHERE rgt > ? and rgt < ?;", step, parentR, targetL); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("UPDATE shop_cats SET rgt = rgt + ? WHERE id = ?;", step, utils.StrToInt(pf_parent)); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE shop_cats SET rgt = rgt + ? WHERE id = ?;", step, utils.StrToInt(pf_parent)); err != nil {
 					return err
 				}
 
@@ -126,7 +127,7 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				for i, _ := range rows_id {
 					new_lft := rows_lft[i] - (targetL - parentR)
 					new_rgt := rows_rgt[i] - (targetL - parentR)
-					if _, err := tx.Exec("UPDATE shop_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+					if _, err := tx.Exec(ctx, "UPDATE shop_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
 						return err
 					}
 				}
@@ -134,10 +135,10 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				// From left to right
 				// Shift
 				step := targetR - targetL + 1
-				if _, err := tx.Exec("UPDATE shop_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE shop_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
 					return err
 				}
-				if _, err := tx.Exec("UPDATE shop_cats SET rgt = rgt - ? WHERE rgt > ? and rgt < ?;", step, targetR, parentR); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE shop_cats SET rgt = rgt - ? WHERE rgt > ? and rgt < ?;", step, targetR, parentR); err != nil {
 					return err
 				}
 
@@ -145,7 +146,7 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				for i, _ := range rows_id {
 					new_lft := rows_lft[i] + (parentR - targetL - step)
 					new_rgt := rows_rgt[i] + (parentR - targetL - step)
-					if _, err := tx.Exec("UPDATE shop_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+					if _, err := tx.Exec(ctx, "UPDATE shop_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
 						return err
 					}
 				}
@@ -156,7 +157,7 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		}
 
 		// Update target cat data
-		if _, err := tx.Exec("UPDATE shop_cats SET name = ?, alias = ? WHERE id = ?;", pf_name, pf_alias, utils.StrToInt(pf_id)); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE shop_cats SET name = ?, alias = ? WHERE id = ?;", pf_name, pf_alias, utils.StrToInt(pf_id)); err != nil {
 			return err
 		}
 

@@ -73,6 +73,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: blog_cats
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE blog_cats (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
@@ -90,6 +91,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: blog_cat_post_rel
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE blog_cat_post_rel (
 				post_id int(11) NOT NULL COMMENT 'Post id',
 				category_id int(11) NOT NULL COMMENT 'Category id'
@@ -102,6 +104,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: blog_posts
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE blog_posts (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
@@ -122,6 +125,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: notify_mail
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE notify_mail (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				email varchar(255) NOT NULL COMMENT 'Email address',
@@ -140,6 +144,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: pages
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE pages (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
@@ -161,6 +166,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: settings
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE settings (
 				name varchar(255) NOT NULL COMMENT 'Setting name',
 				value text NOT NULL COMMENT 'Setting value'
@@ -173,6 +179,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_cat_product_rel
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_cat_product_rel (
 				product_id int(11) NOT NULL COMMENT 'Product id',
 				category_id int(11) NOT NULL COMMENT 'Category id'
@@ -185,6 +192,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_cats
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_cats (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
@@ -202,6 +210,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_currencies
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_currencies (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				name varchar(255) NOT NULL COMMENT 'Currency name',
@@ -218,6 +227,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_filter_product_values
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_filter_product_values (
 				product_id int(11) NOT NULL COMMENT 'Product id',
 				filter_value_id int(11) NOT NULL COMMENT 'Filter value id'
@@ -230,6 +240,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_filters
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_filters (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				name varchar(255) NOT NULL COMMENT 'Filter name in CP',
@@ -244,6 +255,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_filters_values
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_filters_values (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				filter_id int(11) NOT NULL COMMENT 'Filter id',
@@ -258,6 +270,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_order_products
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_order_products (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				order_id int(11) NOT NULL COMMENT 'Order ID',
@@ -274,6 +287,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_orders
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_orders (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				create_datetime datetime NOT NULL COMMENT 'Create date/time',
@@ -301,6 +315,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_product_images
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_product_images (
 				id int(11) NOT NULL AUTO_INCREMENT,
 				product_id int(11) NOT NULL,
@@ -316,6 +331,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: shop_products
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE shop_products (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				parent_id int(11) DEFAULT NULL,
@@ -346,6 +362,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Table: users
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`CREATE TABLE users (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				first_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User first name',
@@ -364,6 +381,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 
 		// Demo datas
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO blog_cats (id, user, name, alias, lft, rgt)
 				VALUES
 			(1, 1, 'ROOT', 'ROOT', 1, 24),
@@ -384,6 +402,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO blog_cat_post_rel (post_id, category_id) VALUES (1, 9), (2, 12), (3, 8);`,
 		); err != nil {
 			tx.Rollback()
@@ -391,6 +410,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO blog_posts SET
 				id = ?,
 				user = ?,
@@ -417,6 +437,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO blog_posts SET
 				id = ?,
 				user = ?,
@@ -443,6 +464,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO blog_posts SET
 				id = ?,
 				user = ?,
@@ -469,6 +491,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO pages SET
 				id = ?,
 				user = ?,
@@ -491,6 +514,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO pages SET
 				id = ?,
 				user = ?,
@@ -513,6 +537,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO pages SET
 				id = ?,
 				user = ?,
@@ -535,6 +560,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO settings (name, value) VALUES ('database_version', '000000020');`,
 		); err != nil {
 			tx.Rollback()
@@ -542,6 +568,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_cat_product_rel (product_id, category_id)
 				VALUES
 			(1, 3),
@@ -553,6 +580,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_cats (id, user, name, alias, lft, rgt)
 				VALUES
 			(1, 1, 'ROOT', 'ROOT', 1, 6),
@@ -564,6 +592,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_currencies (id, name, coefficient, code, symbol)
 				VALUES
 			(1, 'US Dollar', 1.0000, 'USD', '$'),
@@ -574,6 +603,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_filter_product_values (product_id, filter_value_id)
 				VALUES
 			(1, 3),
@@ -597,6 +627,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_filters (id, name, filter)
 				VALUES
 			(1, 'Mobile phones manufacturer', 'Manufacturer'),
@@ -608,6 +639,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_filters_values (id, filter_id, name)
 				VALUES
 			(1, 1, 'Apple'),
@@ -628,6 +660,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_products SET
 				id = ?,
 				user = ?,
@@ -666,6 +699,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_products SET
 				id = ?,
 				parent_id = ?,
@@ -706,6 +740,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO shop_products SET
 				id = ?,
 				parent_id = ?,
@@ -746,6 +781,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 		if _, err = tx.Exec(
+			wrap.R.Context(),
 			`INSERT INTO users (id, first_name, last_name, email, password, admin, active) VALUES (1, 'First Name', 'Last Name', 'example@example.com', '23463b99b62a72f26ed677cc556c44e8', 1, 1);`,
 		); err != nil {
 			tx.Rollback()
@@ -754,357 +790,494 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 
 		// Indexes
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_post_id (post_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_post_id (post_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_category_id (category_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_category_id (category_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD UNIQUE KEY alias (alias);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cats ADD UNIQUE KEY alias (alias);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE blog_posts ADD KEY FK_blog_posts_category (category);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_posts ADD KEY FK_blog_posts_category (category);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE notify_mail ADD KEY status (status);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE notify_mail ADD KEY status (status);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE pages ADD UNIQUE KEY alias (alias);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE pages ADD UNIQUE KEY alias (alias);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE pages ADD KEY alias_active (alias,active) USING BTREE;`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE pages ADD KEY alias_active (alias,active) USING BTREE;`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE pages ADD KEY FK_pages_user (user);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE pages ADD KEY FK_pages_user (user);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE settings ADD UNIQUE KEY name (name);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE settings ADD UNIQUE KEY name (name);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_cat_product_rel ADD UNIQUE KEY product_category (product_id,category_id) USING BTREE;`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cat_product_rel ADD UNIQUE KEY product_category (product_id,category_id) USING BTREE;`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_product_id (product_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_product_id (product_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_category_id (category_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_category_id (category_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_cats ADD UNIQUE KEY alias (alias);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cats ADD UNIQUE KEY alias (alias);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_cats ADD KEY FK_shop_cats_user (user);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cats ADD KEY FK_shop_cats_user (user);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_filter_product_values ADD UNIQUE KEY product_filter_value (product_id,filter_value_id) USING BTREE;`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filter_product_values ADD UNIQUE KEY product_filter_value (product_id,filter_value_id) USING BTREE;`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_product_id (product_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_product_id (product_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_filters ADD KEY name (name);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filters ADD KEY name (name);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_filters_values ADD KEY name (name);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filters_values ADD KEY name (name);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_orders ADD KEY FK_shop_orders_currency_id (currency_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_orders ADD KEY FK_shop_orders_currency_id (currency_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_order_products ADD UNIQUE KEY order_product (order_id,product_id) USING BTREE;`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_order_products ADD UNIQUE KEY order_product (order_id,product_id) USING BTREE;`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_order_id (order_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_order_id (order_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_product_id (product_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_product_id (product_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_product_images ADD UNIQUE KEY product_filename (product_id,filename) USING BTREE;`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_product_images ADD UNIQUE KEY product_filename (product_id,filename) USING BTREE;`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_product_images ADD KEY FK_shop_product_images_product_id (product_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_product_images ADD KEY FK_shop_product_images_product_id (product_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_category (category);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD KEY FK_shop_products_category (category);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY FK_shop_products_parent_id (parent_id);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD KEY FK_shop_products_parent_id (parent_id);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE shop_products ADD KEY name (name);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD KEY name (name);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`ALTER TABLE users ADD UNIQUE KEY email (email);`); err != nil {
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE users ADD UNIQUE KEY email (email);`,
+		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
 
 		// References
-		if _, err = tx.Exec(`
-			ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id
 			FOREIGN KEY (post_id) REFERENCES blog_posts (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id
 			FOREIGN KEY (category_id) REFERENCES blog_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE blog_cats ADD CONSTRAINT FK_blog_cats_user
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_cats ADD CONSTRAINT FK_blog_cats_user
 			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_user
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_user
 			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_category
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_category
 			FOREIGN KEY (category) REFERENCES blog_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE pages ADD CONSTRAINT FK_pages_user
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE pages ADD CONSTRAINT FK_pages_user
 			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id
 			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id
 			FOREIGN KEY (category_id) REFERENCES shop_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_cats ADD CONSTRAINT FK_shop_cats_user
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_cats ADD CONSTRAINT FK_shop_cats_user
 			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id
 			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id
 			FOREIGN KEY (filter_value_id) REFERENCES shop_filters_values (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
 			FOREIGN KEY (filter_id) REFERENCES shop_filters (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_orders ADD CONSTRAINT FK_shop_orders_currency_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_orders ADD CONSTRAINT FK_shop_orders_currency_id
 			FOREIGN KEY (currency_id) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_order_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_order_id
 			FOREIGN KEY (order_id) REFERENCES shop_orders (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_product_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_product_id
 			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id
 			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user
 			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency
 			FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_category
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_category
 			FOREIGN KEY (category) REFERENCES shop_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
 			return
 		}
-		if _, err = tx.Exec(`
-			ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_parent_id
+		if _, err = tx.Exec(
+			wrap.R.Context(),
+			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_parent_id
 			FOREIGN KEY (parent_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()

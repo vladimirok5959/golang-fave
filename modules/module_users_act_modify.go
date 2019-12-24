@@ -61,6 +61,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 			var lastID int64 = 0
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				res, err := tx.Exec(
+					ctx,
 					`INSERT INTO users SET
 						first_name = ?,
 						last_name = ?,
@@ -96,6 +97,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 			if pf_password == "" {
 				if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 					_, err := tx.Exec(
+						ctx,
 						`UPDATE users SET
 							first_name = ?,
 							last_name = ?,
@@ -123,6 +125,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 			} else {
 				if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 					_, err := tx.Exec(
+						ctx,
 						`UPDATE users SET
 							first_name = ?,
 							last_name = ?,
