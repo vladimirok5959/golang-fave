@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"golang-fave/assets"
-	"golang-fave/consts"
+	"golang-fave/engine/consts"
 	"golang-fave/engine/wrapper"
 	"golang-fave/utils"
 )

@@ -49,9 +49,9 @@ update:
 	go mod download
 
 version:
-	@echo "package consts" > consts/consts_version.go
-	@echo "" >> consts/consts_version.go
-	@echo "const ServerVersion = \"${VERSION}\"" >> consts/consts_version.go
+	@echo "package consts" > engine/consts/consts_version.go
+	@echo "" >> engine/consts/consts_version.go
+	@echo "const ServerVersion = \"${VERSION}\"" >> engine/consts/consts_version.go
 
 template:
 	@./support/template.sh

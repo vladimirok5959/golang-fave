@@ -19,7 +19,7 @@ import (
 	"unicode/utf16"
 
 	"golang-fave/assets"
-	"golang-fave/consts"
+	"golang-fave/engine/consts"
 )
 
 func Trim(str string) string {

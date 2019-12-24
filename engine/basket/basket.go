@@ -5,7 +5,7 @@ import (
 	"os"
 	"sync"
 
-	"golang-fave/consts"
+	"golang-fave/engine/consts"
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/wrapper/config"
 	"golang-fave/utils"

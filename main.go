@@ -12,10 +12,10 @@ import (
 
 	"golang-fave/assets"
 	"golang-fave/cblocks"
-	"golang-fave/consts"
 	"golang-fave/domains"
 	"golang-fave/engine"
 	"golang-fave/engine/basket"
+	"golang-fave/engine/consts"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/logger"
 	"golang-fave/modules"

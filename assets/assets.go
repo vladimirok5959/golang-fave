@@ -1,7 +1,7 @@
 package assets
 
 import (
-	"golang-fave/consts"
+	"golang-fave/engine/consts"
 
 	"github.com/vladimirok5959/golang-server-resources/resource"
 )
