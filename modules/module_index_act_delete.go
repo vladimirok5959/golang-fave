@@ -22,7 +22,7 @@ func (this *Modules) RegisterAction_IndexDelete() *Action {
 
 		err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Process
-			if _, err := tx.Exec(ctx, "DELETE FROM pages WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM fave_pages WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			return nil
