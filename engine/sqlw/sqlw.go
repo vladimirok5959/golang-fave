@@ -33,46 +33,6 @@ func Open(driverName, dataSourceName string) (*DB, error) {
 	return &DB{db: db}, err
 }
 
-func (this *DB) Close() error {
-	if consts.ParamDebug {
-		err := this.db.Close()
-		log("[CM] CLOSE", time.Now(), err, true)
-		return err
-	}
-	return this.db.Close()
-}
-
-func (this *DB) Ping(ctx context.Context) error {
-	if consts.ParamDebug {
-		err := this.db.PingContext(ctx)
-		log("[CM] PING", time.Now(), err, true)
-		return err
-	}
-	return this.db.PingContext(ctx)
-}
-
-func (this *DB) SetConnMaxLifetime(d time.Duration) {
-	this.db.SetConnMaxLifetime(d)
-}
-
-func (this *DB) SetMaxIdleConns(n int) {
-	this.db.SetMaxIdleConns(n)
-}
-
-func (this *DB) SetMaxOpenConns(n int) {
-	this.db.SetMaxOpenConns(n)
-}
-
-func (this *DB) QueryRow(ctx context.Context, query string, args ...interface{}) *sql.Row {
-	if consts.ParamDebug {
-		s := time.Now()
-		r := this.db.QueryRowContext(ctx, query, args...)
-		log(query, s, nil, false)
-		return r
-	}
-	return this.db.QueryRow(query, args...)
-}
-
 func (this *DB) Begin(ctx context.Context) (*Tx, error) {
 	tx, err := this.db.BeginTx(ctx, &sql.TxOptions{
 		Isolation: sql.LevelDefault,
@@ -91,14 +51,13 @@ func (this *DB) Begin(ctx context.Context) (*Tx, error) {
 	return &Tx{tx, time.Now()}, err
 }
 
-func (this *DB) Query(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+func (this *DB) Close() error {
 	if consts.ParamDebug {
-		s := time.Now()
-		r, e := this.db.QueryContext(ctx, query, args...)
-		log(query, s, e, false)
-		return r, e
+		err := this.db.Close()
+		log("[CM] CLOSE", time.Now(), err, true)
+		return err
 	}
-	return this.db.Query(query, args...)
+	return this.db.Close()
 }
 
 func (this *DB) Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
@@ -109,6 +68,47 @@ func (this *DB) Exec(ctx context.Context, query string, args ...interface{}) (sq
 		return r, e
 	}
 	return this.db.ExecContext(ctx, query, args...)
+}
+
+func (this *DB) Ping(ctx context.Context) error {
+	if consts.ParamDebug {
+		err := this.db.PingContext(ctx)
+		log("[CM] PING", time.Now(), err, true)
+		return err
+	}
+	return this.db.PingContext(ctx)
+}
+
+func (this *DB) Query(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+	if consts.ParamDebug {
+		s := time.Now()
+		r, e := this.db.QueryContext(ctx, query, args...)
+		log(query, s, e, false)
+		return r, e
+	}
+	return this.db.Query(query, args...)
+}
+
+func (this *DB) QueryRow(ctx context.Context, query string, args ...interface{}) *sql.Row {
+	if consts.ParamDebug {
+		s := time.Now()
+		r := this.db.QueryRowContext(ctx, query, args...)
+		log(query, s, nil, false)
+		return r
+	}
+	return this.db.QueryRow(query, args...)
+}
+
+func (this *DB) SetConnMaxLifetime(d time.Duration) {
+	this.db.SetConnMaxLifetime(d)
+}
+
+func (this *DB) SetMaxIdleConns(n int) {
+	this.db.SetMaxIdleConns(n)
+}
+
+func (this *DB) SetMaxOpenConns(n int) {
+	this.db.SetMaxOpenConns(n)
 }
 
 func (this *DB) Transaction(ctx context.Context, queries func(ctx context.Context, tx *Tx) error) error {
