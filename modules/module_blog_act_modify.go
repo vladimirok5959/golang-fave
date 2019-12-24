@@ -100,13 +100,14 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				catids := utils.GetPostArrayInt("cats[]", wrap.R)
 				if len(catids) > 0 {
 					var catsCount int
-					err = tx.QueryRow(`
-						SELECT
+					err = tx.QueryRow(
+						ctx,
+						`SELECT
 							COUNT(*)
 						FROM
 							blog_cats
 						WHERE
-							id IN(` + strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",") + `)
+							id IN(`+strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",")+`)
 						FOR UPDATE;`,
 					).Scan(
 						&catsCount,
@@ -178,13 +179,14 @@ func (this *Modules) RegisterAction_BlogModify() *Action {
 				catids := utils.GetPostArrayInt("cats[]", wrap.R)
 				if len(catids) > 0 {
 					var catsCount int
-					err := tx.QueryRow(`
-						SELECT
+					err := tx.QueryRow(
+						ctx,
+						`SELECT
 							COUNT(*)
 						FROM
 							blog_cats
 						WHERE
-							id IN(` + strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",") + `)
+							id IN(`+strings.Join(utils.ArrayOfIntToArrayOfString(catids), ",")+`)
 						FOR UPDATE;`,
 					).Scan(
 						&catsCount,

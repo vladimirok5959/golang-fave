@@ -26,6 +26,7 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 			// Check parent
 			var count int
 			if err := tx.QueryRow(
+				ctx,
 				"SELECT COUNT(*) FROM `shop_products` WHERE `id` = ? AND `parent_id` IS NULL;",
 				utils.StrToInt(pf_parent_id),
 			).Scan(&count); err != nil {
@@ -37,6 +38,7 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 
 			// Check child
 			if err := tx.QueryRow(
+				ctx,
 				"SELECT COUNT(*) FROM `shop_products` WHERE `parent_id` = ?;",
 				utils.StrToInt(pf_product_id),
 			).Scan(&count); err != nil {

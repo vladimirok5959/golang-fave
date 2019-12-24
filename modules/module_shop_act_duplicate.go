@@ -98,6 +98,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 			// Duplicate categories
 			cat_sqls := []string{}
 			if cat_rows, err := tx.Query(
+				ctx,
 				`SELECT
 					product_id,
 					category_id
@@ -129,6 +130,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 			// Duplicate attributes
 			attributes_sqls := []string{}
 			if attributes_rows, err := tx.Query(
+				ctx,
 				`SELECT
 					product_id,
 					filter_value_id

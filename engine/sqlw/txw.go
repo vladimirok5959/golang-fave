@@ -34,24 +34,24 @@ func (this *Tx) Exec(ctx context.Context, query string, args ...interface{}) (sq
 	return this.tx.ExecContext(ctx, query, args...)
 }
 
-func (this *Tx) Query(query string, args ...interface{}) (*sql.Rows, error) {
+func (this *Tx) Query(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
 	if consts.ParamDebug {
 		s := time.Now()
-		r, e := this.tx.Query(query, args...)
+		r, e := this.tx.QueryContext(ctx, query, args...)
 		log("[TX] "+query, s, e, true)
 		return r, e
 	}
-	return this.tx.Query(query, args...)
+	return this.tx.QueryContext(ctx, query, args...)
 }
 
-func (this *Tx) QueryRow(query string, args ...interface{}) *sql.Row {
+func (this *Tx) QueryRow(ctx context.Context, query string, args ...interface{}) *sql.Row {
 	if consts.ParamDebug {
 		s := time.Now()
-		r := this.tx.QueryRow(query, args...)
+		r := this.tx.QueryRowContext(ctx, query, args...)
 		log("[TX] "+query, s, nil, true)
 		return r
 	}
-	return this.tx.QueryRow(query, args...)
+	return this.tx.QueryRowContext(ctx, query, args...)
 }
 
 func (this *Tx) Rollback() error {

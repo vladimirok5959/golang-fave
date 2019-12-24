@@ -78,19 +78,19 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 		var parentL int
 		var parentR int
-		if err := tx.QueryRow(`SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_parent)).Scan(&parentL, &parentR); *wrap.LogCpError(&err) != nil {
+		if err := tx.QueryRow(ctx, `SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_parent)).Scan(&parentL, &parentR); *wrap.LogCpError(&err) != nil {
 			return err
 		}
 
 		var targetL int
 		var targetR int
-		if err := tx.QueryRow(`SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_id)).Scan(&targetL, &targetR); *wrap.LogCpError(&err) != nil {
+		if err := tx.QueryRow(ctx, `SELECT lft, rgt FROM shop_cats WHERE id = ?;`, utils.StrToInt(pf_id)).Scan(&targetL, &targetR); *wrap.LogCpError(&err) != nil {
 			return err
 		}
 
 		if !(targetL < parentL && targetR > parentR) {
 			// Select data
-			rows, err := tx.Query("SELECT id, lft, rgt FROM shop_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
+			rows, err := tx.Query(ctx, "SELECT id, lft, rgt FROM shop_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
 			if err != nil {
 				return err
 			}
