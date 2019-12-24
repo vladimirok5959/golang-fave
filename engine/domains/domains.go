@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"golang-fave/utils"
+	"golang-fave/engine/utils"
 )
 
 type Domains struct {

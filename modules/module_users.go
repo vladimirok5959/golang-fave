@@ -6,8 +6,8 @@ import (
 	"golang-fave/engine/assets"
 	"golang-fave/engine/builder"
 	"golang-fave/engine/consts"
+	"golang-fave/engine/utils"
 	"golang-fave/engine/wrapper"
-	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterModule_Users() *Module {

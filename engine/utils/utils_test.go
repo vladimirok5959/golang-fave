@@ -20,27 +20,27 @@ func Expect(t *testing.T, actual, expect interface{}) {
 }
 
 func TestIsFileExists(t *testing.T) {
-	Expect(t, IsFileExists("./../support"), true)
-	Expect(t, IsFileExists("./../support/some-file.txt"), true)
-	Expect(t, IsFileExists("./../support/no-existed-file"), false)
+	Expect(t, IsFileExists("./../../support"), true)
+	Expect(t, IsFileExists("./../../support/some-file.txt"), true)
+	Expect(t, IsFileExists("./../../support/no-existed-file"), false)
 }
 
 func TestIsRegularFileExists(t *testing.T) {
-	Expect(t, IsRegularFileExists("./../support/some-file.txt"), true)
-	Expect(t, IsRegularFileExists("./../support/no-existed-file"), false)
-	Expect(t, IsRegularFileExists("./../support"), false)
+	Expect(t, IsRegularFileExists("./../../support/some-file.txt"), true)
+	Expect(t, IsRegularFileExists("./../../support/no-existed-file"), false)
+	Expect(t, IsRegularFileExists("./../../support"), false)
 }
 
 func TestIsDir(t *testing.T) {
-	Expect(t, IsDir("./../support"), true)
-	Expect(t, IsDir("./../support/some-file.txt"), false)
-	Expect(t, IsDir("./../support/no-existed-dir"), false)
+	Expect(t, IsDir("./../../support"), true)
+	Expect(t, IsDir("./../../support/some-file.txt"), false)
+	Expect(t, IsDir("./../../support/no-existed-dir"), false)
 }
 
 func TestIsDirExists(t *testing.T) {
-	Expect(t, IsDirExists("./../support"), true)
-	Expect(t, IsDirExists("./../support/some-file.txt"), false)
-	Expect(t, IsDirExists("./../support/no-existed-dir"), false)
+	Expect(t, IsDirExists("./../../support"), true)
+	Expect(t, IsDirExists("./../../support/some-file.txt"), false)
+	Expect(t, IsDirExists("./../../support/no-existed-dir"), false)
 }
 
 func TestIsNumeric(t *testing.T) {

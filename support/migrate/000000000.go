@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"golang-fave/engine/sqlw"
-	"golang-fave/utils"
+	"golang-fave/engine/utils"
 )
 
 func Run(ctx context.Context, db *sqlw.DB, version int, host string) error {

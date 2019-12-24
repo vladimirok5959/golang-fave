@@ -18,9 +18,9 @@ import (
 	"golang-fave/engine/domains"
 	"golang-fave/engine/logger"
 	"golang-fave/engine/mysqlpool"
+	"golang-fave/engine/utils"
 	"golang-fave/modules"
 	"golang-fave/support"
-	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
 	"github.com/vladimirok5959/golang-server-resources/resource"

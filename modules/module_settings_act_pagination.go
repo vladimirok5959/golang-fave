@@ -3,8 +3,8 @@ package modules
 import (
 	"strconv"
 
+	"golang-fave/engine/utils"
 	"golang-fave/engine/wrapper"
-	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterAction_SettingsPagination() *Action {

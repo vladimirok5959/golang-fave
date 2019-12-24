@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"golang-fave/engine/sqlw"
-	"golang-fave/utils"
+	"golang-fave/engine/utils"
 )
 
 func Migrate_000000003(ctx context.Context, db *sqlw.DB, host string) error {

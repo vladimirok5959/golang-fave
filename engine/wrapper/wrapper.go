@@ -18,8 +18,8 @@ import (
 	"golang-fave/engine/logger"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/sqlw"
+	"golang-fave/engine/utils"
 	"golang-fave/engine/wrapper/config"
-	"golang-fave/utils"
 
 	"github.com/vladimirok5959/golang-server-sessions/session"
 )

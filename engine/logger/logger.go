@@ -8,7 +8,7 @@ import (
 
 	"golang-fave/engine/consts"
 	"golang-fave/engine/domains"
-	"golang-fave/utils"
+	"golang-fave/engine/utils"
 )
 
 type logMsg struct {

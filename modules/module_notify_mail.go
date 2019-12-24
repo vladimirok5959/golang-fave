@@ -7,8 +7,8 @@ import (
 	"golang-fave/engine/builder"
 	"golang-fave/engine/consts"
 	"golang-fave/engine/sqlw"
+	"golang-fave/engine/utils"
 	"golang-fave/engine/wrapper"
-	"golang-fave/utils"
 )
 
 func (this *Modules) RegisterModule_NotifyMail() *Module {
