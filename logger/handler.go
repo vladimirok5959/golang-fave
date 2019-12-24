@@ -46,8 +46,8 @@ func (this handler) log(w *writer, r *http.Request) {
 		return
 	case this.c <- logMsg{r.Host, msg, w.status >= 400}:
 		return
-	case <-time.After(1 * time.Second):
-		fmt.Println("Logger error, log channel is overflowed (2)")
+	case <-time.After(2 * time.Second):
+		fmt.Printf("Logger, can't write to file (overflow): %s\n", msg)
 		return
 	}
 }

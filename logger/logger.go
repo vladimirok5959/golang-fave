@@ -151,8 +151,8 @@ func (this *Logger) Log(msg string, r *http.Request, isError bool, vars ...inter
 		return
 	case this.cdata <- logMsg{host, msg, isError}:
 		return
-	case <-time.After(1 * time.Second):
-		fmt.Println("Logger error, log channel is overflowed (1)")
+	case <-time.After(2 * time.Second):
+		fmt.Printf("Logger, can't send msg (overflow): %s, %s, %v\n", host, msg, isError)
 		return
 	}
 }
