@@ -14,15 +14,6 @@ type Tx struct {
 	s  time.Time
 }
 
-func (this *Tx) Rollback() error {
-	if consts.ParamDebug {
-		err := this.tx.Rollback()
-		log("[TX] TRANSACTION END (Rollback)", this.s, nil, true)
-		return err
-	}
-	return this.tx.Rollback()
-}
-
 func (this *Tx) Commit() error {
 	if consts.ParamDebug {
 		err := this.tx.Commit()
@@ -42,6 +33,16 @@ func (this *Tx) Exec(query string, args ...interface{}) (sql.Result, error) {
 	return this.tx.Exec(query, args...)
 }
 
+func (this *Tx) Query(query string, args ...interface{}) (*sql.Rows, error) {
+	if consts.ParamDebug {
+		s := time.Now()
+		r, e := this.tx.Query(query, args...)
+		log("[TX] "+query, s, e, true)
+		return r, e
+	}
+	return this.tx.Query(query, args...)
+}
+
 func (this *Tx) QueryRow(query string, args ...interface{}) *sql.Row {
 	if consts.ParamDebug {
 		s := time.Now()
@@ -52,12 +53,11 @@ func (this *Tx) QueryRow(query string, args ...interface{}) *sql.Row {
 	return this.tx.QueryRow(query, args...)
 }
 
-func (this *Tx) Query(query string, args ...interface{}) (*sql.Rows, error) {
+func (this *Tx) Rollback() error {
 	if consts.ParamDebug {
-		s := time.Now()
-		r, e := this.tx.Query(query, args...)
-		log("[TX] "+query, s, e, true)
-		return r, e
+		err := this.tx.Rollback()
+		log("[TX] TRANSACTION END (Rollback)", this.s, nil, true)
+		return err
 	}
-	return this.tx.Query(query, args...)
+	return this.tx.Rollback()
 }
