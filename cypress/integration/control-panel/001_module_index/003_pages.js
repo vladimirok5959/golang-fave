@@ -43,7 +43,7 @@ context('Module pages', () => {
     cy.visitCMS('/cp/');
     cy.get('table.data-table tbody tr').should('have.length', 4);
     cy.get('table.data-table tbody tr td').should('contain', 'Some test page');
-    cy.contains('table#cp-table-pages tbody tr td a', 'Some test page').parentsUntil('tr').parent().find('.svg-green').should('exist');
+    cy.contains('table#cp-table-fave_pages tbody tr td a', 'Some test page').parentsUntil('tr').parent().find('.svg-green').should('exist');
     cy.logoutCMS();
   });
 
