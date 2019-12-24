@@ -23,7 +23,7 @@ func Run(ctx context.Context, db *sqlw.DB, version int, host string) error {
 	}
 
 	if last != "" {
-		if _, err := db.Exec(ctx, `UPDATE settings SET value = ? WHERE name = 'database_version';`, last); err != nil {
+		if _, err := db.Exec(ctx, `UPDATE fave_settings SET value = ? WHERE name = 'database_version';`, last); err != nil {
 			return err
 		}
 	}

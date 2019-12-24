@@ -23,7 +23,7 @@ func New() *Support {
 func (this *Support) isSettingsTableDoesntExist(err error) bool {
 	error_msg := strings.ToLower(err.Error())
 	if match, _ := regexp.MatchString(`^error 1146`, error_msg); match {
-		if match, _ := regexp.MatchString(`'[^\.]+\.settings'`, error_msg); match {
+		if match, _ := regexp.MatchString(`'[^\.]+\.fave_settings'`, error_msg); match {
 			if match, _ := regexp.MatchString(`doesn't exist$`, error_msg); match {
 				return true
 			}
@@ -62,12 +62,22 @@ func (this *Support) Migrate(ctx context.Context, host string) error {
 			return err
 		}
 		defer db.Close()
+
+		var table string
+		if err := db.QueryRow(ctx, `SHOW TABLES LIKE 'settings';`).Scan(&table); err == nil {
+			if table == "settings" {
+				if _, err := db.Exec(ctx, `RENAME TABLE settings TO fave_settings;`); err != nil {
+					return err
+				}
+			}
+		}
+
 		var version string
-		if err := db.QueryRow(ctx, `SELECT value FROM settings WHERE name = 'database_version' LIMIT 1;`).Scan(&version); err != nil {
+		if err := db.QueryRow(ctx, `SELECT value FROM fave_settings WHERE name = 'database_version' LIMIT 1;`).Scan(&version); err != nil {
 			if this.isSettingsTableDoesntExist(err) {
 				if _, err := db.Exec(
 					ctx,
-					`CREATE TABLE settings (
+					`CREATE TABLE fave_settings (
 						name varchar(255) NOT NULL COMMENT 'Setting name',
 						value text NOT NULL COMMENT 'Setting value'
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
@@ -76,7 +86,7 @@ func (this *Support) Migrate(ctx context.Context, host string) error {
 				}
 				if _, err := db.Exec(
 					ctx,
-					`INSERT INTO settings (name, value) VALUES ('database_version', '000000002');`,
+					`INSERT INTO fave_settings (name, value) VALUES ('database_version', '000000002');`,
 				); err != nil {
 					return err
 				}
