@@ -30,7 +30,7 @@ func (this *Modules) RegisterAction_IndexUserUpdateProfile() *Action {
 			// Update with password if set
 			_, err := wrap.DB.Exec(
 				wrap.R.Context(),
-				`UPDATE users SET
+				`UPDATE fave_users SET
 					first_name = ?,
 					last_name = ?,
 					email = ?,
@@ -52,7 +52,7 @@ func (this *Modules) RegisterAction_IndexUserUpdateProfile() *Action {
 			// Update without password if not set
 			_, err := wrap.DB.Exec(
 				wrap.R.Context(),
-				`UPDATE users SET
+				`UPDATE fave_users SET
 					first_name = ?,
 					last_name = ?,
 					email = ?

@@ -71,10 +71,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: blog_cats
+		// Table: fave_blog_cats
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE blog_cats (
+			`CREATE TABLE fave_blog_cats (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Category name',
@@ -89,10 +89,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: blog_cat_post_rel
+		// Table: fave_blog_cat_post_rel
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE blog_cat_post_rel (
+			`CREATE TABLE fave_blog_cat_post_rel (
 				post_id int(11) NOT NULL COMMENT 'Post id',
 				category_id int(11) NOT NULL COMMENT 'Category id'
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
@@ -102,10 +102,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: blog_posts
+		// Table: fave_blog_posts
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE blog_posts (
+			`CREATE TABLE fave_blog_posts (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Post name',
@@ -123,10 +123,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: notify_mail
+		// Table: fave_notify_mail
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE notify_mail (
+			`CREATE TABLE fave_notify_mail (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				email varchar(255) NOT NULL COMMENT 'Email address',
 				subject varchar(800) NOT NULL COMMENT 'Email subject',
@@ -142,10 +142,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: pages
+		// Table: fave_pages
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE pages (
+			`CREATE TABLE fave_pages (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Page name',
@@ -164,10 +164,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: settings
+		// Table: fave_settings
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE settings (
+			`CREATE TABLE fave_settings (
 				name varchar(255) NOT NULL COMMENT 'Setting name',
 				value text NOT NULL COMMENT 'Setting value'
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
@@ -177,10 +177,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_cat_product_rel
+		// Table: fave_shop_cat_product_rel
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_cat_product_rel (
+			`CREATE TABLE fave_shop_cat_product_rel (
 				product_id int(11) NOT NULL COMMENT 'Product id',
 				category_id int(11) NOT NULL COMMENT 'Category id'
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
@@ -190,10 +190,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_cats
+		// Table: fave_shop_cats
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_cats (
+			`CREATE TABLE fave_shop_cats (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				user int(11) NOT NULL COMMENT 'User id',
 				name varchar(255) NOT NULL COMMENT 'Category name',
@@ -208,10 +208,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_currencies
+		// Table: fave_shop_currencies
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_currencies (
+			`CREATE TABLE fave_shop_currencies (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				name varchar(255) NOT NULL COMMENT 'Currency name',
 				coefficient float(8,4) NOT NULL DEFAULT '1.0000' COMMENT 'Currency coefficient',
@@ -225,10 +225,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_filter_product_values
+		// Table: fave_shop_filter_product_values
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_filter_product_values (
+			`CREATE TABLE fave_shop_filter_product_values (
 				product_id int(11) NOT NULL COMMENT 'Product id',
 				filter_value_id int(11) NOT NULL COMMENT 'Filter value id'
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;`,
@@ -238,10 +238,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_filters
+		// Table: fave_shop_filters
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_filters (
+			`CREATE TABLE fave_shop_filters (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				name varchar(255) NOT NULL COMMENT 'Filter name in CP',
 				filter varchar(255) NOT NULL COMMENT 'Filter name in site',
@@ -253,10 +253,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_filters_values
+		// Table: fave_shop_filters_values
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_filters_values (
+			`CREATE TABLE fave_shop_filters_values (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				filter_id int(11) NOT NULL COMMENT 'Filter id',
 				name varchar(255) NOT NULL COMMENT 'Value name',
@@ -268,10 +268,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_order_products
+		// Table: fave_shop_order_products
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_order_products (
+			`CREATE TABLE fave_shop_order_products (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				order_id int(11) NOT NULL COMMENT 'Order ID',
 				product_id int(11) NOT NULL COMMENT 'Product ID',
@@ -285,10 +285,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_orders
+		// Table: fave_shop_orders
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_orders (
+			`CREATE TABLE fave_shop_orders (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				create_datetime datetime NOT NULL COMMENT 'Create date/time',
 				update_datetime datetime NOT NULL COMMENT 'Update date/time',
@@ -313,10 +313,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_product_images
+		// Table: fave_shop_product_images
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_product_images (
+			`CREATE TABLE fave_shop_product_images (
 				id int(11) NOT NULL AUTO_INCREMENT,
 				product_id int(11) NOT NULL,
 				filename varchar(255) NOT NULL,
@@ -329,10 +329,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: shop_products
+		// Table: fave_shop_products
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE shop_products (
+			`CREATE TABLE fave_shop_products (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				parent_id int(11) DEFAULT NULL,
 				user int(11) NOT NULL COMMENT 'User id',
@@ -360,10 +360,10 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 			return
 		}
 
-		// Table: users
+		// Table: fave_users
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`CREATE TABLE users (
+			`CREATE TABLE fave_users (
 				id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 				first_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User first name',
 				last_name varchar(64) NOT NULL DEFAULT '' COMMENT 'User last name',
@@ -382,7 +382,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		// Demo datas
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO blog_cats (id, user, name, alias, lft, rgt)
+			`INSERT INTO fave_blog_cats (id, user, name, alias, lft, rgt)
 				VALUES
 			(1, 1, 'ROOT', 'ROOT', 1, 24),
 			(2, 1, 'Health and food', 'health-and-food', 2, 15),
@@ -403,7 +403,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO blog_cat_post_rel (post_id, category_id) VALUES (1, 9), (2, 12), (3, 8);`,
+			`INSERT INTO fave_blog_cat_post_rel (post_id, category_id) VALUES (1, 9), (2, 12), (3, 8);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -411,7 +411,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO blog_posts SET
+			`INSERT INTO fave_blog_posts SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -438,7 +438,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO blog_posts SET
+			`INSERT INTO fave_blog_posts SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -465,7 +465,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO blog_posts SET
+			`INSERT INTO fave_blog_posts SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -492,7 +492,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO pages SET
+			`INSERT INTO fave_pages SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -515,7 +515,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO pages SET
+			`INSERT INTO fave_pages SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -538,7 +538,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO pages SET
+			`INSERT INTO fave_pages SET
 				id = ?,
 				user = ?,
 				name = ?,
@@ -561,7 +561,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO settings (name, value) VALUES ('database_version', '000000020');`,
+			`INSERT INTO fave_settings (name, value) VALUES ('database_version', '000000020');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -569,7 +569,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_cat_product_rel (product_id, category_id)
+			`INSERT INTO fave_shop_cat_product_rel (product_id, category_id)
 				VALUES
 			(1, 3),
 			(2, 3),
@@ -581,7 +581,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_cats (id, user, name, alias, lft, rgt)
+			`INSERT INTO fave_shop_cats (id, user, name, alias, lft, rgt)
 				VALUES
 			(1, 1, 'ROOT', 'ROOT', 1, 6),
 			(2, 1, 'Electronics', 'electronics', 2, 5),
@@ -593,7 +593,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_currencies (id, name, coefficient, code, symbol)
+			`INSERT INTO fave_shop_currencies (id, name, coefficient, code, symbol)
 				VALUES
 			(1, 'US Dollar', 1.0000, 'USD', '$'),
 			(2, 'UA Grivna', 25.0000, 'UAH', '₴');`,
@@ -604,7 +604,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_filter_product_values (product_id, filter_value_id)
+			`INSERT INTO fave_shop_filter_product_values (product_id, filter_value_id)
 				VALUES
 			(1, 3),
 			(1, 7),
@@ -628,7 +628,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_filters (id, name, filter)
+			`INSERT INTO fave_shop_filters (id, name, filter)
 				VALUES
 			(1, 'Mobile phones manufacturer', 'Manufacturer'),
 			(2, 'Mobile phones memory', 'Memory'),
@@ -640,7 +640,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_filters_values (id, filter_id, name)
+			`INSERT INTO fave_shop_filters_values (id, filter_id, name)
 				VALUES
 			(1, 1, 'Apple'),
 			(2, 1, 'Asus'),
@@ -661,7 +661,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_products SET
+			`INSERT INTO fave_shop_products SET
 				id = ?,
 				user = ?,
 				currency = ?,
@@ -700,7 +700,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_products SET
+			`INSERT INTO fave_shop_products SET
 				id = ?,
 				parent_id = ?,
 				user = ?,
@@ -741,7 +741,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO shop_products SET
+			`INSERT INTO fave_shop_products SET
 				id = ?,
 				parent_id = ?,
 				user = ?,
@@ -782,7 +782,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO users (id, first_name, last_name, email, password, admin, active) VALUES (1, 'First Name', 'Last Name', 'example@example.com', '23463b99b62a72f26ed677cc556c44e8', 1, 1);`,
+			`INSERT INTO fave_users (id, first_name, last_name, email, password, admin, active) VALUES (1, 'First Name', 'Last Name', 'example@example.com', '23463b99b62a72f26ed677cc556c44e8', 1, 1);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -792,7 +792,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		// Indexes
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`,
+			`ALTER TABLE fave_blog_cat_post_rel ADD UNIQUE KEY post_category (post_id,category_id) USING BTREE;`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -800,7 +800,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_post_id (post_id);`,
+			`ALTER TABLE fave_blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_post_id (post_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -808,7 +808,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_category_id (category_id);`,
+			`ALTER TABLE fave_blog_cat_post_rel ADD KEY FK_blog_cat_post_rel_category_id (category_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -816,7 +816,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cats ADD UNIQUE KEY alias (alias);`,
+			`ALTER TABLE fave_blog_cats ADD UNIQUE KEY alias (alias);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -824,7 +824,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
+			`ALTER TABLE fave_blog_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -832,7 +832,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cats ADD KEY FK_blog_cats_user (user);`,
+			`ALTER TABLE fave_blog_cats ADD KEY FK_blog_cats_user (user);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -840,7 +840,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_posts ADD UNIQUE KEY alias (alias);`,
+			`ALTER TABLE fave_blog_posts ADD UNIQUE KEY alias (alias);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -848,7 +848,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_posts ADD KEY FK_blog_posts_user (user);`,
+			`ALTER TABLE fave_blog_posts ADD KEY FK_blog_posts_user (user);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -856,7 +856,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_posts ADD KEY FK_blog_posts_category (category);`,
+			`ALTER TABLE fave_blog_posts ADD KEY FK_blog_posts_category (category);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -864,7 +864,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE notify_mail ADD KEY status (status);`,
+			`ALTER TABLE fave_notify_mail ADD KEY status (status);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -872,7 +872,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE pages ADD UNIQUE KEY alias (alias);`,
+			`ALTER TABLE fave_pages ADD UNIQUE KEY alias (alias);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -880,7 +880,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE pages ADD KEY alias_active (alias,active) USING BTREE;`,
+			`ALTER TABLE fave_pages ADD KEY alias_active (alias,active) USING BTREE;`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -888,7 +888,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE pages ADD KEY FK_pages_user (user);`,
+			`ALTER TABLE fave_pages ADD KEY FK_pages_user (user);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -896,7 +896,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE settings ADD UNIQUE KEY name (name);`,
+			`ALTER TABLE fave_settings ADD UNIQUE KEY name (name);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -904,7 +904,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cat_product_rel ADD UNIQUE KEY product_category (product_id,category_id) USING BTREE;`,
+			`ALTER TABLE fave_shop_cat_product_rel ADD UNIQUE KEY product_category (product_id,category_id) USING BTREE;`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -912,7 +912,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_product_id (product_id);`,
+			`ALTER TABLE fave_shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_product_id (product_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -920,7 +920,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_category_id (category_id);`,
+			`ALTER TABLE fave_shop_cat_product_rel ADD KEY FK_shop_cat_product_rel_category_id (category_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -928,7 +928,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cats ADD UNIQUE KEY alias (alias);`,
+			`ALTER TABLE fave_shop_cats ADD UNIQUE KEY alias (alias);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -936,7 +936,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
+			`ALTER TABLE fave_shop_cats ADD KEY lft (lft), ADD KEY rgt (rgt);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -944,7 +944,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cats ADD KEY FK_shop_cats_user (user);`,
+			`ALTER TABLE fave_shop_cats ADD KEY FK_shop_cats_user (user);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -952,7 +952,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filter_product_values ADD UNIQUE KEY product_filter_value (product_id,filter_value_id) USING BTREE;`,
+			`ALTER TABLE fave_shop_filter_product_values ADD UNIQUE KEY product_filter_value (product_id,filter_value_id) USING BTREE;`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -960,7 +960,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_product_id (product_id);`,
+			`ALTER TABLE fave_shop_filter_product_values ADD KEY FK_shop_filter_product_values_product_id (product_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -968,7 +968,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`,
+			`ALTER TABLE fave_shop_filter_product_values ADD KEY FK_shop_filter_product_values_filter_value_id (filter_value_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -976,7 +976,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filters ADD KEY name (name);`,
+			`ALTER TABLE fave_shop_filters ADD KEY name (name);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -984,7 +984,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`,
+			`ALTER TABLE fave_shop_filters_values ADD KEY FK_shop_filters_values_filter_id (filter_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -992,7 +992,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filters_values ADD KEY name (name);`,
+			`ALTER TABLE fave_shop_filters_values ADD KEY name (name);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1000,7 +1000,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_orders ADD KEY FK_shop_orders_currency_id (currency_id);`,
+			`ALTER TABLE fave_shop_orders ADD KEY FK_shop_orders_currency_id (currency_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1008,7 +1008,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_order_products ADD UNIQUE KEY order_product (order_id,product_id) USING BTREE;`,
+			`ALTER TABLE fave_shop_order_products ADD UNIQUE KEY order_product (order_id,product_id) USING BTREE;`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1016,7 +1016,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_order_id (order_id);`,
+			`ALTER TABLE fave_shop_order_products ADD KEY FK_shop_order_products_order_id (order_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1024,7 +1024,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_order_products ADD KEY FK_shop_order_products_product_id (product_id);`,
+			`ALTER TABLE fave_shop_order_products ADD KEY FK_shop_order_products_product_id (product_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1032,7 +1032,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_product_images ADD UNIQUE KEY product_filename (product_id,filename) USING BTREE;`,
+			`ALTER TABLE fave_shop_product_images ADD UNIQUE KEY product_filename (product_id,filename) USING BTREE;`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1040,7 +1040,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_product_images ADD KEY FK_shop_product_images_product_id (product_id);`,
+			`ALTER TABLE fave_shop_product_images ADD KEY FK_shop_product_images_product_id (product_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1048,7 +1048,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD UNIQUE KEY alias (alias);`,
+			`ALTER TABLE fave_shop_products ADD UNIQUE KEY alias (alias);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1056,7 +1056,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD KEY FK_shop_products_user (user);`,
+			`ALTER TABLE fave_shop_products ADD KEY FK_shop_products_user (user);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1064,7 +1064,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD KEY FK_shop_products_currency (currency);`,
+			`ALTER TABLE fave_shop_products ADD KEY FK_shop_products_currency (currency);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1072,7 +1072,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD KEY FK_shop_products_category (category);`,
+			`ALTER TABLE fave_shop_products ADD KEY FK_shop_products_category (category);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1080,7 +1080,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD KEY FK_shop_products_parent_id (parent_id);`,
+			`ALTER TABLE fave_shop_products ADD KEY FK_shop_products_parent_id (parent_id);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1088,7 +1088,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD KEY name (name);`,
+			`ALTER TABLE fave_shop_products ADD KEY name (name);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1096,7 +1096,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE users ADD UNIQUE KEY email (email);`,
+			`ALTER TABLE fave_users ADD UNIQUE KEY email (email);`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1106,8 +1106,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		// References
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id
-			FOREIGN KEY (post_id) REFERENCES blog_posts (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_post_id
+			FOREIGN KEY (post_id) REFERENCES fave_blog_posts (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1115,8 +1115,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id
-			FOREIGN KEY (category_id) REFERENCES blog_cats (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_blog_cat_post_rel ADD CONSTRAINT FK_blog_cat_post_rel_category_id
+			FOREIGN KEY (category_id) REFERENCES fave_blog_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1124,8 +1124,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_cats ADD CONSTRAINT FK_blog_cats_user
-			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_blog_cats ADD CONSTRAINT FK_blog_cats_user
+			FOREIGN KEY (user) REFERENCES fave_users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1133,8 +1133,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_user
-			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_blog_posts ADD CONSTRAINT FK_blog_posts_user
+			FOREIGN KEY (user) REFERENCES fave_users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1142,8 +1142,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE blog_posts ADD CONSTRAINT FK_blog_posts_category
-			FOREIGN KEY (category) REFERENCES blog_cats (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_blog_posts ADD CONSTRAINT FK_blog_posts_category
+			FOREIGN KEY (category) REFERENCES fave_blog_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1151,8 +1151,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE pages ADD CONSTRAINT FK_pages_user
-			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_pages ADD CONSTRAINT FK_pages_user
+			FOREIGN KEY (user) REFERENCES fave_users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1160,8 +1160,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id
-			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_product_id
+			FOREIGN KEY (product_id) REFERENCES fave_shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1169,8 +1169,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id
-			FOREIGN KEY (category_id) REFERENCES shop_cats (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_cat_product_rel ADD CONSTRAINT FK_shop_cat_product_rel_category_id
+			FOREIGN KEY (category_id) REFERENCES fave_shop_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1178,8 +1178,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_cats ADD CONSTRAINT FK_shop_cats_user
-			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_cats ADD CONSTRAINT FK_shop_cats_user
+			FOREIGN KEY (user) REFERENCES fave_users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1187,8 +1187,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id
-			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_product_id
+			FOREIGN KEY (product_id) REFERENCES fave_shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1196,8 +1196,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id
-			FOREIGN KEY (filter_value_id) REFERENCES shop_filters_values (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_filter_product_values ADD CONSTRAINT FK_shop_filter_product_values_filter_value_id
+			FOREIGN KEY (filter_value_id) REFERENCES fave_shop_filters_values (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1205,8 +1205,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
-			FOREIGN KEY (filter_id) REFERENCES shop_filters (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_filters_values ADD CONSTRAINT FK_shop_filters_values_filter_id
+			FOREIGN KEY (filter_id) REFERENCES fave_shop_filters (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1214,8 +1214,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_orders ADD CONSTRAINT FK_shop_orders_currency_id
-			FOREIGN KEY (currency_id) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_orders ADD CONSTRAINT FK_shop_orders_currency_id
+			FOREIGN KEY (currency_id) REFERENCES fave_shop_currencies (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1223,8 +1223,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_order_id
-			FOREIGN KEY (order_id) REFERENCES shop_orders (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_order_products ADD CONSTRAINT FK_shop_order_products_order_id
+			FOREIGN KEY (order_id) REFERENCES fave_shop_orders (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1232,8 +1232,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_order_products ADD CONSTRAINT FK_shop_order_products_product_id
-			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_order_products ADD CONSTRAINT FK_shop_order_products_product_id
+			FOREIGN KEY (product_id) REFERENCES fave_shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1241,8 +1241,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id
-			FOREIGN KEY (product_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_product_images ADD CONSTRAINT FK_shop_product_images_product_id
+			FOREIGN KEY (product_id) REFERENCES fave_shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1250,8 +1250,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_user
-			FOREIGN KEY (user) REFERENCES users (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_products ADD CONSTRAINT FK_shop_products_user
+			FOREIGN KEY (user) REFERENCES fave_users (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1259,8 +1259,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_currency
-			FOREIGN KEY (currency) REFERENCES shop_currencies (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_products ADD CONSTRAINT FK_shop_products_currency
+			FOREIGN KEY (currency) REFERENCES fave_shop_currencies (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1268,8 +1268,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_category
-			FOREIGN KEY (category) REFERENCES shop_cats (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_products ADD CONSTRAINT FK_shop_products_category
+			FOREIGN KEY (category) REFERENCES fave_shop_cats (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())
@@ -1277,8 +1277,8 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`ALTER TABLE shop_products ADD CONSTRAINT FK_shop_products_parent_id
-			FOREIGN KEY (parent_id) REFERENCES shop_products (id) ON DELETE RESTRICT;
+			`ALTER TABLE fave_shop_products ADD CONSTRAINT FK_shop_products_parent_id
+			FOREIGN KEY (parent_id) REFERENCES fave_shop_products (id) ON DELETE RESTRICT;
 		`); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

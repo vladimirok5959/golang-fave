@@ -19,8 +19,8 @@ func (this *Modules) shop_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 			node.alias,
 			(COUNT(parent.id) - 1) AS depth
 		FROM
-			shop_cats AS node,
-			shop_cats AS parent
+			fave_shop_cats AS node,
+			fave_shop_cats AS parent
 		WHERE
 			node.lft BETWEEN parent.lft AND parent.rgt AND
 			node.id > 1
@@ -72,8 +72,8 @@ func (this *Modules) shop_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int
 		`SELECT
 			parent.id
 		FROM
-			shop_cats AS node,
-			shop_cats AS parent
+			fave_shop_cats AS node,
+			fave_shop_cats AS parent
 		WHERE
 			node.lft BETWEEN parent.lft AND parent.rgt AND
 			node.id = ? AND

@@ -32,7 +32,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"users",
+				"fave_users",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -135,7 +135,7 @@ func (this *Modules) RegisterModule_Users() *Module {
 						admin,
 						active
 					FROM
-						users
+						fave_users
 					WHERE
 						id = ?
 					LIMIT 1;`,

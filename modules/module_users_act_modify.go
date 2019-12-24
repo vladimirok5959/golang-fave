@@ -62,7 +62,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				res, err := tx.Exec(
 					ctx,
-					`INSERT INTO users SET
+					`INSERT INTO fave_users SET
 						first_name = ?,
 						last_name = ?,
 						email = ?,
@@ -98,7 +98,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 				if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 					_, err := tx.Exec(
 						ctx,
-						`UPDATE users SET
+						`UPDATE fave_users SET
 							first_name = ?,
 							last_name = ?,
 							email = ?,
@@ -126,7 +126,7 @@ func (this *Modules) RegisterAction_UsersModify() *Action {
 				if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 					_, err := tx.Exec(
 						ctx,
-						`UPDATE users SET
+						`UPDATE fave_users SET
 							first_name = ?,
 							last_name = ?,
 							email = ?,

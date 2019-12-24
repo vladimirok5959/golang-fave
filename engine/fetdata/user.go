@@ -32,7 +32,7 @@ func (this *User) loadById(id int) {
 			admin,
 			active
 		FROM
-			users
+			fave_users
 		WHERE
 			id = ?
 		LIMIT 1;`,

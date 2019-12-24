@@ -27,7 +27,7 @@ func (this *Modules) RegisterAction_ShopGetAttributeValues() *Action {
 				id,
 				name
 			FROM
-				shop_filters_values
+				fave_shop_filters_values
 			WHERE
 				filter_id = ?
 			ORDER BY

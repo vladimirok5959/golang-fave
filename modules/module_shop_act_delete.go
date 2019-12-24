@@ -22,32 +22,32 @@ func (this *Modules) RegisterAction_ShopDelete() *Action {
 
 		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT product_id FROM fave_shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT product_id FROM fave_shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_product_images WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT product_id FROM fave_shop_product_images WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Delete product attached images
-			if _, err := tx.Exec(ctx, "DELETE FROM shop_product_images WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM fave_shop_product_images WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Delete target product with category connection data
-			if _, err := tx.Exec(ctx, "DELETE FROM shop_filter_product_values WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM fave_shop_filter_product_values WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "DELETE FROM shop_cat_product_rel WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM fave_shop_cat_product_rel WHERE product_id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "DELETE FROM shop_products WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM fave_shop_products WHERE id = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			return nil

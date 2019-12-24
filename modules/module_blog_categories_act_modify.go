@@ -12,24 +12,24 @@ func (this *Modules) blog_ActionCategoryAdd(wrap *wrapper.Wrapper, pf_id, pf_nam
 	var lastID int64 = 0
 	return wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 		// Block rows
-		if _, err := tx.Exec(ctx, "SELECT id FROM blog_cats FOR UPDATE;"); err != nil {
+		if _, err := tx.Exec(ctx, "SELECT id FROM fave_blog_cats FOR UPDATE;"); err != nil {
 			return err
 		}
 
 		// Process
-		if _, err := tx.Exec(ctx, "SELECT @mr := rgt FROM blog_cats WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
+		if _, err := tx.Exec(ctx, "SELECT @mr := rgt FROM fave_blog_cats WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
 			return err
 		}
-		if _, err := tx.Exec(ctx, "UPDATE blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET rgt = rgt + 2 WHERE rgt > @mr;"); err != nil {
 			return err
 		}
-		if _, err := tx.Exec(ctx, "UPDATE blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET lft = lft + 2 WHERE lft > @mr;"); err != nil {
 			return err
 		}
-		if _, err := tx.Exec(ctx, "UPDATE blog_cats SET rgt = rgt + 2 WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET rgt = rgt + 2 WHERE id = ?;", utils.StrToInt(pf_parent)); err != nil {
 			return err
 		}
-		res, err := tx.Exec(ctx, "INSERT INTO blog_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias)
+		res, err := tx.Exec(ctx, "INSERT INTO fave_blog_cats (id, user, name, alias, lft, rgt) VALUES (NULL, ?, ?, ?, @mr, @mr + 1);", wrap.User.A_id, pf_name, pf_alias)
 		if err != nil {
 			return err
 		}
@@ -50,7 +50,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 			// Process
 			if _, err := tx.Exec(
 				ctx,
-				`UPDATE blog_cats SET
+				`UPDATE fave_blog_cats SET
 					name = ?,
 					alias = ?
 				WHERE
@@ -72,25 +72,25 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 	// Parent is changed, move category to new parent
 	return wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 		// Block all rows
-		if _, err := tx.Exec(ctx, "SELECT id FROM blog_cats FOR UPDATE;"); err != nil {
+		if _, err := tx.Exec(ctx, "SELECT id FROM fave_blog_cats FOR UPDATE;"); err != nil {
 			return err
 		}
 
 		var parentL int
 		var parentR int
-		if err := tx.QueryRow(ctx, `SELECT lft, rgt FROM blog_cats WHERE id = ?;`, utils.StrToInt(pf_parent)).Scan(&parentL, &parentR); *wrap.LogCpError(&err) != nil {
+		if err := tx.QueryRow(ctx, `SELECT lft, rgt FROM fave_blog_cats WHERE id = ?;`, utils.StrToInt(pf_parent)).Scan(&parentL, &parentR); *wrap.LogCpError(&err) != nil {
 			return err
 		}
 
 		var targetL int
 		var targetR int
-		if err := tx.QueryRow(ctx, `SELECT lft, rgt FROM blog_cats WHERE id = ?;`, utils.StrToInt(pf_id)).Scan(&targetL, &targetR); *wrap.LogCpError(&err) != nil {
+		if err := tx.QueryRow(ctx, `SELECT lft, rgt FROM fave_blog_cats WHERE id = ?;`, utils.StrToInt(pf_id)).Scan(&targetL, &targetR); *wrap.LogCpError(&err) != nil {
 			return err
 		}
 
 		if !(targetL < parentL && targetR > parentR) {
 			// Select data
-			rows, err := tx.Query(ctx, "SELECT id, lft, rgt FROM blog_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
+			rows, err := tx.Query(ctx, "SELECT id, lft, rgt FROM fave_blog_cats WHERE lft >= ? and rgt <= ? ORDER BY lft ASC", targetL, targetR)
 			if err != nil {
 				return err
 			}
@@ -113,13 +113,13 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				// From right to left
 				// Shift
 				step := targetR - targetL + 1
-				if _, err := tx.Exec(ctx, "UPDATE blog_cats SET lft = lft + ? WHERE lft > ? and lft < ?;", step, parentR, targetL); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET lft = lft + ? WHERE lft > ? and lft < ?;", step, parentR, targetL); err != nil {
 					return err
 				}
-				if _, err := tx.Exec(ctx, "UPDATE blog_cats SET rgt = rgt + ? WHERE rgt > ? and rgt < ?;", step, parentR, targetL); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET rgt = rgt + ? WHERE rgt > ? and rgt < ?;", step, parentR, targetL); err != nil {
 					return err
 				}
-				if _, err := tx.Exec(ctx, "UPDATE blog_cats SET rgt = rgt + ? WHERE id = ?;", step, utils.StrToInt(pf_parent)); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET rgt = rgt + ? WHERE id = ?;", step, utils.StrToInt(pf_parent)); err != nil {
 					return err
 				}
 
@@ -127,7 +127,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				for i, _ := range rows_id {
 					new_lft := rows_lft[i] - (targetL - parentR)
 					new_rgt := rows_rgt[i] - (targetL - parentR)
-					if _, err := tx.Exec(ctx, "UPDATE blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+					if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
 						return err
 					}
 				}
@@ -135,10 +135,10 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				// From left to right
 				// Shift
 				step := targetR - targetL + 1
-				if _, err := tx.Exec(ctx, "UPDATE blog_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET lft = lft - ? WHERE lft > ? and lft < ?;", step, targetR, parentR); err != nil {
 					return err
 				}
-				if _, err := tx.Exec(ctx, "UPDATE blog_cats SET rgt = rgt - ? WHERE rgt > ? and rgt < ?;", step, targetR, parentR); err != nil {
+				if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET rgt = rgt - ? WHERE rgt > ? and rgt < ?;", step, targetR, parentR); err != nil {
 					return err
 				}
 
@@ -146,7 +146,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 				for i, _ := range rows_id {
 					new_lft := rows_lft[i] + (parentR - targetL - step)
 					new_rgt := rows_rgt[i] + (parentR - targetL - step)
-					if _, err := tx.Exec(ctx, "UPDATE blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
+					if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET lft = ?, rgt = ? WHERE id = ?;", new_lft, new_rgt, rows_id[i]); err != nil {
 						return err
 					}
 				}
@@ -157,7 +157,7 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 		}
 
 		// Update target cat data
-		if _, err := tx.Exec(ctx, "UPDATE blog_cats SET name = ?, alias = ? WHERE id = ?;", pf_name, pf_alias, utils.StrToInt(pf_id)); err != nil {
+		if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET name = ?, alias = ? WHERE id = ?;", pf_name, pf_alias, utils.StrToInt(pf_id)); err != nil {
 			return err
 		}
 
@@ -206,7 +206,7 @@ func (this *Modules) RegisterAction_BlogCategoriesModify() *Action {
 				`SELECT
 					id
 				FROM
-					blog_cats
+					fave_blog_cats
 				WHERE
 					id > 1 AND
 					id = ?

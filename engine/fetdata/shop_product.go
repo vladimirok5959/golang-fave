@@ -35,14 +35,14 @@ func (this *ShopProduct) load() *ShopProduct {
 	if rows, err := this.wrap.DB.Query(
 		this.wrap.R.Context(),
 		`SELECT
-			shop_product_images.product_id,
-			shop_product_images.filename
+			fave_shop_product_images.product_id,
+			fave_shop_product_images.filename
 		FROM
-			shop_product_images
+			fave_shop_product_images
 		WHERE
-			shop_product_images.product_id = ?
+			fave_shop_product_images.product_id = ?
 		ORDER BY
-			shop_product_images.ord ASC
+			fave_shop_product_images.ord ASC
 		;`,
 		this.object.A_id,
 	); err == nil {
@@ -63,14 +63,14 @@ func (this *ShopProduct) load() *ShopProduct {
 		if rows, err := this.wrap.DB.Query(
 			this.wrap.R.Context(),
 			`SELECT
-				shop_product_images.product_id,
-				shop_product_images.filename
+				fave_shop_product_images.product_id,
+				fave_shop_product_images.filename
 			FROM
-				shop_product_images
+				fave_shop_product_images
 			WHERE
-				shop_product_images.product_id = ?
+				fave_shop_product_images.product_id = ?
 			ORDER BY
-				shop_product_images.ord ASC
+				fave_shop_product_images.ord ASC
 			;`,
 			this.object.A_parent_id(),
 		); err == nil {
@@ -93,18 +93,18 @@ func (this *ShopProduct) load() *ShopProduct {
 	if rows, err := this.wrap.DB.Query(
 		this.wrap.R.Context(),
 		`SELECT
-			shop_filters.id,
-			shop_filters.filter,
-			shop_filters_values.name
+			fave_shop_filters.id,
+			fave_shop_filters.filter,
+			fave_shop_filters_values.name
 		FROM
-			shop_filter_product_values
-			LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
-			LEFT JOIN shop_filters ON shop_filters.id = shop_filters_values.filter_id
+			fave_shop_filter_product_values
+			LEFT JOIN fave_shop_filters_values ON fave_shop_filters_values.id = fave_shop_filter_product_values.filter_value_id
+			LEFT JOIN fave_shop_filters ON fave_shop_filters.id = fave_shop_filters_values.filter_id
 		WHERE
-			shop_filter_product_values.product_id = ?
+			fave_shop_filter_product_values.product_id = ?
 		ORDER BY
-			shop_filters.filter ASC,
-			shop_filters_values.name ASC
+			fave_shop_filters.filter ASC,
+			fave_shop_filters_values.name ASC
 		;`,
 		this.object.A_id,
 	); err == nil {
@@ -138,22 +138,22 @@ func (this *ShopProduct) load() *ShopProduct {
 	if rows, err := this.wrap.DB.Query(
 		this.wrap.R.Context(),
 		`SELECT
-			shop_products.id,
-			shop_products.name,
-			shop_products.alias
+			fave_shop_products.id,
+			fave_shop_products.name,
+			fave_shop_products.alias
 		FROM
-			shop_products
+			fave_shop_products
 		WHERE
-			shop_products.active = 1 AND
+			fave_shop_products.active = 1 AND
 			(
-				(shop_products.id = ? OR shop_products.parent_id = ?) OR
+				(fave_shop_products.id = ? OR fave_shop_products.parent_id = ?) OR
 				(
-					(shop_products.id = ?) OR
-					(shop_products.parent_id IS NOT NULL AND shop_products.parent_id = ?)
+					(fave_shop_products.id = ?) OR
+					(fave_shop_products.parent_id IS NOT NULL AND fave_shop_products.parent_id = ?)
 				)
 			)
 		ORDER BY
-			shop_products.name ASC
+			fave_shop_products.name ASC
 		;`,
 		this.object.A_id,
 		this.object.A_id,

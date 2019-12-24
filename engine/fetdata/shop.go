@@ -41,7 +41,7 @@ func (this *Shop) load() *Shop {
 		SELECT
 			COUNT(*)
 		FROM
-			shop_products
+			fave_shop_products
 		WHERE
 			active = 1 AND
 			parent_id IS NULL
@@ -49,27 +49,27 @@ func (this *Shop) load() *Shop {
 	`
 	sql_rows := `
 		SELECT
-			shop_products.id,
-			shop_products.user,
-			shop_products.currency,
-			shop_products.price,
-			shop_products.price_old,
-			shop_products.gname,
-			shop_products.name,
-			shop_products.alias,
-			shop_products.vendor,
-			shop_products.quantity,
-			shop_products.category,
-			shop_products.briefly,
-			shop_products.content,
-			UNIX_TIMESTAMP(shop_products.datetime) as datetime,
-			shop_products.active,
-			users.id,
-			users.first_name,
-			users.last_name,
-			users.email,
-			users.admin,
-			users.active,
+			fave_shop_products.id,
+			fave_shop_products.user,
+			fave_shop_products.currency,
+			fave_shop_products.price,
+			fave_shop_products.price_old,
+			fave_shop_products.gname,
+			fave_shop_products.name,
+			fave_shop_products.alias,
+			fave_shop_products.vendor,
+			fave_shop_products.quantity,
+			fave_shop_products.category,
+			fave_shop_products.briefly,
+			fave_shop_products.content,
+			UNIX_TIMESTAMP(fave_shop_products.datetime) as datetime,
+			fave_shop_products.active,
+			fave_users.id,
+			fave_users.first_name,
+			fave_users.last_name,
+			fave_users.email,
+			fave_users.admin,
+			fave_users.active,
 			shop_currencies.id,
 			shop_currencies.name,
 			shop_currencies.coefficient,
@@ -84,9 +84,9 @@ func (this *Shop) load() *Shop {
 			cats.depth,
 			cats.parent_id
 		FROM
-			shop_products
-			LEFT JOIN users ON users.id = shop_products.user
-			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+			fave_shop_products
+			LEFT JOIN fave_users ON fave_users.id = fave_shop_products.user
+			LEFT JOIN shop_currencies ON shop_currencies.id = fave_shop_products.currency
 			LEFT JOIN (
 				SELECT
 					main.id,
@@ -143,13 +143,13 @@ func (this *Shop) load() *Shop {
 					main.id > 1
 				ORDER BY
 					main.lft ASC
-			) AS cats ON cats.id = shop_products.category
+			) AS cats ON cats.id = fave_shop_products.category
 		WHERE
-			shop_products.active = 1 AND
-			shop_products.parent_id IS NULL
+			fave_shop_products.active = 1 AND
+			fave_shop_products.parent_id IS NULL
 		ORDER BY
-			shop_products.quantity DESC,
-			shop_products.id DESC
+			fave_shop_products.quantity DESC,
+			fave_shop_products.id DESC
 		LIMIT ?, ?;
 	`
 
@@ -190,40 +190,40 @@ func (this *Shop) load() *Shop {
 					SELECT
 						COUNT(*)
 					FROM
-						shop_products
-						LEFT JOIN shop_cat_product_rel ON shop_cat_product_rel.product_id = shop_products.id
+						fave_shop_products
+						LEFT JOIN fave_shop_cat_product_rel ON fave_shop_cat_product_rel.product_id = fave_shop_products.id
 					WHERE
-						shop_products.active = 1 AND
-						shop_products.parent_id IS NULL AND
-						shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
+						fave_shop_products.active = 1 AND
+						fave_shop_products.parent_id IS NULL AND
+						fave_shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 					GROUP BY
-						shop_products.id
+						fave_shop_products.id
 				) AS tbl
 			;
 		`
 		sql_rows = `
 			SELECT
-				shop_products.id,
-				shop_products.user,
-				shop_products.currency,
-				shop_products.price,
-				shop_products.price_old,
-				shop_products.gname,
-				shop_products.name,
-				shop_products.alias,
-				shop_products.vendor,
-				shop_products.quantity,
-				shop_products.category,
-				shop_products.briefly,
-				shop_products.content,
-				UNIX_TIMESTAMP(shop_products.datetime) AS datetime,
-				shop_products.active,
-				users.id,
-				users.first_name,
-				users.last_name,
-				users.email,
-				users.admin,
-				users.active,
+				fave_shop_products.id,
+				fave_shop_products.user,
+				fave_shop_products.currency,
+				fave_shop_products.price,
+				fave_shop_products.price_old,
+				fave_shop_products.gname,
+				fave_shop_products.name,
+				fave_shop_products.alias,
+				fave_shop_products.vendor,
+				fave_shop_products.quantity,
+				fave_shop_products.category,
+				fave_shop_products.briefly,
+				fave_shop_products.content,
+				UNIX_TIMESTAMP(fave_shop_products.datetime) AS datetime,
+				fave_shop_products.active,
+				fave_users.id,
+				fave_users.first_name,
+				fave_users.last_name,
+				fave_users.email,
+				fave_users.admin,
+				fave_users.active,
 				shop_currencies.id,
 				shop_currencies.name,
 				shop_currencies.coefficient,
@@ -238,10 +238,10 @@ func (this *Shop) load() *Shop {
 				cats.depth,
 				cats.parent_id
 			FROM
-				shop_products
-				LEFT JOIN shop_cat_product_rel ON shop_cat_product_rel.product_id = shop_products.id
-				LEFT JOIN users ON users.id = shop_products.user
-				LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+				fave_shop_products
+				LEFT JOIN fave_shop_cat_product_rel ON fave_shop_cat_product_rel.product_id = fave_shop_products.id
+				LEFT JOIN fave_users ON fave_users.id = fave_shop_products.user
+				LEFT JOIN shop_currencies ON shop_currencies.id = fave_shop_products.currency
 				LEFT JOIN (
 					SELECT
 						main.id,
@@ -298,17 +298,17 @@ func (this *Shop) load() *Shop {
 						main.id > 1
 					ORDER BY
 						main.lft ASC
-				) AS cats ON cats.id = shop_products.category
+				) AS cats ON cats.id = fave_shop_products.category
 			WHERE
-				shop_products.active = 1 AND
-				shop_products.parent_id IS NULL AND
-				shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
+				fave_shop_products.active = 1 AND
+				fave_shop_products.parent_id IS NULL AND
+				fave_shop_cat_product_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 			GROUP BY
-				shop_products.id,
+				fave_shop_products.id,
 				cats.parent_id
 			ORDER BY
-				shop_products.quantity DESC,
-				shop_products.id DESC
+				fave_shop_products.quantity DESC,
+				fave_shop_products.id DESC
 			LIMIT ?, ?;
 		`
 	}
@@ -386,14 +386,14 @@ func (this *Shop) load() *Shop {
 		if rows, err := this.wrap.DB.Query(
 			this.wrap.R.Context(),
 			`SELECT
-				shop_product_images.product_id,
-				shop_product_images.filename
+				fave_shop_product_images.product_id,
+				fave_shop_product_images.filename
 			FROM
-				shop_product_images
+				fave_shop_product_images
 			WHERE
-				shop_product_images.product_id IN (`+strings.Join(product_ids, ", ")+`)
+				fave_shop_product_images.product_id IN (`+strings.Join(product_ids, ", ")+`)
 			ORDER BY
-				shop_product_images.ord ASC
+				fave_shop_product_images.ord ASC
 			;`,
 		); err == nil {
 			defer rows.Close()

@@ -36,15 +36,15 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 			if wrap.CurrSubModule == "success" {
 				ModuleName = "Success"
 				ModulePagination = "/cp/" + wrap.CurrModule + "/success/"
-				ModuleSqlWhere = " WHERE notify_mail.status = 1"
+				ModuleSqlWhere = " WHERE fave_notify_mail.status = 1"
 			} else if wrap.CurrSubModule == "in-progress" {
 				ModuleName = "In progress"
 				ModulePagination = "/cp/" + wrap.CurrModule + "/in-progress/"
-				ModuleSqlWhere = " WHERE notify_mail.status = 2 OR notify_mail.status = 3"
+				ModuleSqlWhere = " WHERE fave_notify_mail.status = 2 OR fave_notify_mail.status = 3"
 			} else if wrap.CurrSubModule == "error" {
 				ModuleName = "Error"
 				ModulePagination = "/cp/" + wrap.CurrModule + "/error/"
-				ModuleSqlWhere = " WHERE notify_mail.status = 0"
+				ModuleSqlWhere = " WHERE fave_notify_mail.status = 0"
 			}
 
 			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
@@ -52,7 +52,7 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"notify_mail",
+				"fave_notify_mail",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -106,24 +106,24 @@ func (this *Modules) RegisterModule_NotifyMail() *Module {
 					var count int
 					return count, wrap.DB.QueryRow(
 						wrap.R.Context(),
-						"SELECT COUNT(*) FROM `notify_mail`"+ModuleSqlWhere+";",
+						"SELECT COUNT(*) FROM `fave_notify_mail`"+ModuleSqlWhere+";",
 					).Scan(&count)
 				},
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
 						wrap.R.Context(),
 						`SELECT
-							notify_mail.id,
-							notify_mail.email,
-							notify_mail.subject,
-							UNIX_TIMESTAMP(`+"`notify_mail`.`datetime`"+`) AS datetime,
-							notify_mail.status,
-							notify_mail.error
+							fave_notify_mail.id,
+							fave_notify_mail.email,
+							fave_notify_mail.subject,
+							UNIX_TIMESTAMP(`+"`fave_notify_mail`.`datetime`"+`) AS datetime,
+							fave_notify_mail.status,
+							fave_notify_mail.error
 						FROM
-							notify_mail
+							fave_notify_mail
 						`+ModuleSqlWhere+`
 						ORDER BY
-							notify_mail.id DESC
+							fave_notify_mail.id DESC
 						LIMIT ?, ?;`,
 						limit_offset,
 						pear_page,

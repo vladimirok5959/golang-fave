@@ -25,13 +25,13 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 		var lastID int64 = 0
 		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT product_id FROM fave_shop_cat_product_rel WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT product_id FROM shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT product_id FROM fave_shop_filter_product_values WHERE product_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
@@ -43,7 +43,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 			// Duplicate product
 			res, err := tx.Exec(
 				ctx,
-				`INSERT INTO shop_products (
+				`INSERT INTO fave_shop_products (
 					parent_id,
 					user,
 					currency,
@@ -74,7 +74,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					'`+utils.UnixTimestampToMySqlDateTime(utils.GetCurrentUnixTimestamp())+`',
 					0
 				FROM
-					shop_products
+					fave_shop_products
 				WHERE
 					id = ?
 				;`,
@@ -91,7 +91,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 			}
 
 			// Block new product row
-			if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", lastID); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_products WHERE id = ? FOR UPDATE;", lastID); err != nil {
 				return err
 			}
 
@@ -103,7 +103,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					product_id,
 					category_id
 				FROM
-					shop_cat_product_rel
+					fave_shop_cat_product_rel
 				WHERE
 					product_id = ?
 				;`,
@@ -115,7 +115,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					var category_id int
 					if err := cat_rows.Scan(&product_id, &category_id); *wrap.LogCpError(&err) == nil {
 						cat_sqls = append(cat_sqls, `
-							INSERT INTO shop_cat_product_rel SET
+							INSERT INTO fave_shop_cat_product_rel SET
 								product_id = `+utils.Int64ToStr(lastID)+`,
 								category_id = `+utils.IntToStr(category_id)+`
 							;
@@ -135,7 +135,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					product_id,
 					filter_value_id
 				FROM
-					shop_filter_product_values
+					fave_shop_filter_product_values
 				WHERE
 					product_id = ?
 				;`,
@@ -147,7 +147,7 @@ func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 					var filter_value_id int
 					if err := attributes_rows.Scan(&product_id, &filter_value_id); *wrap.LogCpError(&err) == nil {
 						attributes_sqls = append(attributes_sqls, `
-							INSERT INTO shop_filter_product_values SET
+							INSERT INTO fave_shop_filter_product_values SET
 								product_id = `+utils.Int64ToStr(lastID)+`,
 								filter_value_id = `+utils.IntToStr(filter_value_id)+`
 							;

@@ -166,7 +166,7 @@ func (this *Wrapper) LoadSessionUser() bool {
 			admin,
 			active
 		FROM
-			users
+			fave_users
 		WHERE
 			id = ?
 		LIMIT 1;`,
@@ -313,7 +313,7 @@ func (this *Wrapper) SendEmailUsual(email, subject, message string) error {
 
 	if _, err := this.DB.Exec(
 		this.R.Context(),
-		`INSERT INTO notify_mail SET
+		`INSERT INTO fave_notify_mail SET
 			id = NULL,
 			email = ?,
 			subject = ?,
@@ -346,7 +346,7 @@ func (this *Wrapper) SendEmailFast(email, subject, message string) error {
 
 	if _, err := this.DB.Exec(
 		this.R.Context(),
-		`INSERT INTO notify_mail SET
+		`INSERT INTO fave_notify_mail SET
 			id = NULL,
 			email = ?,
 			subject = ?,

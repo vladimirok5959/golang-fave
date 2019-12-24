@@ -47,60 +47,60 @@ func (this *session) updateProducts(ctx context.Context, db *sqlw.DB) {
 		if rows, err := db.Query(
 			ctx,
 			`SELECT
-				shop_products.id,
-				shop_products.name,
-				shop_products.price,
-				shop_products.alias,
-				shop_products.quantity,
-				shop_currencies.id,
-				shop_currencies.name,
-				shop_currencies.coefficient,
-				shop_currencies.code,
-				shop_currencies.symbol,
-				IF(image_this.filename IS NULL, IFNULL(shop_products.parent_id, shop_products.id), shop_products.id) as imgid,
+				fave_shop_products.id,
+				fave_shop_products.name,
+				fave_shop_products.price,
+				fave_shop_products.alias,
+				fave_shop_products.quantity,
+				fave_shop_currencies.id,
+				fave_shop_currencies.name,
+				fave_shop_currencies.coefficient,
+				fave_shop_currencies.code,
+				fave_shop_currencies.symbol,
+				IF(image_this.filename IS NULL, IFNULL(fave_shop_products.parent_id, fave_shop_products.id), fave_shop_products.id) as imgid,
 				IFNULL(IFNULL(image_this.filename, image_parent.filename), '') as filename
 			FROM
-				shop_products
-				LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+				fave_shop_products
+				LEFT JOIN fave_shop_currencies ON fave_shop_currencies.id = fave_shop_products.currency
 				LEFT JOIN (
 					SELECT
 						m.product_id,
 						m.filename
 					FROM
-						shop_product_images as m
+						fave_shop_product_images as m
 						LEFT JOIN (
 							SELECT
 								t.product_id,
 								MIN(t.ord) as ordmin
 							FROM
-								shop_product_images as t
+								fave_shop_product_images as t
 							GROUP BY
 								t.product_id
 						) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
 					WHERE
 						u.product_id IS NOT NULL
-				) as image_this ON image_this.product_id = shop_products.id
+				) as image_this ON image_this.product_id = fave_shop_products.id
 				LEFT JOIN (
 					SELECT
 						m.product_id,
 						m.filename
 					FROM
-						shop_product_images as m
+						fave_shop_product_images as m
 						LEFT JOIN (
 							SELECT
 								t.product_id,
 								MIN(t.ord) as ordmin
 							FROM
-								shop_product_images as t
+								fave_shop_product_images as t
 							GROUP BY
 								t.product_id
 						) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
 					WHERE
 						u.product_id IS NOT NULL
-				) as image_parent ON image_parent.product_id = shop_products.parent_id
+				) as image_parent ON image_parent.product_id = fave_shop_products.parent_id
 			WHERE
-				shop_products.active = 1 AND
-				shop_products.id IN (`+strings.Join(utils.ArrayOfIntToArrayOfString(products_ids), ",")+`)
+				fave_shop_products.active = 1 AND
+				fave_shop_products.id IN (`+strings.Join(utils.ArrayOfIntToArrayOfString(products_ids), ",")+`)
 			;`,
 		); err == nil {
 			defer rows.Close()
@@ -185,7 +185,7 @@ func (this *session) Preload(p *SBParam) {
 			code,
 			symbol
 		FROM
-			shop_currencies
+			fave_shop_currencies
 		ORDER BY
 			id ASC
 		;`,
@@ -255,60 +255,60 @@ func (this *session) Plus(p *SBParam, product_id int) {
 		p.R.Context(),
 		`
 		SELECT
-			shop_products.id,
-			shop_products.name,
-			shop_products.price,
-			shop_products.alias,
-			shop_currencies.id,
-			shop_currencies.name,
-			shop_currencies.coefficient,
-			shop_currencies.code,
-			shop_currencies.symbol,
-			IF(image_this.filename IS NULL, IFNULL(shop_products.parent_id, shop_products.id), shop_products.id) as imgid,
+			fave_shop_products.id,
+			fave_shop_products.name,
+			fave_shop_products.price,
+			fave_shop_products.alias,
+			fave_shop_currencies.id,
+			fave_shop_currencies.name,
+			fave_shop_currencies.coefficient,
+			fave_shop_currencies.code,
+			fave_shop_currencies.symbol,
+			IF(image_this.filename IS NULL, IFNULL(fave_shop_products.parent_id, fave_shop_products.id), fave_shop_products.id) as imgid,
 			IFNULL(IFNULL(image_this.filename, image_parent.filename), '') as filename
 		FROM
-			shop_products
-			LEFT JOIN shop_currencies ON shop_currencies.id = shop_products.currency
+			fave_shop_products
+			LEFT JOIN fave_shop_currencies ON fave_shop_currencies.id = fave_shop_products.currency
 			LEFT JOIN (
 				SELECT
 					m.product_id,
 					m.filename
 				FROM
-					shop_product_images as m
+					fave_shop_product_images as m
 					LEFT JOIN (
 						SELECT
 							t.product_id,
 							MIN(t.ord) as ordmin
 						FROM
-							shop_product_images as t
+							fave_shop_product_images as t
 						GROUP BY
 							t.product_id
 					) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
 				WHERE
 					u.product_id IS NOT NULL
-			) as image_this ON image_this.product_id = shop_products.id
+			) as image_this ON image_this.product_id = fave_shop_products.id
 			LEFT JOIN (
 				SELECT
 					m.product_id,
 					m.filename
 				FROM
-					shop_product_images as m
+					fave_shop_product_images as m
 					LEFT JOIN (
 						SELECT
 							t.product_id,
 							MIN(t.ord) as ordmin
 						FROM
-							shop_product_images as t
+							fave_shop_product_images as t
 						GROUP BY
 							t.product_id
 					) as u ON u.product_id = m.product_id AND u.ordmin = m.ord
 				WHERE
 					u.product_id IS NOT NULL
-			) as image_parent ON image_parent.product_id = shop_products.parent_id
+			) as image_parent ON image_parent.product_id = fave_shop_products.parent_id
 		WHERE
-			shop_products.active = 1 AND
-			shop_products.quantity > 0 AND
-			shop_products.id = ?
+			fave_shop_products.active = 1 AND
+			fave_shop_products.quantity > 0 AND
+			fave_shop_products.id = ?
 		LIMIT 1;`,
 		product_id,
 	).Scan(

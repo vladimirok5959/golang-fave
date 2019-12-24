@@ -103,7 +103,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			// Insert row
 			res, err := tx.Exec(
 				ctx,
-				`INSERT INTO shop_orders SET
+				`INSERT INTO fave_shop_orders SET
 					create_datetime = ?,
 					update_datetime = ?,
 					currency_id = ?,
@@ -150,7 +150,7 @@ func (this *Modules) RegisterAction_ShopOrder() *Action {
 			for _, product := range *(*bdata).Products {
 				if _, err = tx.Exec(
 					ctx,
-					`INSERT INTO shop_order_products (id, order_id, product_id, price, quantity) VALUES (NULL, ?, ?, ?, ?);`,
+					`INSERT INTO fave_shop_order_products (id, order_id, product_id, price, quantity) VALUES (NULL, ?, ?, ?, ?);`,
 					lastID, product.A_product_id, product.A_price, product.A_quantity,
 				); err != nil {
 					return err

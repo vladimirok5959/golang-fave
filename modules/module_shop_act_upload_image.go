@@ -55,14 +55,14 @@ func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 								var lastID int64 = 0
 								if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 									// Block rows
-									if _, err := tx.Exec(ctx, "SELECT id FROM shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+									if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_products WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 										return err
 									}
 
 									// Insert row
 									res, err := tx.Exec(
 										ctx,
-										`INSERT INTO shop_product_images SET
+										`INSERT INTO fave_shop_product_images SET
 											product_id = ?,
 											filename = ?,
 											ord = ?

@@ -50,7 +50,7 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 				// Insert row
 				res, err := tx.Exec(
 					ctx,
-					`INSERT INTO shop_currencies SET
+					`INSERT INTO fave_shop_currencies SET
 						name = ?,
 						coefficient = ?,
 						code = ?,
@@ -85,14 +85,14 @@ func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 		} else {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				// Block rows
-				if _, err := tx.Exec(ctx, "SELECT id FROM shop_currencies WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_currencies WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 
 				// Update row
 				if _, err := tx.Exec(
 					ctx,
-					`UPDATE shop_currencies SET
+					`UPDATE fave_shop_currencies SET
 						name = ?,
 						coefficient = ?,
 						code = ?,

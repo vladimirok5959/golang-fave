@@ -19,8 +19,8 @@ func (this *Modules) blog_GetCategorySelectOptions(wrap *wrapper.Wrapper, id int
 			node.alias,
 			(COUNT(parent.id) - 1) AS depth
 		FROM
-			blog_cats AS node,
-			blog_cats AS parent
+			fave_blog_cats AS node,
+			fave_blog_cats AS parent
 		WHERE
 			node.lft BETWEEN parent.lft AND parent.rgt AND
 			node.id > 1
@@ -72,8 +72,8 @@ func (this *Modules) blog_GetCategoryParentId(wrap *wrapper.Wrapper, id int) int
 		`SELECT
 			parent.id
 		FROM
-			blog_cats AS node,
-			blog_cats AS parent
+			fave_blog_cats AS node,
+			fave_blog_cats AS parent
 		WHERE
 			node.lft BETWEEN parent.lft AND parent.rgt AND
 			node.id = ? AND

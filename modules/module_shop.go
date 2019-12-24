@@ -24,7 +24,7 @@ func (this *Modules) shop_GetCurrencySelectOptions(wrap *wrapper.Wrapper, id int
 			id,
 			code
 		FROM
-			shop_currencies
+			fave_shop_currencies
 		ORDER BY
 			id ASC
 		;`,
@@ -56,34 +56,34 @@ func (this *Modules) shop_GetProductValuesInputs(wrap *wrapper.Wrapper, product_
 	rows, err := wrap.DB.Query(
 		wrap.R.Context(),
 		`SELECT
-			shop_filters.id,
-			shop_filters.name,
-			shop_filters_values.id,
-			shop_filters_values.name,
-			IF(shop_filter_product_values.filter_value_id > 0, 1, 0) as selected
+			fave_shop_filters.id,
+			fave_shop_filters.name,
+			fave_shop_filters_values.id,
+			fave_shop_filters_values.name,
+			IF(fave_shop_filter_product_values.filter_value_id > 0, 1, 0) as selected
 		FROM
-			shop_filters_values
-			LEFT JOIN shop_filters ON shop_filters.id = shop_filters_values.filter_id
-			LEFT JOIN shop_filter_product_values ON
-				shop_filter_product_values.filter_value_id = shop_filters_values.id AND
-				shop_filter_product_values.product_id = `+utils.IntToStr(product_id)+`
+			fave_shop_filters_values
+			LEFT JOIN fave_shop_filters ON fave_shop_filters.id = fave_shop_filters_values.filter_id
+			LEFT JOIN fave_shop_filter_product_values ON
+				fave_shop_filter_product_values.filter_value_id = fave_shop_filters_values.id AND
+				fave_shop_filter_product_values.product_id = `+utils.IntToStr(product_id)+`
 			LEFT JOIN (
 				SELECT
-					shop_filters_values.filter_id,
-					shop_filter_product_values.product_id
+					fave_shop_filters_values.filter_id,
+					fave_shop_filter_product_values.product_id
 				FROM
-					shop_filter_product_values
-					LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id 
+					fave_shop_filter_product_values
+					LEFT JOIN fave_shop_filters_values ON fave_shop_filters_values.id = fave_shop_filter_product_values.filter_value_id 
 				WHERE
-					shop_filter_product_values.product_id = `+utils.IntToStr(product_id)+`
+					fave_shop_filter_product_values.product_id = `+utils.IntToStr(product_id)+`
 				GROUP BY
-					shop_filters_values.filter_id
-			) as filter_used ON filter_used.filter_id = shop_filters.id
+					fave_shop_filters_values.filter_id
+			) as filter_used ON filter_used.filter_id = fave_shop_filters.id
 		WHERE
 			filter_used.filter_id IS NOT NULL
 		ORDER BY
-			shop_filters.name ASC,
-			shop_filters_values.name ASC
+			fave_shop_filters.name ASC,
+			fave_shop_filters_values.name ASC
 		;`,
 	)
 
@@ -136,7 +136,7 @@ func (this *Modules) shop_GetFilterValuesInputs(wrap *wrapper.Wrapper, filter_id
 			id,
 			name
 		FROM
-			shop_filters_values
+			fave_shop_filters_values
 		WHERE
 			filter_id = ?
 		ORDER BY
@@ -170,7 +170,7 @@ func (this *Modules) shop_GetAllAttributesSelectOptions(wrap *wrapper.Wrapper) s
 			name,
 			filter
 		FROM
-			shop_filters
+			fave_shop_filters
 		ORDER BY
 			name ASC
 		;`,
@@ -201,7 +201,7 @@ func (this *Modules) shop_GetAllCurrencies(wrap *wrapper.Wrapper) map[int]string
 			id,
 			code
 		FROM
-			shop_currencies
+			fave_shop_currencies
 		ORDER BY
 			id ASC
 		;`,
@@ -232,7 +232,7 @@ func (this *Modules) shop_GetAllProductImages(wrap *wrapper.Wrapper, product_id 
 			product_id,
 			filename
 		FROM
-			shop_product_images
+			fave_shop_product_images
 		WHERE
 			product_id = ?
 		ORDER BY
@@ -265,7 +265,7 @@ func (this *Modules) shop_GetSubProducts(wrap *wrapper.Wrapper, id int) string {
 			id,
 			name
 		FROM
-			shop_products
+			fave_shop_products
 		WHERE
 			parent_id = ?
 		ORDER BY
@@ -298,7 +298,7 @@ func (this *Modules) shop_GetParentProduct(wrap *wrapper.Wrapper, id int) string
 			id,
 			name
 		FROM
-			shop_products
+			fave_shop_products
 		WHERE
 			id = ?
 		;`,
@@ -380,12 +380,12 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					main.rgt,
 					main.depth,
 					parent.id AS parent_id,
-					users.id,
-					users.first_name,
-					users.last_name,
-					users.email,
-					users.admin,
-					users.active
+					fave_users.id,
+					fave_users.first_name,
+					fave_users.last_name,
+					fave_users.email,
+					fave_users.admin,
+					fave_users.active
 				FROM
 					(
 						SELECT
@@ -397,8 +397,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							node.rgt,
 							(COUNT(parent.id) - 1) AS depth
 						FROM
-							shop_cats AS node,
-							shop_cats AS parent
+							fave_shop_cats AS node,
+							fave_shop_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -416,8 +416,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							node.rgt,
 							(COUNT(parent.id) - 0) AS depth
 						FROM
-							shop_cats AS node,
-							shop_cats AS parent
+							fave_shop_cats AS node,
+							fave_shop_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -428,7 +428,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					parent.depth = main.depth AND
 					main.lft > parent.lft AND
 					main.rgt < parent.rgt
-					LEFT JOIN users ON users.id = main.user
+					LEFT JOIN fave_users ON fave_users.id = main.user
 				WHERE
 					main.id > 1 AND
 					main.alias = ?
@@ -532,33 +532,33 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			err := wrap.DB.QueryRow(
 				wrap.R.Context(),
 				`SELECT
-					shop_products.id,
-					shop_products.parent_id,
-					shop_products.user,
-					shop_products.currency,
-					shop_products.price,
-					shop_products.price_old,
-					shop_products.name,
-					shop_products.alias,
-					shop_products.vendor,
-					shop_products.quantity,
-					shop_products.category,
-					shop_products.briefly,
-					shop_products.content,
-					UNIX_TIMESTAMP(shop_products.datetime) as datetime,
-					shop_products.active,
-					users.id,
-					users.first_name,
-					users.last_name,
-					users.email,
-					users.admin,
-					users.active
+					fave_shop_products.id,
+					fave_shop_products.parent_id,
+					fave_shop_products.user,
+					fave_shop_products.currency,
+					fave_shop_products.price,
+					fave_shop_products.price_old,
+					fave_shop_products.name,
+					fave_shop_products.alias,
+					fave_shop_products.vendor,
+					fave_shop_products.quantity,
+					fave_shop_products.category,
+					fave_shop_products.briefly,
+					fave_shop_products.content,
+					UNIX_TIMESTAMP(fave_shop_products.datetime) as datetime,
+					fave_shop_products.active,
+					fave_users.id,
+					fave_users.first_name,
+					fave_users.last_name,
+					fave_users.email,
+					fave_users.admin,
+					fave_users.active
 				FROM
-					shop_products
-					LEFT JOIN users ON users.id = shop_products.user
+					fave_shop_products
+					LEFT JOIN fave_users ON fave_users.id = fave_shop_products.user
 				WHERE
-					shop_products.active = 1 and
-					shop_products.alias = ?
+					fave_shop_products.active = 1 and
+					fave_shop_products.alias = ?
 				LIMIT 1;`,
 				wrap.UrlArgs[1],
 			).Scan(
@@ -638,7 +638,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 
 			content += builder.DataTable(
 				wrap,
-				"shop_products",
+				"fave_shop_products",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -750,30 +750,30 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					var count int
 					return count, wrap.DB.QueryRow(
 						wrap.R.Context(),
-						"SELECT COUNT(*) FROM `shop_products`;",
+						"SELECT COUNT(*) FROM `fave_shop_products`;",
 					).Scan(&count)
 				},
 				func(limit_offset int, pear_page int) (*sqlw.Rows, error) {
 					return wrap.DB.Query(
 						wrap.R.Context(),
 						`SELECT
-							shop_products.id,
-							shop_products.name,
-							shop_products.alias,
-							shop_products.currency,
-							shop_products.price,
-							UNIX_TIMESTAMP(`+"`shop_products`.`datetime`"+`) AS datetime,
-							shop_products.active,
-							shop_products.parent_id,
+							fave_shop_products.id,
+							fave_shop_products.name,
+							fave_shop_products.alias,
+							fave_shop_products.currency,
+							fave_shop_products.price,
+							UNIX_TIMESTAMP(`+"`fave_shop_products`.`datetime`"+`) AS datetime,
+							fave_shop_products.active,
+							fave_shop_products.parent_id,
 							spp.name AS pname,
-							shop_products.price_old,
-							shop_products.quantity,
-							shop_products.price_promo
+							fave_shop_products.price_old,
+							fave_shop_products.quantity,
+							fave_shop_products.price_promo
 						FROM
-							shop_products
-							LEFT JOIN shop_products AS spp ON spp.id = shop_products.parent_id
+							fave_shop_products
+							LEFT JOIN fave_shop_products AS spp ON spp.id = fave_shop_products.parent_id
 						ORDER BY
-							shop_products.id DESC
+							fave_shop_products.id DESC
 						LIMIT ?, ?;`,
 						limit_offset,
 						pear_page,
@@ -788,7 +788,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"shop_cats",
+				"fave_shop_cats",
 				"id",
 				"ASC",
 				&[]builder.DataTableRow{
@@ -852,8 +852,8 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							node.alias,
 							(COUNT(parent.id) - 1) AS depth
 						FROM
-							shop_cats AS node,
-							shop_cats AS parent
+							fave_shop_cats AS node,
+							fave_shop_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt AND
 							node.id > 1
@@ -873,7 +873,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"shop_filters",
+				"fave_shop_filters",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -920,7 +920,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"shop_currencies",
+				"fave_shop_currencies",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -978,7 +978,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"shop_orders",
+				"fave_shop_orders",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -1093,37 +1093,37 @@ func (this *Modules) RegisterModule_Shop() *Module {
 					return wrap.DB.Query(
 						wrap.R.Context(),
 						`SELECT
-							shop_orders.id,
-							shop_orders.client_phone,
-							shop_orders.update_datetime,
-							shop_orders.currency_id,
-							shop_orders.currency_name,
-							shop_orders.currency_coefficient,
-							shop_orders.currency_code,
-							shop_orders.currency_symbol,
-							shop_orders.client_last_name,
-							shop_orders.client_first_name,
-							shop_orders.client_middle_name,
-							UNIX_TIMESTAMP(shop_orders.create_datetime) as create_datetime,
-							shop_orders.client_email,
-							shop_orders.client_delivery_comment,
-							shop_orders.client_order_comment,
-							shop_orders.status,
-							shop_order_total.total
+							fave_shop_orders.id,
+							fave_shop_orders.client_phone,
+							fave_shop_orders.update_datetime,
+							fave_shop_orders.currency_id,
+							fave_shop_orders.currency_name,
+							fave_shop_orders.currency_coefficient,
+							fave_shop_orders.currency_code,
+							fave_shop_orders.currency_symbol,
+							fave_shop_orders.client_last_name,
+							fave_shop_orders.client_first_name,
+							fave_shop_orders.client_middle_name,
+							UNIX_TIMESTAMP(fave_shop_orders.create_datetime) as create_datetime,
+							fave_shop_orders.client_email,
+							fave_shop_orders.client_delivery_comment,
+							fave_shop_orders.client_order_comment,
+							fave_shop_orders.status,
+							fave_shop_order_total.total
 						FROM
-							shop_orders
+							fave_shop_orders
 							LEFT JOIN (
 								SELECT
 									order_id,
 									SUM(price * quantity) as total
 								FROM
-									shop_order_products
+									fave_shop_order_products
 								GROUP BY
 									order_id
-							) as shop_order_total ON shop_order_total.order_id = shop_orders.id
+							) as shop_order_total ON shop_order_total.order_id = fave_shop_orders.id
 						ORDER BY
-							shop_orders.status ASC,
-							shop_orders.id DESC
+							fave_shop_orders.status ASC,
+							fave_shop_orders.id DESC
 						LIMIT ?, ?;`,
 						limit_offset,
 						pear_page,
@@ -1195,7 +1195,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						custom1,
 						custom2
 					FROM
-						shop_products
+						fave_shop_products
 					WHERE
 						id = ?
 					LIMIT 1;`,
@@ -1232,7 +1232,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			// All product current categories
 			var selids []int
 			if data.A_id > 0 {
-				rows, err := wrap.DB.Query(wrap.R.Context(), "SELECT category_id FROM shop_cat_product_rel WHERE product_id = ?;", data.A_id)
+				rows, err := wrap.DB.Query(wrap.R.Context(), "SELECT category_id FROM fave_shop_cat_product_rel WHERE product_id = ?;", data.A_id)
 				if err == nil {
 					defer rows.Close()
 					values := make([]int, 1)
@@ -1656,7 +1656,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						lft,
 						rgt
 					FROM
-						shop_cats
+						fave_shop_cats
 					WHERE
 						id = ?
 					LIMIT 1;`,
@@ -1780,7 +1780,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						name,
 						filter
 					FROM
-						shop_filters
+						fave_shop_filters
 					WHERE
 						id = ?
 					LIMIT 1;`,
@@ -1901,7 +1901,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 						code,
 						symbol
 					FROM
-						shop_currencies
+						fave_shop_currencies
 					WHERE
 						id = ?
 					LIMIT 1;`,
@@ -2025,36 +2025,36 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			err := wrap.DB.QueryRow(
 				wrap.R.Context(),
 				`SELECT
-					shop_orders.id,
-					shop_orders.client_phone,
-					shop_orders.update_datetime,
-					shop_orders.currency_id,
-					shop_orders.currency_name,
-					shop_orders.currency_coefficient,
-					shop_orders.currency_code,
-					shop_orders.currency_symbol,
-					shop_orders.client_last_name,
-					shop_orders.client_first_name,
-					shop_orders.client_middle_name,
-					UNIX_TIMESTAMP(shop_orders.create_datetime) as create_datetime,
-					shop_orders.client_email,
-					shop_orders.client_delivery_comment,
-					shop_orders.client_order_comment,
-					shop_orders.status,
+					fave_shop_orders.id,
+					fave_shop_orders.client_phone,
+					fave_shop_orders.update_datetime,
+					fave_shop_orders.currency_id,
+					fave_shop_orders.currency_name,
+					fave_shop_orders.currency_coefficient,
+					fave_shop_orders.currency_code,
+					fave_shop_orders.currency_symbol,
+					fave_shop_orders.client_last_name,
+					fave_shop_orders.client_first_name,
+					fave_shop_orders.client_middle_name,
+					UNIX_TIMESTAMP(fave_shop_orders.create_datetime) as create_datetime,
+					fave_shop_orders.client_email,
+					fave_shop_orders.client_delivery_comment,
+					fave_shop_orders.client_order_comment,
+					fave_shop_orders.status,
 					shop_order_total.total
 				FROM
-					shop_orders
+					fave_shop_orders
 					LEFT JOIN (
 						SELECT
 							order_id,
 							SUM(price * quantity) as total
 						FROM
-							shop_order_products
+							fave_shop_order_products
 						GROUP BY
 							order_id
-					) as shop_order_total ON shop_order_total.order_id = shop_orders.id
+					) as shop_order_total ON shop_order_total.order_id = fave_shop_orders.id
 				WHERE
-					shop_orders.id = ?
+					fave_shop_orders.id = ?
 				LIMIT 1;`,
 				utils.StrToInt(wrap.UrlArgs[2]),
 			).Scan(
@@ -2157,17 +2157,17 @@ func (this *Modules) RegisterModule_Shop() *Module {
 			rows, err := wrap.DB.Query(
 				wrap.R.Context(),
 				`SELECT
-					shop_order_products.product_id,
-					shop_products.name,
-					shop_products.alias,
-					shop_order_products.price,
-					shop_order_products.quantity,
-					(shop_order_products.price * shop_order_products.quantity) as total
+					fave_shop_order_products.product_id,
+					fave_shop_products.name,
+					fave_shop_products.alias,
+					fave_shop_order_products.price,
+					fave_shop_order_products.quantity,
+					(fave_shop_order_products.price * fave_shop_order_products.quantity) as total
 				FROM
-					shop_order_products
-					LEFT JOIN shop_products ON shop_products.id = shop_order_products.product_id
+					fave_shop_order_products
+					LEFT JOIN fave_shop_products ON fave_shop_products.id = fave_shop_order_products.product_id
 				WHERE
-					shop_order_products.order_id = ?
+					fave_shop_order_products.order_id = ?
 				;`,
 				curr_order_id,
 			)

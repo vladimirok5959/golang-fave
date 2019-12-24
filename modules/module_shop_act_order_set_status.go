@@ -34,7 +34,7 @@ func (this *Modules) RegisterAction_ShopOrderSetStatus() *Action {
 		if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			if _, err := tx.Exec(
 				ctx,
-				`UPDATE shop_orders SET
+				`UPDATE fave_shop_orders SET
 					status = ?
 				WHERE
 					id = ?

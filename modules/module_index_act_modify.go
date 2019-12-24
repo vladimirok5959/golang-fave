@@ -51,7 +51,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				res, err := tx.Exec(
 					ctx,
-					`INSERT INTO pages SET
+					`INSERT INTO fave_pages SET
 						user = ?,
 						name = ?,
 						alias = ?,
@@ -92,7 +92,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				_, err := tx.Exec(
 					ctx,
-					`UPDATE pages SET
+					`UPDATE fave_pages SET
 						name = ?,
 						alias = ?,
 						content = ?,

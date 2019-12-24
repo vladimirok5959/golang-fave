@@ -51,7 +51,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 				// Insert row
 				res, err := tx.Exec(
 					ctx,
-					`INSERT INTO shop_filters SET
+					`INSERT INTO fave_shop_filters SET
 						name = ?,
 						filter = ?
 					;`,
@@ -69,7 +69,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 				}
 
 				// Block rows
-				if _, err := tx.Exec(ctx, "SELECT id FROM shop_filters WHERE id = ? FOR UPDATE;", lastID); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_filters WHERE id = ? FOR UPDATE;", lastID); err != nil {
 					return err
 				}
 
@@ -77,7 +77,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 				for vname, _ := range filter_values {
 					if _, err = tx.Exec(
 						ctx,
-						`INSERT INTO shop_filters_values SET
+						`INSERT INTO fave_shop_filters_values SET
 							filter_id = ?,
 							name = ?
 						;`,
@@ -101,22 +101,22 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 		} else {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				// Block rows
-				if _, err := tx.Exec(ctx, "SELECT id FROM shop_filters WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_filters WHERE id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
-				if _, err := tx.Exec(ctx, "SELECT id FROM shop_filters_values WHERE filter_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+				if _, err := tx.Exec(ctx, "SELECT id FROM fave_shop_filters_values WHERE filter_id = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 					return err
 				}
 				if _, err := tx.Exec(
 					ctx,
 					`SELECT
-						shop_filter_product_values.product_id
+						fave_shop_filter_product_values.product_id
 					FROM
-						shop_filter_product_values
-						LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
+						fave_shop_filter_product_values
+						LEFT JOIN fave_shop_filters_values ON fave_shop_filters_values.id = fave_shop_filter_product_values.filter_value_id
 					WHERE
-						shop_filters_values.id IS NOT NULL AND
-						shop_filters_values.filter_id = ?
+						fave_shop_filters_values.id IS NOT NULL AND
+						fave_shop_filters_values.filter_id = ?
 					FOR UPDATE;`,
 					utils.StrToInt(pf_id),
 				); err != nil {
@@ -126,7 +126,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 				// Update row
 				if _, err := tx.Exec(
 					ctx,
-					`UPDATE shop_filters SET
+					`UPDATE fave_shop_filters SET
 						name = ?,
 						filter = ?
 					WHERE
@@ -150,14 +150,14 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 					if _, err := tx.Exec(
 						ctx,
 						`DELETE
-							shop_filter_product_values
+							fave_shop_filter_product_values
 						FROM
-							shop_filter_product_values
-							LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
+							fave_shop_filter_product_values
+							LEFT JOIN fave_shop_filters_values ON fave_shop_filters_values.id = fave_shop_filter_product_values.filter_value_id
 						WHERE
-							shop_filters_values.id IS NOT NULL AND
-							shop_filters_values.filter_id = ? AND
-							shop_filter_product_values.filter_value_id NOT IN (`+strings.Join(ignore_ids, ",")+`)
+							fave_shop_filters_values.id IS NOT NULL AND
+							fave_shop_filters_values.filter_id = ? AND
+							fave_shop_filter_product_values.filter_value_id NOT IN (`+strings.Join(ignore_ids, ",")+`)
 						;`,
 						utils.StrToInt(pf_id),
 					); err != nil {
@@ -165,7 +165,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 					}
 					if _, err := tx.Exec(
 						ctx,
-						`DELETE FROM shop_filters_values WHERE filter_id = ? AND id NOT IN (`+strings.Join(ignore_ids, ",")+`);`,
+						`DELETE FROM fave_shop_filters_values WHERE filter_id = ? AND id NOT IN (`+strings.Join(ignore_ids, ",")+`);`,
 						utils.StrToInt(pf_id),
 					); err != nil {
 						return err
@@ -174,13 +174,13 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 					if _, err := tx.Exec(
 						ctx,
 						`DELETE
-							shop_filter_product_values
+							fave_shop_filter_product_values
 						FROM
-							shop_filter_product_values
-							LEFT JOIN shop_filters_values ON shop_filters_values.id = shop_filter_product_values.filter_value_id
+							fave_shop_filter_product_values
+							LEFT JOIN fave_shop_filters_values ON fave_shop_filters_values.id = fave_shop_filter_product_values.filter_value_id
 						WHERE
-							shop_filters_values.id IS NOT NULL AND
-							shop_filters_values.filter_id = ?
+							fave_shop_filters_values.id IS NOT NULL AND
+							fave_shop_filters_values.filter_id = ?
 						;`,
 						utils.StrToInt(pf_id),
 					); err != nil {
@@ -188,7 +188,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 					}
 					if _, err := tx.Exec(
 						ctx,
-						`DELETE FROM shop_filters_values WHERE filter_id = ?;`,
+						`DELETE FROM fave_shop_filters_values WHERE filter_id = ?;`,
 						utils.StrToInt(pf_id),
 					); err != nil {
 						return err
@@ -200,7 +200,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 					if vid == 0 {
 						if _, err := tx.Exec(
 							ctx,
-							`INSERT INTO shop_filters_values SET
+							`INSERT INTO fave_shop_filters_values SET
 								filter_id = ?,
 								name = ?
 							;`,
@@ -212,7 +212,7 @@ func (this *Modules) RegisterAction_ShopAttributesModify() *Action {
 					} else {
 						if _, err := tx.Exec(
 							ctx,
-							`UPDATE shop_filters_values SET
+							`UPDATE fave_shop_filters_values SET
 								name = ?
 							WHERE
 								id = ? AND

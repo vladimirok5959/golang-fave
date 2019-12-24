@@ -22,30 +22,30 @@ func (this *Modules) RegisterAction_UsersDelete() *Action {
 
 		err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 			// Block rows
-			if _, err := tx.Exec(ctx, "SELECT id FROM blog_cats WHERE user = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM fave_blog_cats WHERE user = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT id FROM blog_posts WHERE user = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM fave_blog_posts WHERE user = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT id FROM pages WHERE user = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM fave_pages WHERE user = ? FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "SELECT id FROM users WHERE id = ? and id > 1 FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "SELECT id FROM fave_users WHERE id = ? and id > 1 FOR UPDATE;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 
 			// Process
-			if _, err := tx.Exec(ctx, "UPDATE blog_cats SET user = 1 WHERE user = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "UPDATE fave_blog_cats SET user = 1 WHERE user = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "UPDATE blog_posts SET user = 1 WHERE user = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "UPDATE fave_blog_posts SET user = 1 WHERE user = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "UPDATE pages SET user = 1 WHERE user = ?;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "UPDATE fave_pages SET user = 1 WHERE user = ?;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
-			if _, err := tx.Exec(ctx, "DELETE FROM users WHERE id = ? and id > 1;", utils.StrToInt(pf_id)); err != nil {
+			if _, err := tx.Exec(ctx, "DELETE FROM fave_users WHERE id = ? and id > 1;", utils.StrToInt(pf_id)); err != nil {
 				return err
 			}
 			return nil

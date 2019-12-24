@@ -34,7 +34,7 @@ func (this *Modules) shop_GetProductsListForAttaching(wrap *wrapper.Wrapper, nam
 			id,
 			name
 		FROM
-			shop_products
+			fave_shop_products
 		WHERE
 			id <> ? AND
 			parent_id IS NULL

@@ -27,7 +27,7 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 			var count int
 			if err := tx.QueryRow(
 				ctx,
-				"SELECT COUNT(*) FROM `shop_products` WHERE `id` = ? AND `parent_id` IS NULL;",
+				"SELECT COUNT(*) FROM `fave_shop_products` WHERE `id` = ? AND `parent_id` IS NULL;",
 				utils.StrToInt(pf_parent_id),
 			).Scan(&count); err != nil {
 				return err
@@ -39,7 +39,7 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 			// Check child
 			if err := tx.QueryRow(
 				ctx,
-				"SELECT COUNT(*) FROM `shop_products` WHERE `parent_id` = ?;",
+				"SELECT COUNT(*) FROM `fave_shop_products` WHERE `parent_id` = ?;",
 				utils.StrToInt(pf_product_id),
 			).Scan(&count); err != nil {
 				return err
@@ -51,7 +51,7 @@ func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 			// Attach
 			if _, err := tx.Exec(
 				ctx,
-				`UPDATE shop_products SET
+				`UPDATE fave_shop_products SET
 					parent_id = ?
 				WHERE
 					id = ? AND

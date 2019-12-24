@@ -24,7 +24,7 @@ func (this *Modules) RegisterAction_ShopCurrenciesDelete() *Action {
 			// Process
 			if _, err := tx.Exec(
 				ctx,
-				`DELETE FROM shop_currencies WHERE id = ?;`,
+				`DELETE FROM fave_shop_currencies WHERE id = ?;`,
 				utils.StrToInt(pf_id),
 			); err != nil {
 				return err

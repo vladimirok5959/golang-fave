@@ -34,7 +34,7 @@ func (this *Modules) RegisterAction_ShopImagesReorder() *Action {
 		if len(orders.Items) > 0 {
 			if err := wrap.DB.Transaction(wrap.R.Context(), func(ctx context.Context, tx *wrapper.Tx) error {
 				for _, value := range orders.Items {
-					if _, err := tx.Exec(ctx, "UPDATE shop_product_images SET ord = ? WHERE id = ?;", value.Order, value.Id); err != nil {
+					if _, err := tx.Exec(ctx, "UPDATE fave_shop_product_images SET ord = ? WHERE id = ?;", value.Order, value.Id); err != nil {
 						return err
 					}
 				}

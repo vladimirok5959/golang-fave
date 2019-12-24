@@ -40,7 +40,7 @@ func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 			`SELECT
 				id
 			FROM
-				users
+				fave_users
 			WHERE
 				email = ? and
 				password = MD5(?) and

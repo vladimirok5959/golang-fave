@@ -47,12 +47,12 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					main.rgt,
 					main.depth,
 					parent.id AS parent_id,
-					users.id,
-					users.first_name,
-					users.last_name,
-					users.email,
-					users.admin,
-					users.active
+					fave_users.id,
+					fave_users.first_name,
+					fave_users.last_name,
+					fave_users.email,
+					fave_users.admin,
+					fave_users.active
 				FROM
 					(
 						SELECT
@@ -64,8 +64,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 							node.rgt,
 							(COUNT(parent.id) - 1) AS depth
 						FROM
-							blog_cats AS node,
-							blog_cats AS parent
+							fave_blog_cats AS node,
+							fave_blog_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -83,8 +83,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 							node.rgt,
 							(COUNT(parent.id) - 0) AS depth
 						FROM
-							blog_cats AS node,
-							blog_cats AS parent
+							fave_blog_cats AS node,
+							fave_blog_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -95,7 +95,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 					parent.depth = main.depth AND
 					main.lft > parent.lft AND
 					main.rgt < parent.rgt
-					LEFT JOIN users ON users.id = main.user
+					LEFT JOIN fave_users ON fave_users.id = main.user
 				WHERE
 					main.id > 1 AND
 					main.alias = ?
@@ -147,27 +147,27 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			err := wrap.DB.QueryRow(
 				wrap.R.Context(),
 				`SELECT
-					blog_posts.id,
-					blog_posts.user,
-					blog_posts.name,
-					blog_posts.alias,
-					blog_posts.category,
-					blog_posts.briefly,
-					blog_posts.content,
-					UNIX_TIMESTAMP(blog_posts.datetime) as datetime,
-					blog_posts.active,
-					users.id,
-					users.first_name,
-					users.last_name,
-					users.email,
-					users.admin,
-					users.active
+					fave_blog_posts.id,
+					fave_blog_posts.user,
+					fave_blog_posts.name,
+					fave_blog_posts.alias,
+					fave_blog_posts.category,
+					fave_blog_posts.briefly,
+					fave_blog_posts.content,
+					UNIX_TIMESTAMP(fave_blog_posts.datetime) as datetime,
+					fave_blog_posts.active,
+					fave_users.id,
+					fave_users.first_name,
+					fave_users.last_name,
+					fave_users.email,
+					fave_users.admin,
+					fave_users.active
 				FROM
-					blog_posts
-					LEFT JOIN users ON users.id = blog_posts.user
+					fave_blog_posts
+					LEFT JOIN fave_users ON fave_users.id = fave_blog_posts.user
 				WHERE
-					blog_posts.active = 1 and
-					blog_posts.alias = ?
+					fave_blog_posts.active = 1 and
+					fave_blog_posts.alias = ?
 				LIMIT 1;`,
 				wrap.UrlArgs[1],
 			).Scan(
@@ -237,7 +237,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"blog_posts",
+				"fave_blog_posts",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -310,7 +310,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"blog_cats",
+				"fave_blog_cats",
 				"id",
 				"ASC",
 				&[]builder.DataTableRow{
@@ -374,8 +374,8 @@ func (this *Modules) RegisterModule_Blog() *Module {
 							node.alias,
 							(COUNT(parent.id) - 1) AS depth
 						FROM
-							blog_cats AS node,
-							blog_cats AS parent
+							fave_blog_cats AS node,
+							fave_blog_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt AND
 							node.id > 1
@@ -429,7 +429,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						content,
 						active
 					FROM
-						blog_posts
+						fave_blog_posts
 					WHERE
 						id = ?
 					LIMIT 1;`,
@@ -452,7 +452,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 			// All post current categories
 			var selids []int
 			if data.A_id > 0 {
-				rows, err := wrap.DB.Query(wrap.R.Context(), "SELECT category_id FROM blog_cat_post_rel WHERE post_id = ?;", data.A_id)
+				rows, err := wrap.DB.Query(wrap.R.Context(), "SELECT category_id FROM fave_blog_cat_post_rel WHERE post_id = ?;", data.A_id)
 				if err == nil {
 					defer rows.Close()
 					values := make([]int, 1)
@@ -618,7 +618,7 @@ func (this *Modules) RegisterModule_Blog() *Module {
 						lft,
 						rgt
 					FROM
-						blog_cats
+						fave_blog_cats
 					WHERE
 						id = ?
 					LIMIT 1;`,

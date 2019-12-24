@@ -41,28 +41,28 @@ func (this *Blog) load() *Blog {
 		SELECT
 			COUNT(*)
 		FROM
-			blog_posts
+			fave_blog_posts
 		WHERE
 			active = 1
 		;
 	`
 	sql_rows := `
 		SELECT
-			blog_posts.id,
-			blog_posts.user,
-			blog_posts.name,
-			blog_posts.alias,
-			blog_posts.category,
-			blog_posts.briefly,
-			blog_posts.content,
-			UNIX_TIMESTAMP(blog_posts.datetime) as datetime,
-			blog_posts.active,
-			users.id,
-			users.first_name,
-			users.last_name,
-			users.email,
-			users.admin,
-			users.active,
+			fave_blog_posts.id,
+			fave_blog_posts.user,
+			fave_blog_posts.name,
+			fave_blog_posts.alias,
+			fave_blog_posts.category,
+			fave_blog_posts.briefly,
+			fave_blog_posts.content,
+			UNIX_TIMESTAMP(fave_blog_posts.datetime) as datetime,
+			fave_blog_posts.active,
+			fave_users.id,
+			fave_users.first_name,
+			fave_users.last_name,
+			fave_users.email,
+			fave_users.admin,
+			fave_users.active,
 			cats.id,
 			cats.user,
 			cats.name,
@@ -72,8 +72,8 @@ func (this *Blog) load() *Blog {
 			cats.depth,
 			cats.parent_id
 		FROM
-			blog_posts
-			LEFT JOIN users ON users.id = blog_posts.user
+			fave_blog_posts
+			LEFT JOIN fave_users ON fave_users.id = fave_blog_posts.user
 			LEFT JOIN (
 				SELECT
 					main.id,
@@ -95,8 +95,8 @@ func (this *Blog) load() *Blog {
 							node.rgt,
 							(COUNT(parent.id) - 1) AS depth
 						FROM
-							blog_cats AS node,
-							blog_cats AS parent
+							fave_blog_cats AS node,
+							fave_blog_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -114,8 +114,8 @@ func (this *Blog) load() *Blog {
 							node.rgt,
 							(COUNT(parent.id) - 0) AS depth
 						FROM
-							blog_cats AS node,
-							blog_cats AS parent
+							fave_blog_cats AS node,
+							fave_blog_cats AS parent
 						WHERE
 							node.lft BETWEEN parent.lft AND parent.rgt
 						GROUP BY
@@ -130,11 +130,11 @@ func (this *Blog) load() *Blog {
 					main.id > 1
 				ORDER BY
 					main.lft ASC
-			) AS cats ON cats.id = blog_posts.category
+			) AS cats ON cats.id = fave_blog_posts.category
 		WHERE
-			blog_posts.active = 1
+			fave_blog_posts.active = 1
 		ORDER BY
-			blog_posts.id DESC
+			fave_blog_posts.id DESC
 		LIMIT ?, ?;
 	`
 
@@ -146,8 +146,8 @@ func (this *Blog) load() *Blog {
 			`SELECT
 				node.id
 			FROM
-				blog_cats AS node,
-				blog_cats AS parent
+				fave_blog_cats AS node,
+				fave_blog_cats AS parent
 			WHERE
 				node.lft BETWEEN parent.lft AND parent.rgt AND
 				node.id > 1 AND
@@ -175,33 +175,33 @@ func (this *Blog) load() *Blog {
 					SELECT
 						COUNT(*)
 					FROM
-						blog_posts
-						LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
+						fave_blog_posts
+						LEFT JOIN fave_blog_cat_post_rel ON fave_blog_cat_post_rel.post_id = fave_blog_posts.id
 					WHERE
-						blog_posts.active = 1 AND
-						blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
+						fave_blog_posts.active = 1 AND
+						fave_blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 					GROUP BY
-						blog_posts.id
+						fave_blog_posts.id
 				) AS tbl
 			;
 		`
 		sql_rows = `
 			SELECT
-				blog_posts.id,
-				blog_posts.user,
-				blog_posts.name,
-				blog_posts.alias,
-				blog_posts.category,
-				blog_posts.briefly,
-				blog_posts.content,
-				UNIX_TIMESTAMP(blog_posts.datetime) AS datetime,
-				blog_posts.active,
-				users.id,
-				users.first_name,
-				users.last_name,
-				users.email,
-				users.admin,
-				users.active,
+				fave_blog_posts.id,
+				fave_blog_posts.user,
+				fave_blog_posts.name,
+				fave_blog_posts.alias,
+				fave_blog_posts.category,
+				fave_blog_posts.briefly,
+				fave_blog_posts.content,
+				UNIX_TIMESTAMP(fave_blog_posts.datetime) AS datetime,
+				fave_blog_posts.active,
+				fave_users.id,
+				fave_users.first_name,
+				fave_users.last_name,
+				fave_users.email,
+				fave_users.admin,
+				fave_users.active,
 				cats.id,
 				cats.user,
 				cats.name,
@@ -211,9 +211,9 @@ func (this *Blog) load() *Blog {
 				cats.depth,
 				cats.parent_id
 			FROM
-				blog_posts
-				LEFT JOIN blog_cat_post_rel ON blog_cat_post_rel.post_id = blog_posts.id
-				LEFT JOIN users ON users.id = blog_posts.user
+				fave_blog_posts
+				LEFT JOIN fave_blog_cat_post_rel ON fave_blog_cat_post_rel.post_id = fave_blog_posts.id
+				LEFT JOIN fave_users ON fave_users.id = fave_blog_posts.user
 				LEFT JOIN (
 					SELECT
 						main.id,
@@ -235,8 +235,8 @@ func (this *Blog) load() *Blog {
 								node.rgt,
 								(COUNT(parent.id) - 1) AS depth
 							FROM
-								blog_cats AS node,
-								blog_cats AS parent
+								fave_blog_cats AS node,
+								fave_blog_cats AS parent
 							WHERE
 								node.lft BETWEEN parent.lft AND parent.rgt
 							GROUP BY
@@ -254,8 +254,8 @@ func (this *Blog) load() *Blog {
 								node.rgt,
 								(COUNT(parent.id) - 0) AS depth
 							FROM
-								blog_cats AS node,
-								blog_cats AS parent
+								fave_blog_cats AS node,
+								fave_blog_cats AS parent
 							WHERE
 								node.lft BETWEEN parent.lft AND parent.rgt
 							GROUP BY
@@ -270,15 +270,15 @@ func (this *Blog) load() *Blog {
 						main.id > 1
 					ORDER BY
 						main.lft ASC
-				) AS cats ON cats.id = blog_posts.category
+				) AS cats ON cats.id = fave_blog_posts.category
 			WHERE
-				blog_posts.active = 1 AND
-				blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
+				fave_blog_posts.active = 1 AND
+				fave_blog_cat_post_rel.category_id IN (` + strings.Join(cat_ids, ", ") + `)
 			GROUP BY
-				blog_posts.id,
+				fave_blog_posts.id,
 				cats.parent_id
 			ORDER BY
-				blog_posts.id DESC
+				fave_blog_posts.id DESC
 			LIMIT ?, ?;
 		`
 	}
@@ -451,8 +451,8 @@ func (this *Blog) preload_cats() {
 						node.rgt,
 						(COUNT(parent.id) - 1) AS depth
 					FROM
-						blog_cats AS node,
-						blog_cats AS parent
+						fave_blog_cats AS node,
+						fave_blog_cats AS parent
 					WHERE
 						node.lft BETWEEN parent.lft AND parent.rgt
 					GROUP BY
@@ -470,8 +470,8 @@ func (this *Blog) preload_cats() {
 						node.rgt,
 						(COUNT(parent.id) - 0) AS depth
 					FROM
-						blog_cats AS node,
-						blog_cats AS parent
+						fave_blog_cats AS node,
+						fave_blog_cats AS parent
 					WHERE
 						node.lft BETWEEN parent.lft AND parent.rgt
 					GROUP BY

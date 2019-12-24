@@ -37,7 +37,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 			`SELECT
 				COUNT(*)
 			FROM
-				users
+				fave_users
 			;`,
 		).Scan(
 			&count,
@@ -53,7 +53,7 @@ func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 
 		_, err = wrap.DB.Exec(
 			wrap.R.Context(),
-			`INSERT INTO users SET
+			`INSERT INTO fave_users SET
 				id = 1,
 				first_name = ?,
 				last_name = ?,

@@ -31,28 +31,28 @@ func (this *Modules) RegisterModule_Index() *Module {
 		err := wrap.DB.QueryRow(
 			wrap.R.Context(),
 			`SELECT
-				pages.id,
-				pages.user,
-				pages.name,
-				pages.alias,
-				pages.content,
-				pages.meta_title,
-				pages.meta_keywords,
-				pages.meta_description,
-				UNIX_TIMESTAMP(pages.datetime) as datetime,
-				pages.active,
-				users.id,
-				users.first_name,
-				users.last_name,
-				users.email,
-				users.admin,
-				users.active
+				fave_pages.id,
+				fave_pages.user,
+				fave_pages.name,
+				fave_pages.alias,
+				fave_pages.content,
+				fave_pages.meta_title,
+				fave_pages.meta_keywords,
+				fave_pages.meta_description,
+				UNIX_TIMESTAMP(fave_pages.datetime) as datetime,
+				fave_pages.active,
+				fave_users.id,
+				fave_users.first_name,
+				fave_users.last_name,
+				fave_users.email,
+				fave_users.admin,
+				fave_users.active
 			FROM
-				pages
-				LEFT JOIN users ON users.id = pages.user
+				fave_pages
+				LEFT JOIN fave_users ON fave_users.id = fave_pages.user
 			WHERE
-				pages.active = 1 and
-				pages.alias = ?
+				fave_pages.active = 1 and
+				fave_pages.alias = ?
 			LIMIT 1;`,
 			wrap.R.URL.Path,
 		).Scan(
@@ -101,7 +101,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 			})
 			content += builder.DataTable(
 				wrap,
-				"pages",
+				"fave_pages",
 				"id",
 				"DESC",
 				&[]builder.DataTableRow{
@@ -211,7 +211,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 						meta_description,
 						active
 					FROM
-						pages
+						fave_pages
 					WHERE
 						id = ?
 					LIMIT 1;`,

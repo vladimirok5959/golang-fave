@@ -47,8 +47,8 @@ func (this *ShopCategory) load(cache *map[int]*utils.MySql_shop_category) *ShopC
 					node.rgt,
 					(COUNT(parent.id) - 1) AS depth
 				FROM
-					shop_cats AS node,
-					shop_cats AS parent
+					fave_shop_cats AS node,
+					fave_shop_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY
@@ -66,8 +66,8 @@ func (this *ShopCategory) load(cache *map[int]*utils.MySql_shop_category) *ShopC
 					node.rgt,
 					(COUNT(parent.id) - 0) AS depth
 				FROM
-					shop_cats AS node,
-					shop_cats AS parent
+					fave_shop_cats AS node,
+					fave_shop_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY
@@ -137,8 +137,8 @@ func (this *ShopCategory) loadById(id int) {
 					node.rgt,
 					(COUNT(parent.id) - 1) AS depth
 				FROM
-					shop_cats AS node,
-					shop_cats AS parent
+					fave_shop_cats AS node,
+					fave_shop_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY
@@ -156,8 +156,8 @@ func (this *ShopCategory) loadById(id int) {
 					node.rgt,
 					(COUNT(parent.id) - 0) AS depth
 				FROM
-					shop_cats AS node,
-					shop_cats AS parent
+					fave_shop_cats AS node,
+					fave_shop_cats AS parent
 				WHERE
 					node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY
