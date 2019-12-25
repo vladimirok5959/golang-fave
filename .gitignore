@@ -36,7 +36,6 @@
 /hosts/localhost/config/config.json
 
 # Skip cypress libs folder
-/cypress/screenshots
-/cypress/videos
+/support/cypress/screenshots
+/support/cypress/videos
 /support/node_modules
-/yarn.lock
