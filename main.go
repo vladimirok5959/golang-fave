@@ -60,10 +60,10 @@ func main() {
 	}
 
 	// Init logger
-	lg := logger.New()
+	logs := logger.New()
 
 	// Attach www dir to logger
-	lg.SetWwwDir(consts.ParamWwwDir)
+	logs.SetWwwDir(consts.ParamWwwDir)
 
 	// MySQL connections pool
 	mpool := mysqlpool.New()
@@ -126,9 +126,9 @@ func main() {
 		r.URL.Scheme = "http"
 
 		// Convert
-		var lg *logger.Logger
+		var logs *logger.Logger
 		if v, ok := (*o)[0].(*logger.Logger); ok {
-			lg = v
+			logs = v
 		}
 
 		var mpool *mysqlpool.MySqlPool
@@ -257,7 +257,7 @@ func main() {
 			if engine.Response(
 				mpool,
 				sb,
-				lg,
+				logs,
 				mods,
 				w,
 				r,
@@ -323,8 +323,8 @@ func main() {
 			}
 		}
 
-		if lg, ok := (*o)[0].(*logger.Logger); ok {
-			lg.Close()
+		if logs, ok := (*o)[0].(*logger.Logger); ok {
+			logs.Close()
 		}
 
 		if len(errs) > 0 {
@@ -337,7 +337,7 @@ func main() {
 	// Start server
 	bootstrap.Start(
 		&bootstrap.Opts{
-			Handle:   lg.Handler,
+			Handle:   logs.Handler,
 			Host:     server_address,
 			Path:     consts.AssetsPath,
 			Cbserv:   server_params,
@@ -346,7 +346,7 @@ func main() {
 			Timeout:  8 * time.Second,
 			Shutdown: shutdown,
 			Objects: &[]bootstrap.Iface{
-				lg,
+				logs,
 				mpool,
 				wSessCl,
 				wImageGen,
