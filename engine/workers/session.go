@@ -4,6 +4,7 @@ import (
 	"context"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 
 	"golang-fave/engine/utils"
@@ -35,7 +36,7 @@ func session_clean(ctx context.Context, www_dir string) {
 			case <-ctx.Done():
 				return
 			default:
-				tmpdir := www_dir + string(os.PathSeparator) + file.Name() + string(os.PathSeparator) + "tmp"
+				tmpdir := strings.Join([]string{www_dir, file.Name(), "tmp"}, string(os.PathSeparator))
 				if utils.IsDirExists(tmpdir) {
 					session.Clean(tmpdir)
 				}
