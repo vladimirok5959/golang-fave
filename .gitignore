@@ -38,5 +38,5 @@
 # Skip cypress libs folder
 /cypress/screenshots
 /cypress/videos
-/node_modules
+/support/node_modules
 /yarn.lock
