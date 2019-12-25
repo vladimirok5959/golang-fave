@@ -52,6 +52,7 @@ func main() {
 
 	// Run database migration
 	// TODO: something need here for migration
+	// Something for context
 	ctx := context.Background()
 	if err := support.New().Migration(ctx, consts.ParamWwwDir); err != nil {
 		fmt.Printf("[ERROR] MIGRATION FAILED: %s\n", err)
