@@ -237,7 +237,7 @@ func main() {
 			return
 		}
 
-		// Robots.txt and styles.css from template dir
+		// robots.txt, styles.css and scripts.js from templates dir
 		if ServeTemplateFile(w, r, "robots.txt", "", vhost_dir_template) {
 			return
 		}
