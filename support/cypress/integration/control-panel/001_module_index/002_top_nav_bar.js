@@ -48,6 +48,10 @@ context('Top navigation bar', () => {
     cy.contains('#navbarCollapse ul.navbar-nav li.nav-item a.nav-link', 'example@example.com').click();
     cy.contains('#navbarCollapse ul.navbar-nav li.nav-item a.nav-link', 'example@example.com').parent().find('.dropdown-menu').contains('a.dropdown-item', 'My profile').click();
     cy.get('#sys-modal-user-settings').should('exist');
+    cy.get('#sys-modal-user-settings form input[name=first_name]').clear();
+    cy.wait(500);
+    cy.get('#sys-modal-user-settings form input[name=last_name]').clear();
+    cy.wait(500);
     cy.get('#sys-modal-user-settings form input[name=first_name]').clear().type('FirstNew');
     cy.get('#sys-modal-user-settings form input[name=last_name]').clear().type('LastNew');
     cy.get('#sys-modal-user-settings form button[type=submit].btn').click();
