@@ -52,11 +52,11 @@ func main() {
 	}
 
 	// Run database migration
-	// TODO: something need here for migration
-	// Something for context
-	ctx := context.Background()
-	if err := support.New().Migration(ctx, consts.ParamWwwDir); err != nil {
-		fmt.Printf("[ERROR] MIGRATION FAILED: %s\n", err)
+	if err := support.New().
+		Migration(context.Background(), consts.ParamWwwDir); err != nil {
+		fmt.Printf("[MIGRATION] FAILED: %s\n", err)
+	} else {
+		fmt.Printf("[MIGRATION] DONE!\n")
 	}
 
 	// Init logger

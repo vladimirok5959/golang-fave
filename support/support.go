@@ -2,6 +2,7 @@ package support
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -33,6 +34,7 @@ func (this *Support) isSettingsTableDoesntExist(err error) bool {
 }
 
 func (this *Support) Migration(ctx context.Context, dir string) error {
+	fmt.Printf("[MIGRATION] PLEASE WAIT UNTIL THIS WILL BE DONE!\n")
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return err
