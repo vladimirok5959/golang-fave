@@ -91,8 +91,8 @@ func main() {
 	mods := modules.New()
 
 	// Shop basket
-	sb := basket.New()
-	wBasketCl := workers.BasketCleaner(sb)
+	shopBasket := basket.New()
+	wBasketCl := workers.BasketCleaner(shopBasket)
 
 	// Init cache blocks
 	cbs := cblocks.New()
@@ -151,9 +151,9 @@ func main() {
 			mods = v
 		}
 
-		var sb *basket.Basket
+		var shopBasket *basket.Basket
 		if v, ok := (*o)[9].(*basket.Basket); ok {
-			sb = v
+			shopBasket = v
 		}
 
 		// Mounted assets
@@ -256,7 +256,7 @@ func main() {
 		if mpool != nil {
 			if engine.Response(
 				mpool,
-				sb,
+				shopBasket,
 				logs,
 				mods,
 				w,
@@ -355,7 +355,7 @@ func main() {
 				res,
 				stat,
 				mods,
-				sb,
+				shopBasket,
 				wBasketCl,
 			},
 		},
