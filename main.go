@@ -90,8 +90,7 @@ func main() {
 
 	// Shop basket
 	sb := basket.New()
-	sb_cl_ch, sb_cl_stop := basket_clean_start(sb)
-	defer basket_clean_stop(sb_cl_ch, sb_cl_stop)
+	wBasketCl := basket_cleaner(sb)
 
 	// Init cache blocks
 	cbs := cblocks.New()
@@ -149,7 +148,11 @@ func main() {
 		if v, ok := (*o)[8].(*modules.Modules); ok {
 			mods = v
 		}
-		// ---
+
+		var sb *basket.Basket
+		if v, ok := (*o)[9].(*basket.Basket); ok {
+			sb = v
+		}
 
 		// Mounted assets
 		if res.Response(
@@ -282,7 +285,12 @@ func main() {
 	) error {
 		var errs []string
 
-		// ---
+		if wBasketCl, ok := (*o)[10].(*worker.Worker); ok {
+			if err := wBasketCl.Shutdown(ctx); err != nil {
+				errs = append(errs, fmt.Sprintf("(%T): %s", wBasketCl, err.Error()))
+			}
+		}
+
 		if wSmtpSnd, ok := (*o)[5].(*worker.Worker); ok {
 			if err := wSmtpSnd.Shutdown(ctx); err != nil {
 				errs = append(errs, fmt.Sprintf("(%T): %s", wSmtpSnd, err.Error()))
@@ -316,7 +324,6 @@ func main() {
 		if lg, ok := (*o)[0].(*logger.Logger); ok {
 			lg.Close()
 		}
-		// ---
 
 		if len(errs) > 0 {
 			return errors.New("Shutdown callback: " + strings.Join(errs, ", "))
@@ -346,6 +353,8 @@ func main() {
 				res,
 				stat,
 				mods,
+				sb,
+				wBasketCl,
 			},
 		},
 	)
