@@ -20,6 +20,7 @@ import (
 	"golang-fave/engine/modules"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/utils"
+	"golang-fave/engine/workers"
 	"golang-fave/support"
 
 	"github.com/vladimirok5959/golang-server-bootstrap/bootstrap"
@@ -68,16 +69,16 @@ func main() {
 	mpool := mysqlpool.New()
 
 	// Session cleaner
-	wSessCl := session_cleaner(consts.ParamWwwDir)
+	wSessCl := workers.SessionCleaner(consts.ParamWwwDir)
 
 	// Image processing
-	wImageGen := image_generator(consts.ParamWwwDir)
+	wImageGen := workers.ImageGenerator(consts.ParamWwwDir)
 
 	// Xml generation
-	wXmlGen := xml_generator(consts.ParamWwwDir, mpool)
+	wXmlGen := workers.XmlGenerator(consts.ParamWwwDir, mpool)
 
 	// SMTP sender
-	wSmtpSnd := smtp_sender(consts.ParamWwwDir, mpool)
+	wSmtpSnd := workers.SmtpSender(consts.ParamWwwDir, mpool)
 
 	// Init mounted resources
 	res := resource.New()
@@ -91,7 +92,7 @@ func main() {
 
 	// Shop basket
 	sb := basket.New()
-	wBasketCl := basket_cleaner(sb)
+	wBasketCl := workers.BasketCleaner(sb)
 
 	// Init cache blocks
 	cbs := cblocks.New()

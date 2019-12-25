@@ -1,4 +1,4 @@
-package main
+package workers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func basket_cleaner(sb *basket.Basket) *worker.Worker {
+func BasketCleaner(sb *basket.Basket) *worker.Worker {
 	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
 		select {
 		case <-ctx.Done():

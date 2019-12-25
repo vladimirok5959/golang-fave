@@ -1,4 +1,4 @@
-package main
+package workers
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func smtp_sender(www_dir string, mp *mysqlpool.MySqlPool) *worker.Worker {
+func SmtpSender(www_dir string, mp *mysqlpool.MySqlPool) *worker.Worker {
 	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
 		if www_dir, ok := (*o)[0].(string); ok {
 			if mp, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {
@@ -79,7 +79,7 @@ func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 			subject,
 			message
 		FROM
-			notify_mail
+			fave_notify_mail
 		WHERE
 			status = 2
 		ORDER BY
@@ -98,7 +98,7 @@ func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 			if err == nil {
 				if _, err := db.Exec(
 					ctx,
-					`UPDATE notify_mail SET status = 3 WHERE id = ?;`,
+					`UPDATE fave_notify_mail SET status = 3 WHERE id = ?;`,
 					utils.StrToInt(string(values[0])),
 				); err == nil {
 					go func(db *sqlw.DB, conf *config.Config, id int, subject, msg string, receivers []string) {
@@ -114,7 +114,7 @@ func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 						); err == nil {
 							if _, err := db.Exec(
 								ctx,
-								`UPDATE notify_mail SET status = 1 WHERE id = ?;`,
+								`UPDATE fave_notify_mail SET status = 1 WHERE id = ?;`,
 								id,
 							); err != nil {
 								fmt.Printf("Smtp send error (sql, success): %v\n", err)
@@ -122,7 +122,7 @@ func smtp_prepare(ctx context.Context, db *sqlw.DB, conf *config.Config) {
 						} else {
 							if _, err := db.Exec(
 								ctx,
-								`UPDATE notify_mail SET error = ?, status = 0 WHERE id = ?;`,
+								`UPDATE fave_notify_mail SET error = ?, status = 0 WHERE id = ?;`,
 								err.Error(),
 								id,
 							); err != nil {

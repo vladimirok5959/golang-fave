@@ -1,4 +1,4 @@
-package main
+package workers
 
 import (
 	"context"
@@ -18,7 +18,7 @@ import (
 	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func image_generator(www_dir string) *worker.Worker {
+func ImageGenerator(www_dir string) *worker.Worker {
 	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
 		if www_dir, ok := (*o)[0].(string); ok {
 			image_loop(ctx, www_dir)

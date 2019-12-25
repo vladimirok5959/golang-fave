@@ -1,4 +1,4 @@
-package main
+package workers
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func xml_generator(www_dir string, mp *mysqlpool.MySqlPool) *worker.Worker {
+func XmlGenerator(www_dir string, mp *mysqlpool.MySqlPool) *worker.Worker {
 	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
 		if www_dir, ok := (*o)[0].(string); ok {
 			if mp, ok := (*o)[1].(*mysqlpool.MySqlPool); ok {

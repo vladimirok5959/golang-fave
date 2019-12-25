@@ -1,4 +1,4 @@
-package main
+package workers
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"github.com/vladimirok5959/golang-worker/worker"
 )
 
-func session_cleaner(www_dir string) *worker.Worker {
+func SessionCleaner(www_dir string) *worker.Worker {
 	return worker.New(func(ctx context.Context, w *worker.Worker, o *[]worker.Iface) {
 		if www_dir, ok := (*o)[0].(string); ok {
 			session_clean(ctx, www_dir)
