@@ -81,6 +81,13 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					},
 				},
 				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Maintenance",
+					Name:    "maintenance",
+					Value:   utils.IntToStr((*wrap.Config).Engine.Maintenance),
+					Hint:    "Close web site for maintenance",
+				},
+				{
 					Kind:   builder.DFKSubmit,
 					Value:  "Save",
 					Target: "add-edit-button",

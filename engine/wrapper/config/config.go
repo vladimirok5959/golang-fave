@@ -7,7 +7,8 @@ import (
 
 type Config struct {
 	Engine struct {
-		MainModule int
+		MainModule  int
+		Maintenance int
 	}
 	Blog struct {
 		Pagination struct {
@@ -81,6 +82,7 @@ func ConfigNew() *Config {
 
 func (this *Config) configDefault() {
 	this.Engine.MainModule = 0
+	this.Engine.Maintenance = 0
 
 	this.Blog.Pagination.Index = 5
 	this.Blog.Pagination.Category = 5
