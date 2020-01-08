@@ -1109,7 +1109,7 @@ func (this *Modules) RegisterModule_Shop() *Module {
 							fave_shop_orders.client_delivery_comment,
 							fave_shop_orders.client_order_comment,
 							fave_shop_orders.status,
-							fave_shop_order_total.total
+							shop_order_total.total
 						FROM
 							fave_shop_orders
 							LEFT JOIN (
