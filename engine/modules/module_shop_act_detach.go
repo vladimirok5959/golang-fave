@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopDetach() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-detach",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_UsersDelete() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "users-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

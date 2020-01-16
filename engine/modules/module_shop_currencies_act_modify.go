@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopCurrenciesModify() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-currencies-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

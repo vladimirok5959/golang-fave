@@ -12,7 +12,6 @@ import (
 
 func (this *Modules) RegisterModule_Users() *Module {
 	return this.newModule(MInfo{
-		WantDB: true,
 		Mount:  "users",
 		Name:   "Users",
 		Order:  800,

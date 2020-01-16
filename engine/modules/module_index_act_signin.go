@@ -8,8 +8,7 @@ import (
 
 func (this *Modules) RegisterAction_IndexUserSignIn() *Action {
 	return this.newAction(AInfo{
-		WantDB: true,
-		Mount:  "index-user-sign-in",
+		Mount: "index-user-sign-in",
 	}, func(wrap *wrapper.Wrapper) {
 		pf_email := utils.Trim(wrap.R.FormValue("email"))
 		pf_password := utils.Trim(wrap.R.FormValue("password"))

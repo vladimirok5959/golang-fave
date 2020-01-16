@@ -167,7 +167,6 @@ func (this *Modules) shop_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 func (this *Modules) RegisterAction_ShopCategoriesModify() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-categories-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

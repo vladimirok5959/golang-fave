@@ -10,7 +10,6 @@ import (
 
 func (this *Modules) RegisterAction_TemplateEditThemeFile() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "template-edit-theme-file",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

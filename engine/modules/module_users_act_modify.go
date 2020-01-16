@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_UsersModify() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "users-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -11,7 +11,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopModify() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

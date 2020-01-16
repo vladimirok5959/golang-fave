@@ -167,7 +167,6 @@ func (this *Modules) blog_ActionCategoryUpdate(wrap *wrapper.Wrapper, pf_id, pf_
 
 func (this *Modules) RegisterAction_BlogCategoriesModify() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "blog-categories-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

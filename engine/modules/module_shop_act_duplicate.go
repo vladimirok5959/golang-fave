@@ -10,7 +10,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopDuplicate() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-duplicate",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

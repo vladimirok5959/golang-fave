@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopGetAttributeValues() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-get-attribute-values",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

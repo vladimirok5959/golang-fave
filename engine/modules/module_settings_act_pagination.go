@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_SettingsPagination() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "settings-pagination",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

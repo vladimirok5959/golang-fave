@@ -11,8 +11,7 @@ import (
 
 func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 	return this.newAction(AInfo{
-		WantDB: false,
-		Mount:  "index-mysql-setup",
+		Mount: "index-mysql-setup",
 	}, func(wrap *wrapper.Wrapper) {
 		pf_host := utils.Trim(wrap.R.FormValue("host"))
 		pf_port := utils.Trim(wrap.R.FormValue("port"))

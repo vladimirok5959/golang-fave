@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_IndexModify() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "index-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

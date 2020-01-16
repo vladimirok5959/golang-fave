@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_IndexDelete() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "index-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -16,7 +16,6 @@ import (
 
 func (this *Modules) RegisterModule_Blog() *Module {
 	return this.newModule(MInfo{
-		WantDB: true,
 		Mount:  "blog",
 		Name:   "Blog",
 		Order:  1,

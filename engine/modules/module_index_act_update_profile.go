@@ -7,7 +7,6 @@ import (
 
 func (this *Modules) RegisterAction_IndexUserUpdateProfile() *Action {
 	return this.newAction(AInfo{
-		WantDB:   true,
 		Mount:    "index-user-update-profile",
 		WantUser: true,
 	}, func(wrap *wrapper.Wrapper) {

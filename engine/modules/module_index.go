@@ -14,11 +14,10 @@ import (
 
 func (this *Modules) RegisterModule_Index() *Module {
 	return this.newModule(MInfo{
-		WantDB: true,
-		Mount:  "index",
-		Name:   "Pages",
-		Order:  0,
-		Icon:   assets.SysSvgIconPage,
+		Mount: "index",
+		Name:  "Pages",
+		Order: 0,
+		Icon:  assets.SysSvgIconPage,
 		Sub: &[]MISub{
 			{Mount: "default", Name: "List of pages", Show: true, Icon: assets.SysSvgIconList},
 			{Mount: "add", Name: "Add new page", Show: true, Icon: assets.SysSvgIconPlus},

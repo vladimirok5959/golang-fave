@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopOrderSetStatus() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-order-set-status",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

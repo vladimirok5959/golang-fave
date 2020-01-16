@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopDelete() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

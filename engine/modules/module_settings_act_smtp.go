@@ -7,7 +7,6 @@ import (
 
 func (this *Modules) RegisterAction_SettingsSmtp() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "settings-smtp",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

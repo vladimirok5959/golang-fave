@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_BlogCategoriesDelete() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "blog-categories-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -14,7 +14,6 @@ import (
 
 func (this *Modules) RegisterModule_Settings() *Module {
 	return this.newModule(MInfo{
-		WantDB: false,
 		Mount:  "settings",
 		Name:   "Settings",
 		Order:  801,

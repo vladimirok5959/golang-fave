@@ -34,7 +34,6 @@ func (this *Modules) template_GetThemeFiles(wrap *wrapper.Wrapper) []string {
 
 func (this *Modules) RegisterModule_Template() *Module {
 	return this.newModule(MInfo{
-		WantDB: false,
 		Mount:  "template",
 		Name:   "Template",
 		Order:  802,

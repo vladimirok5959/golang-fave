@@ -7,7 +7,6 @@ import (
 
 func (this *Modules) RegisterAction_SettingsGeneral() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "settings-general",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

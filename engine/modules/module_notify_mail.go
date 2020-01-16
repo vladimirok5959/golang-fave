@@ -13,7 +13,6 @@ import (
 
 func (this *Modules) RegisterModule_NotifyMail() *Module {
 	return this.newModule(MInfo{
-		WantDB: true,
 		Mount:  "notify-mail",
 		Name:   "Mail notifier",
 		Order:  803,

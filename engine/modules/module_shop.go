@@ -338,7 +338,6 @@ func (this *Modules) shop_GetOrderStatus(status int) string {
 
 func (this *Modules) RegisterModule_Shop() *Module {
 	return this.newModule(MInfo{
-		WantDB: true,
 		Mount:  "shop",
 		Name:   "Shop",
 		Order:  2,

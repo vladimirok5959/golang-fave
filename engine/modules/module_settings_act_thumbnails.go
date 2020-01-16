@@ -9,7 +9,6 @@ import (
 
 func (this *Modules) RegisterAction_SettingsThumbnails() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "settings-thumbnails",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

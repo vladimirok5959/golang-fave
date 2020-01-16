@@ -19,7 +19,6 @@ type Orders struct {
 
 func (this *Modules) RegisterAction_ShopImagesReorder() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-images-reorder",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

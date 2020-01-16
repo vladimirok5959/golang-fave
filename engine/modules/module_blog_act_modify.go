@@ -11,7 +11,6 @@ import (
 
 func (this *Modules) RegisterAction_BlogModify() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "blog-modify",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -7,8 +7,7 @@ import (
 
 func (this *Modules) RegisterAction_IndexFirstUser() *Action {
 	return this.newAction(AInfo{
-		WantDB: true,
-		Mount:  "index-first-user",
+		Mount: "index-first-user",
 	}, func(wrap *wrapper.Wrapper) {
 		pf_first_name := utils.Trim(wrap.R.FormValue("first_name"))
 		pf_last_name := utils.Trim(wrap.R.FormValue("last_name"))

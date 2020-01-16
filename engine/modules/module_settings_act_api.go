@@ -7,7 +7,6 @@ import (
 
 func (this *Modules) RegisterAction_SettingsApi() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "settings-api",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -11,7 +11,6 @@ import (
 
 func (this *Modules) RegisterAction_TemplateRestoreFile() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "template-restore-file",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

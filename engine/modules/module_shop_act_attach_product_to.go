@@ -10,7 +10,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopAttachProductTo() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-attach-product-to",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

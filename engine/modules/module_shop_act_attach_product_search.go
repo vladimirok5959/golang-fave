@@ -66,7 +66,6 @@ func (this *Modules) shop_GetProductsListForAttaching(wrap *wrapper.Wrapper, nam
 
 func (this *Modules) RegisterAction_ShopAttachProductSearch() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-attach-product-search",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

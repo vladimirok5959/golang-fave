@@ -12,7 +12,6 @@ import (
 
 func (this *Modules) RegisterModule_Api() *Module {
 	return this.newModule(MInfo{
-		WantDB: true,
 		Mount:  "api",
 		Name:   "Api",
 		Order:  803,

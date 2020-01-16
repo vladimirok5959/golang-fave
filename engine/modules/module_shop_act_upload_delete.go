@@ -10,7 +10,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopUploadDelete() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-upload-delete",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -6,7 +6,6 @@ import (
 
 func (this *Modules) RegisterAction_IndexUserLogout() *Action {
 	return this.newAction(AInfo{
-		WantDB:   true,
 		Mount:    "index-user-logout",
 		WantUser: true,
 	}, func(wrap *wrapper.Wrapper) {

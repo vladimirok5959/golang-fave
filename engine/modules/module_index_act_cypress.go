@@ -10,8 +10,7 @@ import (
 
 func (this *Modules) RegisterAction_IndexCypressReset() *Action {
 	return this.newAction(AInfo{
-		WantDB: false,
-		Mount:  "index-cypress-reset",
+		Mount: "index-cypress-reset",
 	}, func(wrap *wrapper.Wrapper) {
 		if !consts.ParamDebug {
 			wrap.Write(`Access denied`)

@@ -19,7 +19,6 @@ import (
 
 func (this *Modules) RegisterAction_ShopUploadImage() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "shop-upload-image",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {

@@ -7,7 +7,6 @@ import (
 
 func (this *Modules) RegisterAction_SettingsShop() *Action {
 	return this.newAction(AInfo{
-		WantDB:    true,
 		Mount:     "settings-shop",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
