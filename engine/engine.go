@@ -62,12 +62,19 @@ func (this *Engine) Process() bool {
 		return true
 	}
 
+	// Check for MySQL connection
+	err := this.Wrap.UseDatabase()
+	if err != nil {
+		utils.SystemErrorPageEngine(this.Wrap.W, err)
+		return true
+	}
+
 	// Separated logic
 	if !this.Wrap.IsBackend {
 		// Maintenance mode
 		if this.Wrap.Config.Engine.Maintenance != 0 {
 			if this.Wrap.User == nil {
-				this.Wrap.UseDatabase()
+				// this.Wrap.UseDatabase()
 				this.Wrap.LoadSessionUser()
 			}
 			if this.Wrap.User == nil {
@@ -86,13 +93,6 @@ func (this *Engine) Process() bool {
 
 		// Render frontend
 		return this.Mods.XXXFrontEnd(this.Wrap)
-	}
-
-	// Backend must use MySQL anyway, so, check and connect
-	err := this.Wrap.UseDatabase()
-	if err != nil {
-		utils.SystemErrorPageEngine(this.Wrap.W, err)
-		return true
 	}
 
 	// Show login page if need

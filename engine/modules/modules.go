@@ -296,14 +296,14 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 			}
 			if name != "" {
 				if act, ok := this.acts[name]; ok {
-					if act.Info.WantDB {
-						err := wrap.UseDatabase()
-						if err != nil {
-							this.XXXActionHeaders(wrap, http.StatusNotFound)
-							wrap.MsgError(err.Error())
-							return true
-						}
-					}
+					// if act.Info.WantDB {
+					// 	err := wrap.UseDatabase()
+					// 	if err != nil {
+					// 		this.XXXActionHeaders(wrap, http.StatusNotFound)
+					// 		wrap.MsgError(err.Error())
+					// 		return true
+					// 	}
+					// }
 					if act.Info.WantUser || act.Info.WantAdmin {
 						if !wrap.LoadSessionUser() {
 							this.XXXActionHeaders(wrap, http.StatusNotFound)
@@ -344,13 +344,13 @@ func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 	if mod != nil {
 		wrap.CurrModule = cm
 		if mod.Front != nil {
-			if mod.Info.WantDB {
-				err := wrap.UseDatabase()
-				if err != nil {
-					utils.SystemErrorPageEngine(wrap.W, err)
-					return true
-				}
-			}
+			// if mod.Info.WantDB {
+			// 	err := wrap.UseDatabase()
+			// 	if err != nil {
+			// 		utils.SystemErrorPageEngine(wrap.W, err)
+			// 		return true
+			// 	}
+			// }
 			start := time.Now()
 			mod.Front(wrap)
 			if !(mod.Info.Mount == "api" || (mod.Info.Mount == "shop" && len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[1] == "basket")) {
