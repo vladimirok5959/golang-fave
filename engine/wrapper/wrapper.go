@@ -116,6 +116,12 @@ func (this *Wrapper) dbReconnect() error {
 	if err != nil {
 		return err
 	}
+
+	// Max 60 minutes and max 8 connection per host
+	this.DB.SetConnMaxLifetime(time.Minute * 60)
+	this.DB.SetMaxIdleConns(8)
+	this.DB.SetMaxOpenConns(8)
+
 	this.MSPool.Set(this.CurrHost, this.DB)
 	return nil
 }
@@ -127,23 +133,18 @@ func (this *Wrapper) UseDatabase() error {
 			return err
 		}
 	}
-
 	if err := this.DB.Ping(this.R.Context()); err != nil {
 		this.DB.Close()
 		if err := this.dbReconnect(); err != nil {
 			return err
-		}
-		if err := this.DB.Ping(this.R.Context()); err != nil {
-			this.DB.Close()
-			return err
+		} else {
+			if err := this.DB.Ping(this.R.Context()); err != nil {
+				this.DB.Close()
+				this.MSPool.Del(this.CurrHost)
+				return err
+			}
 		}
 	}
-
-	// Max 60 minutes and max 4 connection per host
-	this.DB.SetConnMaxLifetime(time.Minute * 60)
-	this.DB.SetMaxIdleConns(8)
-	this.DB.SetMaxOpenConns(8)
-
 	return nil
 }
 

@@ -35,6 +35,12 @@ func (this *MySqlPool) Set(key string, value *sqlw.DB) {
 	this.connections[key] = value
 }
 
+func (this *MySqlPool) Del(key string) {
+	if _, ok := this.connections[key]; ok {
+		delete(this.connections, key)
+	}
+}
+
 func (this *MySqlPool) Close() error {
 	this.Lock()
 	defer this.Unlock()
