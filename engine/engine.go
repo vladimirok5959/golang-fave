@@ -64,6 +64,26 @@ func (this *Engine) Process() bool {
 
 	// Separated logic
 	if !this.Wrap.IsBackend {
+		// Maintenance mode
+		if this.Wrap.Config.Engine.Maintenance != 0 {
+			if this.Wrap.User == nil {
+				this.Wrap.UseDatabase()
+				this.Wrap.LoadSessionUser()
+			}
+			if this.Wrap.User == nil {
+				this.Wrap.RenderFrontEnd("maintenance", nil, http.StatusServiceUnavailable)
+				return true
+			}
+			if this.Wrap.User.A_id <= 0 {
+				this.Wrap.RenderFrontEnd("maintenance", nil, http.StatusServiceUnavailable)
+				return true
+			}
+			if this.Wrap.User.A_admin <= 0 {
+				this.Wrap.RenderFrontEnd("maintenance", nil, http.StatusServiceUnavailable)
+				return true
+			}
+		}
+
 		// Render frontend
 		return this.Mods.XXXFrontEnd(this.Wrap)
 	}

@@ -11,6 +11,7 @@ var AllData = map[string][]byte{
 	"blog.html":                  VarBlogHtmlFile,
 	"shop-product.html":          VarShopProductHtmlFile,
 	"index.html":                 VarIndexHtmlFile,
+	"maintenance.html":           VarMaintenanceHtmlFile,
 	"email-new-order-admin.html": VarEmailNewOrderAdminHtmlFile,
 	"robots.txt":                 VarRobotsTxtFile,
 	"page.html":                  VarPageHtmlFile,
