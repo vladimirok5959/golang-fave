@@ -590,6 +590,10 @@ body.cp-first-user {
 	text-align: left;
 }
 
+.cp-login .sys-back-link {
+	padding-top: 1.5rem;
+}
+
 /* Control panel skeleton */
 body.cp {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
