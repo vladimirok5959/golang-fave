@@ -2,6 +2,9 @@
 # golang-fave
 CMS written on Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. All in one binary file, no need to install additional web servers. Go native templates with vars allow to do almost all what are need.
 
+## Screenshots
+link here
+
 ## Usage
 ```
 Usage of ./fave:
