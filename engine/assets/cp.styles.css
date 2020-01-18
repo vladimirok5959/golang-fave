@@ -791,118 +791,118 @@ ul.pagination {
 	color: #adafb2;
 }
 
-/* Admin table: table_pages */
-.data-table.table_pages .col_datetime {
+/* Admin table: table_fave_pages */
+.data-table.table_fave_pages .col_datetime {
 	width: 8rem;
 }
 
-.data-table.table_pages .col_active {
+.data-table.table_fave_pages .col_active {
 	width: 5rem;
 }
 
-.data-table.table_pages .col_action {
+.data-table.table_fave_pages .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
-/* Admin table: table_blog_posts */
-.data-table.table_blog_posts .col_datetime {
+/* Admin table: table_fave_blog_posts */
+.data-table.table_fave_blog_posts .col_datetime {
 	width: 8rem;
 }
 
-.data-table.table_blog_posts .col_active {
+.data-table.table_fave_blog_posts .col_active {
 	width: 5rem;
 }
 
-.data-table.table_blog_posts .col_action {
+.data-table.table_fave_blog_posts .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
 /* Admin table: table_blog_cats */
-.data-table.table_blog_cats .col_action {
+.data-table.table_fave_blog_cats .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
-/* Admin table: table_shop_products */
-.data-table.table_shop_products .col_price {
+/* Admin table: table_fave_shop_products */
+.data-table.table_fave_shop_products .col_price {
 	width: 8rem;
 }
 
-.data-table.table_shop_products .col_datetime {
+.data-table.table_fave_shop_products .col_datetime {
 	width: 8rem;
 }
 
-.data-table.table_shop_products .col_active {
+.data-table.table_fave_shop_products .col_active {
 	width: 5rem;
 }
 
-.data-table.table_shop_products .col_action {
+.data-table.table_fave_shop_products .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
-.data-table.table_shop_products .col_quantity {
+.data-table.table_fave_shop_products .col_quantity {
 	width: 8rem;
 }
 
-.data-table.table_shop_products .col_total {
+.data-table.table_fave_shop_products .col_total {
 	width: 8rem;
 }
 
-/* Admin table: table_shop_cats */
-.data-table.table_shop_cats .col_action {
+/* Admin table: table_fave_shop_cats */
+.data-table.table_fave_shop_cats .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
-/* Admin table: table_shop_filters */
-.data-table.table_shop_filters .col_action {
+/* Admin table: table_fave_shop_filters */
+.data-table.table_fave_shop_filters .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
-/* Admin table: table_shop_currencies */
-.data-table.table_shop_currencies .col_coefficient {
+/* Admin table: table_fave_shop_currencies */
+.data-table.table_fave_shop_currencies .col_coefficient {
 	width: 7rem;
 }
 
-.data-table.table_shop_currencies .col_action {
+.data-table.table_fave_shop_currencies .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
-/* Admin table: table_users */
-.data-table.table_users .col_active,
-.data-table.table_users .col_admin {
+/* Admin table: table_fave_users */
+.data-table.table_fave_users .col_active,
+.data-table.table_fave_users .col_admin {
 	width: 5rem;
 }
 
-.data-table.table_users .col_action {
+.data-table.table_fave_users .col_action {
 	width: 6rem;
 	text-align: right;
 }
 
-/* Admin table: table_pages */
-.data-table.table_notify_mail .col_datetime {
+/* Admin table: table_fave_notify_mail */
+.data-table.table_fave_notify_mail .col_datetime {
 	width: 8rem;
 }
 
-.data-table.table_notify_mail .col_status {
+.data-table.table_fave_notify_mail .col_status {
 	width: 5rem;
 }
 
-/* Admin table: table_shop_orders */
-.data-table.table_shop_orders .col_id {
+/* Admin table: table_fave_shop_orders */
+.data-table.table_fave_shop_orders .col_id {
 	width: 7rem;
 }
 
-.data-table.table_shop_orders .col_create_datetime {
+.data-table.table_fave_shop_orders .col_create_datetime {
 	width: 8rem;
 }
 
-.data-table.table_shop_orders .col_client_email {
+.data-table.table_fave_shop_orders .col_client_email {
 	width: 8rem;
 }
 
