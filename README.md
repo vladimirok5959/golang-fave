@@ -44,6 +44,7 @@ hosts
 ├────── footer.html                # Footer
 ├────── header.html                # Header
 ├────── index.html                 # Template for home page
+├────── maintenance.html           # Template for maintenance pages
 ├────── page.html                  # Template for any other pages
 ├────── robots.txt                 # Host robots.txt file
 ├────── scripts.js                 # Theme scripts file
