@@ -79,7 +79,7 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * **make ab** - http stress test
 
 ## Roadmap
-| Tasks                     | Status        | Done |
+| Task                      | Status        | Done |
 | :---                      | :---          | :--- |
 | Module Pages              | ready for use | 100% |
 | Module Blog               | ready for use | 100% |
