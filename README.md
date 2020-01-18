@@ -78,13 +78,15 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * **make cy** - cypress tests in console
 * **make ab** - http stress test
 
-## Modules status
-```
-* Pages | ready for use | done 100%
-* Blog  | ready for use | done 100%
-* Shop  | ready for use | done 100%
-* Files | in progress   | done 0%
-```
+## Roadmap
+| Tasks                     | Status        | Done |
+| :---                      | :---          | :--- |
+| Module Pages              | ready for use | 100% |
+| Module Blog               | ready for use | 100% |
+| Module Shop               | ready for use | 100% |
+| Files manager             | in progress   | 100% |
+| Shop products filters     | in progress   | 100% |
+| Shop payments integration | in progress   | 100% |
 
 ## Used resources
 * [jQuery](https://github.com/jquery/jquery) (MIT License)
