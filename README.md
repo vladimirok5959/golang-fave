@@ -67,6 +67,8 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * **make docker-img** - build docker image only
 * **make docker-push** - build and push image to docker hub
 * **make migrate** - create new empty migration file
+
+**In support dir**
 * **make cy-dev** - cypress tests in browser
 * **make cy** - cypress tests in console
 * **make ab** - http stress test
