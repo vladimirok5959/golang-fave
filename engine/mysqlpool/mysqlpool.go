@@ -20,7 +20,6 @@ func New() *MySqlPool {
 }
 
 func (this *MySqlPool) Get(key string) *sqlw.DB {
-	// TODO: return nil if context canceled!
 	this.Lock()
 	defer this.Unlock()
 	if value, ok := this.connections[key]; ok == true {

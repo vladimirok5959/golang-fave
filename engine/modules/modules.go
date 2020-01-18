@@ -294,6 +294,12 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 			}
 			if name != "" {
 				if act, ok := this.acts[name]; ok {
+					// Check for MySQL connection
+					if err := wrap.UseDatabase(); err != nil {
+						this.XXXActionHeaders(wrap, http.StatusNotFound)
+						wrap.MsgError(err.Error())
+						return true
+					}
 					if act.Info.WantUser || act.Info.WantAdmin {
 						if !wrap.LoadSessionUser() {
 							this.XXXActionHeaders(wrap, http.StatusNotFound)
