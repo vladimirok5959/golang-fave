@@ -59,6 +59,7 @@ Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimiro
 Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.com/r/vladimirok5959/fave)
 
 ## Development
+**In root dir**
 * **make** - vet, test, build and run in debug mode locally
 * **make build** - build release for Linux, Mac OS X and Windows
 * **make format** - format all code by gofmt utility
