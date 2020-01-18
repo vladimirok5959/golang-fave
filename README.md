@@ -84,9 +84,9 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 | Module Pages              | ready for use | 100% |
 | Module Blog               | ready for use | 100% |
 | Module Shop               | ready for use | 100% |
-| Files manager             | in progress   | 100% |
-| Shop products filters     | in progress   | 100% |
-| Shop payments integration | in progress   | 100% |
+| Files manager             | in progress   | 0%   |
+| Shop products filters     | in progress   | 0%   |
+| Shop payments integration | in progress   | 0%   |
 
 ## Used resources
 * [jQuery](https://github.com/jquery/jquery) (MIT License)
