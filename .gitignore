@@ -28,7 +28,6 @@
 !/hosts/localhost
 /hosts/*/htdocs/products
 /hosts/*/htdocs/products.xml
-
 /hosts/*/htdocs/public/*
 !/hosts/*/htdocs/public/.*
 
