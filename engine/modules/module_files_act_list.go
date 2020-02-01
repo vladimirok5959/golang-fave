@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"fmt"
 	"html"
 	"os"
 	"path/filepath"
@@ -67,7 +68,25 @@ func (this *Modules) RegisterAction_FilesList() *Action {
 							Classes: "delete",
 						},
 					})
-					str_files += `<tr class="file"><td class="col_name"><span class="text-dotted">` + html.EscapeString(file_name) + `</span></td><td class="col_type">` + utils.Int64ToStr(utils.GetFileSize(file)) + `</td><td class="col_action">` + actions + `</td></tr>`
+
+					size_value := float64(utils.GetFileSize(file))
+					size_text := "Bytes"
+
+					if size_value > 1024 {
+						size_value = size_value / 1024
+						size_text = "Kb"
+					}
+					if size_value > 1024 {
+						size_value = size_value / 1024
+						size_text = "Mb"
+					}
+					if size_value > 1024 {
+						size_value = size_value / 1024
+						size_text = "Gb"
+					}
+
+					str_size := fmt.Sprintf("%5.2f %s", size_value, size_text)
+					str_files += `<tr class="file"><td class="col_name"><span class="text-dotted">` + html.EscapeString(file_name) + `</span></td><td class="col_type">` + str_size + `</td><td class="col_action">` + actions + `</td></tr>`
 				}
 			}
 		}
