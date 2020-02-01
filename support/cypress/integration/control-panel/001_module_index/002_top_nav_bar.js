@@ -13,7 +13,7 @@ context('Top navigation bar', () => {
 
   it('should render modules menu', () => {
     cy.loginCMS();
-    cy.get('#navbarCollapse ul.navbar-nav:nth-child(1) li.nav-item').should('have.length', 2);
+    cy.get('#navbarCollapse ul.navbar-nav:nth-child(1) li.nav-item').should('have.length', 3);
     cy.get('#navbarCollapse ul.navbar-nav li.nav-item a.nav-link').should('contain', 'Modules');
     cy.contains('#navbarCollapse ul.navbar-nav li.nav-item a.nav-link', 'Modules').parent().find('.dropdown-menu .dropdown-item').should('contain', 'Pages');
     cy.contains('#navbarCollapse ul.navbar-nav li.nav-item a.nav-link', 'Modules').parent().find('.dropdown-menu .dropdown-item').should('contain', 'Blog');
