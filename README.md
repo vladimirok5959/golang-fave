@@ -84,7 +84,7 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 | Module Pages              | ready for use | 100% |
 | Module Blog               | ready for use | 100% |
 | Module Shop               | ready for use | 100% |
-| Files manager             | in progress   | 0%   |
+| Files manager             | ready for use | 100% |
 | Shop products filters     | in progress   | 0%   |
 | Shop payments integration | in progress   | 0%   |
 
