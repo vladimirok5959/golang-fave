@@ -30,4 +30,5 @@ var Migrations = map[string]func(context.Context, *sqlw.DB, string) error{
 	"000000020": Migrate_000000020,
 	"000000021": Migrate_000000021,
 	"000000022": Migrate_000000022,
+	"000000023": Migrate_000000023,
 }

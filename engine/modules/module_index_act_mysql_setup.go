@@ -560,7 +560,7 @@ func (this *Modules) RegisterAction_IndexMysqlSetup() *Action {
 		}
 		if _, err = tx.Exec(
 			wrap.R.Context(),
-			`INSERT INTO fave_settings (name, value) VALUES ('database_version', '000000022');`,
+			`INSERT INTO fave_settings (name, value) VALUES ('database_version', '000000023');`,
 		); err != nil {
 			tx.Rollback()
 			wrap.MsgError(err.Error())

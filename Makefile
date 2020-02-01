@@ -28,6 +28,7 @@ build: clean version template dockerfile
 	@cp -R ./hosts/localhost ./bin/localhost
 	@-find ./bin/localhost -type f -name '.*' -exec rm -f {} \;
 	@-rm -R ./bin/localhost/htdocs/products
+	@-rm -R ./bin/localhost/htdocs/public
 	@-rm ./bin/localhost/config/*
 	@-rm ./bin/localhost/htdocs/*
 	@-rm ./bin/localhost/logs/*

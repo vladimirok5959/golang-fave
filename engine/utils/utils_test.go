@@ -400,3 +400,12 @@ func TestFormatProductPrice(t *testing.T) {
 	Expect(t, FormatProductPrice(123.4567, 3, 2), "123.000")
 	Expect(t, FormatProductPrice(123.4567, 4, 2), "123.0000")
 }
+
+func TestSafeFilePath(t *testing.T) {
+	Expect(t, SafeFilePath("/test/file"), "/test/file")
+	Expect(t, SafeFilePath("/test/../file"), "/test/file")
+	Expect(t, SafeFilePath("../test/file"), "/test/file")
+	Expect(t, SafeFilePath("/test/file/.."), "/test/file/")
+	Expect(t, SafeFilePath("/test/file/./"), "/test/file/")
+	Expect(t, SafeFilePath("/test/./file"), "/test/file")
+}

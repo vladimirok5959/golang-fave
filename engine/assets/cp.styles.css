@@ -1147,6 +1147,24 @@ ul.pagination {
 	display: none;
 }
 
+/* Files manager */
+.data-table.table_fm_files .col_name {
+	max-width: 10rem;
+}
+
+.data-table.table_fm_files .col_type {
+	width: 6rem;
+}
+
+.data-table.table_fm_files .col_action {
+	width: 6rem;
+	text-align: right;
+}
+
+.data-table.table_fm_files .col_name a {
+	display: block;
+}
+
 /* Fix for bootstrap select */
 .dropdown.bootstrap-select {
 	position: relative;
@@ -1251,6 +1269,16 @@ div.wysiwyg.focused {
 
 .bootstrap-select .dropdown-menu.show {
 	padding-bottom: 0px !important;
+}
+
+/* Dotted text */
+.text-dotted {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: -0.5rem;
 }
 
 /* Mobile fixes */

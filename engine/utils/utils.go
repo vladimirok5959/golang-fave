@@ -148,6 +148,17 @@ func ExtractHostPort(host string, https bool) (string, string) {
 	return h, p
 }
 
+func GetFileSize(filename string) int64 {
+	if st, err := os.Stat(filename); !os.IsNotExist(err) {
+		if err == nil {
+			if !st.Mode().IsDir() {
+				return st.Size()
+			}
+		}
+	}
+	return 0
+}
+
 func GetAssetsUrl(filename string) string {
 	return "/" + filename + "?v=" + consts.ServerVersion
 }
@@ -534,4 +545,22 @@ func SMTPSend(host, port, user, pass, subject, msg string, receivers []string) e
 		receivers,
 		[]byte(message),
 	)
+}
+
+func SafeFilePath(path string) string {
+	result := path
+
+	if reg, err := regexp.Compile("([/]+\\.\\.)|(\\.\\.[/]+)"); err == nil {
+		result = reg.ReplaceAllString(result, "/")
+	}
+
+	if reg, err := regexp.Compile("([/]+[\\.]+[/]+)"); err == nil {
+		result = reg.ReplaceAllString(result, "/")
+	}
+
+	if reg, err := regexp.Compile("([/]+)"); err == nil {
+		result = reg.ReplaceAllString(result, "/")
+	}
+
+	return result
 }

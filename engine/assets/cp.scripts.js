@@ -6992,7 +6992,6 @@
 			var html = '<div class="modal fade" id="sys-modal-system-message" tabindex="-1" role="dialog" aria-labelledby="sysModalSystemMessageLabel" aria-hidden="true"> \
 				<div class="modal-dialog modal-dialog-centered" role="document"> \
 					<div class="modal-content"> \
-							<input type="hidden" name="action" value="index-user-update-profile"> \
 							<div class="modal-header"> \
 								<h5 class="modal-title" id="sysModalSystemMessageLabel">' + title + '</h5> \
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
@@ -7504,9 +7503,6 @@
 
 			ShopProductsDeleteImage: function(button, product_id, filename) {
 				if($(button).hasClass('in-progress')) return;
-				// if(!confirm('Are you sure want to delete image?')) {
-				// 	return;
-				// }
 				$(button).addClass('in-progress');
 				$.ajax({
 					type: "POST",
@@ -7658,7 +7654,6 @@
 				var html = '<div class="modal fade" id="sys-modal-shop-product-attach" tabindex="-1" role="dialog" aria-labelledby="sysModalShopProductLabel" aria-hidden="true"> \
 					<div class="modal-dialog modal-dialog-centered" role="document"> \
 						<div class="modal-content"> \
-							<input type="hidden" name="action" value="index-user-update-profile"> \
 							<div class="modal-header"> \
 								<h5 class="modal-title" id="sysModalShopProductLabel">Attach product</h5> \
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
@@ -7756,6 +7751,199 @@
 					}).fail(function(xhr, status, error) {
 						if(IsDebugMode()) console.log('fail', xhr, status, error);
 						AjaxFail(xhr.responseText, status, error);
+					});
+				}
+			},
+
+			FilesManagerDialog: function() {
+				var html = '<div class="modal fade" id="sys-modal-files-manager" tabindex="-1" role="dialog" aria-labelledby="sysModalFilesManagerLabel" aria-hidden="true"> \
+					<div class="modal-dialog modal-dialog-centered" role="document"> \
+						<div class="modal-content"> \
+							<input type="hidden" name="path" value="/"> \
+							<div class="modal-header"> \
+								<h5 class="modal-title" id="sysModalFilesManagerLabel">Files manager</h5> \
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
+									<span aria-hidden="true">&times;</span> \
+								</button> \
+							</div> \
+							<div class="modal-body text-left"> \
+								<div class="dialog-path alert alert-secondary"><span class="text-dotted">/</span></div> \
+								<div class="dialog-data"></div> \
+							</div> \
+							<div class="modal-footer"> \
+								<input class="form-control" type="file" id="fmfiles" name="fmfiles" onchange="fave.FilesManagerUploadFile();" style="font-size:12px;background-color:#28a745;border-color:#28a745;color:#fff;cursor:pointer;" multiple=""> \
+								<button type="button" class="btn btn-primary folder" onclick="fave.FilesManagerNewFolderClick();" disabled>New folder</button> \
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> \
+							</div> \
+						</div> \
+					</div> \
+				</div>';
+				$('#sys-modal-files-manager-placeholder').html(html);
+				$("#sys-modal-files-manager").modal({
+					backdrop: 'static',
+					keyboard: true,
+					show: false,
+				});
+				$('#sys-modal-files-manager').on('hidden.bs.modal', function(e) {
+					$('#sys-modal-files-manager-placeholder').html('');
+				});
+				$("#sys-modal-files-manager").modal('show');
+
+				setTimeout(function() {
+					fave.FilesManagerLoadData('/');
+				}, 500);
+			},
+
+			FilesManagerSetPath: function(path) {
+				$('#sys-modal-files-manager input[name=path]').val(path);
+				$('#sys-modal-files-manager .dialog-path span').html(path);
+			},
+
+			FilesManagerGetPath: function() {
+				return $('#sys-modal-files-manager input[name=path]').val();
+			},
+
+			FilesManagerRemoveFolder: function(filename, msg) {
+				if(!confirm(msg)) {
+					return;
+				}
+				$.ajax({
+					type: "POST",
+					url: '/cp/',
+					data: {
+						action: 'files-remove-folder',
+						file: filename,
+					}
+				}).done(function(data) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('done', data);
+						AjaxDone(data);
+					}
+				}).fail(function(xhr, status, error) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('fail', xhr, status, error);
+						AjaxFail(xhr.responseText, status, error);
+					}
+				});
+			},
+
+			FilesManagerRemoveFile: function(filename, msg) {
+				if(!confirm(msg)) {
+					return;
+				}
+				$.ajax({
+					type: "POST",
+					url: '/cp/',
+					data: {
+						action: 'files-remove-file',
+						file: filename,
+					}
+				}).done(function(data) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('done', data);
+						AjaxDone(data);
+					}
+				}).fail(function(xhr, status, error) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('fail', xhr, status, error);
+						AjaxFail(xhr.responseText, status, error);
+					}
+				});
+			},
+
+			FilesManagerLoadData: function(path) {
+				fave.FilesManagerEnableDisableButtons(true);
+				$.ajax({
+					type: "POST",
+					url: '/cp/',
+					data: {
+						action: 'files-list',
+						path: path,
+					}
+				}).done(function(data) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('done', data);
+						AjaxDone(data);
+					}
+				}).fail(function(xhr, status, error) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('fail', xhr, status, error);
+						AjaxFail(xhr.responseText, status, error);
+					}
+				});
+			},
+
+			FilesManagerLoadDataUp: function(path) {
+				newPath = path.replace(/\/$/i, '');
+				newPath = newPath.replace(/[^\/]+$/i, '');
+				fave.FilesManagerLoadData(newPath);
+			},
+
+			FilesManagerEnableDisableButtons: function(disabled) {
+				$('#sys-modal-files-manager #fmfiles').prop('disabled', disabled);
+				$('#sys-modal-files-manager button.folder').prop('disabled', disabled);
+			},
+
+			FilesManagerUploadFile: function() {
+				var file_el = $('#fmfiles')[0];
+				if(!file_el.files) return;
+				if(file_el.files.length <= 0) return;
+
+				fave.FilesManagerEnableDisableButtons(true);
+
+				var fd = new FormData();
+				fd.append('action', 'files-upload');
+				fd.append('count', file_el.files.length);
+				fd.append('path', fave.FilesManagerGetPath());
+				for(var i = 0; i < file_el.files.length; i++) {
+					fd.append('file_' + i, file_el.files[i]);
+				}
+
+				$.ajax({
+					url: '/cp/',
+					method: 'POST',
+					type: 'POST',
+					data: fd,
+					contentType: false,
+					processData: false
+				}).done(function(data) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('done', data);
+						AjaxDone(data);
+					}
+				}).fail(function(xhr, status, error) {
+					if($('#sys-modal-files-manager').length > 0) {
+						if(IsDebugMode()) console.log('fail', xhr, status, error);
+						AjaxFail(xhr.responseText, status, error);
+					}
+				}).always(function() {
+					file_el.value = '';
+					fave.FilesManagerEnableDisableButtons(false);
+				});
+			},
+
+			FilesManagerNewFolderClick: function() {
+				var folderName = prompt('Please enter new folder name', '');
+				if(folderName != null) {
+					path = fave.FilesManagerGetPath();
+					$.ajax({
+						type: "POST",
+						url: '/cp/',
+						data: {
+							action: 'files-mkdir',
+							path: path,
+							name: folderName,
+						}
+					}).done(function(data) {
+						if($('#sys-modal-files-manager').length > 0) {
+							if(IsDebugMode()) console.log('done', data);
+							AjaxDone(data);
+						}
+					}).fail(function(xhr, status, error) {
+						if($('#sys-modal-files-manager').length > 0) {
+							if(IsDebugMode()) console.log('fail', xhr, status, error);
+							AjaxFail(xhr.responseText, status, error);
+						}
 					});
 				}
 			},
