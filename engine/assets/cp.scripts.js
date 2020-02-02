@@ -7808,6 +7808,7 @@
 				if(!confirm(msg)) {
 					return;
 				}
+				fave.FilesManagerEnableDisableButtons(true);
 				$.ajax({
 					type: "POST",
 					url: '/cp/',
@@ -7825,6 +7826,8 @@
 						if(IsDebugMode()) console.log('fail', xhr, status, error);
 						AjaxFail(xhr.responseText, status, error);
 					}
+				}).always(function() {
+					fave.FilesManagerEnableDisableButtons(false);
 				});
 			},
 
@@ -7832,6 +7835,7 @@
 				if(!confirm(msg)) {
 					return;
 				}
+				fave.FilesManagerEnableDisableButtons(true);
 				$.ajax({
 					type: "POST",
 					url: '/cp/',
@@ -7849,6 +7853,8 @@
 						if(IsDebugMode()) console.log('fail', xhr, status, error);
 						AjaxFail(xhr.responseText, status, error);
 					}
+				}).always(function() {
+					fave.FilesManagerEnableDisableButtons(false);
 				});
 			},
 
@@ -7930,6 +7936,7 @@
 				var folderName = prompt('Please enter new folder name', '');
 				if(folderName != null) {
 					path = fave.FilesManagerGetPath();
+					fave.FilesManagerEnableDisableButtons(true);
 					$.ajax({
 						type: "POST",
 						url: '/cp/',
@@ -7948,6 +7955,8 @@
 							if(IsDebugMode()) console.log('fail', xhr, status, error);
 							AjaxFail(xhr.responseText, status, error);
 						}
+					}).always(function() {
+						fave.FilesManagerEnableDisableButtons(false);
 					});
 				}
 			},
