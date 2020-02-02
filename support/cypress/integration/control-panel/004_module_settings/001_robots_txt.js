@@ -43,19 +43,19 @@ context('Module robots.txt', () => {
     });
 
     cy.visitCMS('/cp/settings/robots-txt/');
-    cy.get('.data-form.settings-robots-txt textarea[name=content]').clear().type('User-agent: *\nDisallow: /\n');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').clear().type('User-agent: *\nDisallow: /');
     cy.get('#add-edit-button').click();
     cy.actionWait();
 
     cy.visitCMS('/cp/settings/robots-txt/');
-    cy.get('.data-form.settings-robots-txt textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /\n');
+    cy.get('.data-form.settings-robots-txt textarea[name=content]').should('have.value', 'User-agent: *\nDisallow: /');
 
     cy.request({
       url: cy.getBaseUrl() + '/robots.txt',
       followRedirect: false
     }).then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.eq('User-agent: *\r\nDisallow: /\r\n');
+      expect(response.body).to.eq('User-agent: *\r\nDisallow: /');
     });
 
     cy.logoutCMS();
