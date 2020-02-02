@@ -72,6 +72,12 @@ type Config struct {
 		Login    string
 		Password string
 	}
+	Modules struct {
+		Enabled struct {
+			Blog int
+			Shop int
+		}
+	}
 }
 
 func ConfigNew() *Config {
@@ -142,6 +148,9 @@ func (this *Config) configDefault() {
 	this.SMTP.Port = 587
 	this.SMTP.Login = ""
 	this.SMTP.Password = ""
+
+	this.Modules.Enabled.Blog = 1
+	this.Modules.Enabled.Shop = 1
 }
 
 func (this *Config) ConfigRead(file string) error {

@@ -87,6 +87,20 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Hint:    "Close web site for maintenance",
 				},
 				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Blog is enabled",
+					Name:    "mod-enabled-blog",
+					Value:   utils.IntToStr((*wrap.Config).Modules.Enabled.Blog),
+					Hint:    "Module can be enabled or fully disabled",
+				},
+				{
+					Kind:    builder.DFKCheckBox,
+					Caption: "Shop is enabled",
+					Name:    "mod-enabled-shop",
+					Value:   utils.IntToStr((*wrap.Config).Modules.Enabled.Shop),
+					Hint:    "Module can be enabled or fully disabled",
+				},
+				{
 					Kind:   builder.DFKSubmit,
 					Value:  "Save",
 					Target: "add-edit-button",
