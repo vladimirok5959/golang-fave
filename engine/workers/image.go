@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"golang-fave/engine/config"
 	"golang-fave/engine/utils"
-	"golang-fave/engine/wrapper/config"
 
 	"github.com/disintegration/imaging"
 	"github.com/vladimirok5959/golang-worker/worker"

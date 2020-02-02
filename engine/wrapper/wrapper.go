@@ -14,12 +14,12 @@ import (
 
 	"golang-fave/engine/basket"
 	"golang-fave/engine/cblocks"
+	"golang-fave/engine/config"
 	"golang-fave/engine/consts"
 	"golang-fave/engine/logger"
 	"golang-fave/engine/mysqlpool"
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/utils"
-	"golang-fave/engine/wrapper/config"
 
 	"github.com/vladimirok5959/golang-server-sessions/session"
 )

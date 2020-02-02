@@ -5,10 +5,10 @@ import (
 	"os"
 	"sync"
 
+	"golang-fave/engine/config"
 	"golang-fave/engine/consts"
 	"golang-fave/engine/sqlw"
 	"golang-fave/engine/utils"
-	"golang-fave/engine/wrapper/config"
 )
 
 type SBParam struct {
