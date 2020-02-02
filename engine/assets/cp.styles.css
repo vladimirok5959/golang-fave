@@ -1165,6 +1165,29 @@ ul.pagination {
 	display: block;
 }
 
+#sys-modal-files-manager #fmfiles {
+	display: block;
+}
+
+#sys-modal-files-manager button.upload {
+	display: none;
+	width: 100%;
+}
+
+#sys-modal-files-manager.uploading #fmfiles {
+	display: none;
+}
+
+#sys-modal-files-manager.uploading button.upload {
+	display: block;
+}
+
+.fm-loading {
+	min-width: 99px;
+	min-height: 99px;
+	background: #fff url(/assets/cp/img-load.gif) no-repeat 50% 50% !important;
+}
+
 /* Fix for bootstrap select */
 .dropdown.bootstrap-select {
 	position: relative;

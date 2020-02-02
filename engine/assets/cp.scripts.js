@@ -7771,6 +7771,7 @@
 								<div class="dialog-data"></div> \
 							</div> \
 							<div class="modal-footer"> \
+								<button type="button" class="btn btn-success upload" disabled>Uploading...</button> \
 								<input class="form-control" type="file" id="fmfiles" name="fmfiles" onchange="fave.FilesManagerUploadFile();" style="font-size:12px;background-color:#28a745;border-color:#28a745;color:#fff;cursor:pointer;" multiple=""> \
 								<button type="button" class="btn btn-primary folder" onclick="fave.FilesManagerNewFolderClick();" disabled>New folder</button> \
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> \
@@ -7853,6 +7854,7 @@
 
 			FilesManagerLoadData: function(path) {
 				fave.FilesManagerEnableDisableButtons(true);
+				$('#sys-modal-files-manager .dialog-data').html('<div class="fm-loading"></div>');
 				$.ajax({
 					type: "POST",
 					url: '/cp/',
@@ -7890,6 +7892,7 @@
 				if(file_el.files.length <= 0) return;
 
 				fave.FilesManagerEnableDisableButtons(true);
+				$('#sys-modal-files-manager').addClass('uploading');
 
 				var fd = new FormData();
 				fd.append('action', 'files-upload');
@@ -7918,6 +7921,7 @@
 					}
 				}).always(function() {
 					file_el.value = '';
+					$('#sys-modal-files-manager').removeClass('uploading');
 					fave.FilesManagerEnableDisableButtons(false);
 				});
 			},
