@@ -337,17 +337,35 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 
 func (this *Modules) XXXFrontEnd(wrap *wrapper.Wrapper) bool {
 	mod, cm := this.getCurrentModule(wrap, false)
-	if mod != nil {
-		wrap.CurrModule = cm
-		if mod.Front != nil {
-			start := time.Now()
-			mod.Front(wrap)
-			if !(mod.Info.Mount == "api" || (mod.Info.Mount == "shop" && len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[1] == "basket")) {
-				wrap.W.Write([]byte(fmt.Sprintf("<!-- %.3f ms -->", time.Now().Sub(start).Seconds())))
+	if mod == nil {
+		return false
+	}
+
+	// Index module, if module disabled
+	if mod.Info.Mount == "blog" || mod.Info.Mount == "shop" {
+		if (*wrap.Config).Modules.Enabled.Blog == 0 || (*wrap.Config).Modules.Enabled.Shop == 0 {
+			if m, ok := this.mods["index"]; ok {
+				if mod.Info.Mount == "blog" && (*wrap.Config).Modules.Enabled.Blog == 0 {
+					mod = m
+					cm = "index"
+				} else if mod.Info.Mount == "shop" && (*wrap.Config).Modules.Enabled.Shop == 0 {
+					mod = m
+					cm = "index"
+				}
 			}
-			return true
 		}
 	}
+
+	wrap.CurrModule = cm
+	if mod.Front != nil {
+		start := time.Now()
+		mod.Front(wrap)
+		if !(mod.Info.Mount == "api" || (mod.Info.Mount == "shop" && len(wrap.UrlArgs) >= 3 && wrap.UrlArgs[1] == "basket")) {
+			wrap.W.Write([]byte(fmt.Sprintf("<!-- %.3f ms -->", time.Now().Sub(start).Seconds())))
+		}
+		return true
+	}
+
 	return false
 }
 
