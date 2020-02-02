@@ -139,6 +139,14 @@ func (this *FERData) Module() string {
 	return mod
 }
 
+func (this *FERData) ModuleBlogEnabled() bool {
+	return (*this.wrap.Config).Modules.Enabled.Blog != 0
+}
+
+func (this *FERData) ModuleShopEnabled() bool {
+	return (*this.wrap.Config).Modules.Enabled.Shop != 0
+}
+
 func (this *FERData) DateTimeUnix() int {
 	return int(time.Now().Unix())
 }

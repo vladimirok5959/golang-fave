@@ -18,49 +18,51 @@
 		<!-- Template CSS file from template folder -->
 		<link rel="stylesheet" href="{{$.System.PathThemeStyles}}">
 
-		<!-- Shop basket texts -->
-		<script type="text/javascript">
-			var ShopBasketName = 'Basket';
-			var ShopBasketTableProduct = 'Product';
-			var ShopBasketTablePrice = 'Price';
-			var ShopBasketTableQuantity = 'Quantity';
-			var ShopBasketTableSum = 'Sum';
-			var ShopBasketTotal = 'Total sum:';
-			var ShopBasketBtnContinue = 'Continue Shopping';
-			var ShopBasketBtnOrder = 'Make order';
-			var ShopBasketEmpty = 'Your basket currently empty...';
+		{{if $.Data.ModuleShopEnabled}}
+			<!-- Shop basket texts -->
+			<script type="text/javascript">
+				var ShopBasketName = 'Basket';
+				var ShopBasketTableProduct = 'Product';
+				var ShopBasketTablePrice = 'Price';
+				var ShopBasketTableQuantity = 'Quantity';
+				var ShopBasketTableSum = 'Sum';
+				var ShopBasketTotal = 'Total sum:';
+				var ShopBasketBtnContinue = 'Continue Shopping';
+				var ShopBasketBtnOrder = 'Make order';
+				var ShopBasketEmpty = 'Your basket currently empty...';
 
-			var ShopOrderLabelLastName = 'Last Name';
-			var ShopOrderLabelFirstName = 'First Name';
-			var ShopOrderLabelMiddleName = 'Middle Name';
-			var ShopOrderLabelMobilePhone = 'Mobile Phone';
-			var ShopOrderLabelEmailAddress = 'Email Address';
-			var ShopOrderLabelDelivery = 'Delivery';
-			var ShopOrderLabelComment = 'Comment';
+				var ShopOrderLabelLastName = 'Last Name';
+				var ShopOrderLabelFirstName = 'First Name';
+				var ShopOrderLabelMiddleName = 'Middle Name';
+				var ShopOrderLabelMobilePhone = 'Mobile Phone';
+				var ShopOrderLabelEmailAddress = 'Email Address';
+				var ShopOrderLabelDelivery = 'Delivery';
+				var ShopOrderLabelComment = 'Comment';
 
-			var ShopOrderRequiredLastName = {{$.Data.ShopOrderRequiredLastName}};
-			var ShopOrderRequiredFirstName = {{$.Data.ShopOrderRequiredFirstName}};
-			var ShopOrderRequiredMiddleName = {{$.Data.ShopOrderRequiredMiddleName}};
-			var ShopOrderRequiredMobilePhone = {{$.Data.ShopOrderRequiredMobilePhone}};
-			var ShopOrderRequiredEmailAddress = {{$.Data.ShopOrderRequiredEmailAddress}};
-			var ShopOrderRequiredDelivery = {{$.Data.ShopOrderRequiredDelivery}};
-			var ShopOrderRequiredComment = {{$.Data.ShopOrderRequiredComment}};
+				var ShopOrderRequiredLastName = {{$.Data.ShopOrderRequiredLastName}};
+				var ShopOrderRequiredFirstName = {{$.Data.ShopOrderRequiredFirstName}};
+				var ShopOrderRequiredMiddleName = {{$.Data.ShopOrderRequiredMiddleName}};
+				var ShopOrderRequiredMobilePhone = {{$.Data.ShopOrderRequiredMobilePhone}};
+				var ShopOrderRequiredEmailAddress = {{$.Data.ShopOrderRequiredEmailAddress}};
+				var ShopOrderRequiredDelivery = {{$.Data.ShopOrderRequiredDelivery}};
+				var ShopOrderRequiredComment = {{$.Data.ShopOrderRequiredComment}};
 
-			var ShopOrderError = 'Error!';
-			var ShopOrderErrorDisabled = 'Sorry, we are currently not accept new orders, please try little later';
-			var ShopOrderErrorBasketEmpty = 'Your basket is empty';
-			var ShopOrderErrorSomethingWrong = 'We cannot process your order, something is wrong...';
-			var ShopOrderEmptyLastName = 'Please enter your last name';
-			var ShopOrderEmptyFirstName = 'Please enter your first name';
-			var ShopOrderEmptyMiddleName = 'Please enter your middle name';
-			var ShopOrderEmptyMobilePhone = 'Please enter your mobile phone';
-			var ShopOrderEmptyEmailAddress = 'Please enter your email address';
-			var ShopOrderEmptyDelivery = 'Please enter delivery comment';
-			var ShopOrderEmptyComment = 'Please enter order comment';
-			var ShopOrderNotCorrectMobilePhone = 'For example: +15417543010';
-			var ShopOrderNotCorrectEmailAddress = 'For example: example@gmail.com';
-			var ShopOrderSuccess = '<b>Thank you for your order! We will call you shortly</b>';
-		</script>
+				var ShopOrderError = 'Error!';
+				var ShopOrderErrorDisabled = 'Sorry, we are currently not accept new orders, please try little later';
+				var ShopOrderErrorBasketEmpty = 'Your basket is empty';
+				var ShopOrderErrorSomethingWrong = 'We cannot process your order, something is wrong...';
+				var ShopOrderEmptyLastName = 'Please enter your last name';
+				var ShopOrderEmptyFirstName = 'Please enter your first name';
+				var ShopOrderEmptyMiddleName = 'Please enter your middle name';
+				var ShopOrderEmptyMobilePhone = 'Please enter your mobile phone';
+				var ShopOrderEmptyEmailAddress = 'Please enter your email address';
+				var ShopOrderEmptyDelivery = 'Please enter delivery comment';
+				var ShopOrderEmptyComment = 'Please enter order comment';
+				var ShopOrderNotCorrectMobilePhone = 'For example: +15417543010';
+				var ShopOrderNotCorrectEmailAddress = 'For example: example@gmail.com';
+				var ShopOrderSuccess = '<b>Thank you for your order! We will call you shortly</b>';
+			</script>
+		{{end}}
 	</head>
 	<body id="body" class="fixed-top-bar">
 		<div id="sys-modal-shop-basket-placeholder"></div>
@@ -69,7 +71,9 @@
 				<div class="container">
 					<a class="navbar-brand" href="/">Fave {{$.System.InfoVersion}}</a>
 					<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-						<span id="basket-mobile-btn" class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span>
+						{{if $.Data.ModuleShopEnabled}}
+							<span id="basket-mobile-btn" class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span>
+						{{end}}
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarResponsive">
@@ -83,25 +87,31 @@
 							<li class="nav-item">
 								<a class="nav-link{{if eq $.Data.Page.Alias "/about/"}} active{{end}}" href="/about/">About</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link{{if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}} active{{end}}" href="/blog/">Blog</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-product") (eq $.Data.Module "shop-category")}} active{{end}}" href="/shop/">Shop</a>
-							</li>
+							{{if $.Data.ModuleBlogEnabled}}
+								<li class="nav-item">
+									<a class="nav-link{{if or (eq $.Data.Module "blog") (eq $.Data.Module "blog-post") (eq $.Data.Module "blog-category")}} active{{end}}" href="/blog/">Blog</a>
+								</li>
+							{{end}}
+							{{if $.Data.ModuleShopEnabled}}
+								<li class="nav-item">
+									<a class="nav-link{{if or (eq $.Data.Module "shop") (eq $.Data.Module "shop-product") (eq $.Data.Module "shop-category")}} active{{end}}" href="/shop/">Shop</a>
+								</li>
+							{{end}}
 							<li class="nav-item">
 								<a class="nav-link{{if eq $.Data.Module "404"}} active{{end}}" href="/not-existent-page/">404</a>
 							</li>
-							<li class="nav-item">
-								<a id="basket-nav-btn" class="nav-link" href="" onclick="window&&window.frontend&&frontend.ShopBasketBtnCollapse()&&frontend.ShopBasketOpen(this);return false;">Basket <span class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span></a>
-							</li>
-							<li class="currency-changer">
-								<select class="form-control" onchange="document.location='/shop/basket/currency/'+this.value+'/';">
-									{{range $.Data.Shop.Currencies}}
-										<option value="{{.Id}}"{{if eq .Id $.Data.Shop.CurrentCurrency.Id}} selected{{end}}>{{.Code}}</option>
-									{{end}}
-								</select>
-							</li>
+							{{if $.Data.ModuleShopEnabled}}
+								<li class="nav-item">
+									<a id="basket-nav-btn" class="nav-link" href="" onclick="window&&window.frontend&&frontend.ShopBasketBtnCollapse()&&frontend.ShopBasketOpen(this);return false;">Basket <span class="badge badge-pill badge-primary">{{$.Data.ShopBasketProductsCount}}</span></a>
+								</li>
+								<li class="currency-changer">
+									<select class="form-control" onchange="document.location='/shop/basket/currency/'+this.value+'/';">
+										{{range $.Data.Shop.Currencies}}
+											<option value="{{.Id}}"{{if eq .Id $.Data.Shop.CurrentCurrency.Id}} selected{{end}}>{{.Code}}</option>
+										{{end}}
+									</select>
+								</li>
+							{{end}}
 						</ul>
 					</div>
 				</div>

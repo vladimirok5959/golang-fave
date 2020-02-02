@@ -1,13 +1,15 @@
 package template
 
-var VarSidebarRightHtmlFile = []byte(`<div class="card mb-4">
-	<h5 class="card-header">Blog categories</h5>
-	<div class="card-body">
-		<ul class="m-0 p-0 pl-4">
-			{{$.Data.CachedBlock5}}
-		</ul>
+var VarSidebarRightHtmlFile = []byte(`{{if $.Data.ModuleBlogEnabled}}
+	<div class="card mb-4">
+		<h5 class="card-header">Blog categories</h5>
+		<div class="card-body">
+			<ul class="m-0 p-0 pl-4">
+				{{$.Data.CachedBlock5}}
+			</ul>
+		</div>
 	</div>
-</div>
+{{end}}
 <div class="card mb-4">
 	<h5 class="card-header">Useful links</h5>
 	<div class="card-body">
