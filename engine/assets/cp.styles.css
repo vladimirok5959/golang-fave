@@ -674,8 +674,18 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item a {
 	color: #444;
 }
 
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.disabled a {
+	color: #c9302c;
+	/*text-decoration: line-through;*/
+}
+
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active {
 	background-color: #417cb9;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active.disabled {
+	background-color: #c9302c;
+	/*text-decoration: none;*/
 }
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active a {
@@ -688,6 +698,10 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item:hover {
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active:hover {
 	background-color: #417cb9;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active.disabled:hover {
+	background-color: #c9302c;
 }
 
 body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav {
@@ -706,6 +720,10 @@ body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active {
 
 body.cp .wrap .sidebar.sidebar-left ul.nav ul.nav li.nav-item.active a {
 	color: #417cb9;
+}
+
+body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.disabled ul.nav li.nav-item.active a {
+	color: #c9302c;
 }
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item:last-child ul {

@@ -197,7 +197,12 @@ func (this *Modules) getNavMenuModules(wrap *wrapper.Wrapper, sys bool) string {
 	for _, mod := range list {
 		class := ""
 		if mod.Mount == wrap.CurrModule {
-			class = " active"
+			class += " active"
+		}
+		if mod.Mount == "blog" && (*wrap.Config).Modules.Enabled.Blog == 0 {
+			class += " disabled"
+		} else if mod.Mount == "shop" && (*wrap.Config).Modules.Enabled.Shop == 0 {
+			class += " disabled"
 		}
 		href := `/cp/` + mod.Mount + `/`
 		if mod.Mount == "index" {
@@ -218,8 +223,13 @@ func (this *Modules) getSidebarModules(wrap *wrapper.Wrapper) string {
 		class := ""
 		submenu := ""
 		if mod.Mount == wrap.CurrModule {
-			class = " active"
+			class += " active"
 			submenu = this.getSidebarModuleSubMenu(wrap, mod)
+		}
+		if mod.Mount == "blog" && (*wrap.Config).Modules.Enabled.Blog == 0 {
+			class += " disabled"
+		} else if mod.Mount == "shop" && (*wrap.Config).Modules.Enabled.Shop == 0 {
+			class += " disabled"
 		}
 		icon := mod.Icon
 		if icon == "" {
