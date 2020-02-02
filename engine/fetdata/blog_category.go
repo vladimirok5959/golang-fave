@@ -18,6 +18,9 @@ func (this *BlogCategory) load(cache *map[int]*utils.MySql_blog_category) *BlogC
 	if this == nil {
 		return this
 	}
+	if (*this.wrap.Config).Modules.Enabled.Blog == 0 {
+		return this
+	}
 	if cache != nil {
 		this.bufferCats = (*cache)
 		return this

@@ -37,6 +37,9 @@ func (this *Blog) load() *Blog {
 	if this == nil {
 		return this
 	}
+	if (*this.wrap.Config).Modules.Enabled.Blog == 0 {
+		return this
+	}
 	sql_nums := `
 		SELECT
 			COUNT(*)
@@ -427,6 +430,9 @@ func (this *Blog) load() *Blog {
 }
 
 func (this *Blog) preload_cats() {
+	if (*this.wrap.Config).Modules.Enabled.Blog == 0 {
+		return
+	}
 	if this.bufferCats == nil {
 		this.bufferCats = map[int]*utils.MySql_blog_category{}
 		if rows, err := this.wrap.DB.Query(
@@ -597,32 +603,34 @@ func (this *Blog) Categories(parent, depth int) []*BlogCategory {
 	depth_tmp := 0
 	result := []*BlogCategory{}
 
-	for _, cat := range this.bufferCats {
-		if parent <= 1 {
-			if depth <= 0 {
-				result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
-			} else {
-				if cat.A_depth <= depth {
-					result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
-				}
-			}
-		} else {
-			if cat.A_parent == parent {
-				if depth_tmp == 0 {
-					depth_tmp = cat.A_depth
-				}
+	if (*this.wrap.Config).Modules.Enabled.Blog != 0 {
+		for _, cat := range this.bufferCats {
+			if parent <= 1 {
 				if depth <= 0 {
 					result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
 				} else {
-					if (cat.A_depth - depth_tmp + 1) <= depth {
+					if cat.A_depth <= depth {
 						result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+					}
+				}
+			} else {
+				if cat.A_parent == parent {
+					if depth_tmp == 0 {
+						depth_tmp = cat.A_depth
+					}
+					if depth <= 0 {
+						result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+					} else {
+						if (cat.A_depth - depth_tmp + 1) <= depth {
+							result = append(result, (&BlogCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+						}
 					}
 				}
 			}
 		}
-	}
 
-	sort.Slice(result, func(i, j int) bool { return result[i].Left() < result[j].Left() })
+		sort.Slice(result, func(i, j int) bool { return result[i].Left() < result[j].Left() })
+	}
 
 	return result
 }

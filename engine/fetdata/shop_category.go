@@ -18,6 +18,9 @@ func (this *ShopCategory) load(cache *map[int]*utils.MySql_shop_category) *ShopC
 	if this == nil {
 		return this
 	}
+	if (*this.wrap.Config).Modules.Enabled.Shop == 0 {
+		return this
+	}
 	if cache != nil {
 		this.bufferCats = (*cache)
 		return this

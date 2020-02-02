@@ -37,6 +37,9 @@ func (this *Shop) load() *Shop {
 	if this == nil {
 		return this
 	}
+	if (*this.wrap.Config).Modules.Enabled.Shop == 0 {
+		return this
+	}
 	sql_nums := `
 		SELECT
 			COUNT(*)
@@ -507,6 +510,9 @@ func (this *Shop) load() *Shop {
 }
 
 func (this *Shop) preload_cats() {
+	if (*this.wrap.Config).Modules.Enabled.Shop == 0 {
+		return
+	}
 	if this.bufferCats == nil {
 		this.bufferCats = map[int]*utils.MySql_shop_category{}
 		if rows, err := this.wrap.DB.Query(
@@ -673,12 +679,15 @@ func (this *Shop) PaginationNext() *ShopPagination {
 
 func (this *Shop) Currencies() []*ShopCurrency {
 	result := []*ShopCurrency{}
-	for _, currency := range *this.wrap.ShopGetAllCurrencies() {
-		obj := currency
-		result = append(result, (&ShopCurrency{wrap: this.wrap, object: &obj}).load())
-	}
 
-	sort.Slice(result, func(i, j int) bool { return result[i].Id() < result[j].Id() })
+	if (*this.wrap.Config).Modules.Enabled.Shop != 0 {
+		for _, currency := range *this.wrap.ShopGetAllCurrencies() {
+			obj := currency
+			result = append(result, (&ShopCurrency{wrap: this.wrap, object: &obj}).load())
+		}
+
+		sort.Slice(result, func(i, j int) bool { return result[i].Id() < result[j].Id() })
+	}
 
 	return result
 }
@@ -694,32 +703,34 @@ func (this *Shop) Categories(parent, depth int) []*ShopCategory {
 	depth_tmp := 0
 	result := []*ShopCategory{}
 
-	for _, cat := range this.bufferCats {
-		if parent <= 1 {
-			if depth <= 0 {
-				result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
-			} else {
-				if cat.A_depth <= depth {
-					result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
-				}
-			}
-		} else {
-			if cat.A_parent == parent {
-				if depth_tmp == 0 {
-					depth_tmp = cat.A_depth
-				}
+	if (*this.wrap.Config).Modules.Enabled.Shop != 0 {
+		for _, cat := range this.bufferCats {
+			if parent <= 1 {
 				if depth <= 0 {
 					result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
 				} else {
-					if (cat.A_depth - depth_tmp + 1) <= depth {
+					if cat.A_depth <= depth {
 						result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+					}
+				}
+			} else {
+				if cat.A_parent == parent {
+					if depth_tmp == 0 {
+						depth_tmp = cat.A_depth
+					}
+					if depth <= 0 {
+						result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+					} else {
+						if (cat.A_depth - depth_tmp + 1) <= depth {
+							result = append(result, (&ShopCategory{wrap: this.wrap, object: cat}).load(&this.bufferCats))
+						}
 					}
 				}
 			}
 		}
-	}
 
-	sort.Slice(result, func(i, j int) bool { return result[i].Left() < result[j].Left() })
+		sort.Slice(result, func(i, j int) bool { return result[i].Left() < result[j].Left() })
+	}
 
 	return result
 }
