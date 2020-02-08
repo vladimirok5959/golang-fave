@@ -37,6 +37,9 @@
 # All else
 /hosts/localhost/config/config.json
 
+# Domains binding
+/hosts/localhost/config/.domains
+
 # Skip cypress libs folder
 /support/cypress/screenshots
 /support/cypress/videos

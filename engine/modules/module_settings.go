@@ -24,6 +24,7 @@ func (this *Modules) RegisterModule_Settings() *Module {
 			{Mount: "robots-txt", Name: "Robots.txt", Show: true, Icon: assets.SysSvgIconBug},
 			{Mount: "pagination", Name: "Pagination", Show: true, Icon: assets.SysSvgIconPagination},
 			{Mount: "thumbnails", Name: "Thumbnails", Show: true, Icon: assets.SysSvgIconThumbnails},
+			{Mount: "domains", Name: "Domains", Show: true, Icon: assets.SysSvgIconApi},
 			{Mount: "smtp", Name: "SMTP", Show: true, Icon: assets.SysSvgIconEmail},
 			{Mount: "shop", Name: "Shop", Show: true, Icon: assets.SysSvgIconShop},
 			{Mount: "api", Name: "API", Show: true, Icon: assets.SysSvgIconApi},
@@ -404,6 +405,35 @@ func (this *Modules) RegisterModule_Settings() *Module {
 					Kind:   builder.DFKSubmit,
 					Value:  "Save",
 					Target: "add-edit-button",
+				},
+			})
+
+			sidebar += `<button class="btn btn-primary btn-sidebar" id="add-edit-button">Save</button>`
+		} else if wrap.CurrSubModule == "domains" {
+			content += this.getBreadCrumbs(wrap, &[]consts.BreadCrumb{
+				{Name: "Domains"},
+			})
+
+			fcont := []byte(``)
+			fcont, _ = ioutil.ReadFile(wrap.DConfig + string(os.PathSeparator) + ".domains")
+
+			content += builder.DataForm(wrap, []builder.DataFormField{
+				{
+					Kind:  builder.DFKHidden,
+					Name:  "action",
+					Value: "settings-domains",
+				},
+				{
+					Kind: builder.DFKText,
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group last"><div class="row"><div class="col-12"><textarea class="form-control autosize" id="lbl_content" name="content" placeholder="" autocomplete="off">` + html.EscapeString(string(fcont)) + `</textarea></div></div></div>`
+					},
+				},
+				{
+					Kind: builder.DFKSubmit,
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="row d-lg-none"><div class="col-12"><div class="pt-3"><button type="submit" class="btn btn-primary" data-target="add-edit-button">Save</button></div></div></div>`
+					},
 				},
 			})
 
