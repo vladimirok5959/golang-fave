@@ -7275,6 +7275,9 @@
 					lineNumbers: true,
 					lineWrapping: true,
 					viewportMargin: Infinity,
+					indentWithTabs: true,
+					indentUnit: 4,
+					tabSize: 4,
 					mode: targetEditorMode,
 				}).on('change', function(editor){
 					targetTextArea.value = editor.getValue();
