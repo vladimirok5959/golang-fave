@@ -223,13 +223,14 @@ func (this *Wrapper) RenderToString(tcont []byte, data interface{}) string {
 }
 
 func (this *Wrapper) RenderFrontEnd(tname string, data interface{}, status int) {
-	tmpl, err := template.New(tname+".html").Funcs(utils.TemplateAdditionalFuncs()).ParseFiles(
-		this.DTemplate+string(os.PathSeparator)+tname+".html",
-		this.DTemplate+string(os.PathSeparator)+"header.html",
-		this.DTemplate+string(os.PathSeparator)+"sidebar-left.html",
-		this.DTemplate+string(os.PathSeparator)+"sidebar-right.html",
-		this.DTemplate+string(os.PathSeparator)+"footer.html",
-	)
+	templates := []string{
+		this.DTemplate + string(os.PathSeparator) + tname + ".html",
+		this.DTemplate + string(os.PathSeparator) + "header.html",
+		this.DTemplate + string(os.PathSeparator) + "sidebar-left.html",
+		this.DTemplate + string(os.PathSeparator) + "sidebar-right.html",
+		this.DTemplate + string(os.PathSeparator) + "footer.html",
+	}
+	tmpl, err := template.New(tname + ".html").Funcs(utils.TemplateAdditionalFuncs()).ParseFiles(templates...)
 	if err != nil {
 		utils.SystemErrorPageTemplate(this.W, err)
 		return
