@@ -805,7 +805,8 @@ ul.pagination {
 }
 
 .data-table.table-bordered td .parent,
-.data-table.table-bordered td .parent a {
+.data-table.table-bordered td .parent a,
+.data-table.table-bordered td .template {
 	color: #adafb2;
 }
 

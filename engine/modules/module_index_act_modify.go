@@ -15,6 +15,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 		pf_id := utils.Trim(wrap.R.FormValue("id"))
 		pf_name := utils.Trim(wrap.R.FormValue("name"))
 		pf_alias := utils.Trim(wrap.R.FormValue("alias"))
+		pf_template := utils.Trim(wrap.R.FormValue("template"))
 		pf_content := utils.Trim(wrap.R.FormValue("content"))
 		pf_meta_title := utils.Trim(wrap.R.FormValue("meta_title"))
 		pf_meta_keywords := utils.Trim(wrap.R.FormValue("meta_keywords"))
@@ -44,6 +45,11 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 			return
 		}
 
+		if pf_template == "" {
+			wrap.MsgError(`Please specify page template`)
+			return
+		}
+
 		if pf_id == "0" {
 			// Add new page
 			var lastID int64 = 0
@@ -52,6 +58,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 					ctx,
 					`INSERT INTO fave_pages SET
 						user = ?,
+						template = ?,
 						name = ?,
 						alias = ?,
 						content = ?,
@@ -62,6 +69,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 						active = ?
 					;`,
 					wrap.User.A_id,
+					pf_template,
 					pf_name,
 					pf_alias,
 					pf_content,
@@ -92,6 +100,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 				_, err := tx.Exec(
 					ctx,
 					`UPDATE fave_pages SET
+						template = ?,
 						name = ?,
 						alias = ?,
 						content = ?,
@@ -102,6 +111,7 @@ func (this *Modules) RegisterAction_IndexModify() *Action {
 					WHERE
 						id = ?
 					;`,
+					pf_template,
 					pf_name,
 					pf_alias,
 					pf_content,

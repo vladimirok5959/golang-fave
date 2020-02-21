@@ -12,6 +12,28 @@ import (
 	"golang-fave/engine/wrapper"
 )
 
+func (this *Modules) index_GetTemplateSelectOptions(wrap *wrapper.Wrapper, template string) string {
+	result := ``
+
+	selected := ""
+
+	// index.html
+	if template == "index" {
+		selected = " selected"
+	}
+	result += `<option title="index.html" value="index"` + selected + `>index.html</option>`
+	selected = ""
+
+	// page.html
+	if template == "" || template == "page" {
+		selected = " selected"
+	}
+	result += `<option title="page.html" value="page"` + selected + `>page.html</option>`
+	selected = ""
+
+	return result
+}
+
 func (this *Modules) RegisterModule_Index() *Module {
 	return this.newModule(MInfo{
 		Mount: "index",
@@ -32,6 +54,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 			`SELECT
 				fave_pages.id,
 				fave_pages.user,
+				fave_pages.template,
 				fave_pages.name,
 				fave_pages.alias,
 				fave_pages.content,
@@ -57,6 +80,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 		).Scan(
 			&row.A_id,
 			&row.A_user,
+			&row.A_template,
 			&row.A_name,
 			&row.A_alias,
 			&row.A_content,
@@ -83,14 +107,8 @@ func (this *Modules) RegisterModule_Index() *Module {
 			return
 		}
 
-		// Which template
-		tname := "index"
-		if wrap.R.URL.Path != "/" {
-			tname = "page"
-		}
-
 		// Render template
-		wrap.RenderFrontEnd(tname, fetdata.New(wrap, false, row, rou), http.StatusOK)
+		wrap.RenderFrontEnd(row.A_template, fetdata.New(wrap, false, row, rou), http.StatusOK)
 	}, func(wrap *wrapper.Wrapper) (string, string, string) {
 		content := ""
 		sidebar := ""
@@ -108,12 +126,16 @@ func (this *Modules) RegisterModule_Index() *Module {
 						DBField: "id",
 					},
 					{
+						DBField: "template",
+					},
+					{
 						DBField:     "name",
 						NameInTable: "Page / URL",
 						CallBack: func(values *[]string) string {
-							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[1]) + `</a>`
-							alias := html.EscapeString((*values)[2])
-							return `<div>` + name + `</div><div><small>` + alias + `</small></div>`
+							name := `<a href="/cp/` + wrap.CurrModule + `/modify/` + (*values)[0] + `/">` + html.EscapeString((*values)[2]) + `</a>`
+							alias := html.EscapeString((*values)[3])
+							template := html.EscapeString((*values)[1]) + ".html"
+							return `<div>` + name + `</div><div class="template"><small>` + template + `</small></div><div><small>` + alias + `</small></div>`
 						},
 					},
 					{
@@ -125,7 +147,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 						NameInTable: "Date / Time",
 						Classes:     "d-none d-md-table-cell",
 						CallBack: func(values *[]string) string {
-							t := int64(utils.StrToInt((*values)[3]))
+							t := int64(utils.StrToInt((*values)[4]))
 							return `<div>` + utils.UnixTimestampToFormat(t, "02.01.2006") + `</div>` +
 								`<div><small>` + utils.UnixTimestampToFormat(t, "15:04:05") + `</small></div>`
 						},
@@ -135,7 +157,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 						NameInTable: "Active",
 						Classes:     "d-none d-sm-table-cell",
 						CallBack: func(values *[]string) string {
-							return builder.CheckBox(utils.StrToInt((*values)[4]))
+							return builder.CheckBox(utils.StrToInt((*values)[5]))
 						},
 					},
 				},
@@ -143,7 +165,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					return builder.DataTableAction(&[]builder.DataTableActionRow{
 						{
 							Icon:   assets.SysSvgIconView,
-							Href:   (*values)[2],
+							Href:   (*values)[3],
 							Hint:   "View",
 							Target: "_blank",
 						},
@@ -180,6 +202,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 			data := utils.MySql_page{
 				A_id:               0,
 				A_user:             0,
+				A_template:         "",
 				A_name:             "",
 				A_alias:            "",
 				A_content:          "",
@@ -202,6 +225,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 					`SELECT
 						id,
 						user,
+						template,
 						name,
 						alias,
 						content,
@@ -218,6 +242,7 @@ func (this *Modules) RegisterModule_Index() *Module {
 				).Scan(
 					&data.A_id,
 					&data.A_user,
+					&data.A_template,
 					&data.A_name,
 					&data.A_alias,
 					&data.A_content,
@@ -263,6 +288,28 @@ func (this *Modules) RegisterModule_Index() *Module {
 					Value:   data.A_alias,
 					Hint:    "Example: /about-us/ or /about-us.html",
 					Max:     "255",
+				},
+				{
+					Kind:    builder.DFKText,
+					Caption: "Page template",
+					Name:    "template",
+					Value:   "0",
+					CallBack: func(field *builder.DataFormField) string {
+						return `<div class="form-group n2">` +
+							`<div class="row">` +
+							`<div class="col-md-3">` +
+							`<label for="lbl_template">Page template</label>` +
+							`</div>` +
+							`<div class="col-md-9">` +
+							`<div>` +
+							`<select class="selectpicker form-control" id="lbl_template" name="template" data-live-search="true">` +
+							this.index_GetTemplateSelectOptions(wrap, data.A_template) +
+							`</select>` +
+							`</div>` +
+							`</div>` +
+							`</div>` +
+							`</div>`
+					},
 				},
 				{
 					Kind:    builder.DFKTextArea,

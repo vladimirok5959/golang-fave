@@ -2,6 +2,7 @@
 CREATE TABLE fave_blog_cats (
 	id int(11) NOT NULL AUTO_INCREMENT COMMENT 'AI',
 	user int(11) NOT NULL COMMENT 'User id',
+	template varchar(255) NOT NULL DEFAULT 'page' COMMENT 'Template',
 	name varchar(255) NOT NULL COMMENT 'Category name',
 	alias varchar(255) NOT NULL COMMENT 'Category alias',
 	lft int(11) NOT NULL COMMENT 'For nested set model',

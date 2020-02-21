@@ -3,6 +3,7 @@ package utils
 type MySql_page struct {
 	A_id               int
 	A_user             int
+	A_template         string
 	A_name             string
 	A_alias            string
 	A_content          string
