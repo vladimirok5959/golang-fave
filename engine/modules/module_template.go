@@ -133,7 +133,7 @@ func (this *Modules) RegisterModule_Template() *Module {
 				{
 					Kind: builder.DFKText,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="form-group last"><div class="row"><div class="col-12"><div class="alert alert-danger" style="margin:0;"><strong>WARNING!</strong> This action will restore current theme files to original, you will lost you theme changes! Think twice before run this action! If you still want to do this, please press <b>Restore</b> red button!</div></div></div></div>`
+						return `<div class="form-group last"><div class="row"><div class="col-12"><div class="alert alert-danger" style="margin:0;"><strong>WARNING!</strong><br>This action will restore current theme files to original, you will lost you theme changes!<br>Think twice before run this action! If you still want to do this, please press <b>Restore</b> red button!</div></div></div></div>`
 					},
 				},
 				{
