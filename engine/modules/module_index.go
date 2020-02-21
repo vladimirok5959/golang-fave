@@ -15,21 +15,19 @@ import (
 func (this *Modules) index_GetTemplateSelectOptions(wrap *wrapper.Wrapper, template string) string {
 	result := ``
 
-	selected := ""
-
 	// index.html
+	result += `<option title="index.html" value="index"`
 	if template == "index" {
-		selected = " selected"
+		result += ` selected`
 	}
-	result += `<option title="index.html" value="index"` + selected + `>index.html</option>`
-	selected = ""
+	result += `>index.html</option>`
 
 	// page.html
+	result += `<option title="page.html" value="page"`
 	if template == "" || template == "page" {
-		selected = " selected"
+		result += ` selected`
 	}
-	result += `<option title="page.html" value="page"` + selected + `>page.html</option>`
-	selected = ""
+	result += `>page.html</option>`
 
 	return result
 }
