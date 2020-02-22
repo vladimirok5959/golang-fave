@@ -11,7 +11,7 @@ import (
 
 func (this *Modules) RegisterAction_TemplateRestoreFile() *Action {
 	return this.newAction(AInfo{
-		Mount:     "template-restore-file",
+		Mount:     "templates-restore-file",
 		WantAdmin: true,
 	}, func(wrap *wrapper.Wrapper) {
 		pf_file := utils.Trim(wrap.R.FormValue("file"))
