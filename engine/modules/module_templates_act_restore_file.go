@@ -9,7 +9,7 @@ import (
 	"golang-fave/engine/wrapper"
 )
 
-func (this *Modules) RegisterAction_TemplateRestoreFile() *Action {
+func (this *Modules) RegisterAction_TemplatesRestoreFile() *Action {
 	return this.newAction(AInfo{
 		Mount:     "templates-restore-file",
 		WantAdmin: true,

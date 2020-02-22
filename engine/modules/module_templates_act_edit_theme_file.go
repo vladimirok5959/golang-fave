@@ -8,7 +8,7 @@ import (
 	"golang-fave/engine/wrapper"
 )
 
-func (this *Modules) RegisterAction_TemplateEditThemeFile() *Action {
+func (this *Modules) RegisterAction_TemplatesEditThemeFile() *Action {
 	return this.newAction(AInfo{
 		Mount:     "templates-edit-theme-file",
 		WantAdmin: true,
@@ -31,7 +31,7 @@ func (this *Modules) RegisterAction_TemplateEditThemeFile() *Action {
 			return
 		}
 
-		files := this.template_GetThemeFiles(wrap)
+		files := this.templates_GetThemeFiles(wrap)
 		if len(files) <= 0 {
 			wrap.MsgError(`No any file found in theme folder`)
 			return

@@ -15,7 +15,7 @@ import (
 	"golang-fave/engine/wrapper"
 )
 
-func (this *Modules) template_GetThemeFiles(wrap *wrapper.Wrapper) []string {
+func (this *Modules) templates_GetThemeFiles(wrap *wrapper.Wrapper) []string {
 	var result []string
 	files, err := ioutil.ReadDir(wrap.DTemplate)
 	if err == nil {
@@ -32,7 +32,7 @@ func (this *Modules) template_GetThemeFiles(wrap *wrapper.Wrapper) []string {
 	return result
 }
 
-func (this *Modules) RegisterModule_Template() *Module {
+func (this *Modules) RegisterModule_Templates() *Module {
 	return this.newModule(MInfo{
 		Mount:  "templates",
 		Name:   "Templates",
@@ -52,7 +52,7 @@ func (this *Modules) RegisterModule_Template() *Module {
 				{Name: "Template editor"},
 			})
 
-			files := this.template_GetThemeFiles(wrap)
+			files := this.templates_GetThemeFiles(wrap)
 			if len(files) > 0 {
 				selected_file, _ := url.QueryUnescape(wrap.R.URL.Query().Get("file"))
 				if !(selected_file != "" && utils.InArrayString(files, selected_file)) {
