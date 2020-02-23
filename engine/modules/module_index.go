@@ -2,7 +2,9 @@ package modules
 
 import (
 	"html"
+	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"golang-fave/engine/assets"
 	"golang-fave/engine/builder"
@@ -11,6 +13,13 @@ import (
 	"golang-fave/engine/utils"
 	"golang-fave/engine/wrapper"
 )
+
+func (this *Modules) index_TemplateNameToValue(filename string) string {
+	if i := strings.LastIndex(filename, "."); i > -1 {
+		return filename[:i]
+	}
+	return filename
+}
 
 func (this *Modules) index_GetTemplateSelectOptions(wrap *wrapper.Wrapper, template string) string {
 	result := ``
@@ -28,6 +37,26 @@ func (this *Modules) index_GetTemplateSelectOptions(wrap *wrapper.Wrapper, templ
 		result += ` selected`
 	}
 	result += `>page.html</option>`
+
+	// User templates
+	if files, err := ioutil.ReadDir(wrap.DTemplate); err == nil {
+		for _, file := range files {
+			if len(file.Name()) > 0 && file.Name()[0] == '.' {
+				continue
+			}
+			if len(file.Name()) > 0 && strings.ToLower(file.Name()) == "robots.txt" {
+				continue
+			}
+			if !wrap.IsSystemMountedTemplateFile(file.Name()) {
+				value := this.index_TemplateNameToValue(file.Name())
+				result += `<option title="` + file.Name() + `" value="` + value + `"`
+				if template == value {
+					result += ` selected`
+				}
+				result += `>` + file.Name() + `</option>`
+			}
+		}
+	}
 
 	return result
 }

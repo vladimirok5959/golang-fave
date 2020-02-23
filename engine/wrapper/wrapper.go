@@ -477,3 +477,32 @@ func (this *Wrapper) ShopGetCurrentCurrency() *utils.MySql_shop_currency {
 	}
 	return nil
 }
+
+func (this *Wrapper) IsSystemMountedTemplateFile(filename string) bool {
+	return utils.InArrayString([]string{
+		"404.html",
+		"blog-category.html",
+		"blog-post.html",
+		"blog.html",
+		"cached-block-1.html",
+		"cached-block-2.html",
+		"cached-block-3.html",
+		"cached-block-4.html",
+		"cached-block-5.html",
+		"email-new-order-admin.html",
+		"email-new-order-user.html",
+		"footer.html",
+		"header.html",
+		"index.html",
+		"maintenance.html",
+		"page.html",
+		"robots.txt",
+		"scripts.js",
+		"shop-category.html",
+		"shop-product.html",
+		"shop.html",
+		"sidebar-left.html",
+		"sidebar-right.html",
+		"styles.css",
+	}, filename)
+}

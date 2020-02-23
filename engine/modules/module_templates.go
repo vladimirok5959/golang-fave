@@ -59,14 +59,26 @@ func (this *Modules) RegisterModule_Templates() *Module {
 					selected_file = files[0]
 				}
 
-				list_of_files := ``
+				list_of_system_files := ``
+				list_of_user_files := ``
 				for _, file := range files {
 					selected := ""
 					if file == selected_file {
 						selected = " selected"
 					}
-					list_of_files += `<option value="` + html.EscapeString(file) +
-						`"` + selected + `>` + html.EscapeString(file) + `</option>`
+					if wrap.IsSystemMountedTemplateFile(file) {
+						list_of_system_files += `<option value="` + html.EscapeString(file) +
+							`"` + selected + `>` + html.EscapeString(file) + `</option>`
+					} else {
+						list_of_user_files += `<option value="` + html.EscapeString(file) +
+							`"` + selected + `>` + html.EscapeString(file) + `</option>`
+					}
+				}
+
+				list_of_files := list_of_system_files
+				if list_of_user_files != "" {
+					list_of_files += `<option disabled>&mdash;</option>`
+					list_of_files += list_of_user_files
 				}
 
 				fcont := []byte(``)
