@@ -21,7 +21,10 @@ func (this *Modules) RegisterAction_TemplatesCreateThemeFile() *Action {
 			return
 		}
 
-		// Check normal file name here
+		if !utils.IsValidTemplateFileName(pf_name) {
+			wrap.MsgError(`Bad template file name`)
+			return
+		}
 
 		template_file := wrap.DTemplate + string(os.PathSeparator) + pf_name + ".html"
 		if utils.IsFileExists(template_file) {
@@ -38,9 +41,6 @@ func (this *Modules) RegisterAction_TemplatesCreateThemeFile() *Action {
 
 		wrap.ResetCacheBlocks()
 
-		// Redirect to created file in editor
-
-		// Reload current page
-		wrap.Write(`window.location.reload(false);`)
+		wrap.Write(`window.location='/cp/templates/?file=` + pf_name + `.html';`)
 	})
 }

@@ -409,3 +409,14 @@ func TestSafeFilePath(t *testing.T) {
 	Expect(t, SafeFilePath("/test/file/./"), "/test/file/")
 	Expect(t, SafeFilePath("/test/./file"), "/test/file")
 }
+
+func TestIsValidTemplateFileName(t *testing.T) {
+	Expect(t, IsValidTemplateFileName("test-template"), true)
+	Expect(t, IsValidTemplateFileName("test-123-TEST"), true)
+	Expect(t, IsValidTemplateFileName("TEST-123-TEST"), true)
+	Expect(t, IsValidTemplateFileName("test template"), false)
+	Expect(t, IsValidTemplateFileName("test_template"), false)
+	Expect(t, IsValidTemplateFileName("test-template.html"), false)
+	Expect(t, IsValidTemplateFileName("test-template.css"), false)
+	Expect(t, IsValidTemplateFileName("test@template"), false)
+}

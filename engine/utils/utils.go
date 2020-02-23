@@ -564,3 +564,8 @@ func SafeFilePath(path string) string {
 
 	return result
 }
+
+func IsValidTemplateFileName(str string) bool {
+	regexpeChars := regexp.MustCompile(`^[0-9A-Za-z-]+$`)
+	return regexpeChars.MatchString(str)
+}
