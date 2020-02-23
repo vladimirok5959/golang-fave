@@ -101,11 +101,18 @@ func (this *Modules) RegisterModule_Templates() *Module {
 						Name:    "file",
 						Value:   "0",
 						CallBack: func(field *builder.DataFormField) string {
+							buttons := ``
+							if wrap.IsSystemMountedTemplateFile(selected_file) {
+								buttons += `<button type="button" class="btn btn-success" onclick="return fave.ActionThemeFile('templates-restore-file','` + selected_file + `','Are you sure want to restore theme file?');" style="position:absolute;right:0;">Restore</button>`
+							} else {
+								buttons += `<button type="button" class="btn btn-danger" onclick="return fave.ActionThemeFile('templates-delete-file','` + selected_file + `','Are you sure want to delete theme file?');" style="position:absolute;right:0;">Delete</button>`
+							}
+
 							return `<div class="form-group n1">` +
 								`<div class="row">` +
 								`<div class="col-12">` +
 								`<div style="position:relative;">` +
-								`<button type="button" class="btn btn-success" onclick="return fave.ActionRestoreThemeFile('templates-restore-file','` + selected_file + `','Are you sure want to restore theme file?');" style="position:absolute;right:0;">Restore</button>` +
+								buttons +
 								`<select class="form-control ignore-lost-data" id="lbl_file" name="file" onchange="setTimeout(function(){$('#lbl_file').val('` + selected_file + `')},500);document.location='/cp/` + wrap.CurrModule + `/?file='+encodeURI(this.value);">` +
 								list_of_files +
 								`</select>` +
@@ -195,12 +202,12 @@ func (this *Modules) RegisterModule_Templates() *Module {
 				{
 					Kind: builder.DFKSubmit,
 					CallBack: func(field *builder.DataFormField) string {
-						return `<div class="row d-lg-none"><div class="col-12"><div class="pt-3"><button type="button" class="btn btn-danger" onclick="return fave.ActionRestoreThemeFile('templates-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');">Restore</button></div></div></div>`
+						return `<div class="row d-lg-none"><div class="col-12"><div class="pt-3"><button type="button" class="btn btn-danger" onclick="return fave.ActionThemeFile('templates-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');">Restore</button></div></div></div>`
 					},
 				},
 			})
 
-			sidebar += `<button class="btn btn-danger btn-sidebar" onclick="return fave.ActionRestoreThemeFile('templates-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');" id="add-edit-button">Restore</button>`
+			sidebar += `<button class="btn btn-danger btn-sidebar" onclick="return fave.ActionThemeFile('templates-restore-file-all','all','WARNING! Are you sure want to restore all theme files?');" id="add-edit-button">Restore</button>`
 		}
 		return this.getSidebarModules(wrap), content, sidebar
 	})

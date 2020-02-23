@@ -7616,7 +7616,7 @@
 				}
 			},
 
-			ActionRestoreThemeFile: function(action_name, file_name, message) {
+			ActionThemeFile: function(action_name, file_name, message) {
 				if(confirm(message)) {
 					$.ajax({
 						type: "POST",
