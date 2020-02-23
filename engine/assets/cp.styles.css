@@ -504,6 +504,7 @@ select.selectpicker {
 
 /* Bootstrap scroll fix */
 body.cp {
+	display: block;
 	padding-right: 0px !important;
 }
 
@@ -624,20 +625,33 @@ body.cp nav.main a.navbar-brand {
 body.cp .wrap {
 	width: 100%;
 	height: 100%;
-	display: table;
+	display: block;
 	align-items: stretch;
 }
 
 body.cp .wrap .sidebar,
 body.cp .wrap .content {
-	display: table-cell;
+	display: block;
+	height: 100%;
 	position: relative;
 	padding-top: 3.5rem;
 	vertical-align: top;
 }
 
+body.cp .wrap .sidebar {
+	float: left;
+	z-index: 1;
+}
+
+body.cp .wrap .content {
+	display: block !important;
+	z-index: 0;
+}
+
 body.cp .wrap .sidebar.sidebar-right {
+	float: right;
 	display: none !important;
+	z-index: 1;
 }
 
 body.cp .wrap .sidebar-right .padd,
@@ -676,7 +690,6 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item a {
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.disabled a {
 	color: #c9302c;
-	/*text-decoration: line-through;*/
 }
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active {
@@ -685,7 +698,6 @@ body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active {
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active.disabled {
 	background-color: #c9302c;
-	/*text-decoration: none;*/
 }
 
 body.cp .wrap .sidebar.sidebar-left ul.nav li.nav-item.active a {
@@ -1387,11 +1399,13 @@ div.wysiwyg.focused {
 	/* Less then 576px */
 	body.cp {
 		height: auto;
-		overflow: scroll;
+		overflow: none;
+		overflow-y: scroll;
 	}
 
 	body.cp .wrap .sidebar {
 		width: auto;
+		float: none;
 		box-shadow: none;
 	}
 
