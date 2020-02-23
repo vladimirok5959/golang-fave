@@ -18,7 +18,7 @@ context('Module pages', () => {
   it('should render data form', () => {
     cy.loginCMS();
     cy.visitCMS('/cp/index/add/');
-    cy.get('.data-form.index-add input[type=text]').should('have.length', 4);
+    cy.get('.data-form.index-add input[type=text]').should('have.length', 5);
     cy.get('.data-form.index-add textarea').should('have.length', 2);
     cy.get('.data-form.index-add input[type=checkbox]').should('have.length', 1);
     cy.logoutCMS();

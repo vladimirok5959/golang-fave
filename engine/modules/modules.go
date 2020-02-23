@@ -305,30 +305,32 @@ func (this *Modules) XXXActionFire(wrap *wrapper.Wrapper) bool {
 			if name != "" {
 				if act, ok := this.acts[name]; ok {
 					// Check for MySQL connection
-					if err := wrap.UseDatabase(); err != nil {
-						this.XXXActionHeaders(wrap, http.StatusNotFound)
-						wrap.MsgError(err.Error())
-						return true
-					}
-					if act.Info.WantUser || act.Info.WantAdmin {
-						if !wrap.LoadSessionUser() {
+					if name != "index-mysql-setup" {
+						if err := wrap.UseDatabase(); err != nil {
 							this.XXXActionHeaders(wrap, http.StatusNotFound)
-							wrap.MsgError(`You must be loginned to run this action`)
+							wrap.MsgError(err.Error())
 							return true
 						}
-						if wrap.User.A_active <= 0 {
+						if act.Info.WantUser || act.Info.WantAdmin {
+							if !wrap.LoadSessionUser() {
+								this.XXXActionHeaders(wrap, http.StatusNotFound)
+								wrap.MsgError(`You must be loginned to run this action`)
+								return true
+							}
+							if wrap.User.A_active <= 0 {
+								if !wrap.LoadSessionUser() {
+									this.XXXActionHeaders(wrap, http.StatusNotFound)
+									wrap.MsgError(`You do not have rights to run this action`)
+									return true
+								}
+							}
+						}
+						if act.Info.WantAdmin && wrap.User.A_admin <= 0 {
 							if !wrap.LoadSessionUser() {
 								this.XXXActionHeaders(wrap, http.StatusNotFound)
 								wrap.MsgError(`You do not have rights to run this action`)
 								return true
 							}
-						}
-					}
-					if act.Info.WantAdmin && wrap.User.A_admin <= 0 {
-						if !wrap.LoadSessionUser() {
-							this.XXXActionHeaders(wrap, http.StatusNotFound)
-							wrap.MsgError(`You do not have rights to run this action`)
-							return true
 						}
 					}
 					this.XXXActionHeaders(wrap, http.StatusOK)
