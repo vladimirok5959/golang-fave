@@ -549,11 +549,11 @@ func SMTPSend(host, port, user, pass, subject, msg string, receivers []string) e
 func SafeFilePath(path string) string {
 	result := path
 
-	if reg, err := regexp.Compile("([/]+\\.\\.)|(\\.\\.[/]+)"); err == nil {
+	if reg, err := regexp.Compile(`([/]+\.\.)|(\.\.[/]+)`); err == nil {
 		result = reg.ReplaceAllString(result, "/")
 	}
 
-	if reg, err := regexp.Compile("([/]+[\\.]+[/]+)"); err == nil {
+	if reg, err := regexp.Compile(`([/]+[\.]+[/]+)`); err == nil {
 		result = reg.ReplaceAllString(result, "/")
 	}
 
