@@ -1,12 +1,16 @@
 [![Cypress](https://img.shields.io/badge/cypress-dashboard-brightgreen.svg)](https://dashboard.cypress.io/#/projects/hv532c/runs)
+
 # golang-fave
-CMS written on Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. All in one binary file, no need to install additional web servers. Go native templates with vars allow to do almost all what are need.
+
+CMS written on Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. All in one binary file, no need to install additional web servers. Go native templates with vars allow to do almost all what are need. Default user email and password after database installation for admin user is `example@example.com`
 
 ## Screenshots
-![](support/screenshots-v2.gif)
+
+![Screenshots](support/screenshots-v2.gif)
 
 ## Usage
-```
+
+```sh
 Usage of ./fave:
   -debug
     debug mode with ignoring log files
@@ -21,7 +25,8 @@ Usage of ./fave:
 ```
 
 ## Hosts structure
-```
+
+```txt
 hosts
 ├── localhost                      # Main host directory
 ├──── config                       # Config directory
@@ -59,10 +64,12 @@ hosts
 ├────── styles.css                 # Theme styles file
 └──── tmp                          # Temporary dir for session files
 ```
+
 Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).<br>
 Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.com/r/vladimirok5959/fave)
 
 ## Development
+
 **In root dir**
 * **make** - vet, test, build and run in debug mode locally
 * **make build** - build release for Linux, Mac OS X and Windows
@@ -79,6 +86,7 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * **make ab** - http stress test
 
 ## Roadmap
+
 | Task                      | Status        | Done |
 | :---                      | :---          | :--- |
 | Module Pages              | ready for use | 100% |
@@ -89,6 +97,7 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 | Shop payments integration | in progress   | 0%   |
 
 ## Used resources
+
 * [jQuery](https://github.com/jquery/jquery) (MIT License)
 * [Autosize](https://github.com/jackmoore/autosize) (MIT License)
 * [Sortable](https://github.com/SortableJS/Sortable) (MIT License)
