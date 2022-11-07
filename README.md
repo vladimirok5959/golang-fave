@@ -1,6 +1,6 @@
-[![Cypress](https://img.shields.io/badge/cypress-dashboard-brightgreen.svg)](https://dashboard.cypress.io/#/projects/hv532c/runs)
-
 # golang-fave
+
+[![Cypress](https://img.shields.io/badge/cypress-dashboard-brightgreen.svg)](https://dashboard.cypress.io/#/projects/hv532c/runs)
 
 CMS written on Go with MySQL as database. Dynamical, splitted by modules, user friendly and thanks bootstrap is fully adaptive for mobile devices and tablets. All in one binary file, no need to install additional web servers. Go native templates with vars allow to do almost all what are need. Default user email and password after database installation for admin user is `example@example.com`
 
@@ -65,12 +65,14 @@ hosts
 └──── tmp                          # Temporary dir for session files
 ```
 
-Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).<br>
+Unlimited hosts count. Template variables in [Wiki](https://github.com/vladimirok5959/golang-fave/wiki) or [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.Data)) and [here](https://github.com/vladimirok5959/golang-fave/wiki/Variables-for-template-($.System)).
+
 Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.com/r/vladimirok5959/fave)
 
 ## Development
 
-**In root dir**
+### In root dir
+
 * **make** - vet, test, build and run in debug mode locally
 * **make build** - build release for Linux, Mac OS X and Windows
 * **make format** - format all code by gofmt utility
@@ -80,7 +82,8 @@ Docker image: [https://hub.docker.com/r/vladimirok5959/fave](https://hub.docker.
 * **make docker-push** - build and push image to docker hub
 * **make migrate** - create new empty migration file
 
-**In support dir**
+### In support dir
+
 * **make cy-dev** - cypress tests in browser
 * **make cy** - cypress tests in console
 * **make ab** - http stress test
